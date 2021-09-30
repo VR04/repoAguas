@@ -698,6 +698,7 @@ def openFiltroWindow():
 	#panelF.add(frameFiltro, text="Filtro rápido")
 	
 	imageAtras= PhotoImage(file="images\\atras.png")
+	imageRestringido=PhotoImage(file="images\\restringido.png")
 	#Botones. 
 
 	botonAtras= HoverButton(frameFiltro, image=imageAtras , width=100, height=40, bg= None, command=lambda: returnMainWindow(filtroWindow))
@@ -705,6 +706,9 @@ def openFiltroWindow():
 
 	botonNewEntryFiltro = HoverButton(frameFiltro, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=20, height=2, bg= "#09C5CE", font=("Yu Gothic bold", 9),command= lambda: newEntryFiltro(lista_entradas, tempAgua))
 	botonNewEntryFiltro.place(x=600,y=70)
+
+	botonRestriccionNumTamiz=  HoverButton(frameFiltro, image=imageRestringido, bg=None, width=40, height=40,command= lambda: messagebox.showinfo(title="Valores estándar tamaño de tamiz",message=f"Los tamaños estándar son: 4,6") )
+	botonRestriccionNumTamiz.place(x=10,y=70)
 
 	'''
 	botonCalcularFH = HoverButton(frameFiltro, text="Fair - Hatch", activebackground="#9DC4AA", anchor=CENTER,width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularFH(lista_entradas))
@@ -733,44 +737,77 @@ def openFiltroWindow():
 	#salidaLabel = Label(frameFiltro, text="Final",font=("Yu Gothic bold",10))
 	#salidaLabel.place(x=30, y=450)
 
-	valoresAceptadosTamiz2=["20","25","30","35","40","50","60","70","100"]
-	nT11 = Entry(frameFiltro, width=6)
-	
-	varPrueba=StringVar()
-	nT12 = Entry(frameFiltro, width=6, textvariable=varPrueba)
-	nT21 = Entry(frameFiltro, width=6)
+	valoresAceptadosTamiz2=["4","6","8","12","14","18","20","25","30","35","40","45","50","60","70","80","100","140"]
 
-	def celda2(*args):
-		if nT21.get() != "":
-			nT21.delete(0,END)
-		ent = nT12.get()
+
+	def celda2(col2,col1):
+		if col1.get() != "":
+			col1.delete(0,END)
+		ent = col2.get()
 		for val in valoresAceptadosTamiz2:
 			if ent == val:
-				nT21.insert(0, ent)
+				col1.insert(0, ent)
+	
+	nT11 = Entry(frameFiltro, width=6)
 
-	varPrueba.trace_add("write", celda2)
-
-	nT22 = Entry(frameFiltro, width=6)
+	var12=StringVar()
+	nT12 = Entry(frameFiltro, width=6, textvariable=var12)
+	nT21 = Entry(frameFiltro, width=6)
+	var12.trace_add("write", lambda *args: celda2(nT12,nT21))
+	
+	var22=StringVar()
+	nT22 = Entry(frameFiltro, width=6, textvariable=var22)
 	nT31 = Entry(frameFiltro, width=6)
-	nT32 = Entry(frameFiltro, width=6)
+	var22.trace_add("write", lambda *args: celda2(nT22,nT31))
+	
+	var32=StringVar()
+	nT32 = Entry(frameFiltro, width=6, textvariable=var32)
 	nT41 = Entry(frameFiltro, width=6)
-	nT42 = Entry(frameFiltro, width=6)
+	var32.trace_add("write", lambda *args: celda2(nT32,nT41))
+
+
+	var42=StringVar()
+	nT42 = Entry(frameFiltro, width=6, textvariable=var42)
 	nT51 = Entry(frameFiltro, width=6)
-	nT52 = Entry(frameFiltro, width=6)
+	var42.trace_add("write", lambda *args: celda2(nT42,nT51))
+	
+	var52=StringVar()
+	nT52 = Entry(frameFiltro, width=6, textvariable=var52)
 	nT61 = Entry(frameFiltro, width=6)
-	nT62 = Entry(frameFiltro, width=6)
+	var52.trace_add("write", lambda *args: celda2(nT52,nT61))
+
+	var62=StringVar()
+	nT62 = Entry(frameFiltro, width=6, textvariable=var62)
 	nT71 = Entry(frameFiltro, width=6)
-	nT72 = Entry(frameFiltro, width=6)
+	var62.trace_add("write", lambda *args: celda2(nT62,nT71))
+
+	var72= StringVar()
+	nT72 = Entry(frameFiltro, width=6, textvariable=var72)
 	nT81 = Entry(frameFiltro, width=6)
-	nT82 = Entry(frameFiltro, width=6)
+	var72.trace_add("write", lambda *args: celda2(nT72,nT81))
+
+	var82=StringVar()
+	nT82 = Entry(frameFiltro, width=6, textvariable=var82)
 	nT91 = Entry(frameFiltro, width=6)
-	nT92 = Entry(frameFiltro, width=6)
+	var82.trace_add("write", lambda *args: celda2(nT82,nT91))
+
+	var92=StringVar()
+	nT92 = Entry(frameFiltro, width=6, textvariable=var92)
 	nT101 = Entry(frameFiltro, width=6)
-	nT102 = Entry(frameFiltro, width=6)
+	var92.trace_add("write", lambda *args: celda2(nT92,nT101))
+
+	var102=StringVar()
+	nT102 = Entry(frameFiltro, width=6, textvariable=var102)
 	nT111 = Entry(frameFiltro, width=6)
-	nT112 = Entry(frameFiltro, width=6)
+	var102.trace_add("write", lambda *args: celda2(nT101,nT111))
+
+	var112=StringVar()
+	nT112 = Entry(frameFiltro, width=6, textvariable=var112)
 	nT121 = Entry(frameFiltro, width=6)
+	var112.trace_add("write", lambda *args: celda2(nT112,nT121))
+
 	nT122 = Entry(frameFiltro, width=6)
+
 	labelSepnT1= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
 	labelSepnT2= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
 	labelSepnT3= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
