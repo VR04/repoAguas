@@ -64,7 +64,6 @@ def openSedWindow():
 			bandera=bandera+1
 			v0=v1
 			v1= (listaE[6]/listaE[4])*(sin(listaE[10]) + ((listaE[7]/listaE[5]) - 0.058*v0*(listaE[5]/listaE[3]) )*cos(listaE[10]))
-			print(v1-v0)
 			if bandera>100:
 				break
 		return v0
@@ -675,125 +674,25 @@ def openSedWindow():
 
 	sedWindow.mainloop()
 
-contador3=0
+
 def openFiltroWindow():
 
-	def newEntryFiltro(lista):
-		global contador3
+	def newEntryFiltro(lista, optValue):
 		for elemento in lista:
 				elemento.delete(0, END)
-		lista[5].insert(0, 9.806)
-
-	def newDataTreeviewFH(tree,listaS):	
-		if contador3%2 ==0:
-			
-			tree.insert("",END,text= f"{contador3+1}", values=(listaS[20],listaS[21],listaS[22],listaS[23],listaS[24],listaS[25],listaS[26],listaS[27],listaS[28],listaS[29],listaS[30],listaS[31],listaS[32],listaS[33],listaS[34],listaS[35],listaS[36],listaS[37],listaS[38],listaS[39],listaS[40],listaS[41],listaS[42],listaS[43],listaS[44],listaS[45],listaS[46],listaS[47],listaS[48],listaS[49],listaS[50]),
-			iid=contador3, tags=("evenrow",))	
-		else:	
-			tree.insert("",END,text= f"{contador3+1}", values=(listaS[20],listaS[21],listaS[22],listaS[23],listaS[24],listaS[25],listaS[26],listaS[27],listaS[28],listaS[29],listaS[30],listaS[31],listaS[32],listaS[33],listaS[34],listaS[35],listaS[36],listaS[37],listaS[38],listaS[39],listaS[40],listaS[41],listaS[42],listaS[43],listaS[44],listaS[45],listaS[46],listaS[47],listaS[48],listaS[49],listaS[50]),
-				iid=contador3, tags=("oddrow",))
-		contador=contador3+1
-	
-	def deleteSedTable(arbol):
-		global contador3
-		m= arbol.get_children()	
-		for j in m:
-			arbol.delete(j)
-		contador3=0
-
-	def calcularFH(lista_ent):
-		lista_entry=[0]*10
-
-		for entryID in range(0,len(lista_ent)-1):
-			try:
-				lista_entry[entryID]=(float(lista_ent[entryID].get()))
-			except:
-				messagebox.showwarning(message="El ingreso de datos es erróneo, vuelva a intentarlo", title= "¡Cuidado!")
-				return None
-		
-		fhWindow = tk.Toplevel()
-		fhWindow.iconbitmap(bitmap='icons\\agua.ico')
-		fhWindow.geometry("600x400") 
-		fhWindow.resizable(0,0)
-		fhWindow.configure(background="#9DC4AA")
-		######################Treeview############################
-		style = ttk.Style()
-		style.theme_use("clam")
-
-		#Configure colors
-		style.configure("Treeview",background="#9DC4AA", foreground="black", rowheight=20,fieldbackground="#9DC4AA")
-		style.configure("Treeview.Heading", foreground="black", font =("Courier",9))
-		#Change selected color
-		style.map("Treeview", background=[("selected", "#09C5CE")])	 
-
-		#Frame Treeview
-		arbolFH_frame = Frame(fhWindow)
-		arbolFH_frame.pack(side=TOP, expand=True)
-
-		#Scrollbar
-		sedScrollX=Scrollbar(arbolFH_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
-		sedScrollY=Scrollbar(arbolFH_frame,orient=VERTICAL)
-		sedScrollY.pack(side=LEFT, fill=Y)
-
-
-		#Treeview
-		arbolFH= ttk.Treeview(arbolFH_frame,selectmode=BROWSE, height=6,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
-		arbolFH.pack()
-
-		sedScrollX.configure(command=arbolFH.xview)
-		sedScrollY.configure(command=arbolFH.yview)
-		#Define columnas.
-		
-		arbolFH["columns"]= (
-		"Número de tamiz",
-		"Área retenida (%)",
-		"Tamaño de abertura del tamiz superior, d1(mm)",
-		"Tamaño de abertura del tamiz inferior, d2(mm)",
-		"Tamaño promedio geométrico",
-		"Fair - Hatch"
-		)
-		
-		#Headings
-		arbolFH.heading("#0",text="ID", anchor=CENTER)
-		
-		for col in arbolFH["columns"]:
-			arbolFH.heading(col, text=col,anchor=CENTER)
-
-		for i in range(0,len(arbolFH["columns"])-1) :
-				arbolFH.column(f"#{i}",width=300, stretch=False)	
-
-				
-		arbolFH.column("#6",width=700, stretch=True)
-		arbolFH.column("#0",width=100, stretch=False)
-
-		#Striped row tags
-		arbolFH.tag_configure("oddrow", background= "#23D95F")
-		arbolFH.tag_configure("evenrow", background= "#9DC4AA")
-
-
-
-
-		######################FinTreeview#############################
-		
-		
-
-
-
-
-
+		optValue.set("Seleccione la temperatura")
 
 	mainWindow.withdraw()
 	filtroWindow = tk.Toplevel()
 	filtroWindow.protocol("WM_DELETE_WINDOW", on_closing)
 	filtroWindow.iconbitmap(bitmap='icons\\agua.ico')
-	filtroWindow.geometry("800x600") 
-	filtroWindow.resizable(0,0)
+	filtroWindow.geometry("1000x500") 
+	filtroWindow.resizable(0,0)	
 	filtroWindow.configure(background="#9DC4AA")
 
 	#panelF = ttk.Notebook(filtroWindow)
 	#panelF.pack(fill=BOTH, expand=TRUE)
-	frameFiltro= LabelFrame(filtroWindow, text="Filtro rápido", font=("Courier", 11))
+	frameFiltro= LabelFrame(filtroWindow, text="Filtro rápido", font=("Yu Gothic bold", 11))
 	frameFiltro.pack(side=LEFT,fill=BOTH,expand=TRUE)
 	#panelF.add(frameFiltro, text="Filtro rápido")
 	
@@ -803,82 +702,126 @@ def openFiltroWindow():
 	botonAtras= HoverButton(frameFiltro, image=imageAtras , width=100, height=40, bg= None, command=lambda: returnMainWindow(filtroWindow))
 	botonAtras.place(x=0,y=10)
 
-	frameEnergia=Label(filtroWindow,borderwidth=3, relief="groove" ,text= "Estimación de las pérdidas de energía a\ntravés del lecho filtrante limpio: ",font=("Courier", 9), width=40, height=18, anchor=NW, justify=LEFT)
-	frameEnergia.place(x=500, y=130)
+	botonNewEntryFiltro = HoverButton(frameFiltro, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=20, height=2, bg= "#09C5CE", font=("Yu Gothic bold", 9),command= lambda: newEntryFiltro(lista_entradas, tempAgua))
+	botonNewEntryFiltro.place(x=600,y=70)
 
-	botonCalcularFH = HoverButton(frameEnergia, text="Fair - Hatch", activebackground="#9DC4AA", anchor=CENTER,width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularFH(lista_entradas))
+	'''
+	botonCalcularFH = HoverButton(frameFiltro, text="Fair - Hatch", activebackground="#9DC4AA", anchor=CENTER,width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularFH(lista_entradas))
 	botonCalcularFH.place(x=2,y=80)
 
-	botonCalcularCK = HoverButton(frameEnergia, text="Carmen - Kozeny", activebackground="#9DC4AA", anchor=CENTER, width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print("Funciona"))
+	botonCalcularCK = HoverButton(frameFiltro, text="Carmen - Kozeny", activebackground="#9DC4AA", anchor=CENTER, width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print("Funciona"))
 	botonCalcularCK.place(x=2,y=140)
 	
-	botonCalcularR = HoverButton(frameEnergia, text="Rose", activebackground="#9DC4AA", anchor=CENTER , width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print("Funciona"))
+	botonCalcularR = HoverButton(frameFiltro, text="Rose", activebackground="#9DC4AA", anchor=CENTER , width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print("Funciona"))
 	botonCalcularR.place(x=2,y=200)
 
 	botonCalcularCoefUnif = HoverButton(frameFiltro, text="Calcular coeficiente de uniformidad", activebackground="#9DC4AA", anchor=CENTER , width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print("Funciona"))
 	botonCalcularCoefUnif.place(x=500,y=428)
 
-	botonNewEntryFiltro = HoverButton(frameFiltro, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltro(lista_entradas))
-	botonNewEntryFiltro.place(x=500,y=500)
-
-	#botonCalcular = HoverButton(frameEnergia, text="Rose", activebackground="#9DC4AA", anchor=CENTER , width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print("Funciona"))
-	#botonCalcular.place(x=2,y=200)
 	
+	'''
+
 	Label(frameFiltro, text="¿?",font=("Yu Gothic bold",10)).place(x=170, y=30)
 
-	entradaLabel=Label(frameFiltro, text="Datos de entrada: ",font=("Yu Gothic bold",10))
+	numTamizLabel = Label(frameFiltro, text="Número de tamiz",font=("Yu Gothic bold",10))
+	numTamizLabel.place(x=30, y=70)
+	arenaRetenidaLabel = Label(frameFiltro, text="Arena retenida [%]",font=("Yu Gothic bold",10))
+	arenaRetenidaLabel.place(x=200, y=70)
+	tempAguaLabel = Label(frameFiltro, text="Temperatura del agua a tratar",font=("Yu Gothic bold",10))
+	tempAguaLabel.place(x=250, y=70)
+	#salidaLabel = Label(frameFiltro, text="Final",font=("Yu Gothic bold",10))
+	#salidaLabel.place(x=30, y=450)
 
-	caudalLabel=Label(frameFiltro, text="Q = Caudal de diseño (QMD)[m^3/s]: ", font =("Yu Gothic",9))
-	caudalName = Entry(frameFiltro)
-	caudalName.focus()
+	nT11 = Entry(frameFiltro, width=6)
+	nT12 = Entry(frameFiltro, width=6)
+	nT21 = Entry(frameFiltro, width=6)
+	nT22 = Entry(frameFiltro, width=6)
+	nT31 = Entry(frameFiltro, width=6)
+	nT32 = Entry(frameFiltro, width=6)
+	nT41 = Entry(frameFiltro, width=6)
+	nT42 = Entry(frameFiltro, width=6)
+	nT51 = Entry(frameFiltro, width=6)
+	nT52 = Entry(frameFiltro, width=6)
+	nT61 = Entry(frameFiltro, width=6)
+	nT62 = Entry(frameFiltro, width=6)
+	nT71 = Entry(frameFiltro, width=6)
+	nT72 = Entry(frameFiltro, width=6)
+	nT81 = Entry(frameFiltro, width=6)
+	nT82 = Entry(frameFiltro, width=6)
+	nT91 = Entry(frameFiltro, width=6)
+	nT92 = Entry(frameFiltro, width=6)
+	nT101 = Entry(frameFiltro, width=6)
+	nT102 = Entry(frameFiltro, width=6)
+	nT111 = Entry(frameFiltro, width=6)
+	nT112 = Entry(frameFiltro, width=6)
+	nT121 = Entry(frameFiltro, width=6)
+	nT122 = Entry(frameFiltro, width=6)
+	labelSepnT1= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+	labelSepnT2= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+	labelSepnT3= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+	labelSepnT4= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+	labelSepnT5= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+	labelSepnT6= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+	labelSepnT7= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+	labelSepnT8= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+	labelSepnT9= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+	labelSepnT10= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+	labelSepnT11= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+	labelSepnT12= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
+
+	aR1 = Entry(frameFiltro, width=6)
+	aR2 = Entry(frameFiltro, width=6)
+	aR3 = Entry(frameFiltro, width=6)
+	aR4 = Entry(frameFiltro, width=6)
+	aR5 = Entry(frameFiltro, width=6)
+	aR6 = Entry(frameFiltro, width=6)
+	aR7 = Entry(frameFiltro, width=6)
+	aR8 = Entry(frameFiltro, width=6)
+	aR9 = Entry(frameFiltro, width=6)
+	aR10 = Entry(frameFiltro, width=6)
+	aR11 = Entry(frameFiltro, width=6)
+	aR12 = Entry(frameFiltro, width=6)
+
 	
-	tasaFiltracionesLabel=Label(frameFiltro, text="V{} = Tasa de filtración [m/d]: ".format(getSub("f")), font =("Yu Gothic",9))
-	tasaFiltracionName = Entry(frameFiltro)
+	
+	
 
-	viscocidadCinematicaLabel= Label(frameFiltro, text="v = Viscocidad cinemática del agua [(m^2)/s]: ", font =("Yu Gothic",9))
-	viscocidadCinematicaName = Entry(frameFiltro)
-
-	caracaLabel=Label(frameFiltro, text="Características del lecho filtrante: ",font=("Yu Gothic bold",10))
-
-	factorDeFormaLabel= Label(frameFiltro, text=u"\u03A6 = Factor de forma (Fair-Hatch y Carmen-Koenzy) []: ", font =("Yu Gothic",9))
-	factorDeFormaName = Entry(frameFiltro)
-
-	velocidadSupFiltracionLabel	= Label(frameFiltro, text="v{} = Velocidad superficial de filtación [m/h]: ".format(getSub("a")), font =("Yu Gothic",9))
-	velocidadSupFiltracionName = Entry(frameFiltro)
-
-	gravedadLabel = Label(frameFiltro, text="g = Gravedad [m/s^2]: ", font =("Yu Gothic",9))
-	gravedadName = Entry(frameFiltro)
-
-	profundidadLabel = Label(frameFiltro, text="L = Profundidad [m]: ", font =("Yu Gothic",9))
-	profuncidadName = Entry(frameFiltro)
-
-	PorosidadLabel= Label(frameFiltro, text=u"\u03B5 = Porosidad []: ", font =("Yu Gothic",9))
-	PorosidadName = Entry(frameFiltro)
-
-	constanteFiltracionLabel= Label(frameFiltro, text=u"\u03BA = Constante de filtración(Fair - Hatch) []:", font =("Yu Gothic",9))
-	constanteFiltracionName = Entry(frameFiltro)
-
-	factorEsfericidadLabel= Label(frameFiltro, text=u"\u04A8 = Factor de esfericidad(Rose) []: ", font =("Yu Gothic",9))
-	factorEsfericidadName = Entry(frameFiltro)
-
-
-	lista_labels=[entradaLabel, caudalLabel, tasaFiltracionesLabel,viscocidadCinematicaLabel,caracaLabel,factorDeFormaLabel,velocidadSupFiltracionLabel,gravedadLabel,profundidadLabel,PorosidadLabel,constanteFiltracionLabel,factorEsfericidadLabel]
-	lista_entry=["noEntry", caudalName, tasaFiltracionName,viscocidadCinematicaName,"noEntry",factorDeFormaName,velocidadSupFiltracionName,gravedadName,profuncidadName,PorosidadName,constanteFiltracionName,factorEsfericidadName]
-	lista_entradas=[caudalName, tasaFiltracionName,viscocidadCinematicaName,factorDeFormaName,velocidadSupFiltracionName,gravedadName,profuncidadName,PorosidadName,constanteFiltracionName,factorEsfericidadName]
-	valorInitFrame= 70
-	valorInitLabel= 70
-
-	for name in lista_labels:
-		valorInitFrame=valorInitFrame+ 35.8
-		name.place(x=0, y= valorInitFrame )
-
-	for name in lista_entry:
-		if name == "noEntry":
-			valorInitLabel=valorInitLabel+ 35.8
+	listaNumTamiz=[nT11,nT12,nT21,nT22,nT31,nT32,nT41,nT42,nT51,nT52,nT61,nT62,nT71,nT72,nT81,nT82,nT91,nT92,nT101,nT102,nT111,nT112,nT121,nT122]
+	listaSepnT=[labelSepnT1, labelSepnT2, labelSepnT3, labelSepnT4, labelSepnT5, labelSepnT6, labelSepnT7, labelSepnT8, labelSepnT9, labelSepnT10, labelSepnT11, labelSepnT12]	
+	listaAR=[aR1,aR2,aR3,aR4,aR5,aR6,aR7,aR8,aR9,aR10,aR11,aR12]
+	i=0
+	alturaInicial = 99
+	for elemento in listaNumTamiz:
+		if i%2==0:
+			elemento.place(x=30, y=alturaInicial)
+			i=i+1
 		else:
-			valorInitLabel=valorInitLabel+ 35.8
-			name.place(x=310, y= valorInitLabel)
-	gravedadName.insert(0, 9.806)
+			elemento.place(x=110, y=alturaInicial)
+			i=i+1
+			alturaInicial=alturaInicial+29
+	alturaInicial = 99
+
+	for j in range(0,len(listaSepnT)):
+		listaSepnT[j].place(x=80, y=alturaInicial)
+		listaAR[j].place(x=235, y=alturaInicial)
+		alturaInicial=alturaInicial+29
+
+	tempAgua = StringVar()
+	tempAgua.set("Seleccione la temperatura")
+	listaValoresTemp=list()
+	for i in range(0,36):
+		listaValoresTemp.append(f"{i}")
+	
+	tempAguaName = OptionMenu(frameFiltro, tempAgua, *listaValoresTemp)
+	tempAguaLabel.place(x=350, y=70)
+	tempAguaName.place(x=350, y=99)
+	
+	nT11.focus()
+	
+	lista_entradas= listaNumTamiz+listaAR
+
+	
+
 	filtroWindow.mainloop()
 
 
