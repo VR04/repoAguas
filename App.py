@@ -4,6 +4,7 @@ from tkinter import messagebox
 import tkinter as tk
 import pandas as pd
 from math import pi,sin,cos,tan,sqrt
+from functools import partial
 
 class HoverButton(Button):
 		def __init__(self, master, **kw):
@@ -732,9 +733,23 @@ def openFiltroWindow():
 	#salidaLabel = Label(frameFiltro, text="Final",font=("Yu Gothic bold",10))
 	#salidaLabel.place(x=30, y=450)
 
+	valoresAceptadosTamiz2=["20","25","30","35","40","50","60","70","100"]
 	nT11 = Entry(frameFiltro, width=6)
-	nT12 = Entry(frameFiltro, width=6)
+	
+	varPrueba=StringVar()
+	nT12 = Entry(frameFiltro, width=6, textvariable=varPrueba)
 	nT21 = Entry(frameFiltro, width=6)
+
+	def celda2(*args):
+		if nT21.get() != "":
+			nT21.delete(0,END)
+		ent = nT12.get()
+		for val in valoresAceptadosTamiz2:
+			if ent == val:
+				nT21.insert(0, ent)
+
+	varPrueba.trace_add("write", celda2)
+
 	nT22 = Entry(frameFiltro, width=6)
 	nT31 = Entry(frameFiltro, width=6)
 	nT32 = Entry(frameFiltro, width=6)
@@ -820,7 +835,7 @@ def openFiltroWindow():
 	
 	lista_entradas= listaNumTamiz+listaAR
 
-	
+
 
 	filtroWindow.mainloop()
 
