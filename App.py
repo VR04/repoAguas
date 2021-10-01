@@ -684,7 +684,7 @@ def openFiltroWindow():
 
 	#Configure colors
 	
-	style.configure("Treeview",background="#9DC4AA", foreground="black", rowheight=30,fieldbackground="#9DC4AA")
+	style.configure("Treeview",background="#9DC4AA", foreground="black", rowheight=40,fieldbackground="#9DC4AA")
 	style.configure("Treeview.Heading", foreground="black", font =("Courier",12))
 	#Change selected color
 	style.map("Treeview", background=[("selected", "#09C5CE")])	 
@@ -693,6 +693,17 @@ def openFiltroWindow():
 		for elemento in lista:
 				elemento.delete(0, END)
 		optValue.set("Seleccione la temperatura")
+
+	def newDataTreeview(tree,listaS):
+		global contador
+
+		if contador%2 ==0:
+			tree.insert("",END,text= f"{contador+1}", values=tuple(listaS),
+			iid=contador, tags=("evenrow",))	
+		else:	
+			tree.insert("",END,text= f"{contador+1}", values=tuple(listaS),
+				iid=contador, tags=("oddrow",))
+		contador=contador+1
 
 	def principalesCaracFiltro():
 		
@@ -705,13 +716,12 @@ def openFiltroWindow():
 		#Frame Treeview
 		arbolCaracFiltro_frame = LabelFrame(caracFiltroWindow, text="Principales caracterísiticas del filtro", font=("Yu Gothic bold", 11))
 		arbolCaracFiltro_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
-		
+
 		#Scrollbar
 		sedScrollX=Scrollbar(arbolCaracFiltro_frame,orient=HORIZONTAL)
 		sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arbolCaracFiltro_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
-
 
 		#Treeview
 		arbolCaracFiltro= ttk.Treeview(arbolCaracFiltro_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
@@ -723,7 +733,7 @@ def openFiltroWindow():
 		arbolCaracFiltro["columns"]= (
 		"Característica",""
 		)
-		
+
 		#Headings
 		arbolCaracFiltro.heading("#0",text="ID", anchor=CENTER)
 		
@@ -741,7 +751,7 @@ def openFiltroWindow():
 		arbolCaracFiltro.tag_configure("evenrow", background= "#9DC4AA")
 
 		col1=["Tipo de filtro","Medio filtrante","Distribución del medio","Tasa de filtración","Duración de carrera","Pérdida de carga inicial","Pérdida de carga final","Uso de agua tratada en lavado","Profundida del medio","Profundidad de grava","Drenaje"]
-		col2=["Filtro rápido de arena","Arena","Estratigicado de fino a grueso","120 m/d","12 - 36 horas", "0.3 m","2,4 - 3,0 m","2-4%","0,60-0,75 m","0,30-0,45 m","Tubería Perforada"]
+		col2=["Filtro rápido de arena","Arena","Estratigicado de fino a grueso","120 m/d","12 - 36 horas", "0,3 m","2,4 - 3,0 m","2-4%","0,60-0,75 m","0,30-0,45 m","Tubería Perforada"]
 
 		count=0
 		for m in range(0,11):
@@ -755,6 +765,116 @@ def openFiltroWindow():
 				count=count+1
 
 		caracFiltroWindow.mainloop()
+
+	
+
+	def granulometria():
+		
+		global contador
+		granulometriaWindow = tk.Toplevel()
+		granulometriaWindow.iconbitmap(bitmap='icons\\agua.ico')
+		granulometriaWindow.geometry("1000x500") 
+		granulometriaWindow.resizable(0,0)	
+		granulometriaWindow.configure(background="#9DC4AA")
+		
+		#Frame principal
+		granulometriaFrame=LabelFrame(granulometriaWindow, text="Granulometría del medio filtrante de arena", font=("Yu Gothic bold", 11))
+		granulometriaFrame.pack(side=TOP, fill=BOTH,expand=True)
+		
+		#Frame Treeview
+		arbolgranulometria_frame = LabelFrame(granulometriaFrame, text="Principales caracterísiticas del filtro", font=("Yu Gothic bold", 11))
+		arbolgranulometria_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolgranulometria_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolgranulometria_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolGranulometria= ttk.Treeview(arbolgranulometria_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolGranulometria.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolGranulometria.xview)
+		sedScrollY.configure(command=arbolGranulometria.yview)
+		#Define columnas.
+		arbolGranulometria["columns"]= (
+		"Número de tamiz","Area retenida [%]", "Número de tamiz que retiene", "Tamaño de abretura del tamiz [mm]", "Acumulado de arena que pasa [%]", "Tamaño de abretura del tamiz [mm]", "Acumulado de arena que pasa [%]" 
+		)
+
+		#Headings
+		arbolGranulometria.heading("#0",text="ID", anchor=CENTER)
+		
+		for col in arbolGranulometria["columns"]:
+			arbolGranulometria.heading(col, text=col,anchor=CENTER)
+
+		for i in range(0,len(arbolGranulometria["columns"])) :
+				arbolGranulometria.column(f"#{i}",width=300, stretch=False)	
+		
+		arbolGranulometria.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolGranulometria.tag_configure("oddrow", background= "#23D95F")
+		arbolGranulometria.tag_configure("evenrow", background= "#9DC4AA")
+
+
+		#Insersión datos.
+		contador=0
+		listaEntradaTemp=list()
+		listaEntradaTemp.clear()
+		newDataTreeview(arbolGranulometria, listaEntradaTemp)
+		'''
+		listaTemp=list()
+		listaTemp.clear()
+		
+		#Todas los calculos.
+		listaTemp.append(velocidadPromedioFlujo(lista_entry))
+		listaTemp.append(velocidadPromedioFlujoCorregida(lista_entry))
+		listaTemp.append(tiempoDeRetencionCanal(lista_entry))
+		listaTemp.append(numeroCanalesModulo(lista_entry))
+		listaTemp.append(longitudOcupadaPlacas(lista_entry))
+		listaTemp.append(alturaPlacas(lista_entry))
+		listaTemp.append(distanciaCanaletasRecoleccion(lista_entry))
+		listaTemp.append(alturaDeSedimentacion(lista_entry))
+		listaTemp.append(volumenTanqueSedimentacion(lista_entry))
+		listaTemp.append(tiempoRetencionTotal(lista_entry))
+		listaTemp.append(cargaSuperficial(lista_entry))
+		listaTemp.append(relacionLongitudAncho(lista_entry))
+		listaTemp.append(alturaTolvaLodos(lista_entry))
+		listaTemp.append(largoTotalSed(lista_entry))
+		listaTemp.append(anchoTotalSed(lista_entry))
+		listaTemp.append(alturaTotalSed(lista_entry))		
+		listaTemp.append(numeroCanaletasDeRecoleccion(lista_entry))
+		listaTemp.append(distanciaEntreCanaletasAjust(lista_entry))
+		listaTemp.append(longitudDelMultipleDescarga(lista_entry))
+		listaTemp.append(diametroNominalMult(lista_entry))
+		listaTemp.append(diametroInternoMultiple(lista_entry))
+		listaTemp.append(diametroInternoOrificios(lista_entry))
+		listaTemp.append(diametroNominalMasCercano(lista_entry))
+		listaTemp.append(diametroInternoMultipleAjust(lista_entry))
+		listaTemp.append(cuadroRelacionDiametroyMultiple(lista_entry))
+		listaTemp.append(diametroNominalMasCercanoAjust(lista_entry))
+		listaTemp.append(diametroInternoMultipleAjust2(lista_entry))
+		listaTemp.append(tiranteSobreOrificio(lista_entry))
+		listaTemp.append(relacionLongitudMultipleNumOrificios(lista_entry))
+		listaTemp.append(separacionEntreOrificiosMult(lista_entry))
+		listaTemp.append(separacionEntreOrificiosMultConf(lista_entry))
+		
+		
+		
+		
+		listaTemp=lista_entry+listaTemp
+		listaSed.append(listaTemp)
+		
+
+		newDataTreeview(arbolSed,listaTemp)
+
+		'''
+
+		
+		granulometriaWindow.mainloop()
+
+
 
 
 
@@ -786,7 +906,7 @@ def openFiltroWindow():
 
 	botonPrincipalesCaracteristicasDelFiltro = HoverButton(frameFiltro, text="Ver principales características del filtro", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=principalesCaracFiltro)
 
-	botonGranulometria = HoverButton(frameFiltro, text="Granulometría del medio filtrante de arena", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+	botonGranulometria = HoverButton(frameFiltro, text="Granulometría del medio filtrante de arena", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: granulometria())
 
 	botonCoefUniformidad = HoverButton(frameFiltro, text="Coeficiente de uniformidad", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
 
@@ -921,6 +1041,8 @@ def openFiltroWindow():
 	listaNumTamiz=[nT11,nT12,nT21,nT22,nT31,nT32,nT41,nT42,nT51,nT52,nT61,nT62,nT71,nT72,nT81,nT82,nT91,nT92,nT101,nT102,nT111,nT112,nT121,nT122]
 	listaSepnT=[labelSepnT1, labelSepnT2, labelSepnT3, labelSepnT4, labelSepnT5, labelSepnT6, labelSepnT7, labelSepnT8, labelSepnT9, labelSepnT10, labelSepnT11, labelSepnT12]	
 	listaAR=[aR1,aR2,aR3,aR4,aR5,aR6,aR7,aR8,aR9,aR10,aR11,aR12]
+
+
 	i=0
 	alturaInicial = 99
 	for elemento in listaNumTamiz:
@@ -951,7 +1073,6 @@ def openFiltroWindow():
 	nT11.focus()
 	
 	lista_entradas= listaNumTamiz+listaAR
-
 
 
 	filtroWindow.mainloop()
