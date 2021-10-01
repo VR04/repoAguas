@@ -768,8 +768,51 @@ def openFiltroWindow():
 
 	
 
-	def granulometria():
+	def granulometria(lista1,lista2):
 		
+		listaNTamizTemp=lista1.copy()
+		listaARetenidaTemp=lista2.copy()
+		listaNTamiz=list()
+		listaARetenida=list()
+		if listaNTamizTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de los números de tamiz.")
+			return None
+		for ind in range(0, len(listaNTamizTemp)):
+			print(listaNTamizTemp[ind].get(), " y ", ind%2)
+			if listaNTamizTemp[ind].get() == "" and ind%2==0:
+				break
+			elif listaNTamizTemp[ind].get() == "" and ind%2 != 0:
+				messagebox.showwarning(title="Error", message="Hace falta el rango de la derecha de alguna entrada.")
+				return None
+			else:
+				try:
+					CountControl=0
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m: 
+							CountControl=CountControl+1
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m and CountControl==18:
+							CountControl=CountControl+1
+							messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no coincide con los valores estándar para número de tamiz.")
+							return None
+					if  ind%2 != 0:
+						guardaValColumna2 = int(listaNTamizTemp[ind].get())	
+					print(listaNTamizTemp[ind].get())
+					
+					if ind !=0 and ind%2==0 and int(listaNTamizTemp[ind].get()) != guardaValColumna2:
+						messagebox.showwarning(title="Error", message=f"El valor donde finaliza un rango debe ser el valor inicial del siguiente rango.")
+						return None
+				
+					
+
+					
+					listaNTamiz.append(int(listaNTamizTemp[ind].get()))
+
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
+		print(listaNTamiz)
+			
 		global contador
 		granulometriaWindow = tk.Toplevel()
 		granulometriaWindow.iconbitmap(bitmap='icons\\agua.ico')
@@ -906,7 +949,7 @@ def openFiltroWindow():
 
 	botonPrincipalesCaracteristicasDelFiltro = HoverButton(frameFiltro, text="Ver principales características del filtro", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=principalesCaracFiltro)
 
-	botonGranulometria = HoverButton(frameFiltro, text="Granulometría del medio filtrante de arena", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: granulometria())
+	botonGranulometria = HoverButton(frameFiltro, text="Granulometría del medio filtrante de arena", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: granulometria(listaNumTamiz,listaAR))
 
 	botonCoefUniformidad = HoverButton(frameFiltro, text="Coeficiente de uniformidad", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
 
