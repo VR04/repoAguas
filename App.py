@@ -677,11 +677,84 @@ def openSedWindow():
 
 
 def openFiltroWindow():
+	#Style
+	style = ttk.Style()
+	#Pick a theme
+	style.theme_use("clam")
+
+	#Configure colors
+	
+	style.configure("Treeview",background="#9DC4AA", foreground="black", rowheight=30,fieldbackground="#9DC4AA")
+	style.configure("Treeview.Heading", foreground="black", font =("Courier",12))
+	#Change selected color
+	style.map("Treeview", background=[("selected", "#09C5CE")])	 
 
 	def newEntryFiltro(lista, optValue):
 		for elemento in lista:
 				elemento.delete(0, END)
 		optValue.set("Seleccione la temperatura")
+
+	def principalesCaracFiltro():
+		
+		caracFiltroWindow = tk.Toplevel()
+		caracFiltroWindow.iconbitmap(bitmap='icons\\agua.ico')
+		caracFiltroWindow.geometry("1000x500") 
+		caracFiltroWindow.resizable(0,0)	
+		caracFiltroWindow.configure(background="#9DC4AA")
+		
+		#Frame Treeview
+		arbolCaracFiltro_frame = LabelFrame(caracFiltroWindow, text="Principales caracterísiticas del filtro", font=("Yu Gothic bold", 11))
+		arbolCaracFiltro_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+		
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolCaracFiltro_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolCaracFiltro_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+
+		#Treeview
+		arbolCaracFiltro= ttk.Treeview(arbolCaracFiltro_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolCaracFiltro.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolCaracFiltro.xview)
+		sedScrollY.configure(command=arbolCaracFiltro.yview)
+		#Define columnas.
+		arbolCaracFiltro["columns"]= (
+		"Característica",""
+		)
+		
+		#Headings
+		arbolCaracFiltro.heading("#0",text="ID", anchor=CENTER)
+		
+		for col in arbolCaracFiltro["columns"]:
+			arbolCaracFiltro.heading(col, text=col,anchor=CENTER)
+
+		for i in range(0,len(arbolCaracFiltro["columns"])) :
+				arbolCaracFiltro.column(f"#{i}",width=300, stretch=False)	
+	
+		arbolCaracFiltro.column("#2",width=300, stretch=True)
+		arbolCaracFiltro.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolCaracFiltro.tag_configure("oddrow", background= "#23D95F")
+		arbolCaracFiltro.tag_configure("evenrow", background= "#9DC4AA")
+
+		col1=["Tipo de filtro","Medio filtrante","Distribución del medio","Tasa de filtración","Duración de carrera","Pérdida de carga inicial","Pérdida de carga final","Uso de agua tratada en lavado","Profundida del medio","Profundidad de grava","Drenaje"]
+		col2=["Filtro rápido de arena","Arena","Estratigicado de fino a grueso","120 m/d","12 - 36 horas", "0.3 m","2,4 - 3,0 m","2-4%","0,60-0,75 m","0,30-0,45 m","Tubería Perforada"]
+
+		count=0
+		for m in range(0,11):
+			if count%2 ==0:
+				arbolCaracFiltro.insert("",END,text=f"{count+1}", values=(col1[count],col2[count]),
+					iid=count, tags=("evenrow",))	
+				count=count+1
+			else:
+				arbolCaracFiltro.insert("",END,text= f"{count+1}", values=(col1[count],col2[count]),
+					iid=count, tags=("oddrow",))
+				count=count+1
+
+		caracFiltroWindow.mainloop()
 
 
 
@@ -711,7 +784,7 @@ def openFiltroWindow():
 
 	botonNewEntryFiltro = HoverButton(frameFiltro, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: newEntryFiltro(lista_entradas, tempAgua))
 
-	botonPrincipalesCaracteristicasDelFiltro = HoverButton(frameFiltro, text="Ver principales características del filtro", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+	botonPrincipalesCaracteristicasDelFiltro = HoverButton(frameFiltro, text="Ver principales características del filtro", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=principalesCaracFiltro)
 
 	botonGranulometria = HoverButton(frameFiltro, text="Granulometría del medio filtrante de arena", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
 
