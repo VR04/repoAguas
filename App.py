@@ -683,6 +683,8 @@ def openFiltroWindow():
 				elemento.delete(0, END)
 		optValue.set("Seleccione la temperatura")
 
+
+
 	mainWindow.withdraw()
 	filtroWindow = tk.Toplevel()
 	filtroWindow.protocol("WM_DELETE_WINDOW", on_closing)
@@ -703,30 +705,35 @@ def openFiltroWindow():
 
 	botonAtras= HoverButton(frameFiltro, image=imageAtras , width=100, height=40, bg= None, command=lambda: returnMainWindow(filtroWindow))
 	botonAtras.place(x=0,y=10)
+	botonRestriccionNumTamiz=  HoverButton(frameFiltro, image=imageRestringido, bg=None, width=20, height=20,command= lambda: messagebox.showinfo(title="Valores estándar tamaño de tamiz",message=f"Los tamaños estándar son: 4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140") )
+	botonRestriccionNumTamiz.place(x=150,y=65)
 
-	botonNewEntryFiltro = HoverButton(frameFiltro, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=20, height=2, bg= "#09C5CE", font=("Yu Gothic bold", 9),command= lambda: newEntryFiltro(lista_entradas, tempAgua))
-	botonNewEntryFiltro.place(x=600,y=70)
 
-	botonRestriccionNumTamiz=  HoverButton(frameFiltro, image=imageRestringido, bg=None, width=40, height=40,command= lambda: messagebox.showinfo(title="Valores estándar tamaño de tamiz",message=f"Los tamaños estándar son: 4,6") )
-	botonRestriccionNumTamiz.place(x=10,y=70)
+	botonNewEntryFiltro = HoverButton(frameFiltro, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: newEntryFiltro(lista_entradas, tempAgua))
 
-	'''
-	botonCalcularFH = HoverButton(frameFiltro, text="Fair - Hatch", activebackground="#9DC4AA", anchor=CENTER,width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularFH(lista_entradas))
-	botonCalcularFH.place(x=2,y=80)
+	botonPrincipalesCaracteristicasDelFiltro = HoverButton(frameFiltro, text="Ver principales características del filtro", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
 
-	botonCalcularCK = HoverButton(frameFiltro, text="Carmen - Kozeny", activebackground="#9DC4AA", anchor=CENTER, width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print("Funciona"))
-	botonCalcularCK.place(x=2,y=140)
+	botonGranulometria = HoverButton(frameFiltro, text="Granulometría del medio filtrante de arena", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+
+	botonCoefUniformidad = HoverButton(frameFiltro, text="Coeficiente de uniformidad", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+
+	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+
+	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimacón de la pérdida de energía en el lecho de grava", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+
+	botonPerdidaCargaLechoExpandido = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+
+	botonPerdidaCargaLechoGrava = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho de grava", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+
+	listaBotonesOrg=[botonNewEntryFiltro,botonPrincipalesCaracteristicasDelFiltro, botonGranulometria,botonCoefUniformidad,botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio,botonEstimacionPerdidaLechoGrava,botonPerdidaCargaLechoExpandido,botonPerdidaCargaLechoGrava]
+
+	alturaInicialBotones=70
+	for boton in listaBotonesOrg:
+		boton.place(x=560, y=alturaInicialBotones)
+		alturaInicialBotones=alturaInicialBotones+50
 	
-	botonCalcularR = HoverButton(frameFiltro, text="Rose", activebackground="#9DC4AA", anchor=CENTER , width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print("Funciona"))
-	botonCalcularR.place(x=2,y=200)
 
-	botonCalcularCoefUnif = HoverButton(frameFiltro, text="Calcular coeficiente de uniformidad", activebackground="#9DC4AA", anchor=CENTER , width=38, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print("Funciona"))
-	botonCalcularCoefUnif.place(x=500,y=428)
-
-	
-	'''
-
-	Label(frameFiltro, text="¿?",font=("Yu Gothic bold",10)).place(x=170, y=30)
+	Label(frameFiltro, text="Diseño de filtro",font=("Yu Gothic bold",10)).place(x=170, y=30)
 
 	numTamizLabel = Label(frameFiltro, text="Número de tamiz",font=("Yu Gothic bold",10))
 	numTamizLabel.place(x=30, y=70)
@@ -799,7 +806,7 @@ def openFiltroWindow():
 	var102=StringVar()
 	nT102 = Entry(frameFiltro, width=6, textvariable=var102)
 	nT111 = Entry(frameFiltro, width=6)
-	var102.trace_add("write", lambda *args: celda2(nT101,nT111))
+	var102.trace_add("write", lambda *args: celda2(nT102,nT111))
 
 	var112=StringVar()
 	nT112 = Entry(frameFiltro, width=6, textvariable=var112)
