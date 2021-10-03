@@ -772,6 +772,10 @@ def openFiltroWindow():
 
 	def granulometria(lista1,lista2):
 		
+		def buscarEnTabla(NumTamiz,tablaDic):
+			return tablaDic[NumTamiz]
+		
+
 		listaNTamizTemp=lista1.copy()
 		listaARetenidaTemp=lista2.copy()
 		listaNTamiz=list()
@@ -816,7 +820,7 @@ def openFiltroWindow():
 				except:
 					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
 					return None
-		print("Tamiz: ", listaNTamiz)
+	
 
 		for ind in range(0, len(listaARetenidaTemp)):
 			if listaARetenidaTemp[ind].get() == "" and ind != 0:
@@ -840,7 +844,7 @@ def openFiltroWindow():
 		if sumaPorcentajes != 100:
 			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
 			return None
-		print("Arena: ",listaARetenida)
+	
 
 
 	
@@ -873,7 +877,13 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolGranulometria.yview)
 		#Define columnas.
 		arbolGranulometria["columns"]= (
-		"Número de tamiz","Area retenida [%]", "Número de tamiz que retiene", "Tamaño de abretura del tamiz [mm] (OD)", "Acumulado de arena que pasa [%] (OD)", "Tamaño de abretura del tamiz [mm] (OA)", "Acumulado de arena que pasa [%](OA)" 
+		"Número de tamiz",
+		"Area retenida [%]", 
+		"Número de tamiz que retiene", 
+		"Tamaño de abertura del tamiz [mm] (OD)", 
+		"Acumulado de arena que pasa [%] (OD)", 
+		"Tamaño de abertura del tamiz [mm] (OA)", 
+		"Acumulado de arena que pasa [%](OA)" 
 		)
 
 		#Headings
@@ -882,9 +892,13 @@ def openFiltroWindow():
 		for col in arbolGranulometria["columns"]:
 			arbolGranulometria.heading(col, text=col,anchor=CENTER)
 
-		for i in range(0,len(arbolGranulometria["columns"])) :
+		for i in range(0,4) :
 				arbolGranulometria.column(f"#{i}",width=300, stretch=False)	
 		
+		for i in range(4,len(arbolGranulometria["columns"])+1) :
+				arbolGranulometria.column(f"#{i}",width=500, stretch=False)	
+		
+	
 		arbolGranulometria.column("#0",width=0, stretch=False)
 
 		#Striped row tags
@@ -897,62 +911,70 @@ def openFiltroWindow():
 		contadorFiltro = 0
 
 		listaEntradaTemp=list()
-		listaEntradaTemp.clear()
+		datosSalida=list()
+		
+		################Datos temporales:
+		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
+		listaARetenida=[0.8, 4.25, 15.02, 16.65, 18.01, 18.25, 15.65, 9.3, 2.07]
+		################
 		
 		
+		#Tabla Tamaño Abertura Tamiz
+		TamañoTamiz= [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]
+		TamañoAbertura= [4.76, 3.35, 2.38, 1.68, 1.41, 1.0, 0.841, 0.707, 0.595, 0.5, 0.4, 0.354, 0.297, 0.25, 0.21, 0.177, 0.149, 0.105]
+		tablaTamañoAberturaTamiz=dict()
+		for ind in range(0, len(TamañoTamiz)):
+			tablaTamañoAberturaTamiz[TamañoTamiz[ind]] = TamañoAbertura[ind]
 
+		#Acumulado arena que pasa.
+		def acumuladoArenaQuePasa(indice):
+			suma=0
+			for elemento in range(0,indice+1):
+				suma= suma+listaARetenida[elemento]
+			return 100-suma
+		#Calculando acumulado:
+		listaAcumuladoArenaDescendente=list()
+		for ind in range(0, len(listaARetenida)):
+			listaAcumuladoArenaDescendente.append(acumuladoArenaQuePasa(ind))
+
+		listaAcumuladoArenaAscendente = listaAcumuladoArenaDescendente.copy()
+		listaAcumuladoArenaAscendente.reverse()
+
+		#OrganizandoListaNTamiz
+		listaNTamizExtremo=list()
+		listaNTamizSinRepeticion=list()
+		for num in range(0,len(listaNTamiz)):
+			if num%2==0:
+				pass	
+			else:
+				listaNTamizExtremo.append(listaNTamiz[num])
+		guardado=listaNTamiz[0]
+		listaNTamizSinRepeticion.append(guardado)
+		for elemento in listaNTamiz:
+			if elemento != guardado:
+				listaNTamizSinRepeticion.append(elemento)
+				guardado=elemento
 	
-		newDataTreeview(arbolGranulometria, listaEntradaTemp)
-		
-		'''	listaNTamiz
-		listaARetenida'''
-		'''
-		listaTemp=list()
-		listaTemp.clear()
-		
-		#Todas los calculos.
-		listaTemp.append(velocidadPromedioFlujo(lista_entry))
-		listaTemp.append(velocidadPromedioFlujoCorregida(lista_entry))
-		listaTemp.append(tiempoDeRetencionCanal(lista_entry))
-		listaTemp.append(numeroCanalesModulo(lista_entry))
-		listaTemp.append(longitudOcupadaPlacas(lista_entry))
-		listaTemp.append(alturaPlacas(lista_entry))
-		listaTemp.append(distanciaCanaletasRecoleccion(lista_entry))
-		listaTemp.append(alturaDeSedimentacion(lista_entry))
-		listaTemp.append(volumenTanqueSedimentacion(lista_entry))
-		listaTemp.append(tiempoRetencionTotal(lista_entry))
-		listaTemp.append(cargaSuperficial(lista_entry))
-		listaTemp.append(relacionLongitudAncho(lista_entry))
-		listaTemp.append(alturaTolvaLodos(lista_entry))
-		listaTemp.append(largoTotalSed(lista_entry))
-		listaTemp.append(anchoTotalSed(lista_entry))
-		listaTemp.append(alturaTotalSed(lista_entry))		
-		listaTemp.append(numeroCanaletasDeRecoleccion(lista_entry))
-		listaTemp.append(distanciaEntreCanaletasAjust(lista_entry))
-		listaTemp.append(longitudDelMultipleDescarga(lista_entry))
-		listaTemp.append(diametroNominalMult(lista_entry))
-		listaTemp.append(diametroInternoMultiple(lista_entry))
-		listaTemp.append(diametroInternoOrificios(lista_entry))
-		listaTemp.append(diametroNominalMasCercano(lista_entry))
-		listaTemp.append(diametroInternoMultipleAjust(lista_entry))
-		listaTemp.append(cuadroRelacionDiametroyMultiple(lista_entry))
-		listaTemp.append(diametroNominalMasCercanoAjust(lista_entry))
-		listaTemp.append(diametroInternoMultipleAjust2(lista_entry))
-		listaTemp.append(tiranteSobreOrificio(lista_entry))
-		listaTemp.append(relacionLongitudMultipleNumOrificios(lista_entry))
-		listaTemp.append(separacionEntreOrificiosMult(lista_entry))
-		listaTemp.append(separacionEntreOrificiosMultConf(lista_entry))
-		
-		
-		
-		
-		listaTemp=lista_entry+listaTemp
-		listaSed.append(listaTemp)
+				
+
+		longListaARetenida=len(listaARetenida)-1
+		for ind in range(0, len(listaARetenida)):
+			listaEntradaTemp.clear()
+			
+			listaEntradaTemp.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+			extremoDerecho=listaNTamizExtremo[ind]
+			listaEntradaTemp.append(listaARetenida[ind])
+			listaEntradaTemp.append(extremoDerecho)
+			listaEntradaTemp.append(tablaTamañoAberturaTamiz[extremoDerecho])
+			listaEntradaTemp.append(listaAcumuladoArenaDescendente[ind])
+			listaEntradaTemp.append(tablaTamañoAberturaTamiz[listaNTamizExtremo[longListaARetenida-ind]])
+			listaEntradaTemp.append(listaAcumuladoArenaAscendente[ind])
+			datosSalida.append(listaEntradaTemp)
+			newDataTreeview(arbolGranulometria, listaEntradaTemp)
 		
 
-		newDataTreeview(arbolSed,listaTemp)
 
-		'''
+		
 
 		
 		granulometriaWindow.mainloop()
