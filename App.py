@@ -47,6 +47,7 @@ def on_closing():
 
 
 contador=0
+contadorFiltro=0
 contador2 = 0
 
 def openSedWindow():
@@ -305,7 +306,7 @@ def openSedWindow():
 		listaTemp=lista_entry+listaTemp
 		listaSed.append(listaTemp)
 		
-
+		
 		newDataTreeview(arbolSed,listaTemp)
 		
 		
@@ -677,6 +678,7 @@ def openSedWindow():
 
 
 def openFiltroWindow():
+	global contadorFiltro
 	#Style
 	style = ttk.Style()
 	#Pick a theme
@@ -695,15 +697,15 @@ def openFiltroWindow():
 		optValue.set("Seleccione la temperatura")
 
 	def newDataTreeview(tree,listaS):
-		global contador
+		global contadorFiltro
 
-		if contador%2 ==0:
-			tree.insert("",END,text= f"{contador+1}", values=tuple(listaS),
-			iid=contador, tags=("evenrow",))	
+		if contadorFiltro%2 ==0:
+			tree.insert("",END,text= f"{contadorFiltro+1}", values=tuple(listaS),
+			iid=contadorFiltro, tags=("evenrow",))	
 		else:	
-			tree.insert("",END,text= f"{contador+1}", values=tuple(listaS),
-				iid=contador, tags=("oddrow",))
-		contador=contador+1
+			tree.insert("",END,text= f"{contadorFiltro+1}", values=tuple(listaS),
+				iid=contadorFiltro, tags=("oddrow",))
+		contadorFiltro=contadorFiltro+1
 
 	def principalesCaracFiltro():
 		
@@ -777,8 +779,11 @@ def openFiltroWindow():
 		if listaNTamizTemp[0].get() == "":
 			messagebox.showwarning(title="Error", message="Hace falta algún dato de los números de tamiz.")
 			return None
+		if listaARetenidaTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de la arena retenida.")
+			return None
+
 		for ind in range(0, len(listaNTamizTemp)):
-			print(listaNTamizTemp[ind].get(), " y ", ind%2)
 			if listaNTamizTemp[ind].get() == "" and ind%2==0:
 				break
 			elif listaNTamizTemp[ind].get() == "" and ind%2 != 0:
@@ -792,18 +797,18 @@ def openFiltroWindow():
 							CountControl=CountControl+1
 					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
 						if int(listaNTamizTemp[ind].get()) != m and CountControl==18:
-							CountControl=CountControl+1
-							messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no coincide con los valores estándar para número de tamiz.")
+							messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no coincide con los valores estándar para número de tamiz. Pulse el botón para conocerlos.")
 							return None
 					if  ind%2 != 0:
 						guardaValColumna2 = int(listaNTamizTemp[ind].get())	
-					print(listaNTamizTemp[ind].get())
 					
 					if ind !=0 and ind%2==0 and int(listaNTamizTemp[ind].get()) != guardaValColumna2:
 						messagebox.showwarning(title="Error", message=f"El valor donde finaliza un rango debe ser el valor inicial del siguiente rango.")
 						return None
-				
-					
+					if ind != 0 and int(listaNTamizTemp[ind].get()) < variableControlCreciente:
+						messagebox.showwarning(title="Error", message=f"Los valores de los rangos de número de tamiz deben ir en orden creciente.")
+						return None
+					variableControlCreciente=int(listaNTamizTemp[ind].get())
 
 					
 					listaNTamiz.append(int(listaNTamizTemp[ind].get()))
@@ -811,9 +816,35 @@ def openFiltroWindow():
 				except:
 					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
 					return None
-		print(listaNTamiz)
-			
-		global contador
+		print("Tamiz: ", listaNTamiz)
+
+		for ind in range(0, len(listaARetenidaTemp)):
+			if listaARetenidaTemp[ind].get() == "" and ind != 0:
+				break
+			else:
+				try:
+					listaARetenida.append(float(listaARetenidaTemp[ind].get()))
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
+		if len(listaARetenida) != len(listaNTamiz)/2:
+			messagebox.showwarning(title="Error", message="La cantidad de datos ingresados en los rangos de número de tamiz no coincide con la cantidad de datos de arena retendia.")
+			return None
+		
+		
+		sumaPorcentajes=0
+		for elemento in listaARetenida:
+			sumaPorcentajes= sumaPorcentajes + elemento
+		
+		
+		if sumaPorcentajes != 100:
+			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
+			return None
+		print("Arena: ",listaARetenida)
+
+
+	
+
 		granulometriaWindow = tk.Toplevel()
 		granulometriaWindow.iconbitmap(bitmap='icons\\agua.ico')
 		granulometriaWindow.geometry("1000x500") 
@@ -842,7 +873,7 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolGranulometria.yview)
 		#Define columnas.
 		arbolGranulometria["columns"]= (
-		"Número de tamiz","Area retenida [%]", "Número de tamiz que retiene", "Tamaño de abretura del tamiz [mm]", "Acumulado de arena que pasa [%]", "Tamaño de abretura del tamiz [mm]", "Acumulado de arena que pasa [%]" 
+		"Número de tamiz","Area retenida [%]", "Número de tamiz que retiene", "Tamaño de abretura del tamiz [mm] (OD)", "Acumulado de arena que pasa [%] (OD)", "Tamaño de abretura del tamiz [mm] (OA)", "Acumulado de arena que pasa [%](OA)" 
 		)
 
 		#Headings
@@ -862,10 +893,19 @@ def openFiltroWindow():
 
 
 		#Insersión datos.
-		contador=0
+		global contadorFiltro
+		contadorFiltro = 0
+
 		listaEntradaTemp=list()
 		listaEntradaTemp.clear()
+		
+		
+
+	
 		newDataTreeview(arbolGranulometria, listaEntradaTemp)
+		
+		'''	listaNTamiz
+		listaARetenida'''
 		'''
 		listaTemp=list()
 		listaTemp.clear()
