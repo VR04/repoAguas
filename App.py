@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 import tkinter as tk
 import pandas as pd
-from math import pi,sin,cos,tan,sqrt
+from math import pi,sin,cos,tan,sqrt,log10
 from functools import partial
 
 class HoverButton(Button):
@@ -1056,7 +1056,7 @@ def openFiltroWindow():
 
 		coeficienteDUWindow = tk.Toplevel()
 		coeficienteDUWindow.iconbitmap(bitmap='icons\\agua.ico')
-		coeficienteDUWindow.geometry("1000x500") 
+		coeficienteDUWindow.geometry("1000x200") 
 		coeficienteDUWindow.resizable(0,0)	
 		coeficienteDUWindow.configure(background="#9DC4AA")
 		
@@ -1065,7 +1065,7 @@ def openFiltroWindow():
 		coeficienteDUFrame.pack(side=TOP, fill=BOTH,expand=True)
 		
 		#Frame Treeview
-		arbolCoeficienteDU_frame = LabelFrame(coeficienteDUFrame, text="Principales caracterísiticas del filtro", font=("Yu Gothic bold", 11))
+		arbolCoeficienteDU_frame = Frame(coeficienteDUFrame, font=("Yu Gothic bold", 11))
 		arbolCoeficienteDU_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
@@ -1075,7 +1075,7 @@ def openFiltroWindow():
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolCoeficienteDU= ttk.Treeview(arbolCoeficienteDU_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolCoeficienteDU= ttk.Treeview(arbolCoeficienteDU_frame,selectmode=BROWSE, height=2,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
 		arbolCoeficienteDU.pack(side=TOP, fill=BOTH, expand=TRUE)
 
 		sedScrollX.configure(command=arbolCoeficienteDU.xview)
@@ -1097,7 +1097,7 @@ def openFiltroWindow():
 		
 		for i in range(0,len(arbolCoeficienteDU["columns"])) :
 				arbolCoeficienteDU.column(f"#{i}",width=300, stretch=False)	
-		arbolCoeficienteDU.column("#3",width=300, stretch=True)	
+		arbolCoeficienteDU.column("#3",width=600, stretch=True)	
 		arbolCoeficienteDU.column("#0",width=0, stretch=False)
 
 		#Striped row tags
@@ -1171,14 +1171,50 @@ def openFiltroWindow():
 			listaIntermedia = listaEntradaTemp.copy()
 			datosSalida.append(listaIntermedia)
 		
-
-		def tamañoEfectivod(numero):
-			pass
-	
-
-
+		abAcDic= dict()
+		for ind in range(0,len(datosSalida)):
+			abAcDic[datosSalida[ind][6]]=datosSalida[ind][5]
 		
+	
+		def tamañoEfectivod1(numero,dic):
+			elementoAnterior=dic[0]
+			for elemento in dic:
+				if elemento <= numero and elemento>=elementoAnterior:
+					variableGuarda=elemento
+					elementoAnterior=elemento
+			return variableGuarda
 
+		def tamañoEfectivod2(numero,dic):
+			elementoAnterior=100
+			for elemento in dic:
+				if elemento >= numero and elemento<=elementoAnterior:
+					variableGuarda=elemento
+					elementoAnterior=elemento
+			return variableGuarda
+		def tamañoEfectivod(numero,dic):
+			return[tamañoEfectivod1(numero,dic), tamañoEfectivod2(numero,dic)]
+
+		def calculo1CU(numero,x1,y1,x2,y2):
+			return(log10(x1)+(((numero-y1)/(y2-y1))*log10(x2/x1)))
+		def calculo2CU(numero,x1,y1,x2,y2):
+			return (10**(calculo1CU(numero,x1,y1,x2,y2)))
+		
+		#Calculo Tamaño Efectivo d10:
+		listaAcumuladoCU10=tamañoEfectivod(10,abAcDic)
+		y1=listaAcumuladoCU10[0]
+		y2=listaAcumuladoCU10[1]
+		x1=abAcDic[y1]
+		x2=abAcDic[y2]
+		d10= calculo2CU(10,x1,y1,x2,y2)
+		listaAcumuladoCU60=tamañoEfectivod(60,abAcDic)
+		Y1= listaAcumuladoCU60[0]
+		Y2= listaAcumuladoCU60[1]
+		X1= abAcDic[Y1]
+		X2=	abAcDic[Y2]
+		d60= calculo2CU(60,X1,Y1,X2,Y2)
+		CU=d60/d10
+		listaIngreso=[d10,d60,CU]
+		newDataTreeview(arbolCoeficienteDU,listaIngreso)
 		
 		coeficienteDUWindow.mainloop()
 
