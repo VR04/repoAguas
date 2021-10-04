@@ -1296,7 +1296,7 @@ def openFiltroWindow():
 				try:
 					listaEU.append(float(elemento.get()))
 				except:
-					messagebox.showwarning(title="Error", message="El número ingresado no es un número")
+					messagebox.showwarning(title="Error", message="El valor ingresado no es un número")
 					return None
 		listaEU.append(valorTemperatura)
 				
@@ -1796,6 +1796,122 @@ def openFiltroWindow():
 			alturaBotones= alturaBotones+50
 		estimacionPerdidaArenaWindow.mainloop()
 	
+	def calcularPEGravaYPredimensionamiento(listaEntradas):
+		listaE=list()
+		for elemento in listaEntradas:
+			try:
+				listaE.append(float(elemento.get()))
+			except:
+				messagebox.showwarning(title="Error", message="El valor ingresado no es un número")
+				return None
+	
+		print(listaE)	
+
+		estimacionPerdidaGravaYPredimensionamientoCalculoWindow = tk.Toplevel()
+		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.geometry("1000x500") 
+		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.resizable(0,0)	
+		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.configure(background="#9DC4AA")
+
+		##Panel:
+		panelGravaDimension = ttk.Notebook(estimacionPerdidaGravaYPredimensionamientoCalculoWindow)
+		panelGravaDimension.pack(fill=BOTH, expand=TRUE)
+		###########Frame Principal1
+		estimacionPerdidaGravaFrame=LabelFrame(panelGravaDimension, text="Estimación de la pérdida de energía en le lecho de grava.", font=("Yu Gothic bold", 11))
+		estimacionPerdidaGravaFrame.pack(side=TOP, fill=BOTH,expand=True)
+		panelGravaDimension.add(estimacionPerdidaGravaFrame,text="Pérdida energía en el lecho de grava")
+		#Frame Treeview
+		arbolEstimacionPerdidaGrava_frame = Frame(estimacionPerdidaGravaFrame)
+		arbolEstimacionPerdidaGrava_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolEstimacionPerdidaGrava_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolEstimacionPerdidaGrava_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolEstimacionPerdidaGrava= ttk.Treeview(arbolEstimacionPerdidaGrava_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolEstimacionPerdidaGrava.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolEstimacionPerdidaGrava.xview)
+		sedScrollY.configure(command=arbolEstimacionPerdidaGrava.yview)
+		#Define columnas.
+		arbolEstimacionPerdidaGrava["columns"]= (
+		"Tasa de filtración [m/d]",
+		"Profundidad del lecho de grava [m]",
+		"Pérdida de energía en lecho de grava durante la filtración [m]"
+		)
+
+		#Headings
+		arbolEstimacionPerdidaGrava.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolEstimacionPerdidaGrava["columns"]:
+			arbolEstimacionPerdidaGrava.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolEstimacionPerdidaGrava["columns"])+1) :
+				arbolEstimacionPerdidaGrava.column(f"#{i}",width=500, stretch=False)	
+		arbolEstimacionPerdidaGrava.column("#3",width=600, stretch=True)
+		arbolEstimacionPerdidaGrava.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolEstimacionPerdidaGrava.tag_configure("oddrow", background= "#23D95F")
+		arbolEstimacionPerdidaGrava.tag_configure("evenrow", background= "#9DC4AA")
+
+		################Frame principal2
+		PredimensionamientoFiltrosFrame=LabelFrame(panelGravaDimension, text="Predimensionamiento de los filtros", font=("Yu Gothic bold", 11))
+		PredimensionamientoFiltrosFrame.pack(side=TOP, fill=BOTH,expand=True)
+		panelGravaDimension.add(PredimensionamientoFiltrosFrame,text="Predimensionamiento de los filtros")
+		#Frame Treeview
+		arbolPredimensionamientoFiltros_frame = Frame(PredimensionamientoFiltrosFrame)
+		arbolPredimensionamientoFiltros_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolPredimensionamientoFiltros_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolPredimensionamientoFiltros_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolPredimensionamientoFiltros= ttk.Treeview(arbolPredimensionamientoFiltros_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolPredimensionamientoFiltros.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolPredimensionamientoFiltros.xview)
+		sedScrollY.configure(command=arbolPredimensionamientoFiltros.yview)
+		#Define columnas.
+		arbolPredimensionamientoFiltros["columns"]= (
+		"Caudal de diseño  [(m^3)/s]",
+		"Número de filtros [und]"
+		)
+
+		#Headings
+		arbolPredimensionamientoFiltros.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolPredimensionamientoFiltros["columns"]:
+			arbolPredimensionamientoFiltros.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolPredimensionamientoFiltros["columns"])+1) :
+				arbolPredimensionamientoFiltros.column(f"#{i}",width=500, stretch=False)	
+		arbolPredimensionamientoFiltros.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolPredimensionamientoFiltros.tag_configure("oddrow", background= "#23D95F")
+		arbolPredimensionamientoFiltros.tag_configure("evenrow", background= "#9DC4AA")
+
+		############Insersión datos.
+		##ListaE Provisional"
+		listaE=[1,3/4,1/2,1/4,1/8,3/4,1/2,1/4,1/8,1/16,0.100,0.075,0.075,0.100,0.100,1.6,0.04404]
+
+		####
+		global contadorFiltro
+		contadorFiltro = 0
+		
+		listaEntradaTemp1=list()
+		listaEntradaTemp2=list()
+
+
+
+
 	def estPerdidaLechoGravaYPredimensionamientoFiltros():
 		estimacionPerdidaGravaYPredimensionamientoWindow = tk.Toplevel()
 		estimacionPerdidaGravaYPredimensionamientoWindow.iconbitmap(bitmap='icons\\agua.ico')
@@ -1818,8 +1934,8 @@ def openFiltroWindow():
 		segundoLabel= Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Caudales de diseño",font=("Yu Gothic bold",10))
 
 		NumeroCapaLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Número de capa",font=("Yu Gothic bold",10))
-		tamañoAberturaMallaPasandoLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Tamaño de abertura de malla pasando [pulg]",font=("Yu Gothic bold",10))
-		tamañoAberturaMallaRetenidaLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Tamaño de abertura de malla retenida [pulg]",font=("Yu Gothic bold",10))
+		tamañoAberturaMallaPasandoLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Tamaño de abertura\nde malla pasando [pulg]",font=("Yu Gothic bold",10))
+		tamañoAberturaMallaRetenidaLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Tamaño de abertura\nde malla retenida [pulg]",font=("Yu Gothic bold",10))
 		profundidadCapaLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Profundidad de la capa [m]",font=("Yu Gothic bold",10))
 		NumeroCapaLabel1Label = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="1",font=("Yu Gothic bold",10))
 		NumeroCapaLabel2Label = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="2",font=("Yu Gothic bold",10))
@@ -1827,8 +1943,8 @@ def openFiltroWindow():
 		NumeroCapaLabel4Label = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="4",font=("Yu Gothic bold",10))
 		NumeroCapaLabel5Label = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="5",font=("Yu Gothic bold",10))
 
-		factorMayoraciónCaudalMaximoHorarioLabel =  Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="{}2 = Factor de mayoración del caudal máximo horario".format(getSub("k")),font=("Yu Gothic bold",10))
-		caudalMedioDiarioLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Q{} = Caudal medio diario [m^3 /s]".format(getSub("md")),font=("Yu Gothic bold",10))
+		factorMayoraciónCaudalMaximoHorarioLabel =  Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="K{} = Factor de mayoración del caudal máximo horario:".format(getSub("2")),font=("Yu Gothic bold",10))
+		caudalMedioDiarioLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Q{} = Caudal medio diario [m^3 /s]:".format(getSub("md")),font=("Yu Gothic bold",10))
 
 		tamañoAberturaMallaPasando1 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
 		tamañoAberturaMallaPasando1.focus()
@@ -1858,24 +1974,65 @@ def openFiltroWindow():
 		listaColumna2=[tamañoAberturaMallaPasando1,tamañoAberturaMallaPasando2,tamañoAberturaMallaPasando3,tamañoAberturaMallaPasando4,tamañoAberturaMallaPasando5]
 		listaColumna3=[tamañoAberturaMallaRetenida1,tamañoAberturaMallaRetenida2,tamañoAberturaMallaRetenida3,tamañoAberturaMallaRetenida4,tamañoAberturaMallaRetenida5]
 		listaColumna4=[profundidadCapa1,profundidadCapa2,profundidadCapa3,profundidadCapa4,profundidadCapa5]
-	
-
-		listaLabel=[inicialLabel,segundoLabel]
+		listaCaudal=[factorMayoraciónCaudalMaximoHorario,caudalMedioDiario]
+		listaCaudalLabel=[factorMayoraciónCaudalMaximoHorarioLabel,caudalMedioDiarioLabel]
+		
 		listaEntradas = [tamañoAberturaMallaPasando1,tamañoAberturaMallaPasando2,tamañoAberturaMallaPasando3,tamañoAberturaMallaPasando4,tamañoAberturaMallaPasando5,
 		tamañoAberturaMallaRetenida1,tamañoAberturaMallaRetenida2,tamañoAberturaMallaRetenida3,tamañoAberturaMallaRetenida4,tamañoAberturaMallaRetenida5,
 		profundidadCapa1,profundidadCapa2,profundidadCapa3,profundidadCapa4,profundidadCapa5,factorMayoraciónCaudalMaximoHorario,caudalMedioDiario]
-	
 		
+		#Organización tabla.
+		xInicial=20
+		for elemento in listaTitulosTabla:
+			elemento.place(x=xInicial,y=63)
+			xInicial=xInicial+180
+
+		alturaInicialCol1=106
+		inicialLabel.place(x=20,y=20)
+		for elemento in listaColumna1:
+			elemento.place(x=60,y=alturaInicialCol1)
+			alturaInicialCol1+=43
+		alturaInicialCol1=106
 		
+		for elemento in listaColumna2:
+			elemento.place(x=200,y=alturaInicialCol1)
+			alturaInicialCol1+=43
+		alturaInicialCol1=106
+		
+		for elemento in listaColumna3:
+			elemento.place(x=380,y=alturaInicialCol1)
+			alturaInicialCol1+=43
+		
+		alturaInicialCol1=106
+		
+		for elemento in listaColumna4:
+			elemento.place(x=560,y=alturaInicialCol1)
+			alturaInicialCol1+=43
+
+		segundoLabel.place(x=20,y=alturaInicialCol1)
+		
+		alturaInicial2=alturaInicialCol1+43
+		
+		for elemento in listaCaudalLabel:
+			elemento.place(x=20,y=alturaInicial2)
+			alturaInicial2+=43
+		
+		alturaInicial2=alturaInicialCol1+43
+
+		for elemento in listaCaudal:
+			elemento.place(x=380,y=alturaInicial2)
+			alturaInicial2+=43
+
 
 		#Botones.
-		botonCalcular = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Calcular la estimación de la pérdida de energía en el lecho filtrante de arena limpio.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPEArena(listaNTamiz,listaARetenida,listaEntradas,valorTemperatura) )
+		botonCalcular = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Calcular la estimación de la pérdida de energía en el lecho filtrante de arena limpio.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPEGravaYPredimensionamiento(listaEntradas) )
 		botonNewEntry = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
 		botones=[botonCalcular,botonNewEntry]
 		alturaBotones=450
 		for elemento in botones:
 			elemento.place(x=40, y=alturaBotones)
 			alturaBotones= alturaBotones+50
+			
 		estimacionPerdidaGravaYPredimensionamientoWindow.mainloop()
 		
 
