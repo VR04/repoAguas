@@ -768,13 +768,11 @@ def openFiltroWindow():
 
 		caracFiltroWindow.mainloop()
 
-	
 
 	def granulometria(lista1,lista2):
 		
 		def buscarEnTabla(NumTamiz,tablaDic):
 			return tablaDic[NumTamiz]
-		
 
 		listaNTamizTemp=lista1.copy()
 		listaARetenidaTemp=lista2.copy()
@@ -969,8 +967,10 @@ def openFiltroWindow():
 			listaEntradaTemp.append(listaAcumuladoArenaDescendente[ind])
 			listaEntradaTemp.append(tablaTamañoAberturaTamiz[listaNTamizExtremo[longListaARetenida-ind]])
 			listaEntradaTemp.append(listaAcumuladoArenaAscendente[ind])
-			datosSalida.append(listaEntradaTemp)
+			listaIntermedia = listaEntradaTemp.copy()
+			datosSalida.append(listaIntermedia)
 			newDataTreeview(arbolGranulometria, listaEntradaTemp)
+		
 		
 
 
@@ -979,7 +979,208 @@ def openFiltroWindow():
 		
 		granulometriaWindow.mainloop()
 
+	def coeficienteDeUniformidad(lista1,lista2):
+		def buscarEnTabla(NumTamiz,tablaDic):
+			return tablaDic[NumTamiz]
 
+		listaNTamizTemp=lista1.copy()
+		listaARetenidaTemp=lista2.copy()
+		listaNTamiz=list()
+		listaARetenida=list()
+
+		if listaNTamizTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de los números de tamiz.")
+			return None
+		if listaARetenidaTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de la arena retenida.")
+			return None
+
+		for ind in range(0, len(listaNTamizTemp)):
+			if listaNTamizTemp[ind].get() == "" and ind%2==0:
+				break
+			elif listaNTamizTemp[ind].get() == "" and ind%2 != 0:
+				messagebox.showwarning(title="Error", message="Hace falta el rango de la derecha de alguna entrada.")
+				return None
+			else:
+				try:
+					CountControl=0
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m: 
+							CountControl=CountControl+1
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m and CountControl==18:
+							messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no coincide con los valores estándar para número de tamiz. Pulse el botón para conocerlos.")
+							return None
+					if  ind%2 != 0:
+						guardaValColumna2 = int(listaNTamizTemp[ind].get())	
+					
+					if ind !=0 and ind%2==0 and int(listaNTamizTemp[ind].get()) != guardaValColumna2:
+						messagebox.showwarning(title="Error", message=f"El valor donde finaliza un rango debe ser el valor inicial del siguiente rango.")
+						return None
+					if ind != 0 and int(listaNTamizTemp[ind].get()) < variableControlCreciente:
+						messagebox.showwarning(title="Error", message=f"Los valores de los rangos de número de tamiz deben ir en orden creciente.")
+						return None
+					variableControlCreciente=int(listaNTamizTemp[ind].get())
+
+					
+					listaNTamiz.append(int(listaNTamizTemp[ind].get()))
+
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
+	
+
+		for ind in range(0, len(listaARetenidaTemp)):
+			if listaARetenidaTemp[ind].get() == "" and ind != 0:
+				break
+			else:
+				try:
+					listaARetenida.append(float(listaARetenidaTemp[ind].get()))
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
+		if len(listaARetenida) != len(listaNTamiz)/2:
+			messagebox.showwarning(title="Error", message="La cantidad de datos ingresados en los rangos de número de tamiz no coincide con la cantidad de datos de arena retendia.")
+			return None
+		
+		
+		sumaPorcentajes=0
+		for elemento in listaARetenida:
+			sumaPorcentajes= sumaPorcentajes + elemento
+		
+		
+		if sumaPorcentajes != 100:
+			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
+			return None
+	
+
+		coeficienteDUWindow = tk.Toplevel()
+		coeficienteDUWindow.iconbitmap(bitmap='icons\\agua.ico')
+		coeficienteDUWindow.geometry("1000x500") 
+		coeficienteDUWindow.resizable(0,0)	
+		coeficienteDUWindow.configure(background="#9DC4AA")
+		
+		#Frame principal
+		coeficienteDUFrame=LabelFrame(coeficienteDUWindow, text="Coeficiente de uniformidad CU", font=("Yu Gothic bold", 11))
+		coeficienteDUFrame.pack(side=TOP, fill=BOTH,expand=True)
+		
+		#Frame Treeview
+		arbolCoeficienteDU_frame = LabelFrame(coeficienteDUFrame, text="Principales caracterísiticas del filtro", font=("Yu Gothic bold", 11))
+		arbolCoeficienteDU_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolCoeficienteDU_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolCoeficienteDU_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolCoeficienteDU= ttk.Treeview(arbolCoeficienteDU_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolCoeficienteDU.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolCoeficienteDU.xview)
+		sedScrollY.configure(command=arbolCoeficienteDU.yview)
+		#Define columnas.
+		arbolCoeficienteDU["columns"]= (
+		"Tamaño Efectivo d{} [mm]".format(getSub("10")),
+        "Tamaño Efectivo d{} [mm]".format(getSub("60")),
+        "Coeficiente de uniformidad. CU= d{}/d{}".format(getSub("60"),getSub("10"))
+		)
+
+		#Headings
+		arbolCoeficienteDU.heading("#0",text="ID", anchor=CENTER)
+		
+		for col in arbolCoeficienteDU["columns"]:
+			arbolCoeficienteDU.heading(col, text=col,anchor=CENTER)
+
+
+		
+		for i in range(0,len(arbolCoeficienteDU["columns"])) :
+				arbolCoeficienteDU.column(f"#{i}",width=300, stretch=False)	
+		arbolCoeficienteDU.column("#3",width=300, stretch=True)	
+		arbolCoeficienteDU.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolCoeficienteDU.tag_configure("oddrow", background= "#23D95F")
+		arbolCoeficienteDU.tag_configure("evenrow", background= "#9DC4AA")
+
+
+		#Insersión datos.
+		global contadorFiltro
+		contadorFiltro = 0
+
+		listaEntradaTemp=list()
+		datosSalida=list()
+		
+		################Datos temporales:
+		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
+		listaARetenida=[0.8, 4.25, 15.02, 16.65, 18.01, 18.25, 15.65, 9.3, 2.07]
+		################
+		
+		
+		#Tabla Tamaño Abertura Tamiz
+		TamañoTamiz= [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]
+		TamañoAbertura= [4.76, 3.35, 2.38, 1.68, 1.41, 1.0, 0.841, 0.707, 0.595, 0.5, 0.4, 0.354, 0.297, 0.25, 0.21, 0.177, 0.149, 0.105]
+		tablaTamañoAberturaTamiz=dict()
+		for ind in range(0, len(TamañoTamiz)):
+			tablaTamañoAberturaTamiz[TamañoTamiz[ind]] = TamañoAbertura[ind]
+
+		#Acumulado arena que pasa.
+		def acumuladoArenaQuePasa(indice):
+			suma=0
+			for elemento in range(0,indice+1):
+				suma= suma+listaARetenida[elemento]
+			return 100-suma
+		#Calculando acumulado:
+		listaAcumuladoArenaDescendente=list()
+		for ind in range(0, len(listaARetenida)):
+			listaAcumuladoArenaDescendente.append(acumuladoArenaQuePasa(ind))
+
+		listaAcumuladoArenaAscendente = listaAcumuladoArenaDescendente.copy()
+		listaAcumuladoArenaAscendente.reverse()
+
+		#OrganizandoListaNTamiz
+		listaNTamizExtremo=list()
+		listaNTamizSinRepeticion=list()
+		for num in range(0,len(listaNTamiz)):
+			if num%2==0:
+				pass	
+			else:
+				listaNTamizExtremo.append(listaNTamiz[num])
+		guardado=listaNTamiz[0]
+		listaNTamizSinRepeticion.append(guardado)
+		for elemento in listaNTamiz:
+			if elemento != guardado:
+				listaNTamizSinRepeticion.append(elemento)
+				guardado=elemento
+	
+				
+
+		longListaARetenida=len(listaARetenida)-1
+		for ind in range(0, len(listaARetenida)):
+			listaEntradaTemp.clear()
+			
+			listaEntradaTemp.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+			extremoDerecho=listaNTamizExtremo[ind]
+			listaEntradaTemp.append(listaARetenida[ind])
+			listaEntradaTemp.append(extremoDerecho)
+			listaEntradaTemp.append(tablaTamañoAberturaTamiz[extremoDerecho])
+			listaEntradaTemp.append(listaAcumuladoArenaDescendente[ind])
+			listaEntradaTemp.append(tablaTamañoAberturaTamiz[listaNTamizExtremo[longListaARetenida-ind]])
+			listaEntradaTemp.append(listaAcumuladoArenaAscendente[ind])
+			listaIntermedia = listaEntradaTemp.copy()
+			datosSalida.append(listaIntermedia)
+		
+
+		def tamañoEfectivod(numero):
+			pass
+	
+
+
+		
+
+		
+		coeficienteDUWindow.mainloop()
 
 
 
@@ -1013,7 +1214,7 @@ def openFiltroWindow():
 
 	botonGranulometria = HoverButton(frameFiltro, text="Granulometría del medio filtrante de arena", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: granulometria(listaNumTamiz,listaAR))
 
-	botonCoefUniformidad = HoverButton(frameFiltro, text="Coeficiente de uniformidad", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+	botonCoefUniformidad = HoverButton(frameFiltro, text="Coeficiente de uniformidad", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: coeficienteDeUniformidad(listaNumTamiz, listaAR) )
 
 	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
 
