@@ -1290,6 +1290,263 @@ def openFiltroWindow():
 
 		coeficienteDUWindow.mainloop()
 
+	def estimacionPerdidaEnergiaArena(lista1,lista2):
+		listaNTamizTemp=lista1.copy()
+		listaARetenidaTemp=lista2.copy()
+		listaNTamiz=list()
+		listaARetenida=list()
+		if listaNTamizTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de los números de tamiz.")
+			return None
+		if listaARetenidaTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de la arena retenida.")
+			return None
+
+		for ind in range(0, len(listaNTamizTemp)):
+			if listaNTamizTemp[ind].get() == "" and ind%2==0:
+				break
+			elif listaNTamizTemp[ind].get() == "" and ind%2 != 0:
+				messagebox.showwarning(title="Error", message="Hace falta el rango de la derecha de alguna entrada.")
+				return None
+			else:
+				try:
+					CountControl=0
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m: 
+							CountControl=CountControl+1
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m and CountControl==18:
+							messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no coincide con los valores estándar para número de tamiz. Pulse el botón para conocerlos.")
+							return None
+					if  ind%2 != 0:
+						guardaValColumna2 = int(listaNTamizTemp[ind].get())	
+					
+					if ind !=0 and ind%2==0 and int(listaNTamizTemp[ind].get()) != guardaValColumna2:
+						messagebox.showwarning(title="Error", message=f"El valor donde finaliza un rango debe ser el valor inicial del siguiente rango.")
+						return None
+					if ind != 0 and int(listaNTamizTemp[ind].get()) < variableControlCreciente:
+						messagebox.showwarning(title="Error", message=f"Los valores de los rangos de número de tamiz deben ir en orden creciente.")
+						return None
+					variableControlCreciente=int(listaNTamizTemp[ind].get())
+
+					
+					listaNTamiz.append(int(listaNTamizTemp[ind].get()))
+
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
+
+
+		for ind in range(0, len(listaARetenidaTemp)):
+			if listaARetenidaTemp[ind].get() == "" and ind != 0:
+				break
+			else:
+				try:
+					listaARetenida.append(float(listaARetenidaTemp[ind].get()))
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
+		if len(listaARetenida) != len(listaNTamiz)/2:
+			messagebox.showwarning(title="Error", message="La cantidad de datos ingresados en los rangos de número de tamiz no coincide con la cantidad de datos de arena retendia.")
+			return None
+
+
+		sumaPorcentajes=0
+		for elemento in listaARetenida:
+			sumaPorcentajes= sumaPorcentajes + elemento
+
+
+		if sumaPorcentajes != 100:
+			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
+			return None
+
+		estimacionPerdidaArenaWindow = tk.Toplevel()
+		estimacionPerdidaArenaWindow.iconbitmap(bitmap='icons\\agua.ico')
+		estimacionPerdidaArenaWindow.geometry("1000x500") 
+		estimacionPerdidaArenaWindow.resizable(0,0)	
+		estimacionPerdidaArenaWindow.configure(background="#9DC4AA")
+
+		frameEstimacionPerdidaArena= LabelFrame(estimacionPerdidaArenaWindow, text="Estimación de la pérdida de energía en el lecho filtrante de arena limpio")
+		frameEstimacionPerdidaArena.pack(side=TOP,fill=BOTH,expand=True)
+		
+		def newEntryFiltroP(lista):
+			for elemento in lista:
+				elemento.delete(0, END)
+		
+		#Botones.
+		botonCalcular = HoverButton(frameEstimacionPerdidaArena, text="Calcular la estimación de la pérdida de energía en el lecho filtrante de arena limpio.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print("Funciona"))
+		botonNewEntry = HoverButton(frameEstimacionPerdidaArena, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas)))
+		#Input
+		lista_inputs=["Velocidad superficial de filtración",
+		"Profundidad del lecho fijo de arena",
+		"Densidad relativa de la arena",
+		"Porosidad del lecho fijo",
+		"Constante de filtración (Fair-Hatch)",
+		"Factor de forma (Fair-Hatch)",
+		"Factor de forma (Carmen -Kozeny)",
+		"Factor de forma (Rose)"
+					]
+	
+		inicialLabel=Label(frameEstimacionPerdidaArena, text="Características del lecho filtrante de arena: ",font=("Yu Gothic bold",10))
+
+		velocidadSuperficialFiltracionLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
+		velocidadSuperficialFiltracion = Entry(frameEstimacionPerdidaArena)
+		velocidadSuperficialFiltracion.focus()
+		
+		profundidadLechoFijoArenaLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
+		densidadRelativaArenaLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
+		porosidadLechoFijoLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
+		constanteFiltracionFHLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
+		factorFormaFHLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
+		factorFormaCKLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
+		factorFormaRoseLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
+		
+		profundidadLechoFijoArena = Entry(frameEstimacionPerdidaArena)
+		densidadRelativaArena = Entry(frameEstimacionPerdidaArena)
+		porosidadLechoFijo = Entry(frameEstimacionPerdidaArena)
+		constanteFiltracionFH = Entry(frameEstimacionPerdidaArena)
+		factorFormaFH = Entry(frameEstimacionPerdidaArena)
+		factorFormaCK = Entry(frameEstimacionPerdidaArena)
+		factorFormaRose = Entry(frameEstimacionPerdidaArena)
+
+		listaEntradas=[velocidadSuperficialFiltracion, profundidadLechoFijoArena, densidadRelativaArena,
+		porosidadLechoFijo,constanteFiltracionFH,factorFormaFH,factorFormaCK,factorFormaRose]
+
+		listaLabel=[inicialLabel,velocidadSuperficialFiltracionLabel, profundidadLechoFijoArenaLabel, densidadRelativaArenaLabel,
+		porosidadLechoFijoLabel,constanteFiltracionFHLabel,factorFormaFHLabel,factorFormaCKLabel,factorFormaRoseLabel]
+
+		
+
+		def fairHatch(listaNTamiz,listaARetenida):
+			estimacionPerdidaArenaWindow = tk.Toplevel()
+			estimacionPerdidaArenaWindow.iconbitmap(bitmap='icons\\agua.ico')
+			estimacionPerdidaArenaWindow.geometry("1000x500") 
+			estimacionPerdidaArenaWindow.resizable(0,0)	
+			estimacionPerdidaArenaWindow.configure(background="#9DC4AA")
+
+			#Frame principal
+			estimacionPerdidaArenaFrame=LabelFrame(estimacionPerdidaArenaWindow, text="Estimación de la pérdida de energía en le lecho filtrante de arena limpio.", font=("Yu Gothic bold", 11))
+			estimacionPerdidaArenaFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+			#Frame Treeview
+			arbolEstimacionPerdidaArena_frame = LabelFrame(estimacionPerdidaArenaFrame, text="Principales caracterísiticas del filtro", font=("Yu Gothic bold", 11))
+			arbolEstimacionPerdidaArena_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+			#Scrollbar
+			sedScrollX=Scrollbar(arbolEstimacionPerdidaArena_frame,orient=HORIZONTAL)
+			sedScrollX.pack(side=BOTTOM, fill=X)
+			sedScrollY=Scrollbar(arbolEstimacionPerdidaArena_frame,orient=VERTICAL)
+			sedScrollY.pack(side=LEFT, fill=Y)
+
+			#Treeview
+			arbolEstimacionPerdidaArena= ttk.Treeview(arbolEstimacionPerdidaArena_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+			arbolEstimacionPerdidaArena.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+			sedScrollX.configure(command=arbolEstimacionPerdidaArena.xview)
+			sedScrollY.configure(command=arbolEstimacionPerdidaArena.yview)
+			#Define columnas.
+			arbolEstimacionPerdidaArena["columns"]= (
+			"Número de tamiz",
+			"Area retenida [%]", 
+			"Tamaño de abertura del tamiz superior [mm]", 
+			"Tamaño de abertura del tamiz inferior [mm]",
+			"Tamaño promedio gométrico [mm]",
+			"arena retenida/tamaño promedio geométrico [1/(m^2)]" 
+			"Fair-Hatch",
+			"Número de Reynolds (Carmen - Koenzy)",
+			"Factor de fricción (Carmen - Koenzy)",
+			"Pérdida de cabeza hidráulica (Carmen - Koenzy)",
+			"Número de Reynolds (Rose)",
+			"Cd",
+			"Fórmula",
+			"Hl"
+			)
+
+			#Headings
+			arbolEstimacionPerdidaArena.heading("#0",text="ID", anchor=CENTER)
+
+			for col in arbolEstimacionPerdidaArena["columns"]:
+				arbolEstimacionPerdidaArena.heading(col, text=col,anchor=CENTER)	
+
+			for i in range(0,len(arbolEstimacionPerdidaArena["columns"])+1) :
+					arbolEstimacionPerdidaArena.column(f"#{i}",width=500, stretch=False)	
+			arbolEstimacionPerdidaArena.column("#0",width=0, stretch=False)
+
+			#Striped row tags
+			arbolEstimacionPerdidaArena.tag_configure("oddrow", background= "#23D95F")
+			arbolEstimacionPerdidaArena.tag_configure("evenrow", background= "#9DC4AA")
+
+
+			#Insersión datos.
+			global contadorFiltro
+			contadorFiltro = 0
+
+			listaEntradaTemp=list()
+			datosSalida=list()
+
+			################Datos temporales:
+			listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
+			listaARetenida=[0.8, 4.25, 15.02, 16.65, 18.01, 18.25, 15.65, 9.3, 2.07]
+			################
+
+
+			#Tabla Tamaño Abertura Tamiz
+			TamañoTamiz= [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]
+			TamañoAbertura= [4.76, 3.35, 2.38, 1.68, 1.41, 1.0, 0.841, 0.707, 0.595, 0.5, 0.4, 0.354, 0.297, 0.25, 0.21, 0.177, 0.149, 0.105]
+			tablaTamañoAberturaTamiz=dict()
+			for ind in range(0, len(TamañoTamiz)):
+				tablaTamañoAberturaTamiz[TamañoTamiz[ind]] = TamañoAbertura[ind]
+
+
+			#OrganizandoListaNTamiz: Extremos 
+			listaNTamizExtremoD=list()
+			listaNTamizExtremoI=list()
+			listaNTamizSinRepeticion=list()
+			for num in range(0,len(listaNTamiz)):
+				if num%2==0:
+					listaNTamizExtremoI.append(listaNTamiz[num])	
+				else:
+					listaNTamizExtremoD.append(listaNTamiz[num])
+			#Lista sin repetición.
+			guardado=listaNTamiz[0]
+			listaNTamizSinRepeticion.append(guardado)
+			for elemento in listaNTamiz:
+				if elemento != guardado:
+					listaNTamizSinRepeticion.append(elemento)
+					guardado=elemento
+
+			def tamañoPromedioGeometrico(d1,d2):
+				return sqrt(d1*d2)
+			
+			listaSumaFH=0
+		
+			for ind in range(0, len(listaARetenida)):
+				listaEntradaTemp.clear()
+				listaEntradaTemp.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+				arenaRenetinda=listaARetenida[ind]
+				listaEntradaTemp.append(arenaRenetinda)
+				extremoDerecho=listaNTamizExtremoD[ind]
+				extremoIzquierdo=listaNTamizExtremoI[ind]
+				tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
+				tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
+				listaEntradaTemp.append(tamañoSuperior)
+				listaEntradaTemp.append(tamañoInferior)
+				tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
+				listaEntradaTemp.append(tamañoPromedioGeo)
+				valorEnSuma= (arenaRenetinda/100)/((tamañoPromedioGeo/1000)**2)
+				listaEntradaTemp.append(valorEnSuma)
+				listaSumaFH= listaSumaFH + valorEnSuma
+				listaEntradaTemp.append("EspacioSUMA")
+
+				"""listaEntradaTemp.append(tablaTamañoAberturaTamiz[listaNTamizExtremo[longListaARetenida-ind]])
+				listaEntradaTemp.append(listaAcumuladoArenaAscendente[ind])
+				listaIntermedia = listaEntradaTemp.copy()
+				datosSalida.append(listaIntermedia)"""
+				newDataTreeview(arbolEstimacionPerdidaArena, listaEntradaTemp)
+
+
+			estimacionPerdidaArenaWindow.mainloop()
+
 
 
 	mainWindow.withdraw()
@@ -1324,7 +1581,7 @@ def openFiltroWindow():
 
 	botonCoefUniformidad = HoverButton(frameFiltro, text="Coeficiente de uniformidad", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: coeficienteDeUniformidad(listaNumTamiz, listaAR) )
 
-	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: estimacionPerdidaEnergiaArena(listaNumTamiz,listaAR))
 
 	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimacón de la pérdida de energía en el lecho de grava", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
 
