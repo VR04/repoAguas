@@ -1348,6 +1348,7 @@ def openFiltroWindow():
 
 		for i in range(0,len(arbolEstimacionPerdidaArenaFH["columns"])+1) :
 				arbolEstimacionPerdidaArenaFH.column(f"#{i}",width=500, stretch=False)	
+		arbolEstimacionPerdidaArenaFH.column("#6",width=600, stretch=False)
 		arbolEstimacionPerdidaArenaFH.column("#0",width=0, stretch=False)
 
 		#Striped row tags
@@ -1447,10 +1448,6 @@ def openFiltroWindow():
 		#Striped row tags
 		arbolEstimacionPerdidaArenaR.tag_configure("oddrow", background= "#23D95F")
 		arbolEstimacionPerdidaArenaR.tag_configure("evenrow", background= "#9DC4AA")
-
-
-
-
 
 
 		############Insersión datos.
@@ -1799,6 +1796,87 @@ def openFiltroWindow():
 			alturaBotones= alturaBotones+50
 		estimacionPerdidaArenaWindow.mainloop()
 	
+	def estPerdidaLechoGravaYPredimensionamientoFiltros():
+		estimacionPerdidaGravaYPredimensionamientoWindow = tk.Toplevel()
+		estimacionPerdidaGravaYPredimensionamientoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		estimacionPerdidaGravaYPredimensionamientoWindow.geometry("800x600") 
+		estimacionPerdidaGravaYPredimensionamientoWindow.resizable(0,0)	
+		estimacionPerdidaGravaYPredimensionamientoWindow.configure(background="#9DC4AA")
+
+		frameEstimacionPerdidaGravaYPredimensionamiento= LabelFrame(estimacionPerdidaGravaYPredimensionamientoWindow, text="Estimación de la pérdida de energía en el lecho de grava y predimensionamiento de los filtros",font=("Yu Gothic bold", 11))
+		frameEstimacionPerdidaGravaYPredimensionamiento.pack(side=TOP,fill=BOTH,expand=True)
+
+		def newEntryFiltroP(lista):
+			for elemento in lista:
+				elemento.delete(0, END)
+
+
+		#Input
+		lista_inputs=[]
+
+		inicialLabel=Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Características del lecho de grava para drenaje por tuberías: ",font=("Yu Gothic bold",10))
+		segundoLabel= Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Caudales de diseño",font=("Yu Gothic bold",10))
+
+		NumeroCapaLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Número de capa",font=("Yu Gothic bold",10))
+		tamañoAberturaMallaPasandoLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Tamaño de abertura de malla pasando [pulg]",font=("Yu Gothic bold",10))
+		tamañoAberturaMallaRetenidaLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Tamaño de abertura de malla retenida [pulg]",font=("Yu Gothic bold",10))
+		profundidadCapaLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Profundidad de la capa [m]",font=("Yu Gothic bold",10))
+		NumeroCapaLabel1Label = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="1",font=("Yu Gothic bold",10))
+		NumeroCapaLabel2Label = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="2",font=("Yu Gothic bold",10))
+		NumeroCapaLabel3Label = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="3",font=("Yu Gothic bold",10))
+		NumeroCapaLabel4Label = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="4",font=("Yu Gothic bold",10))
+		NumeroCapaLabel5Label = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="5",font=("Yu Gothic bold",10))
+
+		factorMayoraciónCaudalMaximoHorarioLabel =  Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="{}2 = Factor de mayoración del caudal máximo horario".format(getSub("k")),font=("Yu Gothic bold",10))
+		caudalMedioDiarioLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Q{} = Caudal medio diario [m^3 /s]".format(getSub("md")),font=("Yu Gothic bold",10))
+
+		tamañoAberturaMallaPasando1 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		tamañoAberturaMallaPasando1.focus()
+		tamañoAberturaMallaPasando2 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		tamañoAberturaMallaPasando3 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		tamañoAberturaMallaPasando4 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		tamañoAberturaMallaPasando5 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+
+		tamañoAberturaMallaRetenida1 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		tamañoAberturaMallaRetenida2 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		tamañoAberturaMallaRetenida3 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		tamañoAberturaMallaRetenida4 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		tamañoAberturaMallaRetenida5 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+
+		profundidadCapa1 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		profundidadCapa2 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		profundidadCapa3 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		profundidadCapa4 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		profundidadCapa5 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+
+		factorMayoraciónCaudalMaximoHorario = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		caudalMedioDiario = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+
+		listaTitulosTabla=[NumeroCapaLabel,tamañoAberturaMallaPasandoLabel, tamañoAberturaMallaRetenidaLabel, profundidadCapaLabel]
+
+		listaColumna1=[NumeroCapaLabel1Label,NumeroCapaLabel2Label,NumeroCapaLabel3Label,NumeroCapaLabel4Label,NumeroCapaLabel5Label]
+		listaColumna2=[tamañoAberturaMallaPasando1,tamañoAberturaMallaPasando2,tamañoAberturaMallaPasando3,tamañoAberturaMallaPasando4,tamañoAberturaMallaPasando5]
+		listaColumna3=[tamañoAberturaMallaRetenida1,tamañoAberturaMallaRetenida2,tamañoAberturaMallaRetenida3,tamañoAberturaMallaRetenida4,tamañoAberturaMallaRetenida5]
+		listaColumna4=[profundidadCapa1,profundidadCapa2,profundidadCapa3,profundidadCapa4,profundidadCapa5]
+	
+
+		listaLabel=[inicialLabel,segundoLabel]
+		listaEntradas = [tamañoAberturaMallaPasando1,tamañoAberturaMallaPasando2,tamañoAberturaMallaPasando3,tamañoAberturaMallaPasando4,tamañoAberturaMallaPasando5,
+		tamañoAberturaMallaRetenida1,tamañoAberturaMallaRetenida2,tamañoAberturaMallaRetenida3,tamañoAberturaMallaRetenida4,tamañoAberturaMallaRetenida5,
+		profundidadCapa1,profundidadCapa2,profundidadCapa3,profundidadCapa4,profundidadCapa5,factorMayoraciónCaudalMaximoHorario,caudalMedioDiario]
+	
+		
+		
+
+		#Botones.
+		botonCalcular = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Calcular la estimación de la pérdida de energía en el lecho filtrante de arena limpio.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPEArena(listaNTamiz,listaARetenida,listaEntradas,valorTemperatura) )
+		botonNewEntry = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botones=[botonCalcular,botonNewEntry]
+		alturaBotones=450
+		for elemento in botones:
+			elemento.place(x=40, y=alturaBotones)
+			alturaBotones= alturaBotones+50
+		estimacionPerdidaGravaYPredimensionamientoWindow.mainloop()
 		
 
 
@@ -1848,7 +1926,7 @@ def openFiltroWindow():
 
 	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: estimacionPerdidaEnergiaArena(listaNumTamiz,listaAR,tempAgua))
 
-	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimación de la pérdida de energía en el lecho de grava", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimación de la pérdida de energía en el lecho de grava y\npredimensionamiento de los filtros", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= estPerdidaLechoGravaYPredimensionamientoFiltros)
 
 	botonPerdidaCargaLechoExpandido = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
 
