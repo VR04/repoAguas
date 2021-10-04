@@ -768,7 +768,6 @@ def openFiltroWindow():
 
 		caracFiltroWindow.mainloop()
 
-
 	def granulometria(lista1,lista2):
 		
 		def buscarEnTabla(NumTamiz,tablaDic):
@@ -980,6 +979,7 @@ def openFiltroWindow():
 		granulometriaWindow.mainloop()
 
 	def coeficienteDeUniformidad(lista1,lista2):
+
 		def buscarEnTabla(NumTamiz,tablaDic):
 			return tablaDic[NumTamiz]
 
@@ -1290,17 +1290,382 @@ def openFiltroWindow():
 
 		coeficienteDUWindow.mainloop()
 
-	def estimacionPerdidaEnergiaArena(lista1,lista2):
+	def calcularPEArena(listaNTamiz,listaARetenida,listaE,valorTemperatura):
+		listaEU=list()
+		for elemento in listaE:
+				try:
+					listaEU.append(float(elemento.get()))
+				except:
+					messagebox.showwarning(title="Error", message="El número ingresado no es un número")
+					return None
+		listaEU.append(valorTemperatura)
+				
+		estimacionPerdidaArenaCalculoWindow = tk.Toplevel()
+		estimacionPerdidaArenaCalculoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		estimacionPerdidaArenaCalculoWindow.geometry("1000x500") 
+		estimacionPerdidaArenaCalculoWindow.resizable(0,0)	
+		estimacionPerdidaArenaCalculoWindow.configure(background="#9DC4AA")
+
+		##Panel:
+		panelFiltro = ttk.Notebook(estimacionPerdidaArenaCalculoWindow)
+		panelFiltro.pack(fill=BOTH, expand=TRUE)
+		###########Frame Principal1
+		estimacionPerdidaArenaFHFrame=LabelFrame(panelFiltro, text="Estimación de la pérdida de energía en le lecho filtrante de arena limpio.", font=("Yu Gothic bold", 11))
+		estimacionPerdidaArenaFHFrame.pack(side=TOP, fill=BOTH,expand=True)
+		panelFiltro.add(estimacionPerdidaArenaFHFrame,text="Fair Hatch")
+		#Frame Treeview
+		arbolEstimacionPerdidaArenaFH_frame = LabelFrame(estimacionPerdidaArenaFHFrame, text="Fair Hatch", font=("Yu Gothic bold", 11))
+		arbolEstimacionPerdidaArenaFH_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolEstimacionPerdidaArenaFH_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolEstimacionPerdidaArenaFH_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolEstimacionPerdidaArenaFH= ttk.Treeview(arbolEstimacionPerdidaArenaFH_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolEstimacionPerdidaArenaFH.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolEstimacionPerdidaArenaFH.xview)
+		sedScrollY.configure(command=arbolEstimacionPerdidaArenaFH.yview)
+		#Define columnas.
+		arbolEstimacionPerdidaArenaFH["columns"]= (
+		"Número de tamiz",
+		"Area retenida [%]", 
+		"Tamaño de abertura del tamiz superior [mm]", 
+		"Tamaño de abertura del tamiz inferior [mm]",
+		"Tamaño promedio geométrico [mm]",
+		"arena retenida/tamaño promedio geométrico [1/(m^2)]",
+		"Fair-Hatch"
+		)
+
+		#Headings
+		arbolEstimacionPerdidaArenaFH.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolEstimacionPerdidaArenaFH["columns"]:
+			arbolEstimacionPerdidaArenaFH.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolEstimacionPerdidaArenaFH["columns"])+1) :
+				arbolEstimacionPerdidaArenaFH.column(f"#{i}",width=500, stretch=False)	
+		arbolEstimacionPerdidaArenaFH.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolEstimacionPerdidaArenaFH.tag_configure("oddrow", background= "#23D95F")
+		arbolEstimacionPerdidaArenaFH.tag_configure("evenrow", background= "#9DC4AA")
+		
+		################Frame principal2
+		estimacionPerdidaArenaCKFrame=LabelFrame(panelFiltro, text="Estimación de la pérdida de energía en le lecho filtrante de arena limpio.", font=("Yu Gothic bold", 11))
+		estimacionPerdidaArenaCKFrame.pack(side=TOP, fill=BOTH,expand=True)
+		panelFiltro.add(estimacionPerdidaArenaCKFrame,text="Carmen-Kozeny")
+		#Frame Treeview
+		arbolEstimacionPerdidaArenaCK_frame = LabelFrame(estimacionPerdidaArenaCKFrame, text="Carmen-Kozeny", font=("Yu Gothic bold", 11))
+		arbolEstimacionPerdidaArenaCK_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolEstimacionPerdidaArenaCK_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolEstimacionPerdidaArenaCK_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolEstimacionPerdidaArenaCK= ttk.Treeview(arbolEstimacionPerdidaArenaCK_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolEstimacionPerdidaArenaCK.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolEstimacionPerdidaArenaCK.xview)
+		sedScrollY.configure(command=arbolEstimacionPerdidaArenaCK.yview)
+		#Define columnas.
+		arbolEstimacionPerdidaArenaCK["columns"]= (
+		"Número de tamiz",
+		"Area retenida [%]", 
+		"Tamaño de abertura del tamiz superior [mm]", 
+		"Tamaño de abertura del tamiz inferior [mm]",
+		"Tamaño promedio geométrico [mm]",
+		"Número de Reynolds", 
+		"Factor de fricción",
+		"NOMBREPREG",
+		"Pérdida de cabeza hidráulica total"
+		)
+
+		#Headings
+		arbolEstimacionPerdidaArenaCK.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolEstimacionPerdidaArenaCK["columns"]:
+			arbolEstimacionPerdidaArenaCK.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolEstimacionPerdidaArenaCK["columns"])+1) :
+				arbolEstimacionPerdidaArenaCK.column(f"#{i}",width=500, stretch=False)	
+		arbolEstimacionPerdidaArenaCK.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolEstimacionPerdidaArenaCK.tag_configure("oddrow", background= "#23D95F")
+		arbolEstimacionPerdidaArenaCK.tag_configure("evenrow", background= "#9DC4AA")
+
+		##########Frame principal3
+		estimacionPerdidaArenaRFrame=LabelFrame(panelFiltro, text="Estimación de la pérdida de energía en le lecho filtrante de arena limpio.", font=("Yu Gothic bold", 11))
+		estimacionPerdidaArenaRFrame.pack(side=TOP, fill=BOTH,expand=True)
+		panelFiltro.add(estimacionPerdidaArenaRFrame,text="Rose")
+		#Frame Treeview
+		arbolEstimacionPerdidaArenaR_frame = LabelFrame(estimacionPerdidaArenaRFrame, text="Rose.", font=("Yu Gothic bold", 11))
+		arbolEstimacionPerdidaArenaR_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolEstimacionPerdidaArenaR_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolEstimacionPerdidaArenaR_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolEstimacionPerdidaArenaR= ttk.Treeview(arbolEstimacionPerdidaArenaR_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolEstimacionPerdidaArenaR.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolEstimacionPerdidaArenaR.xview)
+		sedScrollY.configure(command=arbolEstimacionPerdidaArenaR.yview)
+		#Define columnas.
+		arbolEstimacionPerdidaArenaR["columns"]= (
+		"Número de tamiz",
+		"Area retenida [%]", 
+		"Tamaño de abertura del tamiz superior [mm]", 
+		"Tamaño de abertura del tamiz inferior [mm]",
+		"Tamaño promedio geométrico [mm]",
+		"Número de Reynolds",
+		"PREGUNTAR",
+		"PREGUNTAR",
+		"PREGUNTAR"
+		)
+
+		#Headings
+		arbolEstimacionPerdidaArenaR.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolEstimacionPerdidaArenaR["columns"]:
+			arbolEstimacionPerdidaArenaR.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolEstimacionPerdidaArenaR["columns"])+1) :
+				arbolEstimacionPerdidaArenaR.column(f"#{i}",width=500, stretch=False)	
+		arbolEstimacionPerdidaArenaR.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolEstimacionPerdidaArenaR.tag_configure("oddrow", background= "#23D95F")
+		arbolEstimacionPerdidaArenaR.tag_configure("evenrow", background= "#9DC4AA")
+
+
+
+
+
+
+		############Insersión datos.
+
+		global contadorFiltro
+		contadorFiltro = 0
+		
+		listaEntradaTemp1=list()
+		listaEntradaTemp2=list()
+		listaEntradaTemp3=list()
+		datosSalida=list()
+		
+				
+		################Datos temporales:
+		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
+		listaARetenida=[0.8, 4.25, 15.02, 16.65, 18.01, 18.25, 15.65, 9.3, 2.07]
+		listaEU=[5.00,0.6,2.65,0.45,5,0.85,0.85,6.2,3]
+		################
+
+
+		#Tabla Tamaño Abertura Tamiz
+		TamañoTamiz= [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]
+		TamañoAbertura= [4.76, 3.35, 2.38, 1.68, 1.41, 1.0, 0.841, 0.707, 0.595, 0.5, 0.4, 0.354, 0.297, 0.25, 0.21, 0.177, 0.149, 0.105]
+		tablaTamañoAberturaTamiz=dict()
+		for ind in range(0, len(TamañoTamiz)):
+			tablaTamañoAberturaTamiz[TamañoTamiz[ind]] = TamañoAbertura[ind]
+
+		#Tabla Temperatura Viscocidad
+		valorTemperaturas=list()
+		tablaTemperaturaViscocidad=dict()
+		for i in range(0,36):
+			valorTemperaturas.append(i)
+			valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
+		,1.386e-06, 1.346e-06, 1.308e-06, 1.271e-06, 1.237e-06, 1.204e-06, 
+		1.172e-06, 1.141e-06, 1.112e-06, 1.084e-06, 1.057e-06, 1.032e-06, 1.007e-06, 9.83e-07, 9.6e-07, 9.38e-07, 9.17e-07, 8.96e-07, 8.76e-07, 8.57e-07, 8.39e-07, 8.21e-07, 8.04e-07, 7.88e-07, 7.72e-07, 7.56e-07, 7.41e-07, 7.27e-07]
+
+		for ind in range(0,len(valorTemperaturas)):
+			tablaTemperaturaViscocidad[valorTemperaturas[ind]]=valorViscocidad[ind]
+
+		listaEU[8]=tablaTemperaturaViscocidad[listaEU[8]]
+		
+
+		#OrganizandoListaNTamiz: Extremos 
+		listaNTamizExtremoD=list()
+		listaNTamizExtremoI=list()
+		listaNTamizSinRepeticion=list()
+		for num in range(0,len(listaNTamiz)):
+			if num%2==0:
+				listaNTamizExtremoI.append(listaNTamiz[num])	
+			else:
+				listaNTamizExtremoD.append(listaNTamiz[num])
+		#Lista sin repetición.
+		guardado=listaNTamiz[0]
+		listaNTamizSinRepeticion.append(guardado)
+		for elemento in listaNTamiz:
+			if elemento != guardado:
+				listaNTamizSinRepeticion.append(elemento)
+				guardado=elemento
+
+
+		
+		def tamañoPromedioGeometrico(d1,d2):
+			return sqrt(d1*d2)
+
+
+
+		#############DATOS
+
+		#DatosPara1
+		sumaFH=0
+		for ind in range(0, len(listaARetenida)):
+			listaEntradaTemp1.clear()
+			
+			arenaRenetinda=listaARetenida[ind]
+			extremoDerecho=listaNTamizExtremoD[ind]
+			extremoIzquierdo=listaNTamizExtremoI[ind]
+			tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
+			tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
+			tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
+			valorEnSuma= (arenaRenetinda/100)/((tamañoPromedioGeo/1000)**2)
+			sumaFH=sumaFH+valorEnSuma
+		
+		
+
+		contadorFiltro=0
+
+		valorFH= (listaEU[4]*listaEU[8])*((1-listaEU[3])**2)*listaEU[1]*(listaEU[0]/3600)*((6/listaEU[5])**2)*(1/9.806)*((1/listaEU[3])**3)*sumaFH
+		
+
+		for ind in range(0, len(listaARetenida)):
+			listaEntradaTemp1.clear()
+			listaEntradaTemp1.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+			arenaRenetinda=listaARetenida[ind]
+			listaEntradaTemp1.append(arenaRenetinda)
+			
+
+			extremoDerecho=listaNTamizExtremoD[ind]
+			extremoIzquierdo=listaNTamizExtremoI[ind]
+			tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
+			tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
+			listaEntradaTemp1.append(tamañoSuperior)
+			listaEntradaTemp1.append(tamañoInferior)
+			tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
+			listaEntradaTemp1.append(tamañoPromedioGeo)
+			valorEnSuma= (arenaRenetinda/100)/((tamañoPromedioGeo/1000)**2)
+			listaEntradaTemp1.append(valorEnSuma)
+			
+			listaEntradaTemp1.append(valorFH)
+			newDataTreeview(arbolEstimacionPerdidaArenaFH, listaEntradaTemp1)
+	
+			
+		
+		#DatosPara2
+		contadorFiltro=0
+		sumaCK=0
+		
+		for ind in range(0, len(listaARetenida)):
+			listaEntradaTemp2.clear()
+			arenaRenetinda=listaARetenida[ind]
+			extremoDerecho=listaNTamizExtremoD[ind]
+			extremoIzquierdo=listaNTamizExtremoI[ind]
+			tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
+			tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
+			tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
+			Reynolds2=listaEU[6]*(tamañoPromedioGeo/1000)*(listaEU[0]/3600)*(1/listaEU[8])
+			friccion2=150*((1-listaEU[3])/Reynolds2)+1.75
+			valorSuma2A= friccion2*(arenaRenetinda/100)*(1/(tamañoPromedioGeo/1000))
+			sumaCK=sumaCK+valorSuma2A
+		
+		valorCK=(1/listaEU[6])*(1-listaEU[3])*((1/listaEU[3])**3)*listaEU[1]*((listaEU[0]/3600)**2)*(1/9.806)*sumaCK
+	
+		for ind in range(0, len(listaARetenida)):
+			listaEntradaTemp2.clear()
+			listaEntradaTemp2.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+			arenaRenetinda=listaARetenida[ind]
+			listaEntradaTemp2.append(arenaRenetinda)
+			extremoDerecho=listaNTamizExtremoD[ind]
+			extremoIzquierdo=listaNTamizExtremoI[ind]
+			tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
+			tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
+			listaEntradaTemp2.append(tamañoSuperior)
+			listaEntradaTemp2.append(tamañoInferior)
+			tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
+			listaEntradaTemp2.append(tamañoPromedioGeo)
+			Reynolds2=listaEU[6]*(tamañoPromedioGeo/1000)*(listaEU[0]/3600)*(1/listaEU[8])
+			listaEntradaTemp2.append(Reynolds2)
+			friccion2=150*((1-listaEU[3])/Reynolds2)+1.75
+			listaEntradaTemp2.append(friccion2)
+			valorSuma2= friccion2*(arenaRenetinda/100)*(1/(tamañoPromedioGeo/1000))
+			listaEntradaTemp2.append(valorSuma2)
+			listaEntradaTemp2.append(valorCK)
+			newDataTreeview(arbolEstimacionPerdidaArenaCK, listaEntradaTemp2)
+			
+		#DatosPara3
+		contadorFiltro=0
+		sumaR=0
+
+		for ind in range(0, len(listaARetenida)):
+			arenaRenetinda=listaARetenida[ind]
+			extremoDerecho=listaNTamizExtremoD[ind]
+			extremoIzquierdo=listaNTamizExtremoI[ind]
+			tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
+			tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
+			tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
+			Reynolds3= (tamañoPromedioGeo/1000)*(listaEU[0]/3600)/listaEU[8]
+			Cd=24/Reynolds3 + 3/sqrt(Reynolds3)+0.34
+			Suma3=Cd*(arenaRenetinda/100)*(1000/tamañoPromedioGeo)
+			sumaR= sumaR + Suma3
+		
+
+		valorR= 0.178*((listaEU[0]/3600)**2)*listaEU[1]*(1/9.806)*((1/listaEU[3])**4)*listaEU[7]*sumaR
+
+		
+		for ind in range(0, len(listaARetenida)):
+			listaEntradaTemp3.clear()
+			listaEntradaTemp3.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+			arenaRenetinda=listaARetenida[ind]
+			listaEntradaTemp3.append(arenaRenetinda)
+			extremoDerecho=listaNTamizExtremoD[ind]
+			extremoIzquierdo=listaNTamizExtremoI[ind]
+			tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
+			tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
+			listaEntradaTemp3.append(tamañoSuperior)
+			listaEntradaTemp3.append(tamañoInferior)
+			tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
+			listaEntradaTemp3.append(tamañoPromedioGeo)
+			Reynolds3= (tamañoPromedioGeo/1000)*(listaEU[0]/3600)/listaEU[8]
+			listaEntradaTemp3.append(Reynolds3)
+			Cd=24/Reynolds3 + 3/sqrt(Reynolds3)+0.34
+			listaEntradaTemp3.append(Cd)
+			Suma3=Cd*(arenaRenetinda/100)*(1000/tamañoPromedioGeo)
+			listaEntradaTemp3.append(Suma3)
+			listaEntradaTemp3.append(valorR)
+			newDataTreeview(arbolEstimacionPerdidaArenaR, listaEntradaTemp3)
+
+		estimacionPerdidaArenaCalculoWindow.mainloop()
+
+	def estimacionPerdidaEnergiaArena(lista1,lista2,optnValue):
 		listaNTamizTemp=lista1.copy()
 		listaARetenidaTemp=lista2.copy()
 		listaNTamiz=list()
 		listaARetenida=list()
+		
+
 		if listaNTamizTemp[0].get() == "":
 			messagebox.showwarning(title="Error", message="Hace falta algún dato de los números de tamiz.")
 			return None
 		if listaARetenidaTemp[0].get() == "":
 			messagebox.showwarning(title="Error", message="Hace falta algún dato de la arena retenida.")
 			return None
+		if optnValue.get() == "Seleccione la temperatura":
+			messagebox.showwarning(title="Error", message="Hace falta elegir el valor de la temperatura del agua a tratar.")
+			return None
+		else:
+			valorTemperatura= int(optnValue.get())
 
 		for ind in range(0, len(listaNTamizTemp)):
 			if listaNTamizTemp[ind].get() == "" and ind%2==0:
@@ -1362,20 +1727,18 @@ def openFiltroWindow():
 
 		estimacionPerdidaArenaWindow = tk.Toplevel()
 		estimacionPerdidaArenaWindow.iconbitmap(bitmap='icons\\agua.ico')
-		estimacionPerdidaArenaWindow.geometry("1000x500") 
+		estimacionPerdidaArenaWindow.geometry("800x600") 
 		estimacionPerdidaArenaWindow.resizable(0,0)	
 		estimacionPerdidaArenaWindow.configure(background="#9DC4AA")
 
-		frameEstimacionPerdidaArena= LabelFrame(estimacionPerdidaArenaWindow, text="Estimación de la pérdida de energía en el lecho filtrante de arena limpio")
+		frameEstimacionPerdidaArena= LabelFrame(estimacionPerdidaArenaWindow, text="Estimación de la pérdida de energía en el lecho filtrante de arena limpio",font=("Yu Gothic bold", 11))
 		frameEstimacionPerdidaArena.pack(side=TOP,fill=BOTH,expand=True)
 		
 		def newEntryFiltroP(lista):
 			for elemento in lista:
 				elemento.delete(0, END)
 		
-		#Botones.
-		botonCalcular = HoverButton(frameEstimacionPerdidaArena, text="Calcular la estimación de la pérdida de energía en el lecho filtrante de arena limpio.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print("Funciona"))
-		botonNewEntry = HoverButton(frameEstimacionPerdidaArena, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas)))
+		
 		#Input
 		lista_inputs=["Velocidad superficial de filtración",
 		"Profundidad del lecho fijo de arena",
@@ -1389,17 +1752,17 @@ def openFiltroWindow():
 	
 		inicialLabel=Label(frameEstimacionPerdidaArena, text="Características del lecho filtrante de arena: ",font=("Yu Gothic bold",10))
 
-		velocidadSuperficialFiltracionLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
+		velocidadSuperficialFiltracionLabel = Label(frameEstimacionPerdidaArena, text="V{} = Velocidad superficila de filtración [m/h]".format(getSub("a")), font =("Yu Gothic",9))
 		velocidadSuperficialFiltracion = Entry(frameEstimacionPerdidaArena)
 		velocidadSuperficialFiltracion.focus()
 		
-		profundidadLechoFijoArenaLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
-		densidadRelativaArenaLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
-		porosidadLechoFijoLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
-		constanteFiltracionFHLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
-		factorFormaFHLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
-		factorFormaCKLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
-		factorFormaRoseLabel = Label(frameEstimacionPerdidaArena, text="", font =("Yu Gothic",9))
+		profundidadLechoFijoArenaLabel = Label(frameEstimacionPerdidaArena, text="L = Profundidad del lecho fijo de arena [m]:", font =("Yu Gothic",9))
+		densidadRelativaArenaLabel = Label(frameEstimacionPerdidaArena, text="S{} = Densidad relativa de la arena:", font =("Yu Gothic",9))
+		porosidadLechoFijoLabel = Label(frameEstimacionPerdidaArena, text=u"\u03B5 ,e = Porosidad del lecho fijo:", font =("Yu Gothic",9))
+		constanteFiltracionFHLabel = Label(frameEstimacionPerdidaArena, text=u"\u03BA = Constante de Filtración (Fair-Hatch):", font =("Yu Gothic",9))
+		factorFormaFHLabel = Label(frameEstimacionPerdidaArena, text=u"\u03A6 = Factor de forma (Fair-Hatch):", font =("Yu Gothic",9))
+		factorFormaCKLabel = Label(frameEstimacionPerdidaArena, text=u"\u03A6 = Factor de forma (Carmen-Koenzy):", font =("Yu Gothic",9))
+		factorFormaRoseLabel = Label(frameEstimacionPerdidaArena, text=u"\u03B1/\u03B2 = Factor de forma (Rose):", font =("Yu Gothic",9))
 		
 		profundidadLechoFijoArena = Entry(frameEstimacionPerdidaArena)
 		densidadRelativaArena = Entry(frameEstimacionPerdidaArena)
@@ -1414,139 +1777,29 @@ def openFiltroWindow():
 
 		listaLabel=[inicialLabel,velocidadSuperficialFiltracionLabel, profundidadLechoFijoArenaLabel, densidadRelativaArenaLabel,
 		porosidadLechoFijoLabel,constanteFiltracionFHLabel,factorFormaFHLabel,factorFormaCKLabel,factorFormaRoseLabel]
-
 		
-
-		def fairHatch(listaNTamiz,listaARetenida):
-			estimacionPerdidaArenaWindow = tk.Toplevel()
-			estimacionPerdidaArenaWindow.iconbitmap(bitmap='icons\\agua.ico')
-			estimacionPerdidaArenaWindow.geometry("1000x500") 
-			estimacionPerdidaArenaWindow.resizable(0,0)	
-			estimacionPerdidaArenaWindow.configure(background="#9DC4AA")
-
-			#Frame principal
-			estimacionPerdidaArenaFrame=LabelFrame(estimacionPerdidaArenaWindow, text="Estimación de la pérdida de energía en le lecho filtrante de arena limpio.", font=("Yu Gothic bold", 11))
-			estimacionPerdidaArenaFrame.pack(side=TOP, fill=BOTH,expand=True)
-
-			#Frame Treeview
-			arbolEstimacionPerdidaArena_frame = LabelFrame(estimacionPerdidaArenaFrame, text="Principales caracterísiticas del filtro", font=("Yu Gothic bold", 11))
-			arbolEstimacionPerdidaArena_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
-
-			#Scrollbar
-			sedScrollX=Scrollbar(arbolEstimacionPerdidaArena_frame,orient=HORIZONTAL)
-			sedScrollX.pack(side=BOTTOM, fill=X)
-			sedScrollY=Scrollbar(arbolEstimacionPerdidaArena_frame,orient=VERTICAL)
-			sedScrollY.pack(side=LEFT, fill=Y)
-
-			#Treeview
-			arbolEstimacionPerdidaArena= ttk.Treeview(arbolEstimacionPerdidaArena_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
-			arbolEstimacionPerdidaArena.pack(side=TOP, fill=BOTH, expand=TRUE)
-
-			sedScrollX.configure(command=arbolEstimacionPerdidaArena.xview)
-			sedScrollY.configure(command=arbolEstimacionPerdidaArena.yview)
-			#Define columnas.
-			arbolEstimacionPerdidaArena["columns"]= (
-			"Número de tamiz",
-			"Area retenida [%]", 
-			"Tamaño de abertura del tamiz superior [mm]", 
-			"Tamaño de abertura del tamiz inferior [mm]",
-			"Tamaño promedio gométrico [mm]",
-			"arena retenida/tamaño promedio geométrico [1/(m^2)]" 
-			"Fair-Hatch",
-			"Número de Reynolds (Carmen - Koenzy)",
-			"Factor de fricción (Carmen - Koenzy)",
-			"Pérdida de cabeza hidráulica (Carmen - Koenzy)",
-			"Número de Reynolds (Rose)",
-			"Cd",
-			"Fórmula",
-			"Hl"
-			)
-
-			#Headings
-			arbolEstimacionPerdidaArena.heading("#0",text="ID", anchor=CENTER)
-
-			for col in arbolEstimacionPerdidaArena["columns"]:
-				arbolEstimacionPerdidaArena.heading(col, text=col,anchor=CENTER)	
-
-			for i in range(0,len(arbolEstimacionPerdidaArena["columns"])+1) :
-					arbolEstimacionPerdidaArena.column(f"#{i}",width=500, stretch=False)	
-			arbolEstimacionPerdidaArena.column("#0",width=0, stretch=False)
-
-			#Striped row tags
-			arbolEstimacionPerdidaArena.tag_configure("oddrow", background= "#23D95F")
-			arbolEstimacionPerdidaArena.tag_configure("evenrow", background= "#9DC4AA")
-
-
-			#Insersión datos.
-			global contadorFiltro
-			contadorFiltro = 0
-
-			listaEntradaTemp=list()
-			datosSalida=list()
-
-			################Datos temporales:
-			listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-			listaARetenida=[0.8, 4.25, 15.02, 16.65, 18.01, 18.25, 15.65, 9.3, 2.07]
-			################
-
-
-			#Tabla Tamaño Abertura Tamiz
-			TamañoTamiz= [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]
-			TamañoAbertura= [4.76, 3.35, 2.38, 1.68, 1.41, 1.0, 0.841, 0.707, 0.595, 0.5, 0.4, 0.354, 0.297, 0.25, 0.21, 0.177, 0.149, 0.105]
-			tablaTamañoAberturaTamiz=dict()
-			for ind in range(0, len(TamañoTamiz)):
-				tablaTamañoAberturaTamiz[TamañoTamiz[ind]] = TamañoAbertura[ind]
-
-
-			#OrganizandoListaNTamiz: Extremos 
-			listaNTamizExtremoD=list()
-			listaNTamizExtremoI=list()
-			listaNTamizSinRepeticion=list()
-			for num in range(0,len(listaNTamiz)):
-				if num%2==0:
-					listaNTamizExtremoI.append(listaNTamiz[num])	
-				else:
-					listaNTamizExtremoD.append(listaNTamiz[num])
-			#Lista sin repetición.
-			guardado=listaNTamiz[0]
-			listaNTamizSinRepeticion.append(guardado)
-			for elemento in listaNTamiz:
-				if elemento != guardado:
-					listaNTamizSinRepeticion.append(elemento)
-					guardado=elemento
-
-			def tamañoPromedioGeometrico(d1,d2):
-				return sqrt(d1*d2)
-			
-			listaSumaFH=0
+		alturaInicialLabel=20
+		for elemento in listaLabel:
+			elemento.place(x=50,y=alturaInicialLabel)
+			alturaInicialLabel+=47
 		
-			for ind in range(0, len(listaARetenida)):
-				listaEntradaTemp.clear()
-				listaEntradaTemp.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
-				arenaRenetinda=listaARetenida[ind]
-				listaEntradaTemp.append(arenaRenetinda)
-				extremoDerecho=listaNTamizExtremoD[ind]
-				extremoIzquierdo=listaNTamizExtremoI[ind]
-				tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
-				tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
-				listaEntradaTemp.append(tamañoSuperior)
-				listaEntradaTemp.append(tamañoInferior)
-				tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
-				listaEntradaTemp.append(tamañoPromedioGeo)
-				valorEnSuma= (arenaRenetinda/100)/((tamañoPromedioGeo/1000)**2)
-				listaEntradaTemp.append(valorEnSuma)
-				listaSumaFH= listaSumaFH + valorEnSuma
-				listaEntradaTemp.append("EspacioSUMA")
-
-				"""listaEntradaTemp.append(tablaTamañoAberturaTamiz[listaNTamizExtremo[longListaARetenida-ind]])
-				listaEntradaTemp.append(listaAcumuladoArenaAscendente[ind])
-				listaIntermedia = listaEntradaTemp.copy()
-				datosSalida.append(listaIntermedia)"""
-				newDataTreeview(arbolEstimacionPerdidaArena, listaEntradaTemp)
-
-
-			estimacionPerdidaArenaWindow.mainloop()
-
+		alturaInicialEntradas=67
+		
+		for elemento in listaEntradas:
+				elemento.place(x=400,y=alturaInicialEntradas)
+				alturaInicialEntradas+=47
+		
+		#Botones.
+		botonCalcular = HoverButton(frameEstimacionPerdidaArena, text="Calcular la estimación de la pérdida de energía en el lecho filtrante de arena limpio.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPEArena(listaNTamiz,listaARetenida,listaEntradas,valorTemperatura) )
+		botonNewEntry = HoverButton(frameEstimacionPerdidaArena, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botones=[botonCalcular,botonNewEntry]
+		alturaBotones=450
+		for elemento in botones:
+			elemento.place(x=40, y=alturaBotones)
+			alturaBotones= alturaBotones+50
+		estimacionPerdidaArenaWindow.mainloop()
+	
+		
 
 
 	mainWindow.withdraw()
@@ -1580,10 +1833,22 @@ def openFiltroWindow():
 	botonGranulometria = HoverButton(frameFiltro, text="Granulometría del medio filtrante de arena", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: granulometria(listaNumTamiz,listaAR))
 
 	botonCoefUniformidad = HoverButton(frameFiltro, text="Coeficiente de uniformidad", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: coeficienteDeUniformidad(listaNumTamiz, listaAR) )
+	######DEF TEMP AGUA
+	tempAgua = StringVar()
+	tempAgua.set("Seleccione la temperatura")
+	listaValoresTemp=list()
+	for i in range(0,36):
+		listaValoresTemp.append(f"{i}")
+	
+	tempAguaName = OptionMenu(frameFiltro, tempAgua, *listaValoresTemp)
+	tempAguaName.place(x=350, y=99)
+	
 
-	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: estimacionPerdidaEnergiaArena(listaNumTamiz,listaAR))
+	#####FIN TEMP AGUA
 
-	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimacón de la pérdida de energía en el lecho de grava", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: estimacionPerdidaEnergiaArena(listaNumTamiz,listaAR,tempAgua))
+
+	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimación de la pérdida de energía en el lecho de grava", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
 
 	botonPerdidaCargaLechoExpandido = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
 
@@ -1731,16 +1996,7 @@ def openFiltroWindow():
 		listaAR[j].place(x=235, y=alturaInicial)
 		alturaInicial=alturaInicial+29
 
-	tempAgua = StringVar()
-	tempAgua.set("Seleccione la temperatura")
-	listaValoresTemp=list()
-	for i in range(0,36):
-		listaValoresTemp.append(f"{i}")
-	
-	tempAguaName = OptionMenu(frameFiltro, tempAgua, *listaValoresTemp)
 	tempAguaLabel.place(x=350, y=70)
-	tempAguaName.place(x=350, y=99)
-	
 	nT11.focus()
 	
 	lista_entradas= listaNumTamiz+listaAR
