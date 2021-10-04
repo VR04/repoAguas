@@ -1065,7 +1065,7 @@ def openFiltroWindow():
 		coeficienteDUFrame.pack(side=TOP, fill=BOTH,expand=True)
 		
 		#Frame Treeview
-		arbolCoeficienteDU_frame = Frame(coeficienteDUFrame, font=("Yu Gothic bold", 11))
+		arbolCoeficienteDU_frame = Frame(coeficienteDUFrame)
 		arbolCoeficienteDU_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
@@ -1086,12 +1086,20 @@ def openFiltroWindow():
         "Tamaño Efectivo d{} [mm]".format(getSub("60")),
         "Coeficiente de uniformidad. CU= d{}/d{}".format(getSub("60"),getSub("10"))
 		)
+		
+
+		
 
 		#Headings
 		arbolCoeficienteDU.heading("#0",text="ID", anchor=CENTER)
 		
-		for col in arbolCoeficienteDU["columns"]:
-			arbolCoeficienteDU.heading(col, text=col,anchor=CENTER)
+		arbolCoeficienteDU.heading("#1", text="Tamaño Efectivo d{} [mm]".format(getSub("10")), anchor=CENTER, command= lambda: tamañod(x1,y1,x2,y2,10))
+		arbolCoeficienteDU.heading("#2", text="Tamaño Efectivo d{} [mm]".format(getSub("60")), anchor=CENTER, command= lambda: tamañod(X1,Y1,X2,Y2,60))
+		arbolCoeficienteDU.heading("#3", text="Coeficiente de uniformidad. CU= d{}/d{}".format(getSub("60"),getSub("10")), anchor=CENTER)
+
+		"""for col in arbolCoeficienteDU["columns"]:
+			arbolCoeficienteDU.heading(col, text=col,anchor=CENTER)"""
+		
 
 
 		
@@ -1215,7 +1223,71 @@ def openFiltroWindow():
 		CU=d60/d10
 		listaIngreso=[d10,d60,CU]
 		newDataTreeview(arbolCoeficienteDU,listaIngreso)
+
+		def tamañod(x1,y1,x2,y2,numero):
+			tamañoD10Window = tk.Toplevel()
+			tamañoD10Window.iconbitmap(bitmap='icons\\agua.ico')
+			tamañoD10Window.geometry("1000x200") 
+			tamañoD10Window.resizable(0,0)	
+			tamañoD10Window.configure(background="#9DC4AA")
+			coeficienteDUFrame10=LabelFrame(tamañoD10Window, text="Tamaño Efectio d{} del medio filtrante".format(getSub(f"{numero}")), font=("Yu Gothic bold", 11))
+			coeficienteDUFrame10.pack(side=TOP, fill=BOTH,expand=True)
+			
+			#Frame Treeview
+			coeficienteDUFrame10 = Frame(coeficienteDUFrame10)
+			coeficienteDUFrame10.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+			#Scrollbar
+			sedScrollX=Scrollbar(coeficienteDUFrame10,orient=HORIZONTAL)
+			sedScrollX.pack(side=BOTTOM, fill=X)
+			sedScrollY=Scrollbar(coeficienteDUFrame10,orient=VERTICAL)
+			sedScrollY.pack(side=LEFT, fill=Y)
+
+			#Treeview
+			arbolCoeficienteDU10= ttk.Treeview(coeficienteDUFrame10,selectmode=BROWSE, height=2,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+			arbolCoeficienteDU10.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+			sedScrollX.configure(command=arbolCoeficienteDU10.xview)
+			sedScrollY.configure(command=arbolCoeficienteDU10.yview)
+			#Define columnas.
+			arbolCoeficienteDU10["columns"]= (
+			"Valores para referencia",
+			"Tamaño de abertura del tamiz [mm]",
+			"Acumulado de arena que pasa [%]",
+			"Tamaño d{} [mm]".format(getSub(f"{numero}"))
+			)
+
+			#Headings
+			arbolCoeficienteDU10.heading("#0",text="ID", anchor=CENTER)
+			for col in arbolCoeficienteDU10["columns"]:
+				arbolCoeficienteDU10.heading(col, text=col,anchor=CENTER)
 		
+			
+			for i in range(0,len(arbolCoeficienteDU10["columns"])) :
+					arbolCoeficienteDU10.column(f"#{i}",width=500, stretch=False)	
+			arbolCoeficienteDU10.column("#4",width=600, stretch=True)	
+			arbolCoeficienteDU10.column("#0",width=0, stretch=False)
+
+			#Striped row tags
+			arbolCoeficienteDU10.tag_configure("oddrow", background= "#23D95F")
+			arbolCoeficienteDU10.tag_configure("evenrow", background= "#9DC4AA")
+
+			lista1=list()
+			lista2=list()
+			lista1.append("(x1,y1)")
+			lista1.append(x1)
+			lista1.append(y1)
+			lista1.append(calculo2CU(numero,x1,y1,x2,y2))
+			lista2.append("(x2,y2)")
+			lista2.append(x2)
+			lista2.append(y2)
+			lista2.append(calculo2CU(numero,x1,y1,x2,y2))
+			listaInsertar=[lista1,lista2]
+			for elemento in listaInsertar:
+				newDataTreeview(arbolCoeficienteDU10,elemento)
+
+
+
 		coeficienteDUWindow.mainloop()
 
 
