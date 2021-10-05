@@ -58,7 +58,7 @@ def openSedWindow():
 		return vuelta
 
 	def velocidadPromedioFlujoCorregida(listaE):
-		#¿Cuál es criterio de parada?
+		
 		#valorParada= velocidadPromedioFlujo(listaE)*(listaE[5]/listaE[3])
 		v0=velocidadPromedioFlujo(listaE)
 		v1= (listaE[6]/listaE[4])*(sin(listaE[10]) + ((listaE[7]/listaE[5]) - 0.058*v0*(listaE[5]/listaE[3]) )*cos(listaE[10]))
@@ -86,7 +86,6 @@ def openSedWindow():
 		return listaE[7]*sin(listaE[10])
 
 	def distanciaCanaletasRecoleccion(listaE):
-		#¿Qué va aquí?
 		return 1.5*listaE[11]
 
 	def alturaDeSedimentacion(listaE):
@@ -398,18 +397,7 @@ def openSedWindow():
 			arbol.delete(j)
 		contador=0
 		
-	def formulaN(archivo):
-		forWindow= tk.Toplevel()
-		forWindow.iconbitmap(bitmap='icons\\agua.ico')
-		forWindow.geometry("800x600") 
-		forWindow.resizable(0,0)
-		forWindow.configure(background="#9DC4AA")
-		framefor=Frame(forWindow)
-		framefor.pack(side=TOP, fill=BOTH, expand=True)
-		ima= PhotoImage(file=archivo)
-		l=Label(framefor, image=ima)
-		l.pack()
-		forWindow.mainloop()
+	
 
 
 
@@ -649,11 +637,33 @@ def openSedWindow():
 	"Separación entre orificios del múltiple (confirmada) [m]"
 	)
 	
+	def formulaN(archivo):
+		forWindow= tk.Toplevel()
+		forWindow.iconbitmap(bitmap='icons\\agua.ico')
+		forWindow.geometry("800x600") 
+		forWindow.resizable(0,0)
+		forWindow.configure(background="#9DC4AA")
+		framefor=Frame(forWindow)
+		framefor.pack(side=TOP, fill=BOTH, expand=True)
+		ima= PhotoImage(file=archivo)
+		l=Label(framefor, image=ima)
+		l.pack()
+		forWindow.mainloop()
+
+	numero=1
+	dicImagenCol=dict()
+	for col in arbolSed["columns"]:
+		dicImagenCol[col]=f"images\\Ecuacion_{numero}.png"
+		numero=numero+1
+	
+	print(dicImagenCol)
+
+
 	#Headings
 	arbolSed.heading("#0",text="ID", anchor=CENTER)
 	
 	for col in arbolSed["columns"]:
-		arbolSed.heading(col, text=col,anchor=CENTER, command = lambda: formulaN("images\\Ecuacion_1.png"))
+		arbolSed.heading(col, text=col,anchor=CENTER, command = lambda: formulaN(dicImagenCol[col]))
 
 	
 		
