@@ -49,6 +49,7 @@ def on_closing():
 contador=0
 contadorFiltro=0
 contador2 = 0
+contadorFloculador=0
 
 def openSedWindow():
 
@@ -2433,8 +2434,144 @@ def openFiltroWindow():
 	filtroWindow.mainloop()
 
 
+def openFloculadorWindow():
+	global contadorFloculador
+	#Style
+	style = ttk.Style()
+	#Pick a theme
+	style.theme_use("clam")
+
+	#Configure colors
+
+	style.configure("Treeview",background="#9DC4AA", foreground="black", rowheight=40,fieldbackground="#9DC4AA")
+	style.configure("Treeview.Heading", foreground="black", font =("Courier",12))
+	#Change selected color
+	style.map("Treeview", background=[("selected", "#09C5CE")])	 
+
+	def newEntryFiltro(lista):
+		for elemento in lista:
+				elemento.delete(0, END)
+		lista[10].insert(0,9.81)
+		
+
+	def newDataTreeview(tree,listaS):
+		global contadorFloculador
+
+		if contadorFloculador%2 ==0:
+			tree.insert("",END,text= f"{contadorFloculador+1}", values=tuple(listaS),
+			iid=contadorFloculador, tags=("evenrow",))	
+		else:	
+			tree.insert("",END,text= f"{contadorFloculador+1}", values=tuple(listaS),
+				iid=contadorFloculador, tags=("oddrow",))
+		contadorFloculador=contadorFloculador+1
+
+	
+
+	mainWindow.withdraw()
+	floculadorWindow = tk.Toplevel()
+	floculadorWindow.protocol("WM_DELETE_WINDOW", on_closing)
+	floculadorWindow.iconbitmap(bitmap='icons\\agua.ico')
+	floculadorWindow.geometry("1000x600") 
+	floculadorWindow.resizable(0,0)	
+	floculadorWindow.configure(background="#9DC4AA")
 
 
+	frameFloculador= LabelFrame(floculadorWindow, text="Diseño Floculador Alabama", font=("Yu Gothic bold", 11))
+	frameFloculador.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+
+	imageAtras= PhotoImage(file="images\\atras.png")
+
+	#Botones. 
+
+	botonAtrasFlo= HoverButton(frameFloculador, image=imageAtras , width=100, height=40, bg= None, command=lambda: returnMainWindow(floculadorWindow))
+	botonAtrasFlo.place(x=0,y=10)
+
+	botonNewEntryFiltro = HoverButton(frameFloculador, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: newEntryFiltro(listaEntry))
+	botonVerCalculos = HoverButton(frameFloculador, text="Ver cálculos", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT)
+	botonDatosSalidaCamaraPar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (par)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT)
+	botonDatosSalidaCamaraImpar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (impar)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT)
+
+
+	listaBotones=[botonNewEntryFiltro, botonVerCalculos,botonDatosSalidaCamaraPar,botonDatosSalidaCamaraImpar]
+
+
+	datosEntradaLabel = Label(frameFloculador, text="Datos iniciales: ",font=("Yu Gothic bold",10))
+	caudalDiseñoLabel = Label(frameFloculador, text="QMD = Caudal de diseño [L/s]:",font=("Yu Gothic bold",10))
+	tiempoFloculacionLabel = Label(frameFloculador, text="T = Tiempo de floculación [min]:",font=("Yu Gothic bold",10))
+	diametroInterconexionLabel = Label(frameFloculador, text="D = Diametro de interconexión [m]:",font=("Yu Gothic bold",10))
+	diametroInternoLabel = Label(frameFloculador, text="Di = Diametr interno 20\'\' [m]:",font=("Yu Gothic bold",10))
+	diametroExternoLabel = Label(frameFloculador, text="Di = Diametr externo 20\'\' [m]:",font=("Yu Gothic bold",10))
+	anchoLabel = Label(frameFloculador, text="W = Ancho [m]:",font=("Yu Gothic bold",10))
+	longitudLabel = Label(frameFloculador, text="L Longitud [m]:",font=("Yu Gothic bold",10))
+	alturaLabel = Label(frameFloculador, text="a = Altura [m]:",font=("Yu Gothic bold",10))
+	densidadAguaLabel = Label(frameFloculador, text=u"\u03C1 = Densidad del agua [Kg/(m^3)]:",font=("Yu Gothic bold",10))
+	viscocidadCinematicaLabel = Label(frameFloculador, text=u"\u03BC = Viscocidad Cinemática del agua [(m^2)/s]:",font=("Yu Gothic bold",10))
+	gravedadLabel = Label(frameFloculador, text="g = Gravedad [m/(s^2)]",font=("Yu Gothic bold",10))
+	temperaturaLabel = Label(frameFloculador, text="°C = Temperatura [°C]:",font=("Yu Gothic bold",10))
+	coeficienteDescargaLabel = Label(frameFloculador, text="Cd = Coeficiente de descarga [K]",font=("Yu Gothic bold",10))
+	coeficienteDescargaOrificiosLabel = Label(frameFloculador, text="Cd = Coeficiente de descarga Orificios [K]",font=("Yu Gothic bold",10))
+	
+	
+	listaLabel = [datosEntradaLabel,caudalDiseñoLabel,tiempoFloculacionLabel,diametroInterconexionLabel,diametroInternoLabel,diametroExternoLabel,
+				anchoLabel , longitudLabel,alturaLabel,densidadAguaLabel,viscocidadCinematicaLabel,gravedadLabel,temperaturaLabel,
+				coeficienteDescargaLabel,coeficienteDescargaOrificiosLabel]
+
+	caudalDiseño = Entry(frameFloculador)
+	caudalDiseño.focus()
+	tiempoFloculacion = Entry(frameFloculador)
+	diametroInterconexion = Entry(frameFloculador)
+	diametroInterno = Entry(frameFloculador)
+	diametroExterno = Entry(frameFloculador)
+	ancho = Entry(frameFloculador)
+	longitud = Entry(frameFloculador)
+	altura = Entry(frameFloculador)
+	densidadAgua = Entry(frameFloculador)
+	viscocidadCinematica = Entry(frameFloculador)
+	gravedad = Entry(frameFloculador)
+	gravedad.insert(0,9.81)
+	temperatura = Entry(frameFloculador)
+	coeficienteDescarga = Entry(frameFloculador)
+	coeficienteDescargaOrificios = Entry(frameFloculador)
+	
+
+	listaEntry= [caudalDiseño,tiempoFloculacion,diametroInterconexion,diametroInterno,diametroExterno,
+				ancho,longitud,altura,densidadAgua,viscocidadCinematica,gravedad,temperatura,
+				coeficienteDescarga,coeficienteDescargaOrificios]
+	control=0
+	alturaInicial=70
+	alturaInicial2=113
+	for elemento in listaLabel:
+		if control<8:
+			elemento.place(x=20,y=alturaInicial)
+			alturaInicial+=43
+		else:
+			elemento.place(x=450,y=alturaInicial2)
+			alturaInicial2+=43
+		control=control+1
+	control=0
+	alturaInicial=113
+	alturaInicial2=113
+	for elemento in listaEntry:
+		if control<7:
+			elemento.place(x=300,y=alturaInicial)
+			alturaInicial+=43
+		else:
+			elemento.place(x=770,y=alturaInicial2)
+			alturaInicial2+=43
+		control=control+1
+	xInicial=20
+	xInicial2=20
+	control=0
+	for elemento in listaBotones:
+		if control<2:
+			elemento.place(x=xInicial ,y=alturaInicial2)
+			xInicial+=500
+		else:
+			elemento.place(x=xInicial2 ,y=alturaInicial2+86)
+			xInicial2+=500
+		control+=1
+	floculadorWindow.mainloop()
 
 
 
@@ -2468,7 +2605,7 @@ boton_sed_window = my_canvas.create_window(5,110, anchor= "nw", window=boton_sed
 boton_filtro= HoverButton(frame, text="Filtro rápido", activebackground="#9DC4AA", justify=CENTER, width=50, height=2, bg= "#09C5CE", font =("Courier",9), command=openFiltroWindow)
 boton_filtro_window = my_canvas.create_window(5,160, anchor= "nw", window=boton_filtro)
 
-boton_floc= HoverButton(frame, text="Floculador Alabama", activebackground="#9DC4AA", justify=CENTER, width=50, height=2, bg= "#09C5CE", font =("Courier",9))
+boton_floc= HoverButton(frame, text="Floculador Alabama", activebackground="#9DC4AA", justify=CENTER, width=50, height=2, bg= "#09C5CE", font =("Courier",9), command=openFloculadorWindow)
 boton_floc_window = my_canvas.create_window(5,210, anchor= "nw", window=boton_floc)
 
 '''
