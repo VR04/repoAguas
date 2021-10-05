@@ -653,10 +653,10 @@ def openSedWindow():
 	numero=1
 	dicImagenCol=dict()
 	for col in arbolSed["columns"]:
-		dicImagenCol[col]=f"images\\Ecuacion_{numero}.png"
+		dicImagenCol[col]=f"images\\EcuacionSed{numero}.png"
 		numero=numero+1
 	
-	print(dicImagenCol)
+	
 
 
 	#Headings
