@@ -1284,6 +1284,7 @@ def openFiltroWindow():
 			lista2.append(y2)
 			lista2.append(calculo2CU(numero,x1,y1,x2,y2))
 			listaInsertar=[lista1,lista2]
+			
 			for elemento in listaInsertar:
 				newDataTreeview(arbolCoeficienteDU10,elemento)
 
@@ -1796,8 +1797,188 @@ def openFiltroWindow():
 			elemento.place(x=40, y=alturaBotones)
 			alturaBotones= alturaBotones+50
 		estimacionPerdidaArenaWindow.mainloop()
+
+	def valorCoeficienteDeUniformidad(lista1,lista2):
+
+		def buscarEnTabla(NumTamiz,tablaDic):
+			return tablaDic[NumTamiz]
+
+		listaNTamizTemp=lista1.copy()
+		listaARetenidaTemp=lista2.copy()
+		listaNTamiz=list()
+		listaARetenida=list()
+
+		if listaNTamizTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de los números de tamiz.")
+			return None
+		if listaARetenidaTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de la arena retenida.")
+			return None
+
+		for ind in range(0, len(listaNTamizTemp)):
+			if listaNTamizTemp[ind].get() == "" and ind%2==0:
+				break
+			elif listaNTamizTemp[ind].get() == "" and ind%2 != 0:
+				messagebox.showwarning(title="Error", message="Hace falta el rango de la derecha de alguna entrada.")
+				return None
+			else:
+				try:
+					CountControl=0
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m: 
+							CountControl=CountControl+1
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m and CountControl==18:
+							messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no coincide con los valores estándar para número de tamiz. Pulse el botón para conocerlos.")
+							return None
+					if  ind%2 != 0:
+						guardaValColumna2 = int(listaNTamizTemp[ind].get())	
+					
+					if ind !=0 and ind%2==0 and int(listaNTamizTemp[ind].get()) != guardaValColumna2:
+						messagebox.showwarning(title="Error", message=f"El valor donde finaliza un rango debe ser el valor inicial del siguiente rango.")
+						return None
+					if ind != 0 and int(listaNTamizTemp[ind].get()) < variableControlCreciente:
+						messagebox.showwarning(title="Error", message=f"Los valores de los rangos de número de tamiz deben ir en orden creciente.")
+						return None
+					variableControlCreciente=int(listaNTamizTemp[ind].get())
+
+					
+					listaNTamiz.append(int(listaNTamizTemp[ind].get()))
+
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
 	
-	def calcularPEGravaYPredimensionamiento(listaEntradas):
+
+		for ind in range(0, len(listaARetenidaTemp)):
+			if listaARetenidaTemp[ind].get() == "" and ind != 0:
+				break
+			else:
+				try:
+					listaARetenida.append(float(listaARetenidaTemp[ind].get()))
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
+		if len(listaARetenida) != len(listaNTamiz)/2:
+			messagebox.showwarning(title="Error", message="La cantidad de datos ingresados en los rangos de número de tamiz no coincide con la cantidad de datos de arena retendia.")
+			return None
+		
+		
+		sumaPorcentajes=0
+		for elemento in listaARetenida:
+			sumaPorcentajes= sumaPorcentajes + elemento
+		
+		
+		if sumaPorcentajes != 100:
+			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
+			return None
+
+		listaEntradaTemp=list()
+		datosSalida=list()
+		
+		################Datos temporales:
+		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
+		listaARetenida=[0.8, 4.25, 15.02, 16.65, 18.01, 18.25, 15.65, 9.3, 2.07]
+		################
+		
+		#Tabla Tamaño Abertura Tamiz
+		TamañoTamiz= [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]
+		TamañoAbertura= [4.76, 3.35, 2.38, 1.68, 1.41, 1.0, 0.841, 0.707, 0.595, 0.5, 0.4, 0.354, 0.297, 0.25, 0.21, 0.177, 0.149, 0.105]
+		tablaTamañoAberturaTamiz=dict()
+		for ind in range(0, len(TamañoTamiz)):
+			tablaTamañoAberturaTamiz[TamañoTamiz[ind]] = TamañoAbertura[ind]
+
+		#Acumulado arena que pasa.
+		def acumuladoArenaQuePasa(indice):
+			suma=0
+			for elemento in range(0,indice+1):
+				suma= suma+listaARetenida[elemento]
+			return 100-suma
+		#Calculando acumulado:
+		listaAcumuladoArenaDescendente=list()
+		for ind in range(0, len(listaARetenida)):
+			listaAcumuladoArenaDescendente.append(acumuladoArenaQuePasa(ind))
+
+		listaAcumuladoArenaAscendente = listaAcumuladoArenaDescendente.copy()
+		listaAcumuladoArenaAscendente.reverse()
+
+		#OrganizandoListaNTamiz
+		listaNTamizExtremo=list()
+		listaNTamizSinRepeticion=list()
+		for num in range(0,len(listaNTamiz)):
+			if num%2==0:
+				pass	
+			else:
+				listaNTamizExtremo.append(listaNTamiz[num])
+		guardado=listaNTamiz[0]
+		listaNTamizSinRepeticion.append(guardado)
+		for elemento in listaNTamiz:
+			if elemento != guardado:
+				listaNTamizSinRepeticion.append(elemento)
+				guardado=elemento
+	
+				
+
+		longListaARetenida=len(listaARetenida)-1
+		for ind in range(0, len(listaARetenida)):
+			listaEntradaTemp.clear()
+			
+			listaEntradaTemp.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+			extremoDerecho=listaNTamizExtremo[ind]
+			listaEntradaTemp.append(listaARetenida[ind])
+			listaEntradaTemp.append(extremoDerecho)
+			listaEntradaTemp.append(tablaTamañoAberturaTamiz[extremoDerecho])
+			listaEntradaTemp.append(listaAcumuladoArenaDescendente[ind])
+			listaEntradaTemp.append(tablaTamañoAberturaTamiz[listaNTamizExtremo[longListaARetenida-ind]])
+			listaEntradaTemp.append(listaAcumuladoArenaAscendente[ind])
+			listaIntermedia = listaEntradaTemp.copy()
+			datosSalida.append(listaIntermedia)
+		
+		abAcDic= dict()
+		for ind in range(0,len(datosSalida)):
+			abAcDic[datosSalida[ind][6]]=datosSalida[ind][5]
+		
+	
+		def tamañoEfectivod1(numero,dic):
+			elementoAnterior=dic[0]
+			for elemento in dic:
+				if elemento <= numero and elemento>=elementoAnterior:
+					variableGuarda=elemento
+					elementoAnterior=elemento
+			return variableGuarda
+
+		def tamañoEfectivod2(numero,dic):
+			elementoAnterior=100
+			for elemento in dic:
+				if elemento >= numero and elemento<=elementoAnterior:
+					variableGuarda=elemento
+					elementoAnterior=elemento
+			return variableGuarda
+		def tamañoEfectivod(numero,dic):
+			return[tamañoEfectivod1(numero,dic), tamañoEfectivod2(numero,dic)]
+
+		def calculo1CU(numero,x1,y1,x2,y2):
+			return(log10(x1)+(((numero-y1)/(y2-y1))*log10(x2/x1)))
+		def calculo2CU(numero,x1,y1,x2,y2):
+			return (10**(calculo1CU(numero,x1,y1,x2,y2)))
+		
+		#Calculo Tamaño Efectivo d10:
+		listaAcumuladoCU10=tamañoEfectivod(10,abAcDic)
+		y1=listaAcumuladoCU10[0]
+		y2=listaAcumuladoCU10[1]
+		x1=abAcDic[y1]
+		x2=abAcDic[y2]
+		d10= calculo2CU(10,x1,y1,x2,y2)
+		listaAcumuladoCU60=tamañoEfectivod(60,abAcDic)
+		Y1= listaAcumuladoCU60[0]
+		Y2= listaAcumuladoCU60[1]
+		X1= abAcDic[Y1]
+		X2=	abAcDic[Y2]
+		d60= calculo2CU(60,X1,Y1,X2,Y2)
+		CU=d60/d10
+		return [d10,CU]
+
+	def calcularPEGravaYPredimensionamiento(listaEntradas,lista1, lista2,temp):
 		listaE=list()
 		for elemento in listaEntradas:
 			try:
@@ -1966,10 +2147,39 @@ def openFiltroWindow():
 		listaEntradaTemp2.append(QMH)
 		listaEntradaTemp2.append(0.044*sqrt(QMH*86400))
 		newDataTreeview(arbolPredimensionamientoFiltros,listaEntradaTemp2)
-
 		contadorFiltro = 0
 		############################################################################VALOR PENDIENTE.
-		velocidadLavado=0.409
+		#Tabla Temperatura Viscocidad
+		valorTemperaturas=list()
+		tablaTemperaturaViscocidad=dict()
+		for i in range(0,36):
+			valorTemperaturas.append(i)
+			valorViscocidad=[0.001792, 0.001731, 0.001673, 0.001619, 0.001567, 0.001519, 0.001473, 0.001428, 0.001386, 0.001346, 0.001308, 0.001271, 0.001236, 0.001203, 0.001171, 0.00114, 0.001111, 0.001083, 0.001056, 0.00103, 0.001005, 0.000981, 0.000958, 0.000936, 0.000914, 0.000894, 0.000874, 0.000855, 0.000836, 0.000818, 0.000801, 0.000784, 0.000768, 0.000752, 0.000737, 0.000723]
+
+		for ind in range(0,len(valorTemperaturas)):
+			tablaTemperaturaViscocidad[valorTemperaturas[ind]]=valorViscocidad[ind]
+		
+		listatemporal = valorCoeficienteDeUniformidad(lista1,lista2)
+		percentil60AnalisisGranulometrico = listatemporal[0]*listatemporal[1] 
+		
+		print("Percentil60: ", percentil60AnalisisGranulometrico)
+
+		velocidadArrasteMedioA20= percentil60AnalisisGranulometrico*10
+		print("Velocidad Arrastre medio 20", velocidadArrasteMedioA20)
+
+		viscocidadDinamicaAgua= (tablaTemperaturaViscocidad[temp])*1000
+
+		print("viscocidad Dinamica: ", viscocidadDinamicaAgua)
+
+		if temp == 20:
+			velocidadArrastreMedioFiltrante = velocidadArrasteMedioA20
+		else:
+			velocidadArrastreMedioFiltrante= velocidadArrasteMedioA20*((viscocidadDinamicaAgua)**((-1/3)))
+		
+		print("Velocidad Arrastre: ", velocidadArrastreMedioFiltrante)
+
+		velocidadLavado=0.1*velocidadArrastreMedioFiltrante
+		print("Velocidad Lavado: ",velocidadLavado)
 		listaEntradaTemp3.append(velocidadLavado)
 		listaEntradaTemp3.append(suma)
 		perdidaEnergiaLechoGravaDuranteLavado= suma*velocidadLavado*(1/3)
@@ -1978,7 +2188,14 @@ def openFiltroWindow():
 
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.mainloop()
 
-	def estPerdidaLechoGravaYPredimensionamientoFiltros():
+	def estPerdidaLechoGravaYPredimensionamientoFiltros(lista1, lista2,optnValue):
+		
+		if optnValue.get() == "Seleccione la temperatura":
+			messagebox.showwarning(title="Error", message="Hace falta elegir el valor de la temperatura del agua a tratar.")
+			return None
+		else:
+			temp = int(optnValue.get())
+
 		estimacionPerdidaGravaYPredimensionamientoWindow = tk.Toplevel()
 		estimacionPerdidaGravaYPredimensionamientoWindow.iconbitmap(bitmap='icons\\agua.ico')
 		estimacionPerdidaGravaYPredimensionamientoWindow.geometry("800x600") 
@@ -2090,7 +2307,7 @@ def openFiltroWindow():
 
 
 		#Botones.
-		botonCalcular = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Calcular la estimación de la pérdida de energía en el lecho filtrante de arena limpio.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPEGravaYPredimensionamiento(listaEntradas) )
+		botonCalcular = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Calcular la estimación de la pérdida de energía en el lecho filtrante de arena limpio.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPEGravaYPredimensionamiento(listaEntradas,lista1, lista2,temp) )
 		botonNewEntry = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
 		botones=[botonCalcular,botonNewEntry]
 		alturaBotones=450
@@ -2280,7 +2497,7 @@ def openFiltroWindow():
 
 	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: estimacionPerdidaEnergiaArena(listaNumTamiz,listaAR,tempAgua))
 
-	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimación de la pérdida de energía en el lecho de grava,\nperdida de carga a través del lecho de grava y\npredimensionamiento de los filtros", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= estPerdidaLechoGravaYPredimensionamientoFiltros)
+	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimación de la pérdida de energía en el lecho de grava,\nperdida de carga a través del lecho de grava y\npredimensionamiento de los filtros", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: estPerdidaLechoGravaYPredimensionamientoFiltros(listaNumTamiz, listaAR,tempAgua))
 
 	botonPerdidaCargaLechoExpandido = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= perdidaCargaLechoExpandido)
 
@@ -2503,7 +2720,7 @@ def openFloculadorWindow():
 		
 		CFloculadorWindow = tk.Toplevel()
 		CFloculadorWindow.iconbitmap(bitmap='icons\\agua.ico')
-		CFloculadorWindow.geometry("1000x500") 
+		CFloculadorWindow.geometry("1000x200") 
 		CFloculadorWindow.resizable(0,0)	
 		CFloculadorWindow.configure(background="#9DC4AA")
 
@@ -2593,7 +2810,6 @@ def openFloculadorWindow():
 		CFloculadorWindow.mainloop()
 
 
-
 	def salidaCamara(listaEntry,diametroInternoOrificio):
 		
 		listaE2=list()
@@ -2632,7 +2848,7 @@ def openFloculadorWindow():
 		
 		salidaCamaraWindow = tk.Toplevel()
 		salidaCamaraWindow.iconbitmap(bitmap='icons\\agua.ico')
-		salidaCamaraWindow.geometry("1000x500") 
+		salidaCamaraWindow.geometry("1000x200") 
 		salidaCamaraWindow.resizable(0,0)	
 		salidaCamaraWindow.configure(background="#9DC4AA")
 
