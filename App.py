@@ -1754,7 +1754,7 @@ def openFiltroWindow():
 		velocidadSuperficialFiltracion.focus()
 		
 		profundidadLechoFijoArenaLabel = Label(frameEstimacionPerdidaArena, text="L = Profundidad del lecho fijo de arena [m]:", font =("Yu Gothic",9))
-		densidadRelativaArenaLabel = Label(frameEstimacionPerdidaArena, text="S{} = Densidad relativa de la arena:", font =("Yu Gothic",9))
+		densidadRelativaArenaLabel = Label(frameEstimacionPerdidaArena, text="S{} = Densidad relativa de la arena:".format(getSub("s")), font =("Yu Gothic",9))
 		porosidadLechoFijoLabel = Label(frameEstimacionPerdidaArena, text=u"\u03B5 ,e = Porosidad del lecho fijo:", font =("Yu Gothic",9))
 		constanteFiltracionFHLabel = Label(frameEstimacionPerdidaArena, text=u"\u03BA = Constante de Filtración (Fair-Hatch):", font =("Yu Gothic",9))
 		factorFormaFHLabel = Label(frameEstimacionPerdidaArena, text=u"\u03A6 = Factor de forma (Fair-Hatch):", font =("Yu Gothic",9))
@@ -1802,11 +1802,9 @@ def openFiltroWindow():
 			try:
 				listaE.append(float(elemento.get()))
 			except:
-				messagebox.showwarning(title="Error", message="El valor ingresado no es un número")
+				messagebox.showwarning(title="Error", message="Todos los valores ingresados deben ser números.")
 				return None
 	
-	
-
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow = tk.Toplevel()
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.iconbitmap(bitmap='icons\\agua.ico')
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.geometry("1000x200") 
@@ -1857,10 +1855,51 @@ def openFiltroWindow():
 		#Striped row tags
 		arbolEstimacionPerdidaGrava.tag_configure("evenrow", background= "#23D95F")
 		arbolEstimacionPerdidaGrava.tag_configure("oddrow", background= "#9DC4AA")
-
-	
-
+		
 		################Frame principal2
+		PerdidaCargaGravaFrame=LabelFrame(panelGravaDimension, text="Pérdida de carga a través del lecho de grava", font=("Yu Gothic bold", 11))
+		PerdidaCargaGravaFrame.pack(side=TOP, fill=BOTH,expand=True)
+		panelGravaDimension.add(PerdidaCargaGravaFrame,text="Pérdida de carga a través del lecho de grava")
+		#Frame Treeview
+		arbolPerdidaCargaGrava_frame = Frame(PerdidaCargaGravaFrame)
+		arbolPerdidaCargaGrava_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolPerdidaCargaGrava_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolPerdidaCargaGrava_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolPerdidaCargaGrava= ttk.Treeview(arbolPerdidaCargaGrava_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolPerdidaCargaGrava.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolPerdidaCargaGrava.xview)
+		sedScrollY.configure(command=arbolPerdidaCargaGrava.yview)
+		#Define columnas.
+		arbolPerdidaCargaGrava["columns"]= (
+		"V{} = Velocidad de lavado [m/min]".format(getSub("b")),
+		"L{} = Profundidad del lecho de grava [m]".format(getSub("g")),
+		"h{} = Pérdida de energía en el lecho de grava durante el lavado [m]".format(getSub("2"))
+		)
+
+		#Headings
+		arbolPerdidaCargaGrava.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolPerdidaCargaGrava["columns"]:
+			arbolPerdidaCargaGrava.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolPerdidaCargaGrava["columns"])+1) :
+				arbolPerdidaCargaGrava.column(f"#{i}",width=500, stretch=False)	
+		arbolPerdidaCargaGrava.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolPerdidaCargaGrava.tag_configure("evenrow", background= "#23D95F")
+		arbolPerdidaCargaGrava.tag_configure("oddrow", background= "#9DC4AA")
+
+
+
+		################Frame principal3
 		PredimensionamientoFiltrosFrame=LabelFrame(panelGravaDimension, text="Predimensionamiento de los filtros", font=("Yu Gothic bold", 11))
 		PredimensionamientoFiltrosFrame.pack(side=TOP, fill=BOTH,expand=True)
 		panelGravaDimension.add(PredimensionamientoFiltrosFrame,text="Predimensionamiento de los filtros")
@@ -1909,6 +1948,8 @@ def openFiltroWindow():
 		
 		listaEntradaTemp1=list()
 		listaEntradaTemp2=list()
+		listaEntradaTemp3=list()
+		
 		listaEntradaTemp1.append(120)
 		suma=0
 		for ind in range(10,15):
@@ -1923,9 +1964,15 @@ def openFiltroWindow():
 		QMH=listaE[16]*listaE[15]
 		listaEntradaTemp2.append(QMH)
 		listaEntradaTemp2.append(0.044*sqrt(QMH*86400))
-		
 		newDataTreeview(arbolPredimensionamientoFiltros,listaEntradaTemp2)
 
+		contadorFiltro = 0
+		############################################################################VALOR PENDIENTE.
+		listaEntradaTemp3.append("Valorvel")
+		listaEntradaTemp3.append(suma)
+		perdidaEnergiaLechoGravaDuranteLavado= suma*0.409*(1/3)
+		listaEntradaTemp3.append(perdidaEnergiaLechoGravaDuranteLavado)
+		newDataTreeview(arbolPerdidaCargaGrava,listaEntradaTemp3)
 
 	def estPerdidaLechoGravaYPredimensionamientoFiltros():
 		estimacionPerdidaGravaYPredimensionamientoWindow = tk.Toplevel()
@@ -2049,7 +2096,138 @@ def openFiltroWindow():
 			alturaBotones= alturaBotones+50
 			
 		estimacionPerdidaGravaYPredimensionamientoWindow.mainloop()
-		
+	
+	def calcularPerdidadLechoExpandido(listaEntradas):
+		listaE=list()
+		for elemento in listaEntradas:
+			try:
+				listaE.append(float(elemento.get()))
+			except:
+				messagebox.showwarning(title="Error",message="Uno o varios de los valores ingresados no son números.")
+				return None
+		perdidaLechoExpandidoCWindow = tk.Toplevel()
+		perdidaLechoExpandidoCWindow.iconbitmap(bitmap='icons\\agua.ico')
+		perdidaLechoExpandidoCWindow.geometry("1000x500") 
+		perdidaLechoExpandidoCWindow.resizable(0,0)	
+		perdidaLechoExpandidoCWindow.configure(background="#9DC4AA")
+
+		#Frame principal
+		perdidaLechoExpandidoCFrame=LabelFrame(perdidaLechoExpandidoCWindow, text="Pérdida de carga a través del lecho expandido", font=("Yu Gothic bold", 11))
+		perdidaLechoExpandidoCFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolPerdidaLechoExpandidoC_frame = Frame(perdidaLechoExpandidoCFrame)
+		arbolPerdidaLechoExpandidoC_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolPerdidaLechoExpandidoC_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolPerdidaLechoExpandidoC_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolPerdidaLechoExpandidoC= ttk.Treeview(arbolPerdidaLechoExpandidoC_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolPerdidaLechoExpandidoC.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolPerdidaLechoExpandidoC.xview)
+		sedScrollY.configure(command=arbolPerdidaLechoExpandidoC.yview)
+		#Define columnas.
+		arbolPerdidaLechoExpandidoC["columns"]= (
+		"L = Profundidad del lecho fijo [m]",
+		"e = Porosidad del lecho fijo",
+		"S{} = Densidad relativa de la arena".format(getSub("s")),
+		"h{} = Pérdida de carga a través del lecho expandido [m]".format(getSub("1"))
+		)
+
+		#Headings
+		arbolPerdidaLechoExpandidoC.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolPerdidaLechoExpandidoC["columns"]:
+			arbolPerdidaLechoExpandidoC.heading(col, text=col,anchor=CENTER)
+
+
+		for i in range(0,len(arbolPerdidaLechoExpandidoC["columns"])+1) :
+				arbolPerdidaLechoExpandidoC.column(f"#{i}",width=500, stretch=False)	
+
+
+		arbolPerdidaLechoExpandidoC.column("#0",width=0, stretch=False)
+		arbolPerdidaLechoExpandidoC.column("#4",width=700, stretch=True)
+		#Striped row tags
+		arbolPerdidaLechoExpandidoC.tag_configure("evenrow", background= "#23D95F")
+		arbolPerdidaLechoExpandidoC.tag_configure("oddrow", background= "#9DC4AA")
+
+
+		#Insersión datos.
+		global contadorFiltro
+		contadorFiltro = 0
+
+		listaEnt=list()
+		for j in range(0,3):
+			listaEnt.append(listaE[j])
+
+		perdidaCargaLechoExpandidoVal= listaE[0]*(1-listaE[1])*(listaE[2]-1)
+		listaEnt.append(perdidaCargaLechoExpandidoVal)
+		newDataTreeview(arbolPerdidaLechoExpandidoC,listaEnt)
+
+	def perdidaCargaLechoExpandido():
+		perdidaCargaLechoExpandidoWindow = tk.Toplevel()
+		perdidaCargaLechoExpandidoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		perdidaCargaLechoExpandidoWindow.geometry("600x400") 
+		perdidaCargaLechoExpandidoWindow.resizable(0,0)	
+		perdidaCargaLechoExpandidoWindow.configure(background="#9DC4AA")
+
+		framePerdidaCargaLechoExpandido= LabelFrame(perdidaCargaLechoExpandidoWindow, text="Pérdida de carga a través del lecho expandido",font=("Yu Gothic bold", 11))
+		framePerdidaCargaLechoExpandido.pack(side=TOP,fill=BOTH,expand=True)
+
+		def newEntryFiltroP(lista):
+			for elemento in lista:
+				elemento.delete(0, END)
+
+
+		#Input
+		lista_inputs=[]
+
+		inicialLabel=Label(framePerdidaCargaLechoExpandido, text="Características del lecho filtrante de arena: ",font=("Yu Gothic bold",10))
+
+
+
+		profundidadLechoFijoArenaLabel = Label(framePerdidaCargaLechoExpandido, text="L = Profundidad del lecho fijo de arena [m]:", font =("Yu Gothic",9))
+		porosidadLechoFijoLabel = Label(framePerdidaCargaLechoExpandido, text=u"\u03B5 ,e = Porosidad del lecho fijo:", font =("Yu Gothic",9))
+		densidadRelativaArenaLabel = Label(framePerdidaCargaLechoExpandido, text="S{} = Densidad relativa de la arena:".format(getSub("s")), font =("Yu Gothic",9))
+
+		profundidadLechoFijoArena = Entry(framePerdidaCargaLechoExpandido)
+		profundidadLechoFijoArena.focus()
+		porosidadLechoFijo = Entry(framePerdidaCargaLechoExpandido)
+		densidadRelativaArena = Entry(framePerdidaCargaLechoExpandido)
+
+
+
+		listaEntradas=[profundidadLechoFijoArena,
+		porosidadLechoFijo, densidadRelativaArena]
+
+		listaLabel=[inicialLabel, profundidadLechoFijoArenaLabel,
+		porosidadLechoFijoLabel, densidadRelativaArenaLabel]
+
+		alturaInicialLabel=20
+		for elemento in listaLabel:
+			elemento.place(x=50,y=alturaInicialLabel)
+			alturaInicialLabel+=47
+
+		alturaInicialEntradas=67
+
+		for elemento in listaEntradas:
+				elemento.place(x=400,y=alturaInicialEntradas)
+				alturaInicialEntradas+=47
+
+		#Botones.
+		botonCalcular = HoverButton(framePerdidaCargaLechoExpandido, text="Calcular la pérdida de carga a través del lecho expandido.", activebackground="#9DC4AA", width=70, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPerdidadLechoExpandido(listaEntradas) )
+		botonNewEntry = HoverButton(framePerdidaCargaLechoExpandido, text="Limpiar entradas.", activebackground="#9DC4AA", width=70, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botones=[botonCalcular,botonNewEntry]
+		alturaBotones=220
+		for elemento in botones:
+			elemento.place(x=40, y=alturaBotones)
+			alturaBotones= alturaBotones+50
+		perdidaCargaLechoExpandidoWindow.mainloop()
 
 
 	mainWindow.withdraw()
@@ -2098,18 +2276,18 @@ def openFiltroWindow():
 
 	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: estimacionPerdidaEnergiaArena(listaNumTamiz,listaAR,tempAgua))
 
-	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimación de la pérdida de energía en el lecho de grava y\npredimensionamiento de los filtros", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= estPerdidaLechoGravaYPredimensionamientoFiltros)
+	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimación de la pérdida de energía en el lecho de grava,\nperdida de carga a través del lecho de grava y\npredimensionamiento de los filtros", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= estPerdidaLechoGravaYPredimensionamientoFiltros)
 
-	botonPerdidaCargaLechoExpandido = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+	botonPerdidaCargaLechoExpandido = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= perdidaCargaLechoExpandido)
 
-	botonPerdidaCargaLechoGrava = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho de grava", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9))
+	
 
-	listaBotonesOrg=[botonNewEntryFiltro,botonPrincipalesCaracteristicasDelFiltro, botonGranulometria,botonCoefUniformidad,botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio,botonEstimacionPerdidaLechoGrava,botonPerdidaCargaLechoExpandido,botonPerdidaCargaLechoGrava]
+	listaBotonesOrg=[botonNewEntryFiltro,botonPrincipalesCaracteristicasDelFiltro, botonGranulometria,botonCoefUniformidad,botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio,botonEstimacionPerdidaLechoGrava,botonPerdidaCargaLechoExpandido]
 
 	alturaInicialBotones=70
 	for boton in listaBotonesOrg:
 		boton.place(x=560, y=alturaInicialBotones)
-		alturaInicialBotones=alturaInicialBotones+50
+		alturaInicialBotones=alturaInicialBotones+60
 	
 
 	Label(frameFiltro, text="Diseño de filtro",font=("Yu Gothic bold",10)).place(x=170, y=30)
