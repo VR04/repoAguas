@@ -2473,7 +2473,7 @@ def openFloculadorWindow():
 			except:	
 				messagebox.showwarning(title="Error", message="Uno o varios de los valores ingresados no son números")
 				return None
-		listaE2 = [57.26,20.00,0.39,0.45964,0.51,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]
+		listaE2 = [57.26,20.00,0.39,0.45964,0.508,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]
 		listaE=list()
 		numeroCamaras=12
 		#Ingreso datos completos.
@@ -2557,8 +2557,10 @@ def openFloculadorWindow():
 		velFlujoCodos=listaE[5-4]/listaE[12-4]
 		perdidadPasamuro = (listaE[5-4]**2)/(2*listaE[20-4]*(listaE[22-4]**2)*(listaE[12-4]**2))
 		perdidaCodo = 0.4*((velFlujoCodos**2)/(2*listaE[20-4]))
-		############REVISAR
+		############REVISAR (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(listaE[14-4]**2))
 		perdidaOrificio= (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(listaE[14-4]**2))
+		
+		
 		perdidaFloculador= perdidadPasamuro+perdidaCodo+perdidaOrificio
 		perdidadCargaenCamaras=perdidaFloculador*numeroCamaras
 		gradienteMezcla=sqrt((listaE[20-4]*perdidaFloculador)/(listaE[19-4]*listaE[8-4]))
@@ -2655,8 +2657,8 @@ def openFloculadorWindow():
 		arbolSalidaCamara.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolSalidaCamara.tag_configure("evenrow", background= "#23D95F")
-		arbolSalidaCamara.tag_configure("oddrow", background= "#9DC4AA")
+		arbolSalidaCamara.tag_configure("oddrow", background= "#23D95F")
+		arbolSalidaCamara.tag_configure("evenrow", background= "#9DC4AA")
 		contadorFloculador=0
 		listaEntrada=list()
 		velocidadFlujoCodos=listaE[5-4]/listaE[12-4]
@@ -2670,7 +2672,7 @@ def openFloculadorWindow():
 		numeroCamp= gradienteMezcla*listaE[8-4]
 		pendiente= perdidaFloculador/listaE[16-4]
 
-		listaValores=[diametroInternoOrificio,velocidadFlujoCodos,areaOrificio,coeficienteDescarga,perdidaPasamuros,perdidaCodo,
+		listaValores=[diametroInternoOrificio,areaOrificio,coeficienteDescarga,perdidaPasamuros,perdidaCodo,
 		perdidaOrificio,perdidaFloculador,gradienteMezcla,numeroCamp,pendiente]
 		for valores in listaValores:
 			listaEntrada.append(valores)
