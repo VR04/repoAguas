@@ -1969,11 +1969,14 @@ def openFiltroWindow():
 
 		contadorFiltro = 0
 		############################################################################VALOR PENDIENTE.
-		listaEntradaTemp3.append("Valorvel")
+		velocidadLavado=0.409
+		listaEntradaTemp3.append(velocidadLavado)
 		listaEntradaTemp3.append(suma)
-		perdidaEnergiaLechoGravaDuranteLavado= suma*0.409*(1/3)
+		perdidaEnergiaLechoGravaDuranteLavado= suma*velocidadLavado*(1/3)
 		listaEntradaTemp3.append(perdidaEnergiaLechoGravaDuranteLavado)
 		newDataTreeview(arbolPerdidaCargaGrava,listaEntradaTemp3)
+
+		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.mainloop()
 
 	def estPerdidaLechoGravaYPredimensionamientoFiltros():
 		estimacionPerdidaGravaYPredimensionamientoWindow = tk.Toplevel()
@@ -1981,7 +1984,6 @@ def openFiltroWindow():
 		estimacionPerdidaGravaYPredimensionamientoWindow.geometry("800x600") 
 		estimacionPerdidaGravaYPredimensionamientoWindow.resizable(0,0)	
 		estimacionPerdidaGravaYPredimensionamientoWindow.configure(background="#9DC4AA")
-
 		frameEstimacionPerdidaGravaYPredimensionamiento= LabelFrame(estimacionPerdidaGravaYPredimensionamientoWindow, text="Estimación de la pérdida de energía en el lecho de grava y predimensionamiento de los filtros",font=("Yu Gothic bold", 11))
 		frameEstimacionPerdidaGravaYPredimensionamiento.pack(side=TOP,fill=BOTH,expand=True)
 
@@ -2228,6 +2230,7 @@ def openFiltroWindow():
 		for elemento in botones:
 			elemento.place(x=40, y=alturaBotones)
 			alturaBotones= alturaBotones+50
+		
 		perdidaCargaLechoExpandidoWindow.mainloop()
 
 
@@ -2544,7 +2547,13 @@ def openFloculadorWindow():
 		for i in range(0,len(arbolCFloculador["columns"])) :
 				arbolCFloculador.column(f"#{i}",width=300, stretch=False)	
 
-		arbolCFloculador.column("#2",width=300, stretch=True)
+		
+		arbolCFloculador.column("#3",width=600, stretch=False)
+		arbolCFloculador.column("#7",width=500, stretch=False)
+		arbolCFloculador.column("#8",width=600, stretch=False)
+		arbolCFloculador.column("#9",width=600, stretch=False)
+		arbolCFloculador.column("#10",width=600, stretch=False)
+
 		arbolCFloculador.column("#0",width=0, stretch=False)
 
 		#Striped row tags
@@ -2557,10 +2566,7 @@ def openFloculadorWindow():
 		velFlujoCodos=listaE[5-4]/listaE[12-4]
 		perdidadPasamuro = (listaE[5-4]**2)/(2*listaE[20-4]*(listaE[22-4]**2)*(listaE[12-4]**2))
 		perdidaCodo = 0.4*((velFlujoCodos**2)/(2*listaE[20-4]))
-		############REVISAR (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(listaE[14-4]**2))
-		perdidaOrificio= (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(listaE[14-4]**2))
-		
-		
+		perdidaOrificio= (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(listaE[14-4]**2))		
 		perdidaFloculador= perdidadPasamuro+perdidaCodo+perdidaOrificio
 		perdidadCargaenCamaras=perdidaFloculador*numeroCamaras
 		gradienteMezcla=sqrt((listaE[20-4]*perdidaFloculador)/(listaE[19-4]*listaE[8-4]))
@@ -2572,7 +2578,20 @@ def openFloculadorWindow():
 			listaEntrada.append(valor)
 
 		newDataTreeview(arbolCFloculador,listaEntrada)
+		if velFlujoCodos>=0.25 and velFlujoCodos<=0.65:
+			messagebox.showinfo(title="Información", message="El valor de la velocidad de flujo entre codos cumple. Se encuentra entre 0.25 y 0.65.")
+		else:
+			messagebox.showarning(title="¡Cuidado!", message="El valor de la velocidad de flujo entre codos NO cumple. No se encuentra entre 0.25 y 0.65.")
+		
+		if gradienteMezcla>=35 and gradienteMezcla<=55:
+			messagebox.showinfo(title="Información", message="El valor del gradiente de mezcla cumple. Se encuentra entre 35 y 55.")
+		else:
+			messagebox.showarning(title="¡Cuidado!", message="El valor del gradiente de mezcla NO cumple. No se encuentra entre 35 y 55.")
+		
+		
+		
 		CFloculadorWindow.mainloop()
+
 
 
 	def salidaCamara(listaEntry,diametroInternoOrificio):
@@ -2584,7 +2603,9 @@ def openFloculadorWindow():
 			except:	
 				messagebox.showwarning(title="Error", message="Uno o varios de los valores ingresados no son números")
 				return None
-		listaE2 = [57.26,20.00,0.39,0.45964,0.51,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]
+		##########Datos eliminar
+		listaE2 = [57.26,20.00,0.39,0.45964,0.51,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]		
+		############
 		listaE=list()
 		numeroCamaras=12
 		#Ingreso datos completos.
@@ -2653,7 +2674,11 @@ def openFloculadorWindow():
 		for i in range(0,len(arbolSalidaCamara["columns"])) :
 				arbolSalidaCamara.column(f"#{i}",width=300, stretch=False)	
 
-		arbolSalidaCamara.column("#2",width=300, stretch=True)
+		
+		arbolSalidaCamara.column("#1",width=600, stretch=False)
+		arbolSalidaCamara.column("#3",width=600, stretch=False)
+		arbolSalidaCamara.column("#7",width=600, stretch=False)
+		arbolSalidaCamara.column("#8",width=600, stretch=False)
 		arbolSalidaCamara.column("#0",width=0, stretch=False)
 
 		#Striped row tags
@@ -2678,6 +2703,14 @@ def openFloculadorWindow():
 			listaEntrada.append(valores)
 
 		newDataTreeview(arbolSalidaCamara,listaEntrada)
+		
+		if gradienteMezcla>=35 and gradienteMezcla<=55:
+			messagebox.showinfo(title="Información", message="El valor del gradiente de mezcla cumple. Se encuentra entre 35 y 55.")
+		else:
+			messagebox.showarning(title="¡Cuidado!", message="El valor del gradiente de mezcla NO cumple. No se encuentra entre 35 y 55.")
+		
+
+
 		salidaCamaraWindow.mainloop()
 	
 
