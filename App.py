@@ -2464,7 +2464,219 @@ def openFloculadorWindow():
 			tree.insert("",END,text= f"{contadorFloculador+1}", values=tuple(listaS),
 				iid=contadorFloculador, tags=("oddrow",))
 		contadorFloculador=contadorFloculador+1
+	
+	def calculosFloculador(listaEntry):
+		listaE2=list()
+		for elemento in listaEntry:
+			try:
+				listaE2.append(float(elemento.get()))
+			except:	
+				messagebox.showwarning(title="Error", message="Uno o varios de los valores ingresados no son números")
+				return None
+		listaE2 = [57.26,20.00,0.39,0.45964,0.51,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]
+		listaE=list()
+		numeroCamaras=12
+		#Ingreso datos completos.
+		listaE.append(listaE2[0])
+		listaE.append(listaE2[0]/1000)
+		listaE.append(listaE2[1])
+		listaE.append(listaE2[1]*60)
+		listaE.append((listaE2[1]*60)/numeroCamaras)
+		listaE.append(((listaE2[1]*60)/numeroCamaras)*(listaE2[0]/1000))
+		listaE.append(listaE2[2])
+		listaE.append(listaE2[3])
+		listaE.append((listaE2[3]**2)*pi*(1/4))
+		listaE.append(listaE2[4])
+		listaE.append((listaE2[4]**2)*pi*(1/4))
+		listaE.append(listaE2[5])
+		listaE.append(listaE2[6])
+		listaE.append(listaE2[7])
+		listaE.append(listaE2[8])
+		listaE.append(listaE2[9])
+		listaE.append(listaE2[10])
+		listaE.append(listaE2[11])
+		listaE.append(listaE2[12])
+		listaE.append(listaE2[13])
+		
+		CFloculadorWindow = tk.Toplevel()
+		CFloculadorWindow.iconbitmap(bitmap='icons\\agua.ico')
+		CFloculadorWindow.geometry("1000x500") 
+		CFloculadorWindow.resizable(0,0)	
+		CFloculadorWindow.configure(background="#9DC4AA")
 
+		#Frame Treeview
+		arbolCFloculador_frame = LabelFrame(CFloculadorWindow, text="Principales caracterísiticas del filtro", font=("Yu Gothic bold", 11))
+		arbolCFloculador_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolCFloculador_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolCFloculador_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolCFloculador= ttk.Treeview(arbolCFloculador_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolCFloculador.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolCFloculador.xview)
+		sedScrollY.configure(command=arbolCFloculador.yview)
+		#Define columnas.
+		arbolCFloculador["columns"]= (
+		"V = Volumen floculador [m^3]",
+		"#c = Número de cámaras [und]",
+		"{} = Velocidad de flujo entre codos [m/s]".format(getSub("v")),
+		"H\' = Pérdida Pasamuro [m]",
+		"H\'\' = Perdida Codo [m]",
+		"H\'\'\' = Perdidas Orificio [m]",
+		"H = Perdida total floculador [m]",
+		"Pc = Perdidas de carga en las 12 cámaras [m]",
+		"G = Gradiente de mezcla [s^(-1)]",
+		"Gt = Numero de camp",
+		"P = Pendiente [%]"
+		)
+
+		#Headings
+		arbolCFloculador.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolCFloculador["columns"]:
+			arbolCFloculador.heading(col, text=col,anchor=CENTER)
+
+		for i in range(0,len(arbolCFloculador["columns"])) :
+				arbolCFloculador.column(f"#{i}",width=300, stretch=False)	
+
+		arbolCFloculador.column("#2",width=300, stretch=True)
+		arbolCFloculador.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolCFloculador.tag_configure("evenrow", background= "#23D95F")
+		arbolCFloculador.tag_configure("oddrow", background= "#9DC4AA")
+		contadorFloculador=0
+		listaEntrada= list()
+		volFloculador = listaE[15-4]*listaE[16-4]*listaE[17-4]*numeroCamaras
+		numeroCamaras=12
+		velFlujoCodos=listaE[5-4]/listaE[12-4]
+		perdidadPasamuro = (listaE[5-4]**2)/(2*listaE[20-4]*(listaE[22-4]**2)*(listaE[12-4]**2))
+		perdidaCodo = 0.4*((velFlujoCodos**2)/(2*listaE[20-4]))
+		############REVISAR
+		perdidaOrificio= (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(listaE[14-4]**2))
+		perdidaFloculador= perdidadPasamuro+perdidaCodo+perdidaOrificio
+		perdidadCargaenCamaras=perdidaFloculador*numeroCamaras
+		gradienteMezcla=sqrt((listaE[20-4]*perdidaFloculador)/(listaE[19-4]*listaE[8-4]))
+		numeroCamp=gradienteMezcla*listaE[8-4]
+		pendiente= perdidaFloculador/listaE[16-4]
+		listaValores=[volFloculador,numeroCamaras,velFlujoCodos,perdidadPasamuro,perdidaCodo,perdidaOrificio,
+		perdidaFloculador,perdidadCargaenCamaras,gradienteMezcla,numeroCamp,pendiente]
+		for valor in listaValores:
+			listaEntrada.append(valor)
+
+		newDataTreeview(arbolCFloculador,listaEntrada)
+		CFloculadorWindow.mainloop()
+
+
+	def salidaCamara(listaEntry,diametroInternoOrificio):
+		
+		listaE2=list()
+		for elemento in listaEntry:
+			try:
+				listaE2.append(float(elemento.get()))
+			except:	
+				messagebox.showwarning(title="Error", message="Uno o varios de los valores ingresados no son números")
+				return None
+		listaE2 = [57.26,20.00,0.39,0.45964,0.51,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]
+		listaE=list()
+		numeroCamaras=12
+		#Ingreso datos completos.
+		listaE.append(listaE2[0])
+		listaE.append(listaE2[0]/1000)
+		listaE.append(listaE2[1])
+		listaE.append(listaE2[1]*60)
+		listaE.append((listaE2[1]*60)/numeroCamaras)
+		listaE.append(((listaE2[1]*60)/numeroCamaras)*(listaE2[0]/1000))
+		listaE.append(listaE2[2])
+		listaE.append(listaE2[3])
+		listaE.append((listaE2[3]**2)*pi*(1/4))
+		listaE.append(listaE2[4])
+		listaE.append((listaE2[4]**2)*pi*(1/4))
+		listaE.append(listaE2[5])
+		listaE.append(listaE2[6])
+		listaE.append(listaE2[7])
+		listaE.append(listaE2[8])
+		listaE.append(listaE2[9])
+		listaE.append(listaE2[10])
+		listaE.append(listaE2[11])
+		listaE.append(listaE2[12])
+		listaE.append(listaE2[13])
+		
+		salidaCamaraWindow = tk.Toplevel()
+		salidaCamaraWindow.iconbitmap(bitmap='icons\\agua.ico')
+		salidaCamaraWindow.geometry("1000x500") 
+		salidaCamaraWindow.resizable(0,0)	
+		salidaCamaraWindow.configure(background="#9DC4AA")
+
+		#Frame Treeview
+		arbolSalidaCamara_frame = LabelFrame(salidaCamaraWindow, text="Principales caracterísiticas del filtro", font=("Yu Gothic bold", 11))
+		arbolSalidaCamara_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolSalidaCamara_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolSalidaCamara_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolSalidaCamara= ttk.Treeview(arbolSalidaCamara_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolSalidaCamara.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolSalidaCamara.xview)
+		sedScrollY.configure(command=arbolSalidaCamara.yview)
+		#Define columnas.
+		arbolSalidaCamara["columns"]= (
+		"Di = Diametro de interno Orificio [m]",
+		"A= Área del orificio [m^2]",
+		"Cd = Coeficiente de descarga",
+		"H\' = Pérdida Pasamuro [m]",
+		"H\'\' = Perdida Codo [m]",
+		"H\'\'\' = Perdidas Orificio [m]",
+		"H = Perdida total floculador [m]",
+		"G = Gradiente de mezcla [s^(-1)]",
+		"Gt = Numero de camp",
+		"P = Pendiente [%]"			)
+
+		#Headings
+		arbolSalidaCamara.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolSalidaCamara["columns"]:
+			arbolSalidaCamara.heading(col, text=col,anchor=CENTER)
+
+		for i in range(0,len(arbolSalidaCamara["columns"])) :
+				arbolSalidaCamara.column(f"#{i}",width=300, stretch=False)	
+
+		arbolSalidaCamara.column("#2",width=300, stretch=True)
+		arbolSalidaCamara.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolSalidaCamara.tag_configure("evenrow", background= "#23D95F")
+		arbolSalidaCamara.tag_configure("oddrow", background= "#9DC4AA")
+		contadorFloculador=0
+		listaEntrada=list()
+		velocidadFlujoCodos=listaE[5-4]/listaE[12-4]
+		areaOrificio= pi*(diametroInternoOrificio**2)*(1/4)
+		coeficienteDescarga= listaE[23-4]
+		perdidaPasamuros= (listaE[5-4]**2)/((2*listaE[20-4])*(coeficienteDescarga**2)*(listaE[12-4]**2))
+		perdidaCodo= (0.4)*((velocidadFlujoCodos**2)/(2*listaE[20-4]))
+		perdidaOrificio= (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(areaOrificio**2))
+		perdidaFloculador= perdidaPasamuros+perdidaCodo+perdidaOrificio
+		gradienteMezcla= sqrt((listaE[20-4]*perdidaFloculador)/(listaE[19-4]*listaE[8-4]))
+		numeroCamp= gradienteMezcla*listaE[8-4]
+		pendiente= perdidaFloculador/listaE[16-4]
+
+		listaValores=[diametroInternoOrificio,velocidadFlujoCodos,areaOrificio,coeficienteDescarga,perdidaPasamuros,perdidaCodo,
+		perdidaOrificio,perdidaFloculador,gradienteMezcla,numeroCamp,pendiente]
+		for valores in listaValores:
+			listaEntrada.append(valores)
+
+		newDataTreeview(arbolSalidaCamara,listaEntrada)
+		salidaCamaraWindow.mainloop()
 	
 
 	mainWindow.withdraw()
@@ -2488,9 +2700,9 @@ def openFloculadorWindow():
 	botonAtrasFlo.place(x=0,y=10)
 
 	botonNewEntryFiltro = HoverButton(frameFloculador, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: newEntryFiltro(listaEntry))
-	botonVerCalculos = HoverButton(frameFloculador, text="Ver cálculos", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT)
-	botonDatosSalidaCamaraPar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (par)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT)
-	botonDatosSalidaCamaraImpar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (impar)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT)
+	botonVerCalculos = HoverButton(frameFloculador, text="Ver cálculos", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT, command= lambda: calculosFloculador(listaEntry))
+	botonDatosSalidaCamaraPar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (par)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,0.46))
+	botonDatosSalidaCamaraImpar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (impar)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,0.41))
 
 
 	listaBotones=[botonNewEntryFiltro, botonVerCalculos,botonDatosSalidaCamaraPar,botonDatosSalidaCamaraImpar]
