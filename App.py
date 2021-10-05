@@ -1805,11 +1805,11 @@ def openFiltroWindow():
 				messagebox.showwarning(title="Error", message="El valor ingresado no es un número")
 				return None
 	
-		print(listaE)	
+	
 
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow = tk.Toplevel()
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.iconbitmap(bitmap='icons\\agua.ico')
-		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.geometry("1000x500") 
+		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.geometry("1000x200") 
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.resizable(0,0)	
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.configure(background="#9DC4AA")
 
@@ -1831,16 +1831,16 @@ def openFiltroWindow():
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolEstimacionPerdidaGrava= ttk.Treeview(arbolEstimacionPerdidaGrava_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolEstimacionPerdidaGrava= ttk.Treeview(arbolEstimacionPerdidaGrava_frame,selectmode=BROWSE, height=3,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
 		arbolEstimacionPerdidaGrava.pack(side=TOP, fill=BOTH, expand=TRUE)
 
 		sedScrollX.configure(command=arbolEstimacionPerdidaGrava.xview)
 		sedScrollY.configure(command=arbolEstimacionPerdidaGrava.yview)
 		#Define columnas.
 		arbolEstimacionPerdidaGrava["columns"]= (
-		"Tasa de filtración [m/d]",
-		"Profundidad del lecho de grava [m]",
-		"Pérdida de energía en lecho de grava durante la filtración [m]"
+		"V{} = Tasa de filtración [m/d]".format(getSub("f")),
+		"L{} = Profundidad del lecho de grava [m]".format(getSub("g")),
+		"h{} = Pérdida de energía en lecho de grava durante la filtración [m]".format(getSub("g"))
 		)
 
 		#Headings
@@ -1855,8 +1855,10 @@ def openFiltroWindow():
 		arbolEstimacionPerdidaGrava.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolEstimacionPerdidaGrava.tag_configure("oddrow", background= "#23D95F")
-		arbolEstimacionPerdidaGrava.tag_configure("evenrow", background= "#9DC4AA")
+		arbolEstimacionPerdidaGrava.tag_configure("evenrow", background= "#23D95F")
+		arbolEstimacionPerdidaGrava.tag_configure("oddrow", background= "#9DC4AA")
+
+	
 
 		################Frame principal2
 		PredimensionamientoFiltrosFrame=LabelFrame(panelGravaDimension, text="Predimensionamiento de los filtros", font=("Yu Gothic bold", 11))
@@ -1880,8 +1882,8 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolPredimensionamientoFiltros.yview)
 		#Define columnas.
 		arbolPredimensionamientoFiltros["columns"]= (
-		"Caudal de diseño  [(m^3)/s]",
-		"Número de filtros [und]"
+		"QMH = Caudal de diseño  [(m^3)/s]",
+		"N = Número de filtros [und]"
 		)
 
 		#Headings
@@ -1895,21 +1897,34 @@ def openFiltroWindow():
 		arbolPredimensionamientoFiltros.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolPredimensionamientoFiltros.tag_configure("oddrow", background= "#23D95F")
-		arbolPredimensionamientoFiltros.tag_configure("evenrow", background= "#9DC4AA")
+		arbolPredimensionamientoFiltros.tag_configure("evenrow", background= "#23D95F")
+		arbolPredimensionamientoFiltros.tag_configure("oddrow", background= "#9DC4AA")
 
 		############Insersión datos.
 		##ListaE Provisional"
 		listaE=[1,3/4,1/2,1/4,1/8,3/4,1/2,1/4,1/8,1/16,0.100,0.075,0.075,0.100,0.100,1.6,0.04404]
-
-		####
+		
 		global contadorFiltro
 		contadorFiltro = 0
 		
 		listaEntradaTemp1=list()
 		listaEntradaTemp2=list()
+		listaEntradaTemp1.append(120)
+		suma=0
+		for ind in range(10,15):
+			suma=suma+listaE[ind]
+		listaEntradaTemp1.append(suma)
+		PenergiaLechoGravaFiltracion=(120/(24*60))*suma*(1/3)
+		listaEntradaTemp1.append(PenergiaLechoGravaFiltracion)
 
-
+		newDataTreeview(arbolEstimacionPerdidaGrava,listaEntradaTemp1)
+		
+		contadorFiltro = 0
+		QMH=listaE[16]*listaE[15]
+		listaEntradaTemp2.append(QMH)
+		listaEntradaTemp2.append(0.044*sqrt(QMH*86400))
+		
+		newDataTreeview(arbolPredimensionamientoFiltros,listaEntradaTemp2)
 
 
 	def estPerdidaLechoGravaYPredimensionamientoFiltros():
