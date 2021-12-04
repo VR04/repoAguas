@@ -1311,7 +1311,10 @@ def openFiltroWindow():
 					messagebox.showwarning(title="Error", message="El valor ingresado no es un número")
 					return None
 		listaEU.append(valorTemperatura)
-				
+		
+		listaEU[0]=listaEU[0]/24
+
+
 		estimacionPerdidaArenaCalculoWindow = tk.Toplevel()
 		estimacionPerdidaArenaCalculoWindow.iconbitmap(bitmap='icons\\agua.ico')
 		estimacionPerdidaArenaCalculoWindow.geometry("1000x500") 
@@ -1476,7 +1479,7 @@ def openFiltroWindow():
 		################Datos temporales:
 		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
 		listaARetenida=[0.8, 4.25, 15.02, 16.65, 18.01, 18.25, 15.65, 9.3, 2.07]
-		listaEU=[5.00,0.6,2.65,0.45,5,0.85,0.85,6.2,3]
+		listaEU=[6.25,0.6,2.65,0.45,5,0.85,0.85,6.2,3]
 		################
 
 
@@ -1749,7 +1752,7 @@ def openFiltroWindow():
 		
 		
 		#Input
-		lista_inputs=["Velocidad superficial de filtración",
+		lista_inputs=["Tasa máxima de filtración [m/d]",
 		"Profundidad del lecho fijo de arena",
 		"Densidad relativa de la arena",
 		"Porosidad del lecho fijo",
@@ -1761,7 +1764,7 @@ def openFiltroWindow():
 	
 		inicialLabel=Label(frameEstimacionPerdidaArena, text="Características del lecho filtrante de arena: ",font=("Yu Gothic bold",10))
 
-		velocidadSuperficialFiltracionLabel = Label(frameEstimacionPerdidaArena, text="V{} = Velocidad superficila de filtración [m/h]".format(getSub("a")), font =("Yu Gothic",9))
+		velocidadSuperficialFiltracionLabel = Label(frameEstimacionPerdidaArena, text="24*V{} = Tasa máxima de filtración [m/d]".format(getSub("a")), font =("Yu Gothic",9))
 		velocidadSuperficialFiltracion = Entry(frameEstimacionPerdidaArena)
 		velocidadSuperficialFiltracion.focus()
 		
