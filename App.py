@@ -310,62 +310,61 @@ def openSedWindow():
 		newDataTreeview(arbolSed,listaTemp)
 		
 		
-		
-		df=pd.DataFrame(listaSed, columns=[
-	"Caudal de diseño (QMD)[m^3/s]",
-	"Número de módulos [und]",
-	"Caudal por módulo [m^3/s]", 
-	"Viscocidad cinemática [m^2/s]",
-	"Eficiencia crítica para sedimentador de placas paralelas []",
-	"Espacio entre placas [m]",
-	"Velocidad de sedimentación crítica [m/s]",
-	"Largo de la placa [m]",
-	"Espesor de la placa [m]",
-	"Ancho de la placa [m]",
-	"Ángulo de inclinación de la placa [°]",
-	"Nivel del agua sobre las palcas [m]",
-	"Distancia vertical orificios de distribución a placas [m]",
-	"Borde libre [m]",
-	"Ancho interno de canales de distribución [m]",
-	"Espesor de muros y placas de concreto [m]",
-	"Pendiente transversal de la tolva de lodos [°]",
-	"Longitud de la sección plana de la tolva de lodos [m]",
-	"Número de orificios del múltiple de descarga por módulo [und]",
-	"Velocidad mínima de arraste asignada [m/s]",
-	"Velocidad promedio de flujo [m/s]", 
-	"Velocidad promedio de flujo corregida [m/s]",
-	"Tiempo de retención en cada canal [min]",
-	"Número de canales por módulo [und]",
-	"Longitud ocupada por las placas [m]", 
-	"Altura de las placas [m]", 
-	"Disancia entre las canaletas de recoleeción [m]",
-	"Altura de sedimentación [m]",
-	"Volumen de cada tanque de sedimentación [m^3]",
-	"Tiempo de retención total en el tanque [min]",
-	"Carga superficial [m^3/(m^2*día)]",
-	"Relación longitud ancho de cada tanque [L:A]",
-	"Altura de la tolva de lodos [m]",
-	"Largo total del sedimentador [m]",
-	"Ancho total del sedimentador [m]",
-	"Altura total del sedimentador [m]",
-	"Número de canaletas de recolección por módulo [und]",
-	"Distancia entre canaletas de recolección(Ajsutado) [m]",
-	"Longitud del múltiple de descarga [m]",
-	"Diametro nominal del múltiple de descarga [pulg]",
-	"Diamentro interno del múltiple de descarga en PVC presión [m]",
-	"Diámetro interno de los orificos del múltiple de descarga [m]",
-	"Diámetro nominal más cercano a los orificios del múltiple de descarga [pulg]",
-	"Diámetro interno de los orificios del múltiple de descarga en PVC Presión (ajustado) [m]",
-	"Cuadrado de la relación entre el diámetro de orificos y el del múltiple por el número de orificios []",
-	"Diámetro nominal más cercano de los orificios del múltiple de descarga (ajustado) [pulg]",
-	"Diámetro interno de los orificios del múltiple de descarga en PVC Presión (ajustado nuevamente) [m]",
-	"Tirante sobre el orificio [m]",
-	"Relación longitud del múltiple y número de orificios []",
-	"Separación entre orificios del múltiple [m]",
-	"Separación entre orificios del múltiple (confirmada) [m]"
-	])
+	
+		df=pd.DataFrame(listaSed, columns=[	"Caudal de diseño (QMD)[m^3/s]",
+		"Número de módulos [und]",
+		"Caudal por módulo [m^3/s]", 
+		"Viscocidad cinemática [m^2/s]",
+		"Eficiencia crítica para sedimentador de placas paralelas []",
+		"Espacio entre placas [m]",
+		"Velocidad de sedimentación crítica [m/s]",
+		"Largo de la placa [m]",
+		"Espesor de la placa [m]",
+		"Ancho de la placa [m]",
+		"Ángulo de inclinación de la placa [°]",
+		"Nivel del agua sobre las palcas [m]",
+		"Distancia vertical orificios de distribución a placas [m]",
+		"Borde libre [m]",
+		"Ancho interno de canales de distribución [m]",
+		"Espesor de muros y placas de concreto [m]",
+		"Pendiente transversal de la tolva de lodos [°]",
+		"Longitud de la sección plana de la tolva de lodos [m]",
+		"Número de orificios del múltiple de descarga por módulo [und]",
+		"Velocidad mínima de arraste asignada [m/s]",
+		"Velocidad promedio de flujo [m/s]", 
+		"Velocidad promedio de flujo corregida [m/s]",
+		"Tiempo de retención en cada canal [min]",
+		"Número de canales por módulo [und]",
+		"Longitud ocupada por las placas [m]", 
+		"Altura de las placas [m]", 
+		"Disancia entre las canaletas de recoleeción [m]",
+		"Altura de sedimentación [m]",
+		"Volumen de cada tanque de sedimentación [m^3]",
+		"Tiempo de retención total en el tanque [min]",
+		"Carga superficial [m^3/(m^2*día)]",
+		"Relación longitud ancho de cada tanque [L:A]",
+		"Altura de la tolva de lodos [m]",
+		"Largo total del sedimentador [m]",
+		"Ancho total del sedimentador [m]",
+		"Altura total del sedimentador [m]",
+		"Número de canaletas de recolección por módulo [und]",
+		"Distancia entre canaletas de recolección(Ajsutado) [m]",
+		"Longitud del múltiple de descarga [m]",
+		"Diametro nominal del múltiple de descarga [pulg]",
+		"Diamentro interno del múltiple de descarga en PVC presión [m]",
+		"Diámetro interno de los orificos del múltiple de descarga [m]",
+		"Diámetro nominal más cercano a los orificios del múltiple de descarga [pulg]",
+		"Diámetro interno de los orificios del múltiple de descarga en PVC Presión (ajustado) [m]",
+		"Cuadrado de la relación entre el diámetro de orificos y el del múltiple por el número de orificios []",
+		"Diámetro nominal más cercano de los orificios del múltiple de descarga (ajustado) [pulg]",
+		"Diámetro interno de los orificios del múltiple de descarga en PVC Presión (ajustado nuevamente) [m]",
+		"Tirante sobre el orificio [m]",
+		"Relación longitud del múltiple y número de orificios []",
+		"Separación entre orificios del múltiple [m]",
+		"Separación entre orificios del múltiple (confirmada) [m]"
+		])
 		df.to_excel("DatosSed_Clase.xlsx")
-		
+			
 	
 
 
@@ -662,9 +661,10 @@ def openSedWindow():
 	#Headings
 	arbolSed.heading("#0",text="ID", anchor=CENTER)
 	
-	for col in arbolSed["columns"]:
+	
+	"""for col in arbolSed["columns"]:
 		arbolSed.heading(col, text=col,anchor=CENTER, command = lambda: formulaN(dicImagenCol[col]))
-
+	"""
 	
 		
 	for i in range(0,len(arbolSed["columns"])-1) :
@@ -763,11 +763,11 @@ def openFiltroWindow():
 		arbolCaracFiltro.tag_configure("oddrow", background= "#23D95F")
 		arbolCaracFiltro.tag_configure("evenrow", background= "#9DC4AA")
 
-		col1=["Tipo de filtro","Medio filtrante","Distribución del medio","Tasa de filtración","Duración de carrera","Pérdida de carga inicial","Pérdida de carga final","Uso de agua tratada en lavado","Profundida del medio","Profundidad de grava","Drenaje"]
-		col2=["Filtro rápido de arena","Arena","Estratigicado de fino a grueso","120 m/d","12 - 36 horas", "0,3 m","2,4 - 3,0 m","2-4%","0,60-0,75 m","0,30-0,45 m","Tubería Perforada"]
+		col1=["Tipo de filtro","Medio filtrante","Distribución del medio","Tasa media de filtración","Tasa máxima de filtración","Duración de carrera","Pérdida de carga inicial","Pérdida de carga final","Uso de agua tratada en lavado","Profundida del medio","Profundidad de grava","Drenaje"]
+		col2=["Filtro rápido de arena","Arena","Estratigicado de fino a grueso","120 m/d","150 m/d","12 - 36 horas", "0,3 m","2,4 - 3,0 m","2-4%","0,60-0,75 m","0,30-0,45 m","Tubería Perforada"]
 
 		count=0
-		for m in range(0,11):
+		for m in range(0,12):
 			if count%2 ==0:
 				arbolCaracFiltro.insert("",END,text=f"{count+1}", values=(col1[count],col2[count]),
 					iid=count, tags=("evenrow",))	
