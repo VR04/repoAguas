@@ -2092,76 +2092,29 @@ def openFiltroWindow():
 		arbolPerdidaCargaGrava.tag_configure("evenrow", background= "#23D95F")
 		arbolPerdidaCargaGrava.tag_configure("oddrow", background= "#9DC4AA")
 
-
-
-		################Frame principal3
-		PredimensionamientoFiltrosFrame=LabelFrame(panelGravaDimension, text="Predimensionamiento de los filtros", font=("Yu Gothic bold", 11))
-		PredimensionamientoFiltrosFrame.pack(side=TOP, fill=BOTH,expand=True)
-		panelGravaDimension.add(PredimensionamientoFiltrosFrame,text="Predimensionamiento de los filtros")
-		#Frame Treeview
-		arbolPredimensionamientoFiltros_frame = Frame(PredimensionamientoFiltrosFrame)
-		arbolPredimensionamientoFiltros_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
-
-		#Scrollbar
-		sedScrollX=Scrollbar(arbolPredimensionamientoFiltros_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
-		sedScrollY=Scrollbar(arbolPredimensionamientoFiltros_frame,orient=VERTICAL)
-		sedScrollY.pack(side=LEFT, fill=Y)
-
-		#Treeview
-		arbolPredimensionamientoFiltros= ttk.Treeview(arbolPredimensionamientoFiltros_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
-		arbolPredimensionamientoFiltros.pack(side=TOP, fill=BOTH, expand=TRUE)
-
-		sedScrollX.configure(command=arbolPredimensionamientoFiltros.xview)
-		sedScrollY.configure(command=arbolPredimensionamientoFiltros.yview)
-		#Define columnas.
-		arbolPredimensionamientoFiltros["columns"]= (
-		"QMH = Caudal de diseño  [(m^3)/s]",
-		"N = Número de filtros [und]"
-		)
-
-		#Headings
-		arbolPredimensionamientoFiltros.heading("#0",text="ID", anchor=CENTER)
-
-		for col in arbolPredimensionamientoFiltros["columns"]:
-			arbolPredimensionamientoFiltros.heading(col, text=col,anchor=CENTER)	
-
-		for i in range(0,len(arbolPredimensionamientoFiltros["columns"])+1) :
-				arbolPredimensionamientoFiltros.column(f"#{i}",width=500, stretch=False)	
-		arbolPredimensionamientoFiltros.column("#0",width=0, stretch=False)
-
-		#Striped row tags
-		arbolPredimensionamientoFiltros.tag_configure("evenrow", background= "#23D95F")
-		arbolPredimensionamientoFiltros.tag_configure("oddrow", background= "#9DC4AA")
-
 		############Insersión datos.
 		##ListaE Provisional"
-		listaE=[1,3/4,1/2,1/4,1/8,3/4,1/2,1/4,1/8,1/16,0.100,0.075,0.075,0.100,0.100,1.6,0.04404]
+		listaE=[1,3/4,1/2,1/4,1/8,3/4,1/2,1/4,1/8,1/16,0.100,0.075,0.075,0.100,0.100]
 		
 		global contadorFiltro
 		contadorFiltro = 0
 		
 		listaEntradaTemp1=list()
-		listaEntradaTemp2=list()
 		listaEntradaTemp3=list()
 		
-		listaEntradaTemp1.append(120)
+		listaEntradaTemp1.append(150)
 		suma=0
 		for ind in range(10,15):
 			suma=suma+listaE[ind]
 		listaEntradaTemp1.append(suma)
-		PenergiaLechoGravaFiltracion=(120/(24*60))*suma*(1/3)
+		PenergiaLechoGravaFiltracion=(150/(24*60))*suma*(1/3)
 		listaEntradaTemp1.append(PenergiaLechoGravaFiltracion)
 
 		newDataTreeview(arbolEstimacionPerdidaGrava,listaEntradaTemp1)
 		
+		
 		contadorFiltro = 0
-		QMH=listaE[16]*listaE[15]
-		listaEntradaTemp2.append(QMH)
-		listaEntradaTemp2.append(0.044*sqrt(QMH*86400))
-		newDataTreeview(arbolPredimensionamientoFiltros,listaEntradaTemp2)
-		contadorFiltro = 0
-		############################################################################VALOR PENDIENTE.
+	
 		#Tabla Temperatura Viscocidad
 		valorTemperaturas=list()
 		tablaTemperaturaViscocidad=dict()
@@ -2238,8 +2191,7 @@ def openFiltroWindow():
 		NumeroCapaLabel4Label = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="4",font=("Yu Gothic bold",10))
 		NumeroCapaLabel5Label = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="5",font=("Yu Gothic bold",10))
 
-		factorMayoraciónCaudalMaximoHorarioLabel =  Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="K{} = Factor de mayoración del caudal máximo horario:".format(getSub("2")),font=("Yu Gothic bold",10))
-		caudalMedioDiarioLabel = Label(frameEstimacionPerdidaGravaYPredimensionamiento, text="Q{} = Caudal medio diario [m^3 /s]:".format(getSub("md")),font=("Yu Gothic bold",10))
+		
 
 		tamañoAberturaMallaPasando1 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
 		tamañoAberturaMallaPasando1.focus()
@@ -2260,8 +2212,7 @@ def openFiltroWindow():
 		profundidadCapa4 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
 		profundidadCapa5 = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
 
-		factorMayoraciónCaudalMaximoHorario = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
-		caudalMedioDiario = Entry(frameEstimacionPerdidaGravaYPredimensionamiento)
+		
 
 		listaTitulosTabla=[NumeroCapaLabel,tamañoAberturaMallaPasandoLabel, tamañoAberturaMallaRetenidaLabel, profundidadCapaLabel]
 
@@ -2269,12 +2220,10 @@ def openFiltroWindow():
 		listaColumna2=[tamañoAberturaMallaPasando1,tamañoAberturaMallaPasando2,tamañoAberturaMallaPasando3,tamañoAberturaMallaPasando4,tamañoAberturaMallaPasando5]
 		listaColumna3=[tamañoAberturaMallaRetenida1,tamañoAberturaMallaRetenida2,tamañoAberturaMallaRetenida3,tamañoAberturaMallaRetenida4,tamañoAberturaMallaRetenida5]
 		listaColumna4=[profundidadCapa1,profundidadCapa2,profundidadCapa3,profundidadCapa4,profundidadCapa5]
-		listaCaudal=[factorMayoraciónCaudalMaximoHorario,caudalMedioDiario]
-		listaCaudalLabel=[factorMayoraciónCaudalMaximoHorarioLabel,caudalMedioDiarioLabel]
 		
 		listaEntradas = [tamañoAberturaMallaPasando1,tamañoAberturaMallaPasando2,tamañoAberturaMallaPasando3,tamañoAberturaMallaPasando4,tamañoAberturaMallaPasando5,
 		tamañoAberturaMallaRetenida1,tamañoAberturaMallaRetenida2,tamañoAberturaMallaRetenida3,tamañoAberturaMallaRetenida4,tamañoAberturaMallaRetenida5,
-		profundidadCapa1,profundidadCapa2,profundidadCapa3,profundidadCapa4,profundidadCapa5,factorMayoraciónCaudalMaximoHorario,caudalMedioDiario]
+		profundidadCapa1,profundidadCapa2,profundidadCapa3,profundidadCapa4,profundidadCapa5]
 		
 		#Organización tabla.
 		xInicial=20
@@ -2306,21 +2255,13 @@ def openFiltroWindow():
 
 		segundoLabel.place(x=20,y=alturaInicialCol1)
 		
-		alturaInicial2=alturaInicialCol1+43
-		
-		for elemento in listaCaudalLabel:
-			elemento.place(x=20,y=alturaInicial2)
-			alturaInicial2+=43
-		
-		alturaInicial2=alturaInicialCol1+43
 
-		for elemento in listaCaudal:
-			elemento.place(x=380,y=alturaInicial2)
-			alturaInicial2+=43
+		
+		
 
 
 		#Botones.
-		botonCalcular = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Calcular la estimación de la pérdida de energía en el lecho filtrante de arena limpio.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPEGravaYPredimensionamiento(listaEntradas,lista1, lista2,temp) )
+		botonCalcular = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Calcular la estimación de la pérdida de energía en el lecho de grava.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPEGravaYPredimensionamiento(listaEntradas,lista1, lista2,temp) )
 		botonNewEntry = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
 		botones=[botonCalcular,botonNewEntry]
 		alturaBotones=450
@@ -2510,7 +2451,7 @@ def openFiltroWindow():
 
 	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: estimacionPerdidaEnergiaArena(listaNumTamiz,listaAR,tempAgua))
 
-	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimación de la pérdida de energía en el lecho de grava,\nperdida de carga a través del lecho de grava y\npredimensionamiento de los filtros", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: estPerdidaLechoGravaYPredimensionamientoFiltros(listaNumTamiz, listaAR,tempAgua))
+	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimación de la pérdida de energía en el lecho de grava, y\n ¿Carga?", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: estPerdidaLechoGravaYPredimensionamientoFiltros(listaNumTamiz, listaAR,tempAgua))
 
 	botonPerdidaCargaLechoExpandido = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= perdidaCargaLechoExpandido)
 
