@@ -2256,10 +2256,6 @@ def openFiltroWindow():
 		segundoLabel.place(x=20,y=alturaInicialCol1)
 		
 
-		
-		
-
-
 		#Botones.
 		botonCalcular = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Calcular la estimación de la pérdida de energía en el lecho de grava.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPEGravaYPredimensionamiento(listaEntradas,lista1, lista2,temp) )
 		botonNewEntry = HoverButton(frameEstimacionPerdidaGravaYPredimensionamiento, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
@@ -2404,12 +2400,121 @@ def openFiltroWindow():
 		
 		perdidaCargaLechoExpandidoWindow.mainloop()
 
+	def predimensionamientoFiltros():
+		predimensionamientoFiltrosWindow = tk.Toplevel()
+		predimensionamientoFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
+		predimensionamientoFiltrosWindow.geometry("600x400") 
+		predimensionamientoFiltrosWindow.resizable(0,0)	
+		predimensionamientoFiltrosWindow.configure(background="#9DC4AA")
+
+		PredimensionamientoFiltrosFrame=LabelFrame(predimensionamientoFiltrosWindow, text="Predimensionamiento de los filtros", font=("Yu Gothic bold", 11))
+		PredimensionamientoFiltrosFrame.pack(side=TOP, fill=BOTH,expand=True)
+		
+		#Frame Treeview
+		arbolPredimensionamientoFiltros_frame = Frame(PredimensionamientoFiltrosFrame)
+		arbolPredimensionamientoFiltros_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolPredimensionamientoFiltros_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolPredimensionamientoFiltros_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolPredimensionamientoFiltros= ttk.Treeview(arbolPredimensionamientoFiltros_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolPredimensionamientoFiltros.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolPredimensionamientoFiltros.xview)
+		sedScrollY.configure(command=arbolPredimensionamientoFiltros.yview)
+		#Define columnas.
+		arbolPredimensionamientoFiltros["columns"]= (
+		"QMH = Caudal de diseño  [(m^3)/s]",
+		"N = Número de filtros [und]"
+		)
+
+		#Headings
+		arbolPredimensionamientoFiltros.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolPredimensionamientoFiltros["columns"]:
+			arbolPredimensionamientoFiltros.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolPredimensionamientoFiltros["columns"])+1) :
+				arbolPredimensionamientoFiltros.column(f"#{i}",width=500, stretch=False)	
+		arbolPredimensionamientoFiltros.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolPredimensionamientoFiltros.tag_configure("evenrow", background= "#23D95F")
+		arbolPredimensionamientoFiltros.tag_configure("oddrow", background= "#9DC4AA")
+
+		def newEntryFiltroP(lista):
+			for elemento in lista:
+				elemento.delete(0, END)
+
+
+		#Input
+		lista_inputs=[]
+
+		inicialLabel=Label(PredimensionamientoFiltrosFrame, text="Características del lecho filtrante de arena: ",font=("Yu Gothic bold",10))
+
+		predimensionamientoFiltrosWindow.mainloop()
+
+	def drenajeFiltro():
+		
+		drenajeFiltrosWindow = tk.Toplevel()
+		drenajeFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
+		drenajeFiltrosWindow.geometry("600x400") 
+		drenajeFiltrosWindow.resizable(0,0)	
+		drenajeFiltrosWindow.configure(background="#9DC4AA")
+
+		drenajeFiltrosFrame=LabelFrame(drenajeFiltrosWindow, text="Predimensionamiento de los filtros", font=("Yu Gothic bold", 11))
+		drenajeFiltrosFrame.pack(side=TOP, fill=BOTH,expand=True)
+		
+		#Frame Treeview
+		arbolDrenajeFiltros_frame = Frame(drenajeFiltrosFrame)
+		arbolDrenajeFiltros_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolDrenajeFiltros_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolDrenajeFiltros_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolDrenajeFiltros= ttk.Treeview(arbolDrenajeFiltros_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolDrenajeFiltros.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolDrenajeFiltros.xview)
+		sedScrollY.configure(command=arbolDrenajeFiltros.yview)
+		#Define columnas.
+		arbolDrenajeFiltros["columns"]= (
+		"QMH = Caudal de diseño  [(m^3)/s]",
+		"N = Número de filtros [und]"
+		)
+
+		#Headings
+		arbolDrenajeFiltros.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolDrenajeFiltros["columns"]:
+			arbolDrenajeFiltros.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolDrenajeFiltros["columns"])+1) :
+				arbolDrenajeFiltros.column(f"#{i}",width=500, stretch=False)	
+		arbolDrenajeFiltros.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolDrenajeFiltros.tag_configure("evenrow", background= "#23D95F")
+		arbolDrenajeFiltros.tag_configure("oddrow", background= "#9DC4AA")
+
+		def newEntryFiltroP(lista):
+			for elemento in lista:
+				elemento.delete(0, END)
+		drenajeFiltrosWindow.mainloop()
 
 	mainWindow.withdraw()
 	filtroWindow = tk.Toplevel()
 	filtroWindow.protocol("WM_DELETE_WINDOW", on_closing)
 	filtroWindow.iconbitmap(bitmap='icons\\agua.ico')
-	filtroWindow.geometry("1000x500") 
+	filtroWindow.geometry("1000x650") 
 	filtroWindow.resizable(0,0)	
 	filtroWindow.configure(background="#9DC4AA")
 
@@ -2455,9 +2560,11 @@ def openFiltroWindow():
 
 	botonPerdidaCargaLechoExpandido = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= perdidaCargaLechoExpandido)
 
-	
+	botonPredimensionamientoFiltros = HoverButton(frameFiltro, text="Predimensionamiento de los filtros", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: predimensionamientoFiltros())
 
-	listaBotonesOrg=[botonNewEntryFiltro,botonPrincipalesCaracteristicasDelFiltro, botonGranulometria,botonCoefUniformidad,botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio,botonEstimacionPerdidaLechoGrava,botonPerdidaCargaLechoExpandido]
+	botonDrenajeFiltro = HoverButton(frameFiltro, text="Drenaje del filtro - Tuberías perforadas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: drenajeFiltro())
+
+	listaBotonesOrg=[botonNewEntryFiltro,botonPrincipalesCaracteristicasDelFiltro, botonGranulometria,botonCoefUniformidad,botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio,botonEstimacionPerdidaLechoGrava,botonPredimensionamientoFiltros,botonDrenajeFiltro,botonPerdidaCargaLechoExpandido]
 
 	alturaInicialBotones=70
 	for boton in listaBotonesOrg:
