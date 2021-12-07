@@ -702,11 +702,12 @@ def openFiltroWindow():
 	#Change selected color
 	style.map("Treeview", background=[("selected", "#09C5CE")])	 
 
-	def newEntryFiltro(lista, optValue):
+	def newEntryFiltro(lista, optValue,lista2):
 		for elemento in lista:
 				elemento.delete(0, END)
 		optValue.set("Seleccione la temperatura")
-
+		lista2[0].set("Seleccione el caudal")
+		lista2[1].delete(0,END)
 	def newDataTreeview(tree,listaS):
 		global contadorFiltro
 
@@ -2400,7 +2401,31 @@ def openFiltroWindow():
 		
 		perdidaCargaLechoExpandidoWindow.mainloop()
 
-	def predimensionamientoFiltros():
+	def predimensionamientoFiltros(listaET):
+		
+		if listaET[0].get()== "Seleccione el caudal":
+			messagebox.showwarning(title="Error", message="Hace falta elegir el tipo de caudal que quiere usar(Medio diario, máximo diario ó máximo horario).")
+			return None
+		else:
+			valor= listaET[0].get()[0:3]
+			
+		try: 
+			caudalMedio=float(listaET[1].get())
+		except:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
+			return None
+
+	
+		
+
+		if valor=="Qmd":
+			caudal=caudalMedio
+		elif valor=="QMD":
+			caudal=caudalMedio*1.3
+		elif valor=="QMH":
+			caudal=caudalMedio*1.6
+				
+
 		predimensionamientoFiltrosWindow = tk.Toplevel()
 		predimensionamientoFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
 		predimensionamientoFiltrosWindow.geometry("600x400") 
@@ -2428,8 +2453,14 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolPredimensionamientoFiltros.yview)
 		#Define columnas.
 		arbolPredimensionamientoFiltros["columns"]= (
-		"QMH = Caudal de diseño  [(m^3)/s]",
-		"N = Número de filtros [und]"
+		valor+" = Caudal de diseño  [(m^3)/s]",
+		"V{} = Tasa de filtración en operación normal [m/día]".format(getSub("f")),
+		"V{} = Tasa de filtración con un filtro fuera de servicio por lavado".format(getSub("max")),
+		"A{} = Área de filtración en operación normal".format(getSub("T")),
+		"A{} = Área de filtración con un filtro fuera de servicio por lavado".format(getSub("t")),
+		"A{} = Área máxima de un filtro".format(getSub("f")),
+		"N{} = Número de filtros [und]".format(getSub("f")),
+		"L{} = Lado de cada filtro".format(getSub("f"))
 		)
 
 		#Headings
@@ -2439,22 +2470,35 @@ def openFiltroWindow():
 			arbolPredimensionamientoFiltros.heading(col, text=col,anchor=CENTER)	
 
 		for i in range(0,len(arbolPredimensionamientoFiltros["columns"])+1) :
-				arbolPredimensionamientoFiltros.column(f"#{i}",width=500, stretch=False)	
+				arbolPredimensionamientoFiltros.column(f"#{i}",width=700, stretch=False)	
 		arbolPredimensionamientoFiltros.column("#0",width=0, stretch=False)
 
 		#Striped row tags
 		arbolPredimensionamientoFiltros.tag_configure("evenrow", background= "#23D95F")
 		arbolPredimensionamientoFiltros.tag_configure("oddrow", background= "#9DC4AA")
 
-		def newEntryFiltroP(lista):
-			for elemento in lista:
-				elemento.delete(0, END)
+		listaArbolCaudal=list()
+		listaArbolCaudal.append(caudal)
+		Vf=120
+		Vmax=150
+		listaArbolCaudal.append(Vf)
+		listaArbolCaudal.append(Vmax)
+		areaFilOpNormal=caudal*86400*(1/Vf)
+		listaArbolCaudal.append(areaFilOpNormal)
+		areaFilFueraServ=caudal*86400*(1/Vmax)
+		listaArbolCaudal.append(areaFilFueraServ)
+		areaMaximaFiltro=round(areaFilOpNormal-areaFilFueraServ,2)
+		listaArbolCaudal.append(areaMaximaFiltro)
+		listaArbolCaudal.append(round(areaFilOpNormal/areaMaximaFiltro,2))
+		listaArbolCaudal.append(sqrt(areaMaximaFiltro))
 
-
-		#Input
-		lista_inputs=[]
-
-		inicialLabel=Label(PredimensionamientoFiltrosFrame, text="Características del lecho filtrante de arena: ",font=("Yu Gothic bold",10))
+		
+		contadorFiltro = 0
+		newDataTreeview(arbolPredimensionamientoFiltros,listaArbolCaudal)
+		
+		
+		
+		
 
 		predimensionamientoFiltrosWindow.mainloop()
 
@@ -2534,7 +2578,7 @@ def openFiltroWindow():
 	botonRestriccionNumTamiz.place(x=150,y=65)
 
 
-	botonNewEntryFiltro = HoverButton(frameFiltro, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: newEntryFiltro(lista_entradas, tempAgua))
+	botonNewEntryFiltro = HoverButton(frameFiltro, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: newEntryFiltro(lista_entradas, tempAgua, entradasCaudal))
 
 	botonPrincipalesCaracteristicasDelFiltro = HoverButton(frameFiltro, text="Ver principales características del filtro", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=principalesCaracFiltro)
 
@@ -2551,6 +2595,28 @@ def openFiltroWindow():
 	tempAguaName = OptionMenu(frameFiltro, tempAgua, *listaValoresTemp)
 	tempAguaName.place(x=350, y=99)
 	
+	
+	#DEF CaudalEntry
+	tipoCaudal = StringVar()
+	tipoCaudal.set("Seleccione el caudal")
+	listaValoresTempCaudal=list()
+	listaValoresTempCaudal.append("Qmd: Caudal medio diario")
+	listaValoresTempCaudal.append("QMD: Caudal máximo diario")
+	listaValoresTempCaudal.append("QMH: Caudal máximo horario")
+	tipoCaudalName = OptionMenu(frameFiltro, tipoCaudal, *listaValoresTempCaudal)
+	#tipoCaudalName.place(x=350, y=186)
+	tipoCaudalLabel = Label(frameFiltro, text="Caudal de diseño:",font=("Yu Gothic bold",10))
+	#tipoCaudalLabel.place(x=250, y=157)
+	caudalMedioLabel= Label(frameFiltro, text="Caudal medio diario: ",font=("Yu Gothic bold",10))	
+	caudalMedio = Entry(frameFiltro, width=6)
+
+	altIninicial=157
+	listaTipoCaudal = [tipoCaudalLabel,tipoCaudalName, caudalMedioLabel]
+	for elem in listaTipoCaudal:
+		elem.place(x=350, y=altIninicial)
+		altIninicial=altIninicial+35
+	caudalMedio.place(x=500, y=altIninicial-35)
+	entradasCaudal= [tipoCaudal, caudalMedio]
 
 	#####FIN TEMP AGUA
 
@@ -2560,7 +2626,7 @@ def openFiltroWindow():
 
 	botonPerdidaCargaLechoExpandido = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= perdidaCargaLechoExpandido)
 
-	botonPredimensionamientoFiltros = HoverButton(frameFiltro, text="Predimensionamiento de los filtros", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: predimensionamientoFiltros())
+	botonPredimensionamientoFiltros = HoverButton(frameFiltro, text="Predimensionamiento de los filtros", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: predimensionamientoFiltros(entradasCaudal))
 
 	botonDrenajeFiltro = HoverButton(frameFiltro, text="Drenaje del filtro - Tuberías perforadas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: drenajeFiltro())
 
@@ -2578,8 +2644,9 @@ def openFiltroWindow():
 	numTamizLabel.place(x=30, y=70)
 	arenaRetenidaLabel = Label(frameFiltro, text="Arena retenida [%]",font=("Yu Gothic bold",10))
 	arenaRetenidaLabel.place(x=200, y=70)
-	tempAguaLabel = Label(frameFiltro, text="Temperatura del agua a tratar",font=("Yu Gothic bold",10))
+	tempAguaLabel = Label(frameFiltro, text="Temperatura del agua a tratar:",font=("Yu Gothic bold",10))
 	tempAguaLabel.place(x=250, y=70)
+	
 	#salidaLabel = Label(frameFiltro, text="Final",font=("Yu Gothic bold",10))
 	#salidaLabel.place(x=30, y=450)
 
@@ -2653,6 +2720,8 @@ def openFiltroWindow():
 	var112.trace_add("write", lambda *args: celda2(nT112,nT121))
 
 	nT122 = Entry(frameFiltro, width=6)
+
+
 
 	labelSepnT1= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
 	labelSepnT2= Label(frameFiltro, text="-",font=("Yu Gothic bold",10))
