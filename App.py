@@ -2502,7 +2502,7 @@ def openFiltroWindow():
 
 		predimensionamientoFiltrosWindow.mainloop()
 
-	def drenajeFiltro():
+	def drenajeFiltro2():
 		
 		drenajeFiltrosWindow = tk.Toplevel()
 		drenajeFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
@@ -2510,7 +2510,7 @@ def openFiltroWindow():
 		drenajeFiltrosWindow.resizable(0,0)	
 		drenajeFiltrosWindow.configure(background="#9DC4AA")
 
-		drenajeFiltrosFrame=LabelFrame(drenajeFiltrosWindow, text="Predimensionamiento de los filtros", font=("Yu Gothic bold", 11))
+		drenajeFiltrosFrame=LabelFrame(drenajeFiltrosWindow, text="Drenaje calculo", font=("Yu Gothic bold", 11))
 		drenajeFiltrosFrame.pack(side=TOP, fill=BOTH,expand=True)
 		
 		#Frame Treeview
@@ -2553,6 +2553,16 @@ def openFiltroWindow():
 			for elemento in lista:
 				elemento.delete(0, END)
 		drenajeFiltrosWindow.mainloop()
+	
+	def drenajeFiltro():
+		drenajeFiltrosMainWindow = tk.Toplevel()
+		drenajeFiltrosMainWindow.iconbitmap(bitmap='icons\\agua.ico')
+		drenajeFiltrosMainWindow.geometry("600x400") 
+		drenajeFiltrosMainWindow.resizable(0,0)	
+		drenajeFiltrosMainWindow.configure(background="#9DC4AA")
+
+		drenajeFiltrosMainFrame=LabelFrame(drenajeFiltrosMainWindow, text="Datos adicionales para drenaje del filtro:", font=("Yu Gothic bold", 11))
+		drenajeFiltrosMainFrame.pack(side=TOP, fill=BOTH,expand=True)
 
 	mainWindow.withdraw()
 	filtroWindow = tk.Toplevel()
