@@ -2502,8 +2502,26 @@ def openFiltroWindow():
 
 		predimensionamientoFiltrosWindow.mainloop()
 
-	def drenajeFiltro2():
+	def drenajeFiltro2(caudal,listaEntradaDrenaje):
 		
+		if listaEntradaDrenaje[0].get() == "Diametro de los orificios":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los orificios.")
+			return None
+		else:
+			diametroOrificios=float(listaEntradaDrenaje[0].get()[0])/float(listaEntradaDrenaje[0].get()[2])
+		
+		if listaEntradaDrenaje[1].get() == "Distancia entre laterales":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la distancia entre laterales")
+			return None
+		else:
+			distanciaLaterales=float(listaEntradaDrenaje[1].get())
+		
+		
+	
+			
+		
+
+
 		drenajeFiltrosWindow = tk.Toplevel()
 		drenajeFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
 		drenajeFiltrosWindow.geometry("600x400") 
@@ -2531,8 +2549,19 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolDrenajeFiltros.yview)
 		#Define columnas.
 		arbolDrenajeFiltros["columns"]= (
-		"QMH = Caudal de diseño  [(m^3)/s]",
-		"N = Número de filtros [und]"
+		u"\u03C6{} = Diametro de los orificios [pulgadas]".format(getSub("ori")),
+		"D{} = Distancia entre orificios".format(getSub("ori")),
+		"L{} = Longitud de los laterales".format(getSub("lat")),
+		"D{} = Distancia entre laterales".format(getSub("lat")),
+		u"\u03C6{} = Diámetro de los laterales".format(getSub("lat")),
+		"N{} = Número de laterales por unidad de filtración".format(getSub("lat")),
+		"N{} = Número de orificios por unidad de filtración".format(getSub("ori")),
+		"A{} = Área total de orificios por unidad de filtración".format(getSub("ori")),
+		"A{} = Área del múltiple".format(getSub("mul")),
+		"Sección transversal del múltiple",
+		"A{} = Área del múltiple (Corregida)".format(getSub("mul")),
+		"Área total de orificios/ área filtrante",
+		"Área del lateral / área de orificios del lateral"
 		)
 
 		#Headings
@@ -2542,27 +2571,162 @@ def openFiltroWindow():
 			arbolDrenajeFiltros.heading(col, text=col,anchor=CENTER)	
 
 		for i in range(0,len(arbolDrenajeFiltros["columns"])+1) :
-				arbolDrenajeFiltros.column(f"#{i}",width=500, stretch=False)	
+				arbolDrenajeFiltros.column(f"#{i}",width=700, stretch=False)	
 		arbolDrenajeFiltros.column("#0",width=0, stretch=False)
 
 		#Striped row tags
 		arbolDrenajeFiltros.tag_configure("evenrow", background= "#23D95F")
 		arbolDrenajeFiltros.tag_configure("oddrow", background= "#9DC4AA")
 
-		def newEntryFiltroP(lista):
-			for elemento in lista:
-				elemento.delete(0, END)
+		listaArbolDreanejFiltros=list()
+		
+		listaArbolDreanejFiltros.append(diametroOrificios)
+		if diametroOrificios==1/4:
+			distanciaOrificios=0.075
+		elif diametroOrificios==3/8:
+			distanciaOrificios=0.15
+		elif diametroOrificios==1/2:
+			distanciaOrificios=0.2
+		elif diametroOrificios==5/8:
+			distanciaOrificios=0.25
+		else:
+			messagebox.showwarning(title="Error", message="?")
+			return None
+
+
+		listaArbolDreanejFiltros.append(distanciaOrificios)
+		
+		areaFiltracionOpNormal= caudal*86400*(1/120)
+		areaFiltracionFuera= caudal*86400*(1/150)
+		areaMaximaFiltro=round(areaFiltracionOpNormal-areaFiltracionFuera,2)
+		ladoFiltro= sqrt(areaMaximaFiltro)
+		longitudLaterales= round((ladoFiltro/2)-0.1,2)
+		listaArbolDreanejFiltros.append(longitudLaterales)
+		listaArbolDreanejFiltros.append(distanciaLaterales)
+		
+		if longitudLaterales<1:
+			diametroLaterales=2
+		elif longitudLaterales<1.5:
+			diametroLaterales=2.5
+		elif longitudLaterales<2:
+			diametroLaterales=3
+		else:
+			messagebox.showwarning(title="Error", message="El valor del caudal ingresado es erróneo, pues la longitud de los laterales es mayor a 2.")
+			return None
+		
+		listaArbolDreanejFiltros.append(diametroLaterales)
+
+		numLatPUDF=int(2*(ladoFiltro/distanciaLaterales))
+		listaArbolDreanejFiltros.append(numLatPUDF)
+
+		numOrifPUDF=numLatPUDF*round(longitudLaterales/distanciaOrificios,0)*2
+		listaArbolDreanejFiltros.append(numOrifPUDF)
+
+		areaTotalOrifPUDF=numOrifPUDF*pi*(1/4)*((diametroOrificios*0.0254)**2)
+
+		listaArbolDreanejFiltros.append(areaTotalOrifPUDF)
+		areaMultiple= areaTotalOrifPUDF/0.4
+
+		listaArbolDreanejFiltros.append(areaMultiple)
+		
+		dicSeccionArea={0.0103226: '4 X 4', 0.0232258: '6 X 6', 0.0412902: '8 X 8', 0.064516: '10 X 10', 0.092903: '12 X 12', 0.1264514: '14 X 14', 0.165161: '16 X 16', 0.2090318: '18 X 18', 0.258064: '20 X 20'}
+		def funcionMayorDeMenores(numero):
+			l1=[0.0103226,0.0232258,0.0412902,0.0645160,0.0929030,0.1264514,0.1651610,0.2090318,0.2580640]
+			elementoAnt=l1[0]
+			for elemento in l1:
+				if elemento<=numero and elemento>elementoAnt:
+					elementoAnt=elemento
+					vuelve=elemento
+			return vuelve
+
+		seccionTransvMultiple= dicSeccionArea[funcionMayorDeMenores(areaMultiple)]
+
+		listaArbolDreanejFiltros.append(seccionTransvMultiple)
+		areaMultipleCorregida=funcionMayorDeMenores(areaMultiple)
+		listaArbolDreanejFiltros.append(areaMultipleCorregida)
+		
+		areaTotalOrif=areaTotalOrifPUDF/areaMaximaFiltro
+		listaArbolDreanejFiltros.append(areaTotalOrif)
+		areaLateral=((0.0254*diametroLaterales)**2)/(areaTotalOrifPUDF/numLatPUDF)
+		listaArbolDreanejFiltros.append(areaLateral)
+
+		newDataTreeview(arbolDrenajeFiltros,listaArbolDreanejFiltros)
+		
 		drenajeFiltrosWindow.mainloop()
 	
-	def drenajeFiltro():
+	def drenajeFiltro(listaET):
+		
+
+		if listaET[0].get()== "Seleccione el caudal":
+			messagebox.showwarning(title="Error", message="Hace falta elegir el tipo de caudal que quiere usar(Medio diario, máximo diario ó máximo horario).")
+			return None
+		else:
+			valor= listaET[0].get()[0:3]
+			
+		try: 
+			caudalMedio=float(listaET[1].get())
+		except:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
+			return None
+
+		##Provicsional
+		caudalMedio=0.04404
+
+
+		if valor=="Qmd":
+			caudal=caudalMedio
+		elif valor=="QMD":
+			caudal=caudalMedio*1.3
+		elif valor=="QMH":
+			caudal=caudalMedio*1.6
+
+		
 		drenajeFiltrosMainWindow = tk.Toplevel()
 		drenajeFiltrosMainWindow.iconbitmap(bitmap='icons\\agua.ico')
-		drenajeFiltrosMainWindow.geometry("600x400") 
+		drenajeFiltrosMainWindow.geometry("400x300") 
 		drenajeFiltrosMainWindow.resizable(0,0)	
 		drenajeFiltrosMainWindow.configure(background="#9DC4AA")
 
 		drenajeFiltrosMainFrame=LabelFrame(drenajeFiltrosMainWindow, text="Datos adicionales para drenaje del filtro:", font=("Yu Gothic bold", 11))
 		drenajeFiltrosMainFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		
+		diametroOrificios = StringVar()
+		diametroOrificios.set("Diametro de los orificios")
+		listaValoresTempDiametroOrificios=list()
+		listaValoresTempDiametroOrificios.append("1/4")
+		listaValoresTempDiametroOrificios.append("3/8")
+		listaValoresTempDiametroOrificios.append("1/2")
+		listaValoresTempDiametroOrificios.append("5/8")
+		diametroOrificiosName = OptionMenu(drenajeFiltrosMainFrame, diametroOrificios, *listaValoresTempDiametroOrificios)
+		diametroOrificiosLabel= Label(drenajeFiltrosMainWindow, text="Seleccione el diámetro de los orificios:", font=("Yu Gothic bold", 11))
+		
+		
+		distanciaLaterales = StringVar()
+		distanciaLaterales.set("Distancia entre laterales")
+		listaValoresTempDistanciaLaterales=list()
+		listaValoresTempDistanciaLaterales.append("0.20")
+		listaValoresTempDistanciaLaterales.append("0.25")
+		listaValoresTempDistanciaLaterales.append("0.30")
+		distanciaLateralesName = OptionMenu(drenajeFiltrosMainFrame, distanciaLaterales, *listaValoresTempDistanciaLaterales)
+		distanciaLateralesLabel= Label(drenajeFiltrosMainWindow, text="Seleccione la distancia entre laterales", font=("Yu Gothic bold", 11))
+		
+		listaEntradaDrenaje2=[diametroOrificiosName,distanciaLateralesName]
+		listaLabel= [diametroOrificiosLabel,distanciaLateralesLabel]
+		listaEntradaDrenaje=[diametroOrificios,distanciaLaterales]
+		altIn= 30
+		for ind in range(0,2):
+			listaLabel[ind].place(x=0,y=altIn)
+			listaEntradaDrenaje2[ind].place(x=0, y= altIn+20)
+			altIn=altIn+80
+		
+		botonCalculoDrenaje = HoverButton(drenajeFiltrosMainFrame, text="Cálculos para el drenaje del filtro", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: drenajeFiltro2(caudal,listaEntradaDrenaje))
+		botonCalculoDrenaje.place(x=0, y=altIn)
+			
+
+		
+		
+		drenajeFiltrosMainWindow.mainloop()
 
 	mainWindow.withdraw()
 	filtroWindow = tk.Toplevel()
@@ -2638,7 +2802,7 @@ def openFiltroWindow():
 
 	botonPredimensionamientoFiltros = HoverButton(frameFiltro, text="Predimensionamiento de los filtros", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: predimensionamientoFiltros(entradasCaudal))
 
-	botonDrenajeFiltro = HoverButton(frameFiltro, text="Drenaje del filtro - Tuberías perforadas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: drenajeFiltro())
+	botonDrenajeFiltro = HoverButton(frameFiltro, text="Drenaje del filtro - Tuberías perforadas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: drenajeFiltro(entradasCaudal))
 
 	listaBotonesOrg=[botonNewEntryFiltro,botonPrincipalesCaracteristicasDelFiltro, botonGranulometria,botonCoefUniformidad,botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio,botonEstimacionPerdidaLechoGrava,botonPredimensionamientoFiltros,botonDrenajeFiltro,botonPerdidaCargaLechoExpandido]
 
