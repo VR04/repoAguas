@@ -654,7 +654,8 @@ def openSedWindow():
 	for col in arbolSed["columns"]:
 		dicImagenCol[col]=f"images\\EcuacionSed{numero}.png"
 		numero=numero+1
-	
+
+
 	
 
 
@@ -662,10 +663,43 @@ def openSedWindow():
 	arbolSed.heading("#0",text="ID", anchor=CENTER)
 	
 	
-	"""for col in arbolSed["columns"]:
+	'''for col in arbolSed["columns"]:
 		arbolSed.heading(col, text=col,anchor=CENTER, command = lambda: formulaN(dicImagenCol[col]))
-	"""
+	'''
 	
+	arbolSed.heading("Velocidad promedio de flujo [m/s]", text="Velocidad promedio de flujo [m/s]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed1.png"))
+	arbolSed.heading("Velocidad promedio de flujo corregida [m/s]", text="Velocidad promedio de flujo corregida [m/s]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed2.png"))
+	arbolSed.heading("Tiempo de retención en cada canal [min]", text="Tiempo de retención en cada canal [min]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed3.png"))
+	arbolSed.heading("Número de canales por módulo [und]", text="Número de canales por módulo [und]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed4.png"))
+	arbolSed.heading("Longitud ocupada por las placas [m]", text="Longitud ocupada por las placas [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed5.png"))
+	arbolSed.heading("Altura de las placas [m]", text="Altura de las placas [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed6.png"))
+	arbolSed.heading("Disancia entre las canaletas de recoleeción [m]", text="Disancia entre las canaletas de recoleeción [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed7.png"))
+	arbolSed.heading("Altura de sedimentación [m]", text="Altura de sedimentación [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed8.png"))
+	arbolSed.heading("Volumen de cada tanque de sedimentación [m^3]", text="Volumen de cada tanque de sedimentación [m^3]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed9.png"))
+	arbolSed.heading("Tiempo de retención total en el tanque [min]", text="Tiempo de retención total en el tanque [min]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed10.png"))
+	arbolSed.heading("Carga superficial [m^3/(m^2*día)]", text="Carga superficial [m^3/(m^2*día)]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed11.png"))
+	arbolSed.heading("Relación longitud ancho de cada tanque [L:A]", text="Relación longitud ancho de cada tanque [L:A]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed12.png"))
+	arbolSed.heading("Altura de la tolva de lodos [m]", text="Altura de la tolva de lodos [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed13.png"))
+	arbolSed.heading("Largo total del sedimentador [m]", text="Largo total del sedimentador [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed14.png"))
+	arbolSed.heading("Ancho total del sedimentador [m]", text="Ancho total del sedimentador [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed15.png"))
+	arbolSed.heading("Altura total del sedimentador [m]", text="Altura total del sedimentador [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed16.png"))
+	arbolSed.heading("Número de canaletas de recolección por módulo [und]", text="Número de canaletas de recolección por módulo [und]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed17.png"))
+	arbolSed.heading("Distancia entre canaletas de recolección(Ajsutado) [m]", text="Distancia entre canaletas de recolección(Ajsutado) [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed18.png"))
+	arbolSed.heading("Longitud del múltiple de descarga [m]", text="Longitud del múltiple de descarga [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed19.png"))
+	arbolSed.heading("Diametro nominal del múltiple de descarga [pulg]", text="Diametro nominal del múltiple de descarga [pulg]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed20.png"))
+	arbolSed.heading("Diamentro interno del múltiple de descarga en PVC presión [m]", text="Diamentro interno del múltiple de descarga en PVC presión [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed21.png"))
+	arbolSed.heading("Diámetro interno de los orificos del múltiple de descarga [m]", text="Diámetro interno de los orificos del múltiple de descarga [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed22.png"))
+	arbolSed.heading("Diámetro nominal más cercano a los orificios del múltiple de descarga [pulg]", text="Diámetro nominal más cercano a los orificios del múltiple de descarga [pulg]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed23.png"))
+	arbolSed.heading("Diámetro interno de los orificios del múltiple de descarga en PVC Presión (ajustado) [m]", text="Diámetro interno de los orificios del múltiple de descarga en PVC Presión (ajustado) [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed24.png"))
+	arbolSed.heading("Cuadrado de la relación entre el diámetro de orificos y el del múltiple por el número de orificios []", text="Cuadrado de la relación entre el diámetro de orificos y el del múltiple por el número de orificios []",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed25.png"))
+	arbolSed.heading("Diámetro nominal más cercano de los orificios del múltiple de descarga (ajustado) [pulg]", text="Diámetro nominal más cercano de los orificios del múltiple de descarga (ajustado) [pulg]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed26.png"))
+	arbolSed.heading("Diámetro interno de los orificios del múltiple de descarga PVC Presión (ajustado nuevamente)[m]", text="Diámetro interno de los orificios del múltiple de descarga PVC Presión (ajustado nuevamente)[m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed27.png"))
+	arbolSed.heading("Tirante sobre el orificio [m]", text="Tirante sobre el orificio [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed28.png"))
+	arbolSed.heading("Relación longitud del múltiple y número de orificios []", text="Relación longitud del múltiple y número de orificios []",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed29.png"))
+	arbolSed.heading("Separación entre orificios del múltiple [m]", text="Separación entre orificios del múltiple [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed30.png"))
+	arbolSed.heading("Separación entre orificios del múltiple (confirmada) [m]", text="Separación entre orificios del múltiple (confirmada) [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed31.png"))
+
+
 		
 	for i in range(0,len(arbolSed["columns"])-1) :
 			arbolSed.column(f"#{i}",width=300, stretch=False)	
