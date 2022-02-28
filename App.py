@@ -958,7 +958,7 @@ def openFiltroWindow():
 		
 		################Datos temporales:
 		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-		listaARetenida=[16.20, 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
+		listaARetenida= [16.20, 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
 		################
 		
 		
@@ -1168,7 +1168,8 @@ def openFiltroWindow():
 		
 		################Datos temporales:
 		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-		listaARetenida=[0.8, 4.25, 15.02, 16.65, 18.01, 18.25, 15.65, 9.3, 2.07]
+		##listaARetenida= [16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
+		listaARetenida= [16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
 		################
 		
 		
@@ -1184,15 +1185,19 @@ def openFiltroWindow():
 			suma=0
 			for elemento in range(0,indice+1):
 				suma= suma+listaARetenida[elemento]
-			return 100-suma
+
+			return 100.0-suma
 		#Calculando acumulado:
 		listaAcumuladoArenaDescendente=list()
 		for ind in range(0, len(listaARetenida)):
-			listaAcumuladoArenaDescendente.append(acumuladoArenaQuePasa(ind))
-
+			if ind != len(listaARetenida)-1:
+				listaAcumuladoArenaDescendente.append(acumuladoArenaQuePasa(ind))
+			else:
+				listaAcumuladoArenaDescendente.append(0)
 		listaAcumuladoArenaAscendente = listaAcumuladoArenaDescendente.copy()
 		listaAcumuladoArenaAscendente.reverse()
 
+		
 		#OrganizandoListaNTamiz
 		listaNTamizExtremo=list()
 		listaNTamizSinRepeticion=list()
@@ -1229,7 +1234,8 @@ def openFiltroWindow():
 		for ind in range(0,len(datosSalida)):
 			abAcDic[datosSalida[ind][6]]=datosSalida[ind][5]
 		
-	
+		
+
 		def tamañoEfectivod1(numero,dic):
 			elementoAnterior=dic[0]
 			for elemento in dic:
@@ -1513,7 +1519,7 @@ def openFiltroWindow():
 				
 		################Datos temporales:
 		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-		listaARetenida=[0.8, 4.25, 15.02, 16.65, 18.01, 18.25, 15.65, 9.3, 2.07]
+		listaARetenida=[16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
 		listaEU=[6.25,0.6,2.65,0.45,5,0.85,0.85,6.2,3]
 		################
 
@@ -1926,7 +1932,7 @@ def openFiltroWindow():
 		
 		################Datos temporales:
 		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-		listaARetenida=[0.8, 4.25, 15.02, 16.65, 18.01, 18.25, 15.65, 9.3, 2.07]
+		listaARetenida=[16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
 		################
 		
 		#Tabla Tamaño Abertura Tamiz
