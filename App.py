@@ -1947,11 +1947,14 @@ def openFiltroWindow():
 			suma=0
 			for elemento in range(0,indice+1):
 				suma= suma+listaARetenida[elemento]
-			return 100-suma
+			return 100.0-suma
 		#Calculando acumulado:
 		listaAcumuladoArenaDescendente=list()
 		for ind in range(0, len(listaARetenida)):
-			listaAcumuladoArenaDescendente.append(acumuladoArenaQuePasa(ind))
+			if ind != len(listaARetenida)-1:
+				listaAcumuladoArenaDescendente.append(acumuladoArenaQuePasa(ind))
+			else:
+				listaAcumuladoArenaDescendente.append(0)
 
 		listaAcumuladoArenaAscendente = listaAcumuladoArenaDescendente.copy()
 		listaAcumuladoArenaAscendente.reverse()
