@@ -337,7 +337,7 @@ def openSedWindow():
 		"Número de canales por módulo [und]",
 		"Longitud ocupada por las placas [m]", 
 		"Altura de las placas [m]", 
-		"Disancia entre las canaletas de recoleeción [m]",
+		"Distancia entre las canaletas de recolección [m]",
 		"Altura de sedimentación [m]",
 		"Volumen de cada tanque de sedimentación [m^3]",
 		"Tiempo de retención total en el tanque [min]",
@@ -352,10 +352,10 @@ def openSedWindow():
 		"Longitud del múltiple de descarga [m]",
 		"Diametro nominal del múltiple de descarga [pulg]",
 		"Diamentro interno del múltiple de descarga en PVC presión [m]",
-		"Diámetro interno de los orificos del múltiple de descarga [m]",
+		"Diámetro interno de los orificios del múltiple de descarga [m]",
 		"Diámetro nominal más cercano a los orificios del múltiple de descarga [pulg]",
 		"Diámetro interno de los orificios del múltiple de descarga en PVC Presión (ajustado) [m]",
-		"Cuadrado de la relación entre el diámetro de orificos y el del múltiple por el número de orificios []",
+		"Cuadrado de la relación entre el diámetro de orificios y el del múltiple por el número de orificios []",
 		"Diámetro nominal más cercano de los orificios del múltiple de descarga (ajustado) [pulg]",
 		"Diámetro interno de los orificios del múltiple de descarga en PVC Presión (ajustado nuevamente) [m]",
 		"Tirante sobre el orificio [m]",
@@ -435,7 +435,7 @@ def openSedWindow():
 	lista_inputs=["Caudal de diseño (QMD)[m^3/s]",
 	"Número de módulos [und]",
 	"Caudal por módulo [m^3/s]", 
-	"Viscocidad cinemática [m^2/s]",
+	"Viscosidad cinemática [m^2/s]",
 	"Eficiencia crítica para sedimentador de placas paralelas []",
 	"Espacio entre placas [m]",
 	"Velocidad de sedimentación crítica [m/s]",
@@ -443,7 +443,7 @@ def openSedWindow():
 	"Espesor de la placa [m]",
 	"Ancho de la placa [m]",
 	"Ángulo de inclinación de la placa [°]",
-	"Nivel del agua sobre las palcas [m]",
+	"Nivel del agua sobre las placas [m]",
 	"Distancia vertical orificios de distribución a placas [m]",
 	"Borde libre [m]",
 	"Ancho interno de canales de distribución [m]",
@@ -624,10 +624,10 @@ def openSedWindow():
 	"Longitud del múltiple de descarga [m]",
 	"Diametro nominal del múltiple de descarga [pulg]",
 	"Diamentro interno del múltiple de descarga en PVC presión [m]",
-	"Diámetro interno de los orificos del múltiple de descarga [m]",
+	"Diámetro interno de los orificios del múltiple de descarga [m]",
 	"Diámetro nominal más cercano a los orificios del múltiple de descarga [pulg]",
 	"Diámetro interno de los orificios del múltiple de descarga en PVC Presión (ajustado) [m]",
-	"Cuadrado de la relación entre el diámetro de orificos y el del múltiple por el número de orificios []",
+	"Cuadrado de la relación entre el diámetro de orificios y el del múltiple por el número de orificios []",
 	"Diámetro nominal más cercano de los orificios del múltiple de descarga (ajustado) [pulg]",
 	"Diámetro interno de los orificios del múltiple de descarga PVC Presión (ajustado nuevamente)[m]",
 	"Tirante sobre el orificio [m]",
@@ -688,10 +688,10 @@ def openSedWindow():
 	arbolSed.heading("Longitud del múltiple de descarga [m]", text="Longitud del múltiple de descarga [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed19.png"))
 	arbolSed.heading("Diametro nominal del múltiple de descarga [pulg]", text="Diametro nominal del múltiple de descarga [pulg]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed20.png"))
 	arbolSed.heading("Diamentro interno del múltiple de descarga en PVC presión [m]", text="Diamentro interno del múltiple de descarga en PVC presión [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed21.png"))
-	arbolSed.heading("Diámetro interno de los orificos del múltiple de descarga [m]", text="Diámetro interno de los orificos del múltiple de descarga [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed22.png"))
+	arbolSed.heading("Diámetro interno de los orificios del múltiple de descarga [m]", text="Diámetro interno de los orificios del múltiple de descarga [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed22.png"))
 	arbolSed.heading("Diámetro nominal más cercano a los orificios del múltiple de descarga [pulg]", text="Diámetro nominal más cercano a los orificios del múltiple de descarga [pulg]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed23.png"))
 	arbolSed.heading("Diámetro interno de los orificios del múltiple de descarga en PVC Presión (ajustado) [m]", text="Diámetro interno de los orificios del múltiple de descarga en PVC Presión (ajustado) [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed24.png"))
-	arbolSed.heading("Cuadrado de la relación entre el diámetro de orificos y el del múltiple por el número de orificios []", text="Cuadrado de la relación entre el diámetro de orificos y el del múltiple por el número de orificios []",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed25.png"))
+	arbolSed.heading("Cuadrado de la relación entre el diámetro de orificios y el del múltiple por el número de orificios []", text="Cuadrado de la relación entre el diámetro de orificios y el del múltiple por el número de orificios []",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed25.png"))
 	arbolSed.heading("Diámetro nominal más cercano de los orificios del múltiple de descarga (ajustado) [pulg]", text="Diámetro nominal más cercano de los orificios del múltiple de descarga (ajustado) [pulg]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed26.png"))
 	arbolSed.heading("Diámetro interno de los orificios del múltiple de descarga PVC Presión (ajustado nuevamente)[m]", text="Diámetro interno de los orificios del múltiple de descarga PVC Presión (ajustado nuevamente)[m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed27.png"))
 	arbolSed.heading("Tirante sobre el orificio [m]", text="Tirante sobre el orificio [m]",anchor=CENTER, command = lambda: formulaN("images\\EcuacionSed28.png"))
@@ -715,7 +715,7 @@ def openSedWindow():
 	arbolSed.column("#0",width=100, stretch=False)
 
 	#Striped row tags
-	arbolSed.tag_configure("oddrow", background= "#23D95F")
+	arbolSed.tag_configure("oddrow", background= "#1FCCDB")
 	arbolSed.tag_configure("evenrow", background= "#9DC4AA")
 	
 
@@ -795,7 +795,7 @@ def openFiltroWindow():
 		arbolCaracFiltro.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolCaracFiltro.tag_configure("oddrow", background= "#23D95F")
+		arbolCaracFiltro.tag_configure("oddrow", background= "#1FCCDB")
 		arbolCaracFiltro.tag_configure("evenrow", background= "#9DC4AA")
 
 		col1=["Tipo de filtro","Medio filtrante","Distribución del medio","Tasa media de filtración","Tasa máxima de filtración","Duración de carrera","Pérdida de carga inicial","Pérdida de carga final","Uso de agua tratada en lavado","Profundida del medio","Profundidad de grava","Drenaje"]
@@ -921,7 +921,7 @@ def openFiltroWindow():
 		#Define columnas.
 		arbolGranulometria["columns"]= (
 		"Número de tamiz",
-		"Area retenida [%]", 
+		"Arena retenida [%]", 
 		"Número de tamiz que retiene", 
 		"Tamaño de abertura del tamiz [mm] (OD)", 
 		"Acumulado de arena que pasa [%] (OD)", 
@@ -945,7 +945,7 @@ def openFiltroWindow():
 		arbolGranulometria.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolGranulometria.tag_configure("oddrow", background= "#23D95F")
+		arbolGranulometria.tag_configure("oddrow", background= "#1FCCDB")
 		arbolGranulometria.tag_configure("evenrow", background= "#9DC4AA")
 
 
@@ -1155,7 +1155,7 @@ def openFiltroWindow():
 		arbolCoeficienteDU.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolCoeficienteDU.tag_configure("oddrow", background= "#23D95F")
+		arbolCoeficienteDU.tag_configure("oddrow", background= "#1FCCDB")
 		arbolCoeficienteDU.tag_configure("evenrow", background= "#9DC4AA")
 
 
@@ -1321,7 +1321,7 @@ def openFiltroWindow():
 			arbolCoeficienteDU10.column("#0",width=0, stretch=False)
 
 			#Striped row tags
-			arbolCoeficienteDU10.tag_configure("oddrow", background= "#23D95F")
+			arbolCoeficienteDU10.tag_configure("oddrow", background= "#1FCCDB")
 			arbolCoeficienteDU10.tag_configure("evenrow", background= "#9DC4AA")
 
 			lista1=list()
@@ -1388,7 +1388,7 @@ def openFiltroWindow():
 		#Define columnas.
 		arbolEstimacionPerdidaArenaFH["columns"]= (
 		"Número de tamiz",
-		"Area retenida [%]", 
+		"Arena retenida [%]", 
 		"Tamaño de abertura del tamiz superior [mm]", 
 		"Tamaño de abertura del tamiz inferior [mm]",
 		"Tamaño promedio geométrico [mm]",
@@ -1408,7 +1408,7 @@ def openFiltroWindow():
 		arbolEstimacionPerdidaArenaFH.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolEstimacionPerdidaArenaFH.tag_configure("oddrow", background= "#23D95F")
+		arbolEstimacionPerdidaArenaFH.tag_configure("oddrow", background= "#1FCCDB")
 		arbolEstimacionPerdidaArenaFH.tag_configure("evenrow", background= "#9DC4AA")
 		
 		################Frame principal2
@@ -1434,7 +1434,7 @@ def openFiltroWindow():
 		#Define columnas.
 		arbolEstimacionPerdidaArenaCK["columns"]= (
 		"Número de tamiz",
-		"Area retenida [%]", 
+		"Arena retenida [%]", 
 		"Tamaño de abertura del tamiz superior [mm]", 
 		"Tamaño de abertura del tamiz inferior [mm]",
 		"Tamaño promedio geométrico [mm]",
@@ -1455,7 +1455,7 @@ def openFiltroWindow():
 		arbolEstimacionPerdidaArenaCK.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolEstimacionPerdidaArenaCK.tag_configure("oddrow", background= "#23D95F")
+		arbolEstimacionPerdidaArenaCK.tag_configure("oddrow", background= "#1FCCDB")
 		arbolEstimacionPerdidaArenaCK.tag_configure("evenrow", background= "#9DC4AA")
 
 		##########Frame principal3
@@ -1481,7 +1481,7 @@ def openFiltroWindow():
 		#Define columnas.
 		arbolEstimacionPerdidaArenaR["columns"]= (
 		"Número de tamiz",
-		"Area retenida [%]", 
+		"Arena retenida [%]", 
 		"Tamaño de abertura del tamiz superior [mm]", 
 		"Tamaño de abertura del tamiz inferior [mm]",
 		"Tamaño promedio geométrico [mm]",
@@ -1502,7 +1502,7 @@ def openFiltroWindow():
 		arbolEstimacionPerdidaArenaR.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolEstimacionPerdidaArenaR.tag_configure("oddrow", background= "#23D95F")
+		arbolEstimacionPerdidaArenaR.tag_configure("oddrow", background= "#1FCCDB")
 		arbolEstimacionPerdidaArenaR.tag_configure("evenrow", background= "#9DC4AA")
 
 
@@ -2092,7 +2092,7 @@ def openFiltroWindow():
 		arbolEstimacionPerdidaGrava.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolEstimacionPerdidaGrava.tag_configure("evenrow", background= "#23D95F")
+		arbolEstimacionPerdidaGrava.tag_configure("evenrow", background= "#1FCCDB")
 		arbolEstimacionPerdidaGrava.tag_configure("oddrow", background= "#9DC4AA")
 		
 		################Frame principal2
@@ -2133,7 +2133,7 @@ def openFiltroWindow():
 		arbolPerdidaCargaGrava.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolPerdidaCargaGrava.tag_configure("evenrow", background= "#23D95F")
+		arbolPerdidaCargaGrava.tag_configure("evenrow", background= "#1FCCDB")
 		arbolPerdidaCargaGrava.tag_configure("oddrow", background= "#9DC4AA")
 
 		############Insersión datos.
@@ -2367,7 +2367,7 @@ def openFiltroWindow():
 		arbolPerdidaLechoExpandidoC.column("#0",width=0, stretch=False)
 		arbolPerdidaLechoExpandidoC.column("#4",width=700, stretch=True)
 		#Striped row tags
-		arbolPerdidaLechoExpandidoC.tag_configure("evenrow", background= "#23D95F")
+		arbolPerdidaLechoExpandidoC.tag_configure("evenrow", background= "#1FCCDB")
 		arbolPerdidaLechoExpandidoC.tag_configure("oddrow", background= "#9DC4AA")
 
 
@@ -2517,7 +2517,7 @@ def openFiltroWindow():
 		arbolPredimensionamientoFiltros.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolPredimensionamientoFiltros.tag_configure("evenrow", background= "#23D95F")
+		arbolPredimensionamientoFiltros.tag_configure("evenrow", background= "#1FCCDB")
 		arbolPredimensionamientoFiltros.tag_configure("oddrow", background= "#9DC4AA")
 
 		listaArbolCaudal=list()
@@ -2526,14 +2526,14 @@ def openFiltroWindow():
 		Vmax=150
 		listaArbolCaudal.append(Vf)
 		listaArbolCaudal.append(Vmax)
-		areaFilOpNormal=caudal*86400*(1/Vf)
-		listaArbolCaudal.append(areaFilOpNormal)
-		areaFilFueraServ=caudal*86400*(1/Vmax)
-		listaArbolCaudal.append(areaFilFueraServ)
-		areaMaximaFiltro=round(areaFilOpNormal-areaFilFueraServ,2)
-		listaArbolCaudal.append(areaMaximaFiltro)
-		listaArbolCaudal.append(round(areaFilOpNormal/areaMaximaFiltro,2))
-		listaArbolCaudal.append(sqrt(areaMaximaFiltro))
+		arenaFilOpNormal=caudal*86400*(1/Vf)
+		listaArbolCaudal.append(arenaFilOpNormal)
+		arenaFilFueraServ=caudal*86400*(1/Vmax)
+		listaArbolCaudal.append(arenaFilFueraServ)
+		arenaMaximaFiltro=round(arenaFilOpNormal-arenaFilFueraServ,2)
+		listaArbolCaudal.append(arenaMaximaFiltro)
+		listaArbolCaudal.append(round(arenaFilOpNormal/arenaMaximaFiltro,2))
+		listaArbolCaudal.append(sqrt(arenaMaximaFiltro))
 
 		
 		contadorFiltro = 0
@@ -2618,7 +2618,7 @@ def openFiltroWindow():
 		arbolDrenajeFiltros.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolDrenajeFiltros.tag_configure("evenrow", background= "#23D95F")
+		arbolDrenajeFiltros.tag_configure("evenrow", background= "#1FCCDB")
 		arbolDrenajeFiltros.tag_configure("oddrow", background= "#9DC4AA")
 
 		listaArbolDreanejFiltros=list()
@@ -2639,10 +2639,10 @@ def openFiltroWindow():
 
 		listaArbolDreanejFiltros.append(distanciaOrificios)
 		
-		areaFiltracionOpNormal= caudal*86400*(1/120)
-		areaFiltracionFuera= caudal*86400*(1/150)
-		areaMaximaFiltro=round(areaFiltracionOpNormal-areaFiltracionFuera,2)
-		ladoFiltro= sqrt(areaMaximaFiltro)
+		arenaFiltracionOpNormal= caudal*86400*(1/120)
+		arenaFiltracionFuera= caudal*86400*(1/150)
+		arenaMaximaFiltro=round(arenaFiltracionOpNormal-arenaFiltracionFuera,2)
+		ladoFiltro= sqrt(arenaMaximaFiltro)
 		longitudLaterales= round((ladoFiltro/2)-0.1,2)
 		listaArbolDreanejFiltros.append(longitudLaterales)
 		listaArbolDreanejFiltros.append(distanciaLaterales)
@@ -2665,14 +2665,14 @@ def openFiltroWindow():
 		numOrifPUDF=numLatPUDF*round(longitudLaterales/distanciaOrificios,0)*2
 		listaArbolDreanejFiltros.append(numOrifPUDF)
 
-		areaTotalOrifPUDF=numOrifPUDF*pi*(1/4)*((diametroOrificios*0.0254)**2)
+		arenaTotalOrifPUDF=numOrifPUDF*pi*(1/4)*((diametroOrificios*0.0254)**2)
 
-		listaArbolDreanejFiltros.append(areaTotalOrifPUDF)
-		areaMultiple= areaTotalOrifPUDF/0.4
+		listaArbolDreanejFiltros.append(arenaTotalOrifPUDF)
+		arenaMultiple= arenaTotalOrifPUDF/0.4
 
-		listaArbolDreanejFiltros.append(areaMultiple)
+		listaArbolDreanejFiltros.append(arenaMultiple)
 		
-		dicSeccionArea={0.0103226: '4 X 4', 0.0232258: '6 X 6', 0.0412902: '8 X 8', 0.064516: '10 X 10', 0.092903: '12 X 12', 0.1264514: '14 X 14', 0.165161: '16 X 16', 0.2090318: '18 X 18', 0.258064: '20 X 20'}
+		dicSeccionArena={0.0103226: '4 X 4', 0.0232258: '6 X 6', 0.0412902: '8 X 8', 0.064516: '10 X 10', 0.092903: '12 X 12', 0.1264514: '14 X 14', 0.165161: '16 X 16', 0.2090318: '18 X 18', 0.258064: '20 X 20'}
 		def funcionMayorDeMenores(numero):
 			l1=[0.0103226,0.0232258,0.0412902,0.0645160,0.0929030,0.1264514,0.1651610,0.2090318,0.2580640]
 			elementoAnt=l1[0]
@@ -2682,16 +2682,16 @@ def openFiltroWindow():
 					vuelve=elemento
 			return vuelve
 
-		seccionTransvMultiple= dicSeccionArea[funcionMayorDeMenores(areaMultiple)]
+		seccionTransvMultiple= dicSeccionArena[funcionMayorDeMenores(arenaMultiple)]
 
 		listaArbolDreanejFiltros.append(seccionTransvMultiple)
-		areaMultipleCorregida=funcionMayorDeMenores(areaMultiple)
-		listaArbolDreanejFiltros.append(areaMultipleCorregida)
+		arenaMultipleCorregida=funcionMayorDeMenores(arenaMultiple)
+		listaArbolDreanejFiltros.append(arenaMultipleCorregida)
 		
-		areaTotalOrif=areaTotalOrifPUDF/areaMaximaFiltro
-		listaArbolDreanejFiltros.append(areaTotalOrif)
-		areaLateral=((0.0254*diametroLaterales)**2)/(areaTotalOrifPUDF/numLatPUDF)
-		listaArbolDreanejFiltros.append(areaLateral)
+		arenaTotalOrif=arenaTotalOrifPUDF/arenaMaximaFiltro
+		listaArbolDreanejFiltros.append(arenaTotalOrif)
+		arenaLateral=((0.0254*diametroLaterales)**2)/(arenaTotalOrifPUDF/numLatPUDF)
+		listaArbolDreanejFiltros.append(arenaLateral)
 
 		newDataTreeview(arbolDrenajeFiltros,listaArbolDreanejFiltros)
 		
@@ -3121,7 +3121,7 @@ def openFloculadorWindow():
 		arbolCFloculador.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolCFloculador.tag_configure("evenrow", background= "#23D95F")
+		arbolCFloculador.tag_configure("evenrow", background= "#1FCCDB")
 		arbolCFloculador.tag_configure("oddrow", background= "#9DC4AA")
 		contadorFloculador=0
 		listaEntrada= list()
@@ -3245,22 +3245,22 @@ def openFloculadorWindow():
 		arbolSalidaCamara.column("#0",width=0, stretch=False)
 
 		#Striped row tags
-		arbolSalidaCamara.tag_configure("oddrow", background= "#23D95F")
+		arbolSalidaCamara.tag_configure("oddrow", background= "#1FCCDB")
 		arbolSalidaCamara.tag_configure("evenrow", background= "#9DC4AA")
 		contadorFloculador=0
 		listaEntrada=list()
 		velocidadFlujoCodos=listaE[5-4]/listaE[12-4]
-		areaOrificio= pi*(diametroInternoOrificio**2)*(1/4)
+		arenaOrificio= pi*(diametroInternoOrificio**2)*(1/4)
 		coeficienteDescarga= listaE[23-4]
 		perdidaPasamuros= (listaE[5-4]**2)/((2*listaE[20-4])*(coeficienteDescarga**2)*(listaE[12-4]**2))
 		perdidaCodo= (0.4)*((velocidadFlujoCodos**2)/(2*listaE[20-4]))
-		perdidaOrificio= (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(areaOrificio**2))
+		perdidaOrificio= (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(arenaOrificio**2))
 		perdidaFloculador= perdidaPasamuros+perdidaCodo+perdidaOrificio
 		gradienteMezcla= sqrt((listaE[20-4]*perdidaFloculador)/(listaE[19-4]*listaE[8-4]))
 		numeroCamp= gradienteMezcla*listaE[8-4]
 		pendiente= perdidaFloculador/listaE[16-4]
 
-		listaValores=[diametroInternoOrificio,areaOrificio,coeficienteDescarga,perdidaPasamuros,perdidaCodo,
+		listaValores=[diametroInternoOrificio,arenaOrificio,coeficienteDescarga,perdidaPasamuros,perdidaCodo,
 		perdidaOrificio,perdidaFloculador,gradienteMezcla,numeroCamp,pendiente]
 		for valores in listaValores:
 			listaEntrada.append(valores)
@@ -3309,14 +3309,14 @@ def openFloculadorWindow():
 	datosEntradaLabel = Label(frameFloculador, text="Datos iniciales: ",font=("Yu Gothic bold",10))
 	caudalDiseñoLabel = Label(frameFloculador, text="QMD = Caudal de diseño [L/s]:",font=("Yu Gothic bold",10))
 	tiempoFloculacionLabel = Label(frameFloculador, text="T = Tiempo de floculación [min]:",font=("Yu Gothic bold",10))
-	diametroInterconexionLabel = Label(frameFloculador, text="D = Diametro de interconexión [m]:",font=("Yu Gothic bold",10))
-	diametroInternoLabel = Label(frameFloculador, text="Di = Diametr interno 20\'\' [m]:",font=("Yu Gothic bold",10))
-	diametroExternoLabel = Label(frameFloculador, text="Di = Diametr externo 20\'\' [m]:",font=("Yu Gothic bold",10))
+	diametroInterconexionLabel = Label(frameFloculador, text="D = Diámetro de interconexión [m]:",font=("Yu Gothic bold",10))
+	diametroInternoLabel = Label(frameFloculador, text="Di = Diámetro interno 20\'\' [m]:",font=("Yu Gothic bold",10))
+	diametroExternoLabel = Label(frameFloculador, text="Di = Diámetro externo 20\'\' [m]:",font=("Yu Gothic bold",10))
 	anchoLabel = Label(frameFloculador, text="W = Ancho [m]:",font=("Yu Gothic bold",10))
-	longitudLabel = Label(frameFloculador, text="L Longitud [m]:",font=("Yu Gothic bold",10))
+	longitudLabel = Label(frameFloculador, text="L = Longitud [m]:",font=("Yu Gothic bold",10))
 	alturaLabel = Label(frameFloculador, text="a = Altura [m]:",font=("Yu Gothic bold",10))
 	densidadAguaLabel = Label(frameFloculador, text=u"\u03C1 = Densidad del agua [Kg/(m^3)]:",font=("Yu Gothic bold",10))
-	viscocidadCinematicaLabel = Label(frameFloculador, text=u"\u03BC = Viscocidad Cinemática del agua [(m^2)/s]:",font=("Yu Gothic bold",10))
+	viscocidadCinematicaLabel = Label(frameFloculador, text=u"\u03BC = Viscosidad Cinemática del agua [(m^2)/s]:",font=("Yu Gothic bold",10))
 	gravedadLabel = Label(frameFloculador, text="g = Gravedad [m/(s^2)]",font=("Yu Gothic bold",10))
 	temperaturaLabel = Label(frameFloculador, text="°C = Temperatura [°C]:",font=("Yu Gothic bold",10))
 	coeficienteDescargaLabel = Label(frameFloculador, text="Cd = Coeficiente de descarga [K]",font=("Yu Gothic bold",10))
