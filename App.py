@@ -1345,15 +1345,26 @@ def openFiltroWindow():
 
 	def calcularPEArena(listaNTamiz,listaARetenida,listaE,valorTemperatura):
 		listaEU=list()
+
+		#Volver
+		i=0
 		for elemento in listaE:
 				try:
-					listaEU.append(float(elemento.get()))
+					if i==0:
+						if elemento.get() == "Seleccione el tipo de grano de arena":
+							messagebox.showwarning(title="Error", message="Hace falta seleccionar el tipo de grano de arena")
+							return None
+						else:
+							listaEU.append(elemento.get())
+							i=i+1
+					else:
+						listaEU.append(float(elemento.get()))
 				except:
 					messagebox.showwarning(title="Error", message="El valor ingresado no es un número")
 					return None
 		listaEU.append(valorTemperatura)
 		
-		listaEU[0]=listaEU[0]/24
+		
 
 
 		estimacionPerdidaArenaCalculoWindow = tk.Toplevel()
@@ -1361,6 +1372,8 @@ def openFiltroWindow():
 		estimacionPerdidaArenaCalculoWindow.geometry("1000x500") 
 		estimacionPerdidaArenaCalculoWindow.resizable(0,0)	
 		estimacionPerdidaArenaCalculoWindow.configure(background="#9DC4AA")
+
+
 
 		##Panel:
 		panelFiltro = ttk.Notebook(estimacionPerdidaArenaCalculoWindow)
@@ -1440,8 +1453,11 @@ def openFiltroWindow():
 		"Tamaño promedio geométrico [mm]",
 		"Número de Reynolds", 
 		"Factor de fricción",
+		#Pendiente
 		"NOMBREPREG",
 		"Pérdida de cabeza hidráulica total"
+		"NombrePREG"
+		"Coeficiente de permeabilidad"
 		)
 
 		#Headings
@@ -1520,6 +1536,14 @@ def openFiltroWindow():
 		################Datos temporales:
 		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
 		listaARetenida=[16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
+
+		"""
+		listaEntradas=[TipoGranoArena, profundidadLechoFijoArena, densidadRelativaArena,
+		porosidadLechoFijo,constanteFiltracionFH]
+		["Angular", "Afilada", "Erosionada", "Redondeada", "Esférica"]
+
+		"""
+
 		listaEU=[6.25,0.6,2.65,0.45,5,0.85,0.85,6.2,3]
 		################
 
@@ -1573,6 +1597,17 @@ def openFiltroWindow():
 		#############DATOS
 
 		#DatosPara1
+
+		'''(
+		"Número de tamiz",
+		"Arena retenida [%]", 
+		"Tamaño de abertura del tamiz superior [mm]", 
+		"Tamaño de abertura del tamiz inferior [mm]",
+		"Tamaño promedio geométrico [mm]",
+		"arena retenida/tamaño promedio geométrico [1/(m^2)]",
+		"Fair-Hatch"
+		)
+		'''
 		sumaFH=0
 		for ind in range(0, len(listaARetenida)):
 			listaEntradaTemp1.clear()
@@ -1617,6 +1652,21 @@ def openFiltroWindow():
 			
 		
 		#DatosPara2
+		'''(
+		"Número de tamiz",
+		"Arena retenida [%]", 
+		"Tamaño de abertura del tamiz superior [mm]", 
+		"Tamaño de abertura del tamiz inferior [mm]",
+		"Tamaño promedio geométrico [mm]",
+		"Número de Reynolds", 
+		"Factor de fricción",
+		#Pendiente
+		"NOMBREPREG",
+		"Pérdida de cabeza hidráulica total"
+		"NombrePREG"
+		"Coeficiente de permeabilidad"
+		)
+		'''
 		contadorFiltro=0
 		sumaCK=0
 		
@@ -1658,6 +1708,20 @@ def openFiltroWindow():
 			newDataTreeview(arbolEstimacionPerdidaArenaCK, listaEntradaTemp2)
 			
 		#DatosPara3
+
+		'''(
+		"Número de tamiz",
+		"Arena retenida [%]", 
+		"Tamaño de abertura del tamiz superior [mm]", 
+		"Tamaño de abertura del tamiz inferior [mm]",
+		"Tamaño promedio geométrico [mm]",
+		"Número de Reynolds",
+		"PREGUNTAR",
+		"PREGUNTAR",
+		"PREGUNTAR"
+		)
+		'''
+
 		contadorFiltro=0
 		sumaR=0
 
@@ -1789,7 +1853,10 @@ def openFiltroWindow():
 		
 		def newEntryFiltroP(lista):
 			for elemento in lista:
-				elemento.delete(0, END)
+				if elemento == TipoGranoArena:
+					TipoGranoArena.set("Seleccione el tipo de grano de arena")
+				else:
+					elemento.delete(0, END)
 		
 		
 		#Input
@@ -1805,31 +1872,45 @@ def openFiltroWindow():
 	
 		inicialLabel=Label(frameEstimacionPerdidaArena, text="Características del lecho filtrante de arena: ",font=("Yu Gothic bold",10))
 
-		velocidadSuperficialFiltracionLabel = Label(frameEstimacionPerdidaArena, text="24*V{} = Tasa máxima de filtración [m/d]".format(getSub("a")), font =("Yu Gothic",9))
-		velocidadSuperficialFiltracion = Entry(frameEstimacionPerdidaArena)
-		velocidadSuperficialFiltracion.focus()
 		
+		
+		
+		TipoGranoArena = StringVar()
+		TipoGranoArena.set("Seleccione el tipo de grano de arena")
+		listaValoresTemp=["Angular", "Afilada", "Erosionada", "Redondeada", "Esférica"]
+		TipoGranoArenaName = OptionMenu(frameEstimacionPerdidaArena, TipoGranoArena, *listaValoresTemp)
+		
+
+
 		profundidadLechoFijoArenaLabel = Label(frameEstimacionPerdidaArena, text="L = Profundidad del lecho fijo de arena [m]:", font =("Yu Gothic",9))
+		
 		densidadRelativaArenaLabel = Label(frameEstimacionPerdidaArena, text="S{} = Densidad relativa de la arena:".format(getSub("s")), font =("Yu Gothic",9))
 		porosidadLechoFijoLabel = Label(frameEstimacionPerdidaArena, text=u"\u03B5 ,e = Porosidad del lecho fijo:", font =("Yu Gothic",9))
 		constanteFiltracionFHLabel = Label(frameEstimacionPerdidaArena, text=u"\u03BA = Constante de Filtración (Fair-Hatch):", font =("Yu Gothic",9))
+		
+		factorEsfereicidadFHCKLabel = Label(frameEstimacionPerdidaArena, text="Factor de esfericidad (Fair - Hatch, Carman - Koenzy", font =("Yu Gothic",9)) 
+		factorDeEsfericidadRoseLabel = Label(frameEstimacionPerdidaArena, text="Factor de esfericidad (Rose)", font =("Yu Gothic",9)) 
+	
 		factorFormaFHLabel = Label(frameEstimacionPerdidaArena, text=u"\u03A6 = Factor de forma (Fair-Hatch):", font =("Yu Gothic",9))
-		factorFormaCKLabel = Label(frameEstimacionPerdidaArena, text=u"\u03A6 = Factor de forma (Carmen-Koenzy):", font =("Yu Gothic",9))
 		factorFormaRoseLabel = Label(frameEstimacionPerdidaArena, text=u"\u03B1/\u03B2 = Factor de forma (Rose):", font =("Yu Gothic",9))
 		
+
 		profundidadLechoFijoArena = Entry(frameEstimacionPerdidaArena)
 		densidadRelativaArena = Entry(frameEstimacionPerdidaArena)
 		porosidadLechoFijo = Entry(frameEstimacionPerdidaArena)
 		constanteFiltracionFH = Entry(frameEstimacionPerdidaArena)
+		
+		factorEsfereicidadFHCK = Entry(frameEstimacionPerdidaArena)
+		factorDeEsfericidadRose = Entry(frameEstimacionPerdidaArena)
+
 		factorFormaFH = Entry(frameEstimacionPerdidaArena)
-		factorFormaCK = Entry(frameEstimacionPerdidaArena)
 		factorFormaRose = Entry(frameEstimacionPerdidaArena)
 
-		listaEntradas=[velocidadSuperficialFiltracion, profundidadLechoFijoArena, densidadRelativaArena,
-		porosidadLechoFijo,constanteFiltracionFH,factorFormaFH,factorFormaCK,factorFormaRose]
+		listaEntradas=[TipoGranoArena, profundidadLechoFijoArena, densidadRelativaArena,
+		porosidadLechoFijo,constanteFiltracionFH]
 
-		listaLabel=[inicialLabel,velocidadSuperficialFiltracionLabel, profundidadLechoFijoArenaLabel, densidadRelativaArenaLabel,
-		porosidadLechoFijoLabel,constanteFiltracionFHLabel,factorFormaFHLabel,factorFormaCKLabel,factorFormaRoseLabel]
+		listaLabel=[inicialLabel, TipoGranoArenaName, profundidadLechoFijoArenaLabel, densidadRelativaArenaLabel,
+		porosidadLechoFijoLabel,constanteFiltracionFHLabel]
 		
 		alturaInicialLabel=20
 		for elemento in listaLabel:
@@ -1841,7 +1922,7 @@ def openFiltroWindow():
 		for elemento in listaEntradas:
 				elemento.place(x=400,y=alturaInicialEntradas)
 				alturaInicialEntradas+=47
-		
+		#Volver2
 		#Botones.
 		botonCalcular = HoverButton(frameEstimacionPerdidaArena, text="Calcular la estimación de la pérdida de energía en el lecho filtrante de arena limpio.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPEArena(listaNTamiz,listaARetenida,listaEntradas,valorTemperatura) )
 		botonNewEntry = HoverButton(frameEstimacionPerdidaArena, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
