@@ -2930,10 +2930,21 @@ def openFiltroWindow():
 		Vmax=150
 		listaArbolCaudal.append(Vf)
 		listaArbolCaudal.append(Vmax)
-		arenaFilOpNormal=caudal*86400*(1/Vf)
+		arenaFilOpNormal=caudalMedio*86400*(1/Vf)
 		listaArbolCaudal.append(arenaFilOpNormal)
-		arenaFilFueraServ=caudal*86400*(1/Vmax)
+		arenaFilFueraServ=caudalMedio*86400*(1/Vmax)
 		listaArbolCaudal.append(arenaFilFueraServ)
+		arenaFilFueraServ2 = arenaFilOpNormal - arenaFilFueraServ
+		listaArbolCaudal.append(arenaFilFueraServ2)
+
+		if arenaFilOpNormal/arenaFilFueraServ2 < 3.0:
+			numMinFiltros=3
+		else:
+			numMinFiltros= round(arenaFilOpNormal/arenaFilFueraServ2 ,0)
+		listaArbolCaudal.append(numMinFiltros)
+
+		
+
 		arenaMaximaFiltro=round(arenaFilOpNormal-arenaFilFueraServ,2)
 		listaArbolCaudal.append(arenaMaximaFiltro)
 		listaArbolCaudal.append(round(arenaFilOpNormal/arenaMaximaFiltro,2))
