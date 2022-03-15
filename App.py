@@ -1349,34 +1349,32 @@ def openFiltroWindow():
 		
 		i=0
 		for elemento in listaE:
-				i=i+1
-				try:
-					if i==0 or i==5:
-						if elemento.get() == "Seleccione el tipo de grano de arena":
-							messagebox.showwarning(title="Error", message="Hace falta seleccionar el tipo de grano de arena")
-							return None
-						elif elemento.get() == "Seleccione la tasa para calcular":
-							messagebox.showwarning(title="Error", message="Hace falta seleccionar la tasa")
-							return None
-						else:
-							if i==0:
-								listaEU.append(elemento.get())
-							else:
-								TasaCopy=elemento.get()
+			
+			try:
+				if i==0 or i==5:
+					if elemento.get() == "Seleccione el tipo de grano de arena":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el tipo de grano de arena")
+						return None
+					elif elemento.get() == "Seleccione la tasa para calcular":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar la tasa")
+						return None
 					else:
-						listaEU.append(float(elemento.get()))
-				except:
-					messagebox.showwarning(title="Error", message="El valor ingresado no es un número")
-					return None
+						i=i+1
+						if i==0:
+							listaEU.append(elemento.get())
+						else:
+							TasaCopy = elemento.get()
+							
+				else:
+					i=i+1
+					listaEU.append(float(elemento.get()))
+			except:
+				messagebox.showwarning(title="Error", message="El valor ingresado no es un número")
+				return None
+			
 		listaEU.append(float(valorTemperatura))
 		
-		"""	 
-		#ListaOrden
-		 listaEU=[0 = TipoGranoArena, 1 = profundidadLechoFijoArena, 2 = densidadRelativaArena,
-		3 = porosidadLechoFijo,4 = constanteFiltracionFH, 5 = temperatura, 6 = Coeficiente de filtración,
-		7 = Factor de esfericidad (FH - CK), 8 = Factor de forma (FH), 9 = Factor de forma (Rose), 10=Tasa]
-
-		"""
+	
 
 
 		estimacionPerdidaArenaCalculoWindow = tk.Toplevel()
@@ -1467,9 +1465,9 @@ def openFiltroWindow():
 		"Factor de fricción",
 		#Pendiente
 		"NOMBREPREG",
-		"Pérdida de cabeza hidráulica total"
-		"NombrePREG"
-		"Coeficiente de permeabilidad"
+		"Pérdida de cabeza hidráulica total",
+		"NombrePREG",
+		"Coeficiente de permeabilidad",
 		)
 
 		#Headings
@@ -1533,7 +1531,7 @@ def openFiltroWindow():
 		arbolEstimacionPerdidaArenaR.tag_configure("oddrow", background= "#1FCCDB")
 		arbolEstimacionPerdidaArenaR.tag_configure("evenrow", background= "#9DC4AA")
 
-		#Volver
+		
 
 		############Insersión datos.
 
@@ -1550,7 +1548,7 @@ def openFiltroWindow():
 		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
 		listaARetenida=[16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
 		listaEU=["Erosionada", 0.64, 2.65,0.45,5,3]
-		
+		valorTemperatura=3
 		
 		################
 
@@ -1599,21 +1597,37 @@ def openFiltroWindow():
 		#Tabla Temperatura Viscocidad
 		valorTemperaturas=list()
 		tablaTemperaturaViscocidad=dict()
+		tablaTemperaturaDensidad= dict()
+		tablaTemperaturaViscosidadDinamica = dict()
 		for i in range(0,36):
 			valorTemperaturas.append(i)
-			valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
+		
+		valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
 		,1.386e-06, 1.346e-06, 1.308e-06, 1.271e-06, 1.237e-06, 1.204e-06, 
 		1.172e-06, 1.141e-06, 1.112e-06, 1.084e-06, 1.057e-06, 1.032e-06, 1.007e-06, 9.83e-07, 9.6e-07, 9.38e-07, 9.17e-07, 8.96e-07, 8.76e-07, 8.57e-07, 8.39e-07, 8.21e-07, 8.04e-07, 7.88e-07, 7.72e-07, 7.56e-07, 7.41e-07, 7.27e-07]
 
+		valorDensidad= [999.82, 999.89, 999.94, 999.98, 1000.0, 1000.0, 999.99, 999.96, 999.91, 999.85, 999.77, 999.68, 999.58, 999.46, 999.33, 999.19, 999.03, 998.86, 998.68, 998.49, 998.29, 998.08, 997.86, 997.62, 997.38, 997.13, 
+		996.86, 996.59, 996.31, 996.02, 995.71, 995.41, 995.09, 994.76, 994.43, 994.08]
+		
+		valorViscosidadDinamica = [0.001792, 0.001731, 0.001673, 0.001619, 0.001567, 0.001519, 0.001473, 0.001428, 0.001386, 0.001346, 0.001308, 0.001271, 0.001236, 0.001203, 0.001171, 0.00114, 0.001111, 0.001083, 0.001056, 0.00103
+		, 0.001005, 0.000981, 0.000958, 0.000936, 0.000914, 0.000894, 0.000874, 0.000855, 0.000836, 0.000818, 0.000801, 0.000784, 0.000768, 0.000752, 0.000737, 0.000723]  
+
 		for ind in range(0,len(valorTemperaturas)):
 			tablaTemperaturaViscocidad[valorTemperaturas[ind]]=valorViscocidad[ind]
+			tablaTemperaturaDensidad[valorTemperaturas[ind]]= valorDensidad[ind]
+			tablaTemperaturaViscosidadDinamica[valorTemperaturas[ind]] = valorViscosidadDinamica[ind]
 
 		listaEU[5]=tablaTemperaturaViscocidad[listaEU[5]]
 		
+		
+		listaEU.append(TasaCopy)
+
 		if listaEU[10] == "Tasa media":
 			listaEU[10]=120
 		elif listaEU[10] == "Tasa máxima":
 			listaEU[10]=150
+		
+		
 		#OrganizandoListaNTamiz: Extremos 
 		listaNTamizExtremoD=list()
 		listaNTamizExtremoI=list()
@@ -1636,6 +1650,7 @@ def openFiltroWindow():
 		def tamañoPromedioGeometrico(d1,d2):
 			return sqrt(d1*d2)
 
+		
 
 		"""	 
 		#ListaOrden
@@ -1672,11 +1687,11 @@ def openFiltroWindow():
 			valorEnSuma= (arenaRenetinda/100)/((tamañoPromedioGeo/1000)**2)
 			sumaFH=sumaFH+valorEnSuma
 		
-		#Continuar
+		
 
 		contadorFiltro=0
 
-		valorFH= (listaEU[4]*listaEU[5])*((1-listaEU[3])**2)*listaEU[1]*(120.0/86.400)*((6/listaEU[6])**2)*(1/9.806)*((1/listaEU[3])**3)*sumaFH
+		valorFH= (listaEU[4]*listaEU[5])*((1-listaEU[3])**2)*listaEU[1]*(listaEU[10]/86400.0)*((6/listaEU[6])**2)*(1/9.806)*((1/listaEU[3])**3)*sumaFH
 		
 
 		for ind in range(0, len(listaARetenida)):
@@ -1713,11 +1728,15 @@ def openFiltroWindow():
 		"Factor de fricción",
 		#Pendiente
 		"NOMBREPREG",
-		"Pérdida de cabeza hidráulica total"
-		"NombrePREG"
-		"Coeficiente de permeabilidad"
+		"Pérdida de cabeza hidráulica total",
+		"NombrePREG",
+		"Coeficiente de permeabilidad",
 		)
 		'''
+
+		
+		
+
 		contadorFiltro=0
 		sumaCK=0
 		
@@ -1729,13 +1748,34 @@ def openFiltroWindow():
 			tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
 			tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
 			tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
-			Reynolds2=listaEU[6]*(tamañoPromedioGeo/1000)*(listaEU[0]/3600)*(1/listaEU[8])
+			Reynolds2=listaEU[6]*(tamañoPromedioGeo/1000)*(listaEU[10]/86400)*(1/listaEU[5])
 			friccion2=150*((1-listaEU[3])/Reynolds2)+1.75
 			valorSuma2A= friccion2*(arenaRenetinda/100)*(1/(tamañoPromedioGeo/1000))
 			sumaCK=sumaCK+valorSuma2A
 		
-		valorCK=(1/listaEU[6])*(1-listaEU[3])*((1/listaEU[3])**3)*listaEU[1]*((listaEU[0]/3600)**2)*(1/9.806)*sumaCK
+		valorCK=(1/listaEU[6])*(1-listaEU[3])*((1/listaEU[3])**3)*listaEU[1]*((listaEU[10]/86400)**2)*(1/9.806)*sumaCK
 	
+		
+		sumaCKsinF=0
+		#Continuar
+		for ind in range(0, len(listaARetenida)):
+			listaEntradaTemp2.clear()
+			arenaRenetinda=listaARetenida[ind]
+			extremoDerecho=listaNTamizExtremoD[ind]
+			extremoIzquierdo=listaNTamizExtremoI[ind]
+			tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
+			tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
+			tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
+			Reynolds2_2=listaEU[6]*(tamañoPromedioGeo/1000)*(listaEU[10]/86400)*(1/listaEU[5])
+			friccion2_2=150*((1-listaEU[3])/Reynolds2_2)+1.75
+			valorSuma2_2= (arenaRenetinda/100)*(1/(tamañoPromedioGeo/1000))
+			sumaCKsinF=sumaCKsinF+valorSuma2_2
+		
+		
+		
+		valorCoefPermeabilidad = (tablaTemperaturaDensidad[valorTemperatura]*9.806)*(1/tablaTemperaturaViscosidadDinamica[valorTemperatura])*(1/listaEU[4])*((1/listaEU[8])**2)*(listaEU[3]**3)*(1/(1-listaEU[3]))*(sumaCKsinF**(-2))
+
+
 		for ind in range(0, len(listaARetenida)):
 			listaEntradaTemp2.clear()
 			listaEntradaTemp2.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
@@ -1749,13 +1789,18 @@ def openFiltroWindow():
 			listaEntradaTemp2.append(tamañoInferior)
 			tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
 			listaEntradaTemp2.append(tamañoPromedioGeo)
-			Reynolds2=listaEU[6]*(tamañoPromedioGeo/1000)*(listaEU[0]/3600)*(1/listaEU[8])
+			Reynolds2=listaEU[6]*(tamañoPromedioGeo/1000)*(listaEU[10]/86400)*(1/listaEU[5])
 			listaEntradaTemp2.append(Reynolds2)
 			friccion2=150*((1-listaEU[3])/Reynolds2)+1.75
 			listaEntradaTemp2.append(friccion2)
 			valorSuma2= friccion2*(arenaRenetinda/100)*(1/(tamañoPromedioGeo/1000))
 			listaEntradaTemp2.append(valorSuma2)
 			listaEntradaTemp2.append(valorCK)
+			valorSuma2_2= (arenaRenetinda/100)*(1/(tamañoPromedioGeo/1000))
+			listaEntradaTemp2.append(valorSuma2_2)
+			listaEntradaTemp2.append(valorCoefPermeabilidad)
+
+
 			newDataTreeview(arbolEstimacionPerdidaArenaCK, listaEntradaTemp2)
 			
 		#DatosPara3
@@ -1773,6 +1818,14 @@ def openFiltroWindow():
 		)
 		'''
 
+		"""	 
+		#ListaOrden
+		 listaEU=[0 = TipoGranoArena, 1 = profundidadLechoFijoArena, 2 = densidadRelativaArena,
+		3 = porosidadLechoFijo,4 = constanteFiltracionFH, 5 = temperatura, 6 = Factor de esfericidad (FH - CK),
+		7 = Factor de esfericidad (Rose), 8 = Factor de forma (FH), 9 = Factor de forma (Rose), 10=Vel]
+
+		"""
+
 		contadorFiltro=0
 		sumaR=0
 
@@ -1783,13 +1836,13 @@ def openFiltroWindow():
 			tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
 			tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
 			tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
-			Reynolds3= (tamañoPromedioGeo/1000)*(listaEU[0]/3600)/listaEU[8]
+			Reynolds3= (tamañoPromedioGeo/1000)*(listaEU[10]/86400.0)/listaEU[5]
 			Cd=24/Reynolds3 + 3/sqrt(Reynolds3)+0.34
 			Suma3=Cd*(arenaRenetinda/100)*(1000/tamañoPromedioGeo)
 			sumaR= sumaR + Suma3
 		
 
-		valorR= 0.178*((listaEU[0]/3600)**2)*listaEU[1]*(1/9.806)*((1/listaEU[3])**4)*listaEU[7]*sumaR
+		valorR= 1.067*((listaEU[10]/86400.0)**2)*listaEU[1]*(1/9.806)*((1/listaEU[3])**4)*(1/listaEU[7])*sumaR
 
 		
 		for ind in range(0, len(listaARetenida)):
@@ -1805,7 +1858,7 @@ def openFiltroWindow():
 			listaEntradaTemp3.append(tamañoInferior)
 			tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
 			listaEntradaTemp3.append(tamañoPromedioGeo)
-			Reynolds3= (tamañoPromedioGeo/1000)*(listaEU[0]/3600)/listaEU[8]
+			Reynolds3= (tamañoPromedioGeo/1000)*(listaEU[10]/86400.0)/listaEU[5]
 			listaEntradaTemp3.append(Reynolds3)
 			Cd=24/Reynolds3 + 3/sqrt(Reynolds3)+0.34
 			listaEntradaTemp3.append(Cd)
@@ -3103,7 +3156,10 @@ def openFiltroWindow():
 	aR12 = Entry(frameFiltro, width=6)
 
 	
-	
+	#Borrar
+	nT11.insert(0,14)
+	aR1.insert(0,100)
+	#Borrar
 	
 
 	listaNumTamiz=[nT11,nT12,nT21,nT22,nT31,nT32,nT41,nT42,nT51,nT52,nT61,nT62,nT71,nT72,nT81,nT82,nT91,nT92,nT101,nT102,nT111,nT112,nT121,nT122]
