@@ -1758,7 +1758,7 @@ def openFiltroWindow():
 		
 			
 			sumaCKsinF=0
-			#Continuar
+			
 			for ind in range(0, len(listaARetenida)):
 				listaEntradaTemp2.clear()
 				arenaRenetinda=listaARetenida[ind]
@@ -2259,7 +2259,7 @@ def openFiltroWindow():
 					i=i+1
 					elemento.place(x=400,y=alturaInicialEntradas)
 					alturaInicialEntradas+=47
-		#Volver2
+		
 		#Botones.
 		botonCalcular = HoverButton(frameEstimacionPerdidaArena, text="Calcular la estimación de la pérdida de energía en el lecho filtrante de arena limpio.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularPEArena(listaNTamiz,listaARetenida,listaEntradas,valorTemperatura) )
 		botonNewEntry = HoverButton(frameEstimacionPerdidaArena, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
@@ -2924,15 +2924,19 @@ def openFiltroWindow():
 		arbolPredimensionamientoFiltros.tag_configure("evenrow", background= "#1FCCDB")
 		arbolPredimensionamientoFiltros.tag_configure("oddrow", background= "#9DC4AA")
 
+
+		contadorFiltro = 0
+
 		listaArbolCaudal=list()
-		listaArbolCaudal.append(caudalMedio*1.3)
+		caudal=caudalMedio*(1.30)
+		listaArbolCaudal.append(caudal)
 		Vf=120
 		Vmax=150
 		listaArbolCaudal.append(Vf)
 		listaArbolCaudal.append(Vmax)
-		arenaFilOpNormal=caudalMedio*86400*(1/Vf)
+		arenaFilOpNormal=caudal*86400*(1/Vf)
 		listaArbolCaudal.append(arenaFilOpNormal)
-		arenaFilFueraServ=caudalMedio*86400*(1/Vmax)
+		arenaFilFueraServ=caudal*86400*(1/Vmax)
 		listaArbolCaudal.append(arenaFilFueraServ)
 		arenaFilFueraServ2 = arenaFilOpNormal - arenaFilFueraServ
 		listaArbolCaudal.append(arenaFilFueraServ2)
@@ -2945,13 +2949,19 @@ def openFiltroWindow():
 
 		
 
-		arenaMaximaFiltro=round(arenaFilOpNormal-arenaFilFueraServ,2)
-		listaArbolCaudal.append(arenaMaximaFiltro)
-		listaArbolCaudal.append(round(arenaFilOpNormal/arenaMaximaFiltro,2))
-		listaArbolCaudal.append(sqrt(arenaMaximaFiltro))
+		if 0.044*sqrt(caudal*86400)<numMinFiltros:
+			numFiltros=numMinFiltros
+		else:
+			numFiltros = int(0.044*sqrt(caudal*86400))+1
+		listaArbolCaudal.append(numFiltros)
 
+		areaFiltro = arenaFilOpNormal/numFiltros
+		listaArbolCaudal.append(areaFiltro)
+
+		ladoFiltro= sqrt(areaFiltro)
+		listaArbolCaudal.append(ladoFiltro)
 		
-		contadorFiltro = 0
+		
 		newDataTreeview(arbolPredimensionamientoFiltros,listaArbolCaudal)
 		
 		
@@ -2961,6 +2971,8 @@ def openFiltroWindow():
 		predimensionamientoFiltrosWindow.mainloop()
 
 	def drenajeFiltro2(caudal,listaEntradaDrenaje):
+
+		#continuar2
 		
 		if listaEntradaDrenaje[0].get() == "Diametro de los orificios":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los orificios.")
@@ -3114,43 +3126,29 @@ def openFiltroWindow():
 	
 	def drenajeFiltro(listaET):
 		
-
-		if listaET[0].get()== "Seleccione el caudal":
-			messagebox.showwarning(title="Error", message="Hace falta elegir el tipo de caudal que quiere usar(Medio diario, máximo diario ó máximo horario).")
-			return None
-		else:
-			valor= listaET[0].get()[0:3]
-			
 		try: 
-			caudalMedio=float(listaET[1].get())
+			caudalMedio=float(listaET[0].get())
+			
 		except:
 			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
 			return None
 
-		##Provicsional
+		#Borrar
 		caudalMedio=0.04404
-
-
-		if valor=="Qmd":
-			caudal=caudalMedio
-		elif valor=="QMD":
-			caudal=caudalMedio*1.3
-		elif valor=="QMH":
-			caudal=caudalMedio*1.6
-
 		
 		drenajeFiltrosMainWindow = tk.Toplevel()
 		drenajeFiltrosMainWindow.iconbitmap(bitmap='icons\\agua.ico')
-		drenajeFiltrosMainWindow.geometry("400x300") 
+		drenajeFiltrosMainWindow.geometry("600x600") 
 		drenajeFiltrosMainWindow.resizable(0,0)	
 		drenajeFiltrosMainWindow.configure(background="#9DC4AA")
 
 		drenajeFiltrosMainFrame=LabelFrame(drenajeFiltrosMainWindow, text="Datos adicionales para drenaje del filtro:", font=("Yu Gothic bold", 11))
 		drenajeFiltrosMainFrame.pack(side=TOP, fill=BOTH,expand=True)
 
+		#Continuar
 		
 		diametroOrificios = StringVar()
-		diametroOrificios.set("Diametro de los orificios")
+		diametroOrificios.set("Diametro de los orificios:")
 		listaValoresTempDiametroOrificios=list()
 		listaValoresTempDiametroOrificios.append("1/4")
 		listaValoresTempDiametroOrificios.append("3/8")
@@ -3159,9 +3157,36 @@ def openFiltroWindow():
 		diametroOrificiosName = OptionMenu(drenajeFiltrosMainFrame, diametroOrificios, *listaValoresTempDiametroOrificios)
 		diametroOrificiosLabel= Label(drenajeFiltrosMainWindow, text="Seleccione el diámetro de los orificios:", font=("Yu Gothic bold", 11))
 		
+
 		
+		distanciaOrificios = StringVar()
+		distanciaOrificios.set("Distancia entre los orificios:")
+		listaValoresTempDistanciaOrificios=list()
+		listaValoresTempDistanciaOrificios.append("0.750")
+		listaValoresTempDistanciaOrificios.append("0.100")
+		listaValoresTempDistanciaOrificios.append("0.125")
+		listaValoresTempDistanciaOrificios.append("0.150")
+		distanciaOrificiosName = OptionMenu(drenajeFiltrosMainFrame, distanciaOrificios, *listaValoresTempDistanciaOrificios)
+		distanciaOrificiosLabel= Label(drenajeFiltrosMainWindow, text="Seleccione la distancia entre orificios", font=("Yu Gothic bold", 11))
+
+
+		seccionTransversal = StringVar()
+		seccionTransversal.set("Sección transversal:")
+		listaValoresTempSeccionTransversal=list()
+		listaValoresTempSeccionTransversal.append("6 X 6")
+		listaValoresTempSeccionTransversal.append("8 X 8")
+		listaValoresTempSeccionTransversal.append("10 X 10")
+		listaValoresTempSeccionTransversal.append("12 X 12")
+		listaValoresTempSeccionTransversal.append("14 X 14")
+		listaValoresTempSeccionTransversal.append("16 X 16")
+		listaValoresTempSeccionTransversal.append("18 X 18")
+		listaValoresTempSeccionTransversal.append("20 X 20")
+		seccionTransversalName = OptionMenu(drenajeFiltrosMainFrame, seccionTransversal, *listaValoresTempSeccionTransversal)
+		seccionTransversalLabel= Label(drenajeFiltrosMainWindow, text="Seleccione la sección transversal comercial del múltiple", font=("Yu Gothic bold", 11))
+
+
 		distanciaLaterales = StringVar()
-		distanciaLaterales.set("Distancia entre laterales")
+		distanciaLaterales.set("Distancia entre laterales:")
 		listaValoresTempDistanciaLaterales=list()
 		listaValoresTempDistanciaLaterales.append("0.20")
 		listaValoresTempDistanciaLaterales.append("0.25")
@@ -3169,19 +3194,35 @@ def openFiltroWindow():
 		distanciaLateralesName = OptionMenu(drenajeFiltrosMainFrame, distanciaLaterales, *listaValoresTempDistanciaLaterales)
 		distanciaLateralesLabel= Label(drenajeFiltrosMainWindow, text="Seleccione la distancia entre laterales", font=("Yu Gothic bold", 11))
 		
-		listaEntradaDrenaje2=[diametroOrificiosName,distanciaLateralesName]
-		listaLabel= [diametroOrificiosLabel,distanciaLateralesLabel]
-		listaEntradaDrenaje=[diametroOrificios,distanciaLaterales]
+		
+		diametroEntreLaterales = StringVar()
+		diametroEntreLaterales.set("Diametro de los orificios:")
+		listaValoresTempDiametroEntreLaterales=list()
+		listaValoresTempDiametroEntreLaterales.append("1 1/2")
+		listaValoresTempDiametroEntreLaterales.append("2")
+		listaValoresTempDiametroEntreLaterales.append("2 1/2")
+		listaValoresTempDiametroEntreLaterales.append("3")
+		diametroEntreLateralesName = OptionMenu(drenajeFiltrosMainFrame, diametroEntreLaterales, *listaValoresTempDiametroEntreLaterales)
+		diametroEntreLateralesLabel= Label(drenajeFiltrosMainWindow, text="Seleccione el diámetro de los laterales", font=("Yu Gothic bold", 11))
+
+	
+		
+		listaEntradaDrenaje2=[diametroOrificiosName,distanciaOrificiosName,seccionTransversalName,distanciaLateralesName, diametroEntreLateralesName]
+		listaLabel= [diametroOrificiosLabel,distanciaOrificiosLabel, seccionTransversalLabel, distanciaLateralesLabel, diametroEntreLateralesLabel]
+		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
+		
+		
+	
 		altIn= 30
-		for ind in range(0,2):
+		for ind in range(0,len(listaLabel)):
 			listaLabel[ind].place(x=0,y=altIn)
 			listaEntradaDrenaje2[ind].place(x=0, y= altIn+20)
 			altIn=altIn+80
 		
-		botonCalculoDrenaje = HoverButton(drenajeFiltrosMainFrame, text="Cálculos para el drenaje del filtro", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: drenajeFiltro2(caudal,listaEntradaDrenaje))
+		botonCalculoDrenaje = HoverButton(drenajeFiltrosMainFrame, text="Cálculos para el drenaje del filtro", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: drenajeFiltro2(caudalMedio,listaEntradaDrenaje))
 		botonCalculoDrenaje.place(x=0, y=altIn)
 			
-
+	
 		
 		
 		drenajeFiltrosMainWindow.mainloop()
