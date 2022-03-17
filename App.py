@@ -2971,27 +2971,49 @@ def openFiltroWindow():
 		predimensionamientoFiltrosWindow.mainloop()
 
 	def drenajeFiltro2(caudal,listaEntradaDrenaje):
-
+			
 		#continuar2
+		'''
+		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
+
+		'''
+
 		
 		if listaEntradaDrenaje[0].get() == "Diametro de los orificios":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los orificios.")
 			return None
 		else:
 			diametroOrificios=float(listaEntradaDrenaje[0].get()[0])/float(listaEntradaDrenaje[0].get()[2])
+
+		if listaEntradaDrenaje[1].get() == "Distancia entre los orificios":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la distancia entre los orificios")
+			return None
+		else:
+			distanciaOrificios=float(listaEntradaDrenaje[1].get())
 		
-		if listaEntradaDrenaje[1].get() == "Distancia entre laterales":
+		
+		if listaEntradaDrenaje[2].get() == "Sección transversal":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la sección transversal")
+			return None
+		else:
+			seccionTransvMultiple=listaEntradaDrenaje[2]
+		
+		if listaEntradaDrenaje[3].get() == "Distancia entre laterales":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar la distancia entre laterales")
 			return None
 		else:
-			distanciaLaterales=float(listaEntradaDrenaje[1].get())
+			distanciaLaterales=float(listaEntradaDrenaje[3].get())
+	
+
+		if listaEntradaDrenaje[4].get() == "Diámetro de los laterales":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los laterales")
+			return None
+		else:
+			diametroLaterales=listaEntradaDrenaje[4].get()
 		
 		
 	
 			
-		
-
-
 		drenajeFiltrosWindow = tk.Toplevel()
 		drenajeFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
 		drenajeFiltrosWindow.geometry("600x400") 
@@ -3019,19 +3041,16 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolDrenajeFiltros.yview)
 		#Define columnas.
 		arbolDrenajeFiltros["columns"]= (
-		u"\u03C6{} = Diametro de los orificios [pulgadas]".format(getSub("ori")),
-		"D{} = Distancia entre orificios".format(getSub("ori")),
+		
+		"B{} = Ancho del múltiple".format(getSub("mul")),
 		"L{} = Longitud de los laterales".format(getSub("lat")),
-		"D{} = Distancia entre laterales".format(getSub("lat")),
-		u"\u03C6{} = Diámetro de los laterales".format(getSub("lat")),
 		"N{} = Número de laterales por unidad de filtración".format(getSub("lat")),
+		" = Número de orificios por lateral",
 		"N{} = Número de orificios por unidad de filtración".format(getSub("ori")),
-		"A{} = Área total de orificios por unidad de filtración".format(getSub("ori")),
-		"A{} = Área del múltiple".format(getSub("mul")),
-		"Sección transversal del múltiple",
-		"A{} = Área del múltiple (Corregida)".format(getSub("mul")),
-		"Área total de orificios/ área filtrante",
-		"Área del lateral / área de orificios del lateral"
+		"Área total de orificios/ área filtrante"
+		"Área transversal del lateral / área de orificios del lateral"
+		"Área transversal del múltiple / área transversal de laterales"
+		"Longitud de lateral / diámetro de lateral"
 		)
 
 		#Headings
@@ -3048,6 +3067,12 @@ def openFiltroWindow():
 		arbolDrenajeFiltros.tag_configure("evenrow", background= "#1FCCDB")
 		arbolDrenajeFiltros.tag_configure("oddrow", background= "#9DC4AA")
 
+		
+		
+		
+		
+		
+		
 		listaArbolDreanejFiltros=list()
 		
 		listaArbolDreanejFiltros.append(diametroOrificios)
@@ -3120,6 +3145,8 @@ def openFiltroWindow():
 		arenaLateral=((0.0254*diametroLaterales)**2)/(arenaTotalOrifPUDF/numLatPUDF)
 		listaArbolDreanejFiltros.append(arenaLateral)
 
+
+
 		newDataTreeview(arbolDrenajeFiltros,listaArbolDreanejFiltros)
 		
 		drenajeFiltrosWindow.mainloop()
@@ -3148,7 +3175,7 @@ def openFiltroWindow():
 		#Continuar
 		
 		diametroOrificios = StringVar()
-		diametroOrificios.set("Diametro de los orificios:")
+		diametroOrificios.set("Diametro de los orificios")
 		listaValoresTempDiametroOrificios=list()
 		listaValoresTempDiametroOrificios.append("1/4")
 		listaValoresTempDiametroOrificios.append("3/8")
@@ -3160,7 +3187,7 @@ def openFiltroWindow():
 
 		
 		distanciaOrificios = StringVar()
-		distanciaOrificios.set("Distancia entre los orificios:")
+		distanciaOrificios.set("Distancia entre los orificios")
 		listaValoresTempDistanciaOrificios=list()
 		listaValoresTempDistanciaOrificios.append("0.750")
 		listaValoresTempDistanciaOrificios.append("0.100")
@@ -3171,7 +3198,7 @@ def openFiltroWindow():
 
 
 		seccionTransversal = StringVar()
-		seccionTransversal.set("Sección transversal:")
+		seccionTransversal.set("Sección transversal")
 		listaValoresTempSeccionTransversal=list()
 		listaValoresTempSeccionTransversal.append("6 X 6")
 		listaValoresTempSeccionTransversal.append("8 X 8")
@@ -3186,7 +3213,7 @@ def openFiltroWindow():
 
 
 		distanciaLaterales = StringVar()
-		distanciaLaterales.set("Distancia entre laterales:")
+		distanciaLaterales.set("Distancia entre laterales")
 		listaValoresTempDistanciaLaterales=list()
 		listaValoresTempDistanciaLaterales.append("0.20")
 		listaValoresTempDistanciaLaterales.append("0.25")
@@ -3194,9 +3221,10 @@ def openFiltroWindow():
 		distanciaLateralesName = OptionMenu(drenajeFiltrosMainFrame, distanciaLaterales, *listaValoresTempDistanciaLaterales)
 		distanciaLateralesLabel= Label(drenajeFiltrosMainWindow, text="Seleccione la distancia entre laterales", font=("Yu Gothic bold", 11))
 		
+
 		
 		diametroEntreLaterales = StringVar()
-		diametroEntreLaterales.set("Diametro de los orificios:")
+		diametroEntreLaterales.set("Diámetro de los laterales")
 		listaValoresTempDiametroEntreLaterales=list()
 		listaValoresTempDiametroEntreLaterales.append("1 1/2")
 		listaValoresTempDiametroEntreLaterales.append("2")
@@ -3205,7 +3233,7 @@ def openFiltroWindow():
 		diametroEntreLateralesName = OptionMenu(drenajeFiltrosMainFrame, diametroEntreLaterales, *listaValoresTempDiametroEntreLaterales)
 		diametroEntreLateralesLabel= Label(drenajeFiltrosMainWindow, text="Seleccione el diámetro de los laterales", font=("Yu Gothic bold", 11))
 
-	
+
 		
 		listaEntradaDrenaje2=[diametroOrificiosName,distanciaOrificiosName,seccionTransversalName,distanciaLateralesName, diametroEntreLateralesName]
 		listaLabel= [diametroOrificiosLabel,distanciaOrificiosLabel, seccionTransversalLabel, distanciaLateralesLabel, diametroEntreLateralesLabel]
