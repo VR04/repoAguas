@@ -2972,7 +2972,7 @@ def openFiltroWindow():
 
 	def drenajeFiltro2(caudal,listaEntradaDrenaje):
 			
-		#continuar2
+		
 		'''
 		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
 
@@ -2996,7 +2996,7 @@ def openFiltroWindow():
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar la sección transversal")
 			return None
 		else:
-			seccionTransvMultiple=listaEntradaDrenaje[2]
+			seccionTransvMultiple=listaEntradaDrenaje[2].get()
 		
 		if listaEntradaDrenaje[3].get() == "Distancia entre laterales":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar la distancia entre laterales")
@@ -3047,10 +3047,10 @@ def openFiltroWindow():
 		"N{} = Número de laterales por unidad de filtración".format(getSub("lat")),
 		" = Número de orificios por lateral",
 		"N{} = Número de orificios por unidad de filtración".format(getSub("ori")),
-		"Área total de orificios/ área filtrante"
-		"Área transversal del lateral / área de orificios del lateral"
-		"Área transversal del múltiple / área transversal de laterales"
-		"Longitud de lateral / diámetro de lateral"
+		"Área total de orificios/ área filtrante",
+		"Área transversal del lateral / área de orificios del lateral",
+		"Área transversal del múltiple / área transversal de laterales",
+		"Longitud de lateral / diámetro de lateral",
 		)
 
 		#Headings
@@ -3067,85 +3067,144 @@ def openFiltroWindow():
 		arbolDrenajeFiltros.tag_configure("evenrow", background= "#1FCCDB")
 		arbolDrenajeFiltros.tag_configure("oddrow", background= "#9DC4AA")
 
+
+		#Tablas
+
+
+		listaSeccionTuberia=['6 X 6', '8 X 8', '10 X 10', '12 X 12', '14 X 14', '16 X 16', '18 X 18','20 X 20']
+		listaAnchoSeccion=list()
+		listaAnchoSeccion2=list()
+		ind=0
+
+		for elemento in listaSeccionTuberia:
+			if elemento == '10 X 10':
+				ind=ind+1
+			if ind==0:
+				listaAnchoSeccion.append((float(elemento[0])*0.0254))
+			else:
+				listaAnchoSeccion.append(float(elemento[0:2])*0.0254)
+		
+		ind=0
+
+		for elemento in listaSeccionTuberia:
+			if elemento == '10 X 10':
+				ind=ind+1
+			if ind==0:
+				listaAnchoSeccion2.append((float(elemento[0])*0.0254)**2)
+			else:
+				listaAnchoSeccion2.append((float(elemento[0:2])*0.0254)**2)
+
+
+		anchoSeccion=dict()
+		anchoSeccion2=dict()
+
+		for j in range(0,len(listaSeccionTuberia)):
+			anchoSeccion[listaSeccionTuberia[j]]=listaAnchoSeccion[j]
+
+		for j in range(0,len(listaSeccionTuberia)):
+			anchoSeccion2[listaSeccionTuberia[j]]=listaAnchoSeccion2[j]
+
+		#Obtención de Lf
+		
+		caudal=caudal*(1.30)
 		
 		
+
+
+		Vf=120
+		Vmax=150
+		arenaFilOpNormal=caudal*86400*(1/Vf)
+		arenaFilFueraServ=caudal*86400*(1/Vmax)
+		arenaFilFueraServ2 = arenaFilOpNormal - arenaFilFueraServ
+		if arenaFilOpNormal/arenaFilFueraServ2 < 3.0:
+			numMinFiltros=3
+		else:
+			numMinFiltros= round(arenaFilOpNormal/arenaFilFueraServ2 ,0)
+		if 0.044*sqrt(caudal*86400)<numMinFiltros:
+			numFiltros=numMinFiltros
+		else:
+			numFiltros = int(0.044*sqrt(caudal*86400))+1
+	
+
+		areaFiltro = arenaFilOpNormal/numFiltros
+		ladoFiltro= sqrt(areaFiltro)
 		
+
+
+
+		listaDiametroOrificios= [1/4,3/8,1/2,5/8]
+
+		listaAreasOrificios= [0.0000317,0.0000713,0.0001267,0.0001979]
+
+		areaOrificiosDic = dict()
+
+		for i in range(0,len(listaDiametroOrificios)):
+			areaOrificiosDic[listaDiametroOrificios[i]]=listaAreasOrificios[i]
+
+
+		listaDiametroLaterales= ("1 1/2", "2", "2 1/2", "3")
+		listaAreasLaterales=[0.0011401,0.0020268,0.0031669,0.0045604]
+		areaLateralesDic=dict()
+
+		for i in range(0, len(listaDiametroLaterales)):
+			areaLateralesDic[listaDiametroLaterales[i]]=listaAreasLaterales[i]
+
+		'''
+		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
+
+		'''
+
+
 		
+		#continuar2
 		
-		
+
+
 		listaArbolDreanejFiltros=list()
 		
-		listaArbolDreanejFiltros.append(diametroOrificios)
-		if diametroOrificios==1/4:
-			distanciaOrificios=0.075
-		elif diametroOrificios==3/8:
-			distanciaOrificios=0.15
-		elif diametroOrificios==1/2:
-			distanciaOrificios=0.2
-		elif diametroOrificios==5/8:
-			distanciaOrificios=0.25
-		else:
-			messagebox.showwarning(title="Error", message="?")
-			return None
+		anchoMultiple= anchoSeccion[seccionTransvMultiple]
+		listaArbolDreanejFiltros.append(anchoMultiple)
 
 
-		listaArbolDreanejFiltros.append(distanciaOrificios)
-		
-		arenaFiltracionOpNormal= caudal*86400*(1/120)
-		arenaFiltracionFuera= caudal*86400*(1/150)
-		arenaMaximaFiltro=round(arenaFiltracionOpNormal-arenaFiltracionFuera,2)
-		ladoFiltro= sqrt(arenaMaximaFiltro)
-		longitudLaterales= round((ladoFiltro/2)-0.1,2)
+		longitudLaterales= (ladoFiltro/2) - (anchoMultiple/2) -0.05
 		listaArbolDreanejFiltros.append(longitudLaterales)
-		listaArbolDreanejFiltros.append(distanciaLaterales)
-		
-		if longitudLaterales<1:
-			diametroLaterales=2
-		elif longitudLaterales<1.5:
-			diametroLaterales=2.5
-		elif longitudLaterales<2:
-			diametroLaterales=3
-		else:
-			messagebox.showwarning(title="Error", message="El valor del caudal ingresado es erróneo, pues la longitud de los laterales es mayor a 2.")
-			return None
-		
-		listaArbolDreanejFiltros.append(diametroLaterales)
 
-		numLatPUDF=int(2*(ladoFiltro/distanciaLaterales))
+		numLatPUDF= round(2*(ladoFiltro/distanciaLaterales),0)
 		listaArbolDreanejFiltros.append(numLatPUDF)
 
-		numOrifPUDF=numLatPUDF*round(longitudLaterales/distanciaOrificios,0)*2
+		numOrif= 2*int(longitudLaterales/distanciaOrificios)+1
+		listaArbolDreanejFiltros.append(numOrif)
+
+		#Borrar
+		numOrif=26.0
+
+		numOrifPUDF=numLatPUDF*numOrif
 		listaArbolDreanejFiltros.append(numOrifPUDF)
 
-		arenaTotalOrifPUDF=numOrifPUDF*pi*(1/4)*((diametroOrificios*0.0254)**2)
-
-		listaArbolDreanejFiltros.append(arenaTotalOrifPUDF)
-		arenaMultiple= arenaTotalOrifPUDF/0.4
-
-		listaArbolDreanejFiltros.append(arenaMultiple)
-		
-		dicSeccionArena={0.0103226: '4 X 4', 0.0232258: '6 X 6', 0.0412902: '8 X 8', 0.064516: '10 X 10', 0.092903: '12 X 12', 0.1264514: '14 X 14', 0.165161: '16 X 16', 0.2090318: '18 X 18', 0.258064: '20 X 20'}
-		def funcionMayorDeMenores(numero):
-			l1=[0.0103226,0.0232258,0.0412902,0.0645160,0.0929030,0.1264514,0.1651610,0.2090318,0.2580640]
-			elementoAnt=l1[0]
-			for elemento in l1:
-				if elemento<=numero and elemento>elementoAnt:
-					elementoAnt=elemento
-					vuelve=elemento
-			return vuelve
-
-		seccionTransvMultiple= dicSeccionArena[funcionMayorDeMenores(arenaMultiple)]
-
-		listaArbolDreanejFiltros.append(seccionTransvMultiple)
-		arenaMultipleCorregida=funcionMayorDeMenores(arenaMultiple)
-		listaArbolDreanejFiltros.append(arenaMultipleCorregida)
-		
-		arenaTotalOrif=arenaTotalOrifPUDF/arenaMaximaFiltro
-		listaArbolDreanejFiltros.append(arenaTotalOrif)
-		arenaLateral=((0.0254*diametroLaterales)**2)/(arenaTotalOrifPUDF/numLatPUDF)
-		listaArbolDreanejFiltros.append(arenaLateral)
+		areaTotalOrificios= numOrifPUDF*areaOrificiosDic[diametroOrificios]*(1/areaFiltro)
+		listaArbolDreanejFiltros.append(areaTotalOrificios)
 
 
+
+		areaTransversalDelLateral= areaLateralesDic[diametroLaterales]/(areaOrificiosDic[diametroOrificios]*numOrif)
+		listaArbolDreanejFiltros.append(areaTransversalDelLateral)
+
+
+		areaTransversalDelMultiple=	anchoSeccion2[seccionTransvMultiple]/(numLatPUDF*areaLateralesDic[diametroLaterales])
+		listaArbolDreanejFiltros.append(areaTransversalDelMultiple)
+			
+
+		#diametroLateralesA número:
+
+		if diametroLaterales=="1 1/2":
+			diametroLaterales= 1.0 + (1/2)
+		elif diametroLaterales=="2 1/2":
+			diametroLaterales=2.0 + (1/2)
+		else:
+			diametroLaterales=float(diametroLaterales)
+
+		longitudLateral= longitudLaterales/(diametroLaterales*0.0254)
+		listaArbolDreanejFiltros.append(longitudLateral)
 
 		newDataTreeview(arbolDrenajeFiltros,listaArbolDreanejFiltros)
 		
@@ -3239,6 +3298,15 @@ def openFiltroWindow():
 		listaLabel= [diametroOrificiosLabel,distanciaOrificiosLabel, seccionTransversalLabel, distanciaLateralesLabel, diametroEntreLateralesLabel]
 		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
 		
+		#Borrar
+
+		diametroOrificios.set("1/4")
+		distanciaOrificios.set("0.100")
+		seccionTransversal.set("14 X 14")
+		distanciaLaterales.set("0.25")
+		diametroEntreLaterales.set("1 1/2")
+
+
 		
 	
 		altIn= 30
