@@ -736,12 +736,13 @@ def openFiltroWindow():
 	#Change selected color
 	style.map("Treeview", background=[("selected", "#09C5CE")])	 
 
-	def newEntryFiltro(lista, optValue,lista2):
+	def newEntryFiltro(lista, optValue,lista2): 
 		for elemento in lista:
 				elemento.delete(0, END)
+
 		optValue.set("Seleccione la temperatura")
-		lista2[0].set("Seleccione el caudal")
-		lista2[1].delete(0,END)
+		lista2[0].delete(0,END)
+
 	def newDataTreeview(tree,listaS):
 		global contadorFiltro
 
@@ -2104,7 +2105,7 @@ def openFiltroWindow():
 		listaNTamiz=list()
 		listaARetenida=list()
 		
-
+		
 		if listaNTamizTemp[0].get() == "":
 			messagebox.showwarning(title="Error", message="Hace falta algún dato de los números de tamiz.")
 			return None
@@ -2271,10 +2272,10 @@ def openFiltroWindow():
 		estimacionPerdidaArenaWindow.mainloop()
 
 	def valorCoeficienteDeUniformidad(lista1,lista2):
-
+		
 		def buscarEnTabla(NumTamiz,tablaDic):
 			return tablaDic[NumTamiz]
-
+		
 		listaNTamizTemp=lista1.copy()
 		listaARetenidaTemp=lista2.copy()
 		listaNTamiz=list()
@@ -2451,6 +2452,7 @@ def openFiltroWindow():
 		X2=	abAcDic[Y2]
 		d60= calculo2CU(60,X1,Y1,X2,Y2)
 		CU=d60/d10
+
 		return [d10,CU]
 
 	def calcularPEGravaYPredimensionamiento(listaEntradas,lista1, lista2,temp):
@@ -3156,7 +3158,7 @@ def openFiltroWindow():
 
 
 		
-		#continuar2
+		
 		
 
 
@@ -3231,7 +3233,7 @@ def openFiltroWindow():
 		drenajeFiltrosMainFrame=LabelFrame(drenajeFiltrosMainWindow, text="Datos adicionales para drenaje del filtro:", font=("Yu Gothic bold", 11))
 		drenajeFiltrosMainFrame.pack(side=TOP, fill=BOTH,expand=True)
 
-		#Continuar
+		
 		
 		diametroOrificios = StringVar()
 		diametroOrificios.set("Diametro de los orificios")
@@ -3322,6 +3324,427 @@ def openFiltroWindow():
 		
 		
 		drenajeFiltrosMainWindow.mainloop()
+	
+	def velocidadLavadoExpansionLechoFiltrante(tempValue,d60):
+		#Volver
+		#Borrar 
+		tempValue=3.0
+
+
+		velocidadLavadoExpansionLechoFiltranteWindow = tk.Toplevel()
+		velocidadLavadoExpansionLechoFiltranteWindow.iconbitmap(bitmap='icons\\agua.ico')
+		velocidadLavadoExpansionLechoFiltranteWindow.geometry("600x400") 
+		velocidadLavadoExpansionLechoFiltranteWindow.resizable(0,0)	
+		velocidadLavadoExpansionLechoFiltranteWindow.configure(background="#9DC4AA")
+
+		velocidadLavadoExpansionLechoFiltranteFrame=LabelFrame(velocidadLavadoExpansionLechoFiltranteWindow, text="Cálculos para la velocidad de expansión del lecho filtrante", font=("Yu Gothic bold", 11))
+		velocidadLavadoExpansionLechoFiltranteFrame.pack(side=TOP, fill=BOTH,expand=True)
+		
+		#Frame Treeview
+		arbolvelocidadLavadoExpansionLechoFiltrante_frame = Frame(velocidadLavadoExpansionLechoFiltranteFrame)
+		arbolvelocidadLavadoExpansionLechoFiltrante_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolvelocidadLavadoExpansionLechoFiltrante_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolvelocidadLavadoExpansionLechoFiltrante_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolvelocidadLavadoExpansionLechoFiltrante= ttk.Treeview(arbolvelocidadLavadoExpansionLechoFiltrante_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolvelocidadLavadoExpansionLechoFiltrante.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolvelocidadLavadoExpansionLechoFiltrante.xview)
+		sedScrollY.configure(command=arbolvelocidadLavadoExpansionLechoFiltrante.yview)
+		#Define columnas.
+		arbolvelocidadLavadoExpansionLechoFiltrante["columns"]= (
+		"Porosidad del lecho fijo", "Viscocidad dinámica del agua",
+		"Percentil 60 del análisis granulométrico", "Velocidad de asentamiento del medio filtrante a 20 °C",
+		f"Velocidad de asentamiento del medio filtrante a {tempValue} °C",
+		f"Velocidad de fluidización del medio filtrante a {tempValue} °C",
+		f"Velocidad óptima de lavado a {tempValue} °C",
+		"Porosidad del lecho expandido",
+		"Profundidad del lecho fijo",
+		"Profundidad del lecho expandido",
+		"Relación de expansión",
+		)
+
+		#Headings
+		arbolvelocidadLavadoExpansionLechoFiltrante.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolvelocidadLavadoExpansionLechoFiltrante["columns"]:
+			arbolvelocidadLavadoExpansionLechoFiltrante.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolvelocidadLavadoExpansionLechoFiltrante["columns"])+1) :
+				arbolvelocidadLavadoExpansionLechoFiltrante.column(f"#{i}",width=700, stretch=False)	
+		arbolvelocidadLavadoExpansionLechoFiltrante.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolvelocidadLavadoExpansionLechoFiltrante.tag_configure("evenrow", background= "#1FCCDB")
+		arbolvelocidadLavadoExpansionLechoFiltrante.tag_configure("oddrow", background= "#9DC4AA")    
+
+		listavelocidadLavadoExpansionLechoFiltrante=list()
+	
+		porosidad= 0.45
+		listavelocidadLavadoExpansionLechoFiltrante.append(porosidad)
+
+
+		tablaTemperaturaViscosidadDinamica=dict()
+		valorTemperaturas=list()
+		
+		for i in range(0,36):
+			valorTemperaturas.append(i)
+
+		valorViscosidadDinamica = [0.001792, 0.001731, 0.001673, 0.001619, 0.001567, 0.001519, 0.001473, 0.001428, 0.001386, 0.001346, 0.001308, 0.001271, 0.001236, 0.001203, 0.001171, 0.00114, 0.001111, 0.001083, 0.001056, 0.00103
+					, 0.001005, 0.000981, 0.000958, 0.000936, 0.000914, 0.000894, 0.000874, 0.000855, 0.000836, 0.000818, 0.000801, 0.000784, 0.000768, 0.000752, 0.000737, 0.000723]  
+
+		for ind in range(0,len(valorTemperaturas)):
+			tablaTemperaturaViscosidadDinamica[valorTemperaturas[ind]] = valorViscosidadDinamica[ind]
+
+		viscosidadDinamica= tablaTemperaturaViscosidadDinamica[tempValue] * 1000.0
+		
+		listavelocidadLavadoExpansionLechoFiltrante.append(viscosidadDinamica)
+
+		D60=d60
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(D60)
+
+		velocidadAsentamientoMedioFiltrante20 = D60*10
+		
+		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadAsentamientoMedioFiltrante20)
+
+		velocidadAsentamientoMedioFiltrante3= velocidadAsentamientoMedioFiltrante20*(viscosidadDinamica**(-1/3))
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadAsentamientoMedioFiltrante3)
+
+		velocidadFluidizacion3 = velocidadAsentamientoMedioFiltrante3*(porosidad**(4.5))
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadFluidizacion3)
+
+		velocidadOptimaLavado3= velocidadAsentamientoMedioFiltrante3*0.1
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadOptimaLavado3)
+
+		porosidadLechoExpandido = (velocidadOptimaLavado3/velocidadAsentamientoMedioFiltrante3)**(0.22)
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadOptimaLavado3)
+
+		profundidadLechoFijo = 0.	640
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(profundidadLechoFijo)
+
+		profundidadLechoExpandido= profundidadLechoFijo*((1-porosidad)/(1- porosidadLechoExpandido))
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(profundidadLechoExpandido)
+
+		relacionExpansion = ((porosidadLechoExpandido-porosidad)/(1-porosidadLechoExpandido))*100
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(relacionExpansion)
+
+
+		newDataTreeview(arbolvelocidadLavadoExpansionLechoFiltrante,listavelocidadLavadoExpansionLechoFiltrante)
+		
+		velocidadLavadoExpansionLechoFiltranteWindow.mainloop()
+
+
+
+
+	def consumoAguaLavado():
+		return 0
+
+	def perdidaCargaLechoExpandido():
+		return 0
+		
+	def perdidacargaLechoGravaLavado():
+		return 0
+
+	def perdidaCargaSistemaDrenajeLavado():
+		return 0
+	
+	def perdidaCargaTuberiaLavado_DW():
+		return 0
+
+	def perdidaCargaTuberiaLavado_HW():
+		return 0
+	
+	def perdidaCargaTuberiaLavadoAccesorios():
+		return 0 
+
+	def perdidaCargaTotalLavado():
+		return 0 
+
+	def verificacionVelocidadesDiseñoTuberias():
+		return 0 
+
+	
+
+	
+	
+	
+	def hidraulicaSistemaLavado(listaTamiz, listaAR, optnValue, listaCaudal):
+		#Hidraulica
+
+		try: 
+			caudalMedio=float(listaCaudal[0].get())
+			
+		except:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
+			return None
+
+		listaNTamizTemp=listaTamiz.copy()
+		listaARetenidaTemp=listaAR.copy()
+		listaNTamiz=list()
+		listaARetenida=list()
+
+		if listaNTamizTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de los números de tamiz.")
+			return None
+		if listaARetenidaTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de la arena retenida.")
+			return None
+		if optnValue.get() == "Seleccione la temperatura":
+			messagebox.showwarning(title="Error", message="Hace falta elegir el valor de la temperatura del agua a tratar.")
+			return None
+		else:
+			valorTemperatura= int(optnValue.get())
+
+
+		for ind in range(0, len(listaNTamizTemp)):
+			if listaNTamizTemp[ind].get() == "" and ind%2==0:
+				break
+			elif listaNTamizTemp[ind].get() == "" and ind%2 != 0:
+				messagebox.showwarning(title="Error", message="Hace falta el rango de la derecha de alguna entrada.")
+				return None
+			else:
+				try:
+					CountControl=0
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m: 
+							CountControl=CountControl+1
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m and CountControl==18:
+							messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no coincide con los valores estándar para número de tamiz. Pulse el botón para conocerlos.")
+							return None
+					if  ind%2 != 0:
+						guardaValColumna2 = int(listaNTamizTemp[ind].get())	
+					
+					if ind !=0 and ind%2==0 and int(listaNTamizTemp[ind].get()) != guardaValColumna2:
+						messagebox.showwarning(title="Error", message=f"El valor donde finaliza un rango debe ser el valor inicial del siguiente rango.")
+						return None
+					if ind != 0 and int(listaNTamizTemp[ind].get()) < variableControlCreciente:
+						messagebox.showwarning(title="Error", message=f"Los valores de los rangos de número de tamiz deben ir en orden creciente.")
+						return None
+					variableControlCreciente=int(listaNTamizTemp[ind].get())
+
+					
+					listaNTamiz.append(int(listaNTamizTemp[ind].get()))
+
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
+	
+
+		for ind in range(0, len(listaARetenidaTemp)):
+			if listaARetenidaTemp[ind].get() == "" and ind != 0:
+				break
+			else:
+				try:
+					listaARetenida.append(float(listaARetenidaTemp[ind].get()))
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
+		if len(listaARetenida) != len(listaNTamiz)/2:
+			messagebox.showwarning(title="Error", message="La cantidad de datos ingresados en los rangos de número de tamiz no coincide con la cantidad de datos de arena retendia.")
+			return None
+		
+		
+		sumaPorcentajes=0
+		for elemento in listaARetenida:
+			sumaPorcentajes= sumaPorcentajes + elemento
+		
+		
+		if sumaPorcentajes != 100:
+			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
+			return None
+
+		listaEntradaTemp=list()
+		datosSalida=list()
+		
+		
+		#Borrar
+		################Datos temporales:
+		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
+		listaARetenida=[16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
+		caudalMedio=0.04404
+		
+		################
+			
+	
+
+		
+	
+		
+		hidraulicaSistemaLavadoMainWindow = tk.Toplevel()
+		hidraulicaSistemaLavadoMainWindow.iconbitmap(bitmap='icons\\agua.ico')
+		hidraulicaSistemaLavadoMainWindow.geometry("800x600") 
+		hidraulicaSistemaLavadoMainWindow.resizable(0,0)	
+		hidraulicaSistemaLavadoMainWindow.configure(background="#9DC4AA")
+
+		hidraulicaSistemaLavadoMainFrame=LabelFrame(hidraulicaSistemaLavadoMainWindow, text="Datos adicionales para la hidráulica del sistema de lavado", font=("Yu Gothic bold", 11))
+		hidraulicaSistemaLavadoMainFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		
+		
+		diametroOrificios = StringVar()
+		diametroOrificios.set("Diametro de los orificios")
+		listaValoresTempDiametroOrificios=list()
+		listaValoresTempDiametroOrificios.append("1/4")
+		listaValoresTempDiametroOrificios.append("3/8")
+		listaValoresTempDiametroOrificios.append("1/2")
+		listaValoresTempDiametroOrificios.append("5/8")
+		diametroOrificiosName = OptionMenu(hidraulicaSistemaLavadoMainFrame, diametroOrificios, *listaValoresTempDiametroOrificios)
+		diametroOrificiosLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione el diámetro de los orificios:", font=("Yu Gothic bold", 11))
+		
+
+		
+		distanciaOrificios = StringVar()
+		distanciaOrificios.set("Distancia entre los orificios")
+		listaValoresTempDistanciaOrificios=list()
+		listaValoresTempDistanciaOrificios.append("0.750")
+		listaValoresTempDistanciaOrificios.append("0.100")
+		listaValoresTempDistanciaOrificios.append("0.125")
+		listaValoresTempDistanciaOrificios.append("0.150")
+		distanciaOrificiosName = OptionMenu(hidraulicaSistemaLavadoMainFrame, distanciaOrificios, *listaValoresTempDistanciaOrificios)
+		distanciaOrificiosLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione la distancia entre orificios:", font=("Yu Gothic bold", 11))
+
+
+		seccionTransversal = StringVar()
+		seccionTransversal.set("Sección transversal")
+		listaValoresTempSeccionTransversal=list()
+		listaValoresTempSeccionTransversal.append("6 X 6")
+		listaValoresTempSeccionTransversal.append("8 X 8")
+		listaValoresTempSeccionTransversal.append("10 X 10")
+		listaValoresTempSeccionTransversal.append("12 X 12")
+		listaValoresTempSeccionTransversal.append("14 X 14")
+		listaValoresTempSeccionTransversal.append("16 X 16")
+		listaValoresTempSeccionTransversal.append("18 X 18")
+		listaValoresTempSeccionTransversal.append("20 X 20")
+		seccionTransversalName = OptionMenu(hidraulicaSistemaLavadoMainFrame, seccionTransversal, *listaValoresTempSeccionTransversal)
+		seccionTransversalLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione la sección transversal comercial del múltiple:", font=("Yu Gothic bold", 11))
+
+
+		distanciaLaterales = StringVar()
+		distanciaLaterales.set("Distancia entre laterales")
+		listaValoresTempDistanciaLaterales=list()
+		listaValoresTempDistanciaLaterales.append("0.20")
+		listaValoresTempDistanciaLaterales.append("0.25")
+		listaValoresTempDistanciaLaterales.append("0.30")
+		distanciaLateralesName = OptionMenu(hidraulicaSistemaLavadoMainFrame, distanciaLaterales, *listaValoresTempDistanciaLaterales)
+		distanciaLateralesLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione la distancia entre laterales:", font=("Yu Gothic bold", 11))
+		
+
+		
+		diametroEntreLaterales = StringVar()
+		diametroEntreLaterales.set("Diámetro de los laterales")
+		listaValoresTempDiametroEntreLaterales=list()
+		listaValoresTempDiametroEntreLaterales.append("1 1/2")
+		listaValoresTempDiametroEntreLaterales.append("2")
+		listaValoresTempDiametroEntreLaterales.append("2 1/2")
+		listaValoresTempDiametroEntreLaterales.append("3")
+		diametroEntreLateralesName = OptionMenu(hidraulicaSistemaLavadoMainFrame, diametroEntreLaterales, *listaValoresTempDiametroEntreLaterales)
+		diametroEntreLateralesLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione el diámetro de los laterales:", font=("Yu Gothic bold", 11))
+
+
+		
+		listaEntradaDrenaje2=[diametroOrificiosName,distanciaOrificiosName,seccionTransversalName,distanciaLateralesName, diametroEntreLateralesName]
+		listaLabel= [diametroOrificiosLabel,distanciaOrificiosLabel, seccionTransversalLabel, distanciaLateralesLabel, diametroEntreLateralesLabel]
+		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
+		
+		#Borrar
+
+		diametroOrificios.set("1/4")
+		distanciaOrificios.set("0.100")
+		seccionTransversal.set("14 X 14")
+		distanciaLaterales.set("0.25")
+		diametroEntreLaterales.set("1 1/2")
+
+
+		
+	
+		altIn= 30
+		altIn2=30
+		for ind in range(0,len(listaLabel)):
+			if ind%2==0:
+				listaLabel[ind].place(x=20,y=altIn)
+				listaEntradaDrenaje2[ind].place(x=20, y= altIn+20)
+				altIn=altIn+80
+			else:
+				listaLabel[ind].place(x=500,y=altIn2)
+				listaEntradaDrenaje2[ind].place(x=500, y= altIn2+20)
+				altIn2=altIn2+80
+			
+		#BotonesHidraulica
+		#botonCalculoDrenaje = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Cálculos para el drenaje del filtro", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: calculoDrenaje())
+		
+		botonVelocidadLavadoExpansionLechoFiltrante = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Velocidad de lavado\n y expansión del lecho filtrante", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: velocidadLavadoExpansionLechoFiltrante(valorTemperatura,d60) )
+
+		botonConsumoAguaLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="2", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: consumoAguaLavado())
+
+		botonPerdidaCargaLechoExpandido = HoverButton(hidraulicaSistemaLavadoMainFrame, text="3", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaLechoExpandido() )
+ 
+		botonPerdidacargaLechoGravaLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="4", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado() )
+
+		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="5", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado() )
+
+		botonPerdidaCargaTuberiaLavado_DW = HoverButton(hidraulicaSistemaLavadoMainFrame, text="6", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW() )
+
+		botonPerdidaCargaTuberiaLavado_HW = HoverButton(hidraulicaSistemaLavadoMainFrame, text="7", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_HW())
+
+		botonPerdidaCargaTuberiaLavadoAccesorios = HoverButton(hidraulicaSistemaLavadoMainFrame, text="8", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavadoAccesorios() )
+
+		botonPerdidaCargaTotalLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="9", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavado() )
+
+		botonVerificacionVelocidadesDiseñoTuberias = HoverButton(hidraulicaSistemaLavadoMainFrame, text="10", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: verificacionVelocidadesDiseñoTuberias() )
+
+
+			
+		listaBotones=[botonVelocidadLavadoExpansionLechoFiltrante ,botonConsumoAguaLavado ,
+		botonPerdidaCargaLechoExpandido ,botonPerdidacargaLechoGravaLavado ,botonPerdidaCargaSistemaDrenajeLavado 
+		,botonPerdidaCargaTuberiaLavado_DW ,botonPerdidaCargaTuberiaLavado_HW ,botonPerdidaCargaTuberiaLavadoAccesorios 
+		,botonPerdidaCargaTotalLavado ,botonVerificacionVelocidadesDiseñoTuberias]
+		 
+		counter= 0
+		altIn2= altIn
+		for elemento in listaBotones:
+			if counter < 5:
+				elemento.place(x=20,y=altIn)
+				altIn=altIn+60
+				counter=counter+1
+			else: 
+				elemento.place(x=500,y=altIn2)
+				altIn2=altIn2+60
+		#botonCalculoDrenaje.place(x=0, y=altIn)
+			
+	
+		
+		listaCU = valorCoeficienteDeUniformidad(listaTamiz,listaAR)
+		d10= listaCU[0]
+		CU=listaCU[1]
+		d60=d10*CU
+
+		##return [d10,CU]
+		
+		hidraulicaSistemaLavadoMainWindow.mainloop()
+
+
+
+		#HidraulicaFin
+		
+
+	def perdidaEnergiaLechoLimpio():
+		#Lecholimpio
+		return 0 
+
 
 	mainWindow.withdraw()
 	filtroWindow = tk.Toplevel()
@@ -3339,7 +3762,8 @@ def openFiltroWindow():
 	
 	imageAtras= PhotoImage(file="images\\atras.png")
 	imageRestringido=PhotoImage(file="images\\restringido.png")
-	#Botones. 
+	#BotonesFiltro 
+
 
 	botonAtras= HoverButton(frameFiltro, image=imageAtras , width=100, height=40, bg= None, command=lambda: returnMainWindow(filtroWindow))
 	botonAtras.place(x=0,y=10)
@@ -3385,15 +3809,23 @@ def openFiltroWindow():
 
 	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: estimacionPerdidaEnergiaArena(listaNumTamiz,listaAR,tempAgua))
 
-	botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimación de la pérdida de energía en el lecho de grava, y\n ¿Carga?", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: estPerdidaLechoGravaYPredimensionamientoFiltros(listaNumTamiz, listaAR,tempAgua))
+	#botonEstimacionPerdidaLechoGrava = HoverButton(frameFiltro, text="Estimación de la pérdida de energía en el lecho de grava, y\n ¿Carga?", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: estPerdidaLechoGravaYPredimensionamientoFiltros(listaNumTamiz, listaAR,tempAgua))
 
-	botonPerdidaCargaLechoExpandido = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= perdidaCargaLechoExpandido)
+	#botonPerdidaCargaLechoExpandido = HoverButton(frameFiltro, text="Pérdida de carga a través del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command= perdidaCargaLechoExpandido)
 
 	botonPredimensionamientoFiltros = HoverButton(frameFiltro, text="Predimensionamiento de los filtros", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: predimensionamientoFiltros(entradasCaudal))
 
 	botonDrenajeFiltro = HoverButton(frameFiltro, text="Drenaje del filtro - Tuberías perforadas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: drenajeFiltro(entradasCaudal))
 
-	listaBotonesOrg=[botonNewEntryFiltro,botonPrincipalesCaracteristicasDelFiltro, botonGranulometria,botonCoefUniformidad,botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio,botonEstimacionPerdidaLechoGrava,botonPredimensionamientoFiltros,botonDrenajeFiltro,botonPerdidaCargaLechoExpandido]
+	botonHidraulicaSistemaLavado = HoverButton(frameFiltro, text="Hidráulica del sistema de lavado", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: hidraulicaSistemaLavado(listaNumTamiz,listaAR,tempAgua, entradasCaudal))
+
+	botonPerdidaEnergiaLechoLimpio = HoverButton(frameFiltro, text="Pérdidas de energía durante el filtrado con lecho limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: perdidaEnergiaLechoLimpio())
+ 
+			
+
+
+
+	listaBotonesOrg=[botonNewEntryFiltro,botonPrincipalesCaracteristicasDelFiltro, botonGranulometria,botonCoefUniformidad,botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio,botonPredimensionamientoFiltros,botonDrenajeFiltro,botonHidraulicaSistemaLavado,botonPerdidaEnergiaLechoLimpio]#,botonEstimacionPerdidaLechoGrava,botonPerdidaCargaLechoExpandido]
 
 	alturaInicialBotones=70
 	for boton in listaBotonesOrg:
