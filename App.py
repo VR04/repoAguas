@@ -2971,6 +2971,58 @@ def openFiltroWindow():
 		
 
 		predimensionamientoFiltrosWindow.mainloop()
+	
+	def ValuepredimensionamientoFiltros(listaET):
+	
+			
+		try: 
+			caudalMedio=float(listaET[0].get())
+		except:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
+			return None
+
+		#Borrar 
+		caudalMedio= 0.04404
+
+
+		contadorFiltro = 0
+
+		listaArbolCaudal=list()
+		caudal=caudalMedio*(1.30)
+		listaArbolCaudal.append(caudal)
+		Vf=120
+		Vmax=150
+		listaArbolCaudal.append(Vf)
+		listaArbolCaudal.append(Vmax)
+		arenaFilOpNormal=caudal*86400*(1/Vf)
+		listaArbolCaudal.append(arenaFilOpNormal)
+		arenaFilFueraServ=caudal*86400*(1/Vmax)
+		listaArbolCaudal.append(arenaFilFueraServ)
+		arenaFilFueraServ2 = arenaFilOpNormal - arenaFilFueraServ
+		listaArbolCaudal.append(arenaFilFueraServ2)
+
+		if arenaFilOpNormal/arenaFilFueraServ2 < 3.0:
+			numMinFiltros=3
+		else:
+			numMinFiltros= round(arenaFilOpNormal/arenaFilFueraServ2 ,0)
+		listaArbolCaudal.append(numMinFiltros)
+
+		
+
+		if 0.044*sqrt(caudal*86400)<numMinFiltros:
+			numFiltros=numMinFiltros
+		else:
+			numFiltros = int(0.044*sqrt(caudal*86400))+1
+		listaArbolCaudal.append(numFiltros)
+
+		areaFiltro = arenaFilOpNormal/numFiltros
+		listaArbolCaudal.append(areaFiltro)
+
+		ladoFiltro= sqrt(areaFiltro)
+		listaArbolCaudal.append(ladoFiltro)
+		
+		
+		return listaArbolCaudal
 
 	def drenajeFiltro2(caudal,listaEntradaDrenaje):
 			
@@ -3326,7 +3378,7 @@ def openFiltroWindow():
 		drenajeFiltrosMainWindow.mainloop()
 	
 	def velocidadLavadoExpansionLechoFiltrante(tempValue,d60):
-		#Volver
+		
 		#Borrar 
 		tempValue=3.0
 
@@ -3429,7 +3481,7 @@ def openFiltroWindow():
 
 		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadOptimaLavado3)
 
-		profundidadLechoFijo = 0.	640
+		profundidadLechoFijo = 0.640
 
 		listavelocidadLavadoExpansionLechoFiltrante.append(profundidadLechoFijo)
 
@@ -3445,18 +3497,321 @@ def openFiltroWindow():
 		newDataTreeview(arbolvelocidadLavadoExpansionLechoFiltrante,listavelocidadLavadoExpansionLechoFiltrante)
 		
 		velocidadLavadoExpansionLechoFiltranteWindow.mainloop()
+	
+	def ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60):
+		
+
+		listavelocidadLavadoExpansionLechoFiltrante=list()
+	
+		porosidad= 0.45
+		listavelocidadLavadoExpansionLechoFiltrante.append(porosidad)
+
+
+		tablaTemperaturaViscosidadDinamica=dict()
+		valorTemperaturas=list()
+		
+		for i in range(0,36):
+			valorTemperaturas.append(i)
+
+		valorViscosidadDinamica = [0.001792, 0.001731, 0.001673, 0.001619, 0.001567, 0.001519, 0.001473, 0.001428, 0.001386, 0.001346, 0.001308, 0.001271, 0.001236, 0.001203, 0.001171, 0.00114, 0.001111, 0.001083, 0.001056, 0.00103
+					, 0.001005, 0.000981, 0.000958, 0.000936, 0.000914, 0.000894, 0.000874, 0.000855, 0.000836, 0.000818, 0.000801, 0.000784, 0.000768, 0.000752, 0.000737, 0.000723]  
+
+		for ind in range(0,len(valorTemperaturas)):
+			tablaTemperaturaViscosidadDinamica[valorTemperaturas[ind]] = valorViscosidadDinamica[ind]
+
+		viscosidadDinamica= tablaTemperaturaViscosidadDinamica[tempValue] * 1000.0
+		
+		listavelocidadLavadoExpansionLechoFiltrante.append(viscosidadDinamica)
+
+		D60=d60
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(D60)
+
+		velocidadAsentamientoMedioFiltrante20 = D60*10
+		
+		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadAsentamientoMedioFiltrante20)
+
+		velocidadAsentamientoMedioFiltrante3= velocidadAsentamientoMedioFiltrante20*(viscosidadDinamica**(-1/3))
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadAsentamientoMedioFiltrante3)
+
+		velocidadFluidizacion3 = velocidadAsentamientoMedioFiltrante3*(porosidad**(4.5))
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadFluidizacion3)
+
+		velocidadOptimaLavado3= velocidadAsentamientoMedioFiltrante3*0.1
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadOptimaLavado3)
+
+		porosidadLechoExpandido = (velocidadOptimaLavado3/velocidadAsentamientoMedioFiltrante3)**(0.22)
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadOptimaLavado3)
+
+		profundidadLechoFijo = 0.640
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(profundidadLechoFijo)
+
+		profundidadLechoExpandido= profundidadLechoFijo*((1-porosidad)/(1- porosidadLechoExpandido))
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(profundidadLechoExpandido)
+
+		relacionExpansion = ((porosidadLechoExpandido-porosidad)/(1-porosidadLechoExpandido))*100
+
+		listavelocidadLavadoExpansionLechoFiltrante.append(relacionExpansion)
+		
+		return(listavelocidadLavadoExpansionLechoFiltrante)
+		
 
 
 
 
-	def consumoAguaLavado():
-		return 0
+
+	def consumoAguaLavado(listaE,tempValue,d60,caudalLista):
+		
+
+	
+		if listaE[0].get() == "Tiempo de retrolavado":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el tiempo de retrolavado")
+			return None
+		else:
+			tiempoRetrolavado = float(listaE[0].get())
+
+
+
+
+
+		consumoAguaLavado2Window = tk.Toplevel()
+		consumoAguaLavado2Window.iconbitmap(bitmap='icons\\agua.ico')
+		consumoAguaLavado2Window.geometry("600x400") 
+		consumoAguaLavado2Window.resizable(0,0)	
+		consumoAguaLavado2Window.configure(background="#9DC4AA")
+
+		consumoAguaLavado2Frame=LabelFrame(consumoAguaLavado2Window, text="Cálculos para el consumo de agua de lavado", font=("Yu Gothic bold", 11))
+		consumoAguaLavado2Frame.pack(side=TOP, fill=BOTH,expand=True)
+		
+		#Frame Treeview
+		arbolconsumoAguaLavado2_frame = Frame(consumoAguaLavado2Frame)
+		arbolconsumoAguaLavado2_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolconsumoAguaLavado2_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolconsumoAguaLavado2_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolconsumoAguaLavado2= ttk.Treeview(arbolconsumoAguaLavado2_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolconsumoAguaLavado2.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolconsumoAguaLavado2.xview)
+		sedScrollY.configure(command=arbolconsumoAguaLavado2.yview)
+		#Define columnas.
+		arbolconsumoAguaLavado2["columns"]= (
+		"Tiempo de retrolavado",
+		"Carrera de filtración normal o duración del ciclo",
+		"Velocidad de lavado",
+		"Tasa de filtración en operación normal",
+		"Área de un filtro",
+		"Caudal de lavado",
+		"Consumo de agua para lavado de un filtro (Volumen del tanque)",
+		"Agua producida por un filtro en cada ciclo",
+		"Porcentaje de agua filtrada usada en el lavado de un filtro",
+		)
+
+		#Headings
+		arbolconsumoAguaLavado2.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolconsumoAguaLavado2["columns"]:
+			arbolconsumoAguaLavado2.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolconsumoAguaLavado2["columns"])+1) :
+				arbolconsumoAguaLavado2.column(f"#{i}",width=700, stretch=False)	
+		arbolconsumoAguaLavado2.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolconsumoAguaLavado2.tag_configure("evenrow", background= "#1FCCDB")
+		arbolconsumoAguaLavado2.tag_configure("oddrow", background= "#9DC4AA")    
+
+
+		listaconsumoAguaLavado2=list()
+
+		listaVelocidadVelocidadLavadoExpansion = ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60)
+
+		listaconsumoAguaLavado2.append(tiempoRetrolavado)
+
+		carreraFiltracionNormal=36.0
+
+		listaconsumoAguaLavado2.append(carreraFiltracionNormal)
+
+		velocidadDeLavado= round(listaVelocidadVelocidadLavadoExpansion[6],4)
+		
+		listaconsumoAguaLavado2.append(velocidadDeLavado)
+
+		tasaFiltracionOpNormal=120
+
+		listaconsumoAguaLavado2.append(tasaFiltracionOpNormal)
+
+		areaDeFiltro= round(ValuepredimensionamientoFiltros(caudalLista)[5],2)
+		
+		listaconsumoAguaLavado2.append(areaDeFiltro)
+
+		caudalLavado = round((velocidadDeLavado/60)*areaDeFiltro,3)
+
+		listaconsumoAguaLavado2.append(caudalLavado)
+
+		consumoAguaLavadoFiltro = round(tiempoRetrolavado*velocidadDeLavado*areaDeFiltro,3)
+
+		listaconsumoAguaLavado2.append(consumoAguaLavadoFiltro)
+		
+		aguaProducidaFiltroCiclo= round((tasaFiltracionOpNormal/24.0)*areaDeFiltro*carreraFiltracionNormal,3)
+
+		listaconsumoAguaLavado2.append(aguaProducidaFiltroCiclo)
+
+		porcentajeAguaFiltrada = (consumoAguaLavadoFiltro/aguaProducidaFiltroCiclo)*100
+
+		listaconsumoAguaLavado2.append(porcentajeAguaFiltrada)
+
+		newDataTreeview(arbolconsumoAguaLavado2,listaconsumoAguaLavado2)
+		
+		consumoAguaLavado2Window.mainloop()
+
+
+
 
 	def perdidaCargaLechoExpandido():
-		return 0
+		perdidaCargaLechoExpandidoWindow = tk.Toplevel()
+		perdidaCargaLechoExpandidoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		perdidaCargaLechoExpandidoWindow.geometry("600x400") 
+		perdidaCargaLechoExpandidoWindow.resizable(0,0)	
+		perdidaCargaLechoExpandidoWindow.configure(background="#9DC4AA")
+
+		perdidaCargaLechoExpandidoFrame=LabelFrame(perdidaCargaLechoExpandidoWindow, text="Cálculos para la velocidad de expansión del lecho filtrante", font=("Yu Gothic bold", 11))
+		perdidaCargaLechoExpandidoFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolperdidaCargaLechoExpandido_frame = Frame(perdidaCargaLechoExpandidoFrame)
+		arbolperdidaCargaLechoExpandido_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolperdidaCargaLechoExpandido_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolperdidaCargaLechoExpandido_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolperdidaCargaLechoExpandido= ttk.Treeview(arbolperdidaCargaLechoExpandido_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolperdidaCargaLechoExpandido.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolperdidaCargaLechoExpandido.xview)
+		sedScrollY.configure(command=arbolperdidaCargaLechoExpandido.yview)
+		#Define columnas.
+		arbolperdidaCargaLechoExpandido["columns"]= (
+		"Profundidad del lecho fijo", 
+		"Porosidad del lecho fijo",
+		"Densidad relativa de la arena",
+		"Pérdida de carga a través del lecho expandido"
+		)
+
+		#Headings
+		arbolperdidaCargaLechoExpandido.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolperdidaCargaLechoExpandido["columns"]:
+			arbolperdidaCargaLechoExpandido.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolperdidaCargaLechoExpandido["columns"])+1) :
+				arbolperdidaCargaLechoExpandido.column(f"#{i}",width=700, stretch=False)	
+		arbolperdidaCargaLechoExpandido.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolperdidaCargaLechoExpandido.tag_configure("evenrow", background= "#1FCCDB")
+		arbolperdidaCargaLechoExpandido.tag_configure("oddrow", background= "#9DC4AA")    
+
+		listaperdidaCargaLechoExpandido=list()
 		
-	def perdidacargaLechoGravaLavado():
-		return 0
+
+		profundidadLechoFijo= 0.64
+		listaperdidaCargaLechoExpandido.append(profundidadLechoFijo)
+
+
+		porosidadLechoFijo= 0.45
+		listaperdidaCargaLechoExpandido.append(porosidadLechoFijo)
+
+		densidadRelativaArena=2.650
+		listaperdidaCargaLechoExpandido.append(densidadRelativaArena)
+
+		perdidaCargaALechoExpandido= profundidadLechoFijo*(1-porosidadLechoFijo)*(densidadRelativaArena-1)
+		listaperdidaCargaLechoExpandido.append(perdidaCargaALechoExpandido)
+
+		newDataTreeview(arbolperdidaCargaLechoExpandido,listaperdidaCargaLechoExpandido)
+
+		perdidaCargaLechoExpandidoWindow.mainloop()
+
+
+
+		
+	def perdidacargaLechoGravaLavado(tempValue,d60):
+		perdidacargaLechoGravaLavadoWindow = tk.Toplevel()
+		perdidacargaLechoGravaLavadoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		perdidacargaLechoGravaLavadoWindow.geometry("600x400") 
+		perdidacargaLechoGravaLavadoWindow.resizable(0,0)	
+		perdidacargaLechoGravaLavadoWindow.configure(background="#9DC4AA")
+
+		perdidacargaLechoGravaLavadoFrame=LabelFrame(perdidacargaLechoGravaLavadoWindow, text="Cálculos para la velocidad de expansión del lecho filtrante", font=("Yu Gothic bold", 11))
+		perdidacargaLechoGravaLavadoFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolperdidacargaLechoGravaLavado_frame = Frame(perdidacargaLechoGravaLavadoFrame)
+		arbolperdidacargaLechoGravaLavado_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolperdidacargaLechoGravaLavado_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolperdidacargaLechoGravaLavado_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolperdidacargaLechoGravaLavado= ttk.Treeview(arbolperdidacargaLechoGravaLavado_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolperdidacargaLechoGravaLavado.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolperdidacargaLechoGravaLavado.xview)
+		sedScrollY.configure(command=arbolperdidacargaLechoGravaLavado.yview)
+		#Define columnas.
+		arbolperdidacargaLechoGravaLavado["columns"]= (
+		"Velocidad de lavado", 
+		"Profundidad del lecho de grava",
+		"Pérdida de carga a través del lecho de grava",
+		)
+
+		#Headings
+		arbolperdidacargaLechoGravaLavado.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolperdidacargaLechoGravaLavado["columns"]:
+			arbolperdidacargaLechoGravaLavado.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolperdidacargaLechoGravaLavado["columns"])+1) :
+				arbolperdidacargaLechoGravaLavado.column(f"#{i}",width=700, stretch=False)	
+		arbolperdidacargaLechoGravaLavado.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolperdidacargaLechoGravaLavado.tag_configure("evenrow", background= "#1FCCDB")
+		arbolperdidacargaLechoGravaLavado.tag_configure("oddrow", background= "#9DC4AA")    
+
+		listaperdidacargaLechoGravaLavado=list()
+		#Volver
+		velocidadLavado= ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60)[6]
+		listaperdidacargaLechoGravaLavado.append(velocidadLavado)
+
+		profundidadLechoGrava= 0.100+0.075+0.075+0.100+0.100
+
+		listaperdidacargaLechoGravaLavado.append(profundidadLechoGrava)
+
+		perdidaLechoGrava= velocidadLavado*profundidadLechoGrava*(1/3)
+
+		listaperdidacargaLechoGravaLavado.append(perdidaLechoGrava)
+
+		newDataTreeview(arbolperdidacargaLechoGravaLavado,listaperdidacargaLechoGravaLavado)
+
+		perdidacargaLechoGravaLavadoWindow.mainloop()
 
 	def perdidaCargaSistemaDrenajeLavado():
 		return 0
@@ -3654,11 +4009,22 @@ def openFiltroWindow():
 		diametroEntreLateralesName = OptionMenu(hidraulicaSistemaLavadoMainFrame, diametroEntreLaterales, *listaValoresTempDiametroEntreLaterales)
 		diametroEntreLateralesLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione el diámetro de los laterales:", font=("Yu Gothic bold", 11))
 
+		tiempoRetrolavado = StringVar()
+		tiempoRetrolavado.set("Tiempo de retrolavado")
+		listaValoresTemptiempoRetrolavado=list()
+		listaValoresTemptiempoRetrolavado.append("10")
+		listaValoresTemptiempoRetrolavado.append("11")
+		listaValoresTemptiempoRetrolavado.append("12")
+		listaValoresTemptiempoRetrolavado.append("13")
+		listaValoresTemptiempoRetrolavado.append("14")
+		tiempoRetrolavadoName = OptionMenu(hidraulicaSistemaLavadoMainFrame, tiempoRetrolavado, *listaValoresTemptiempoRetrolavado)
+		tiempoRetrolavadoLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione el tiempo de retrolavado.", font=("Yu Gothic bold", 11))
 
 		
-		listaEntradaDrenaje2=[diametroOrificiosName,distanciaOrificiosName,seccionTransversalName,distanciaLateralesName, diametroEntreLateralesName]
-		listaLabel= [diametroOrificiosLabel,distanciaOrificiosLabel, seccionTransversalLabel, distanciaLateralesLabel, diametroEntreLateralesLabel]
+		listaEntradaDrenaje2=[diametroOrificiosName,distanciaOrificiosName,seccionTransversalName,distanciaLateralesName, diametroEntreLateralesName,tiempoRetrolavadoName]
+		listaLabel= [diametroOrificiosLabel,distanciaOrificiosLabel, seccionTransversalLabel, distanciaLateralesLabel, diametroEntreLateralesLabel,tiempoRetrolavadoLabel]
 		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
+		listaEntradaExtra=[tiempoRetrolavado]
 		
 		#Borrar
 
@@ -3667,6 +4033,7 @@ def openFiltroWindow():
 		seccionTransversal.set("14 X 14")
 		distanciaLaterales.set("0.25")
 		diametroEntreLaterales.set("1 1/2")
+		tiempoRetrolavado.set("12")
 
 
 		
@@ -3685,16 +4052,16 @@ def openFiltroWindow():
 			
 		#BotonesHidraulica
 		#botonCalculoDrenaje = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Cálculos para el drenaje del filtro", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: calculoDrenaje())
-		
+
 		botonVelocidadLavadoExpansionLechoFiltrante = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Velocidad de lavado\n y expansión del lecho filtrante", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: velocidadLavadoExpansionLechoFiltrante(valorTemperatura,d60) )
 
-		botonConsumoAguaLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="2", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: consumoAguaLavado())
+		botonConsumoAguaLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Consumo de agua de\n lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: consumoAguaLavado(listaEntradaExtra,valorTemperatura,d60,listaCaudal))
 
-		botonPerdidaCargaLechoExpandido = HoverButton(hidraulicaSistemaLavadoMainFrame, text="3", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaLechoExpandido() )
+		botonPerdidaCargaLechoExpandido = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga a través\n del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaLechoExpandido() )
  
-		botonPerdidacargaLechoGravaLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="4", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado() )
+		botonPerdidacargaLechoGravaLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga a través\n del lecho de grava durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado(valorTemperatura,d60) )
 
-		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="5", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado() )
+		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga a través\n del sistema de drenaje durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado() )
 
 		botonPerdidaCargaTuberiaLavado_DW = HoverButton(hidraulicaSistemaLavadoMainFrame, text="6", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW() )
 
@@ -3806,6 +4173,8 @@ def openFiltroWindow():
 	entradasCaudal= [caudalMedio]
 
 	#####FIN TEMP AGUA
+	
+	#BotonesFiltro2
 
 	botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio = HoverButton(frameFiltro, text="Pérdida de energía en el lecho filtrante de arena limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: estimacionPerdidaEnergiaArena(listaNumTamiz,listaAR,tempAgua))
 
