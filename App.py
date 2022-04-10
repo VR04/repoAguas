@@ -4266,16 +4266,50 @@ def openFiltroWindow():
 
 		#DatosPara1        
 		'''materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion y temperatureValue'''	
-		#Volver2
+	
 
 		#Tablas1
 		MaterialTuberiaLista=["Acero al carbono API 5L SCH-40","Acero al carbono API 5L SCH-80","Hierro dúctil C30",
 		"Hierro dúctil C40","Polietileno de alta densidad (PEAD) PE 100 RDE 21","Polietileno de alta densidad (PEAD) PE 100 RDE 17",
 		"Policluro de vinilo (PVC) RDE 26","Policluro de vinilo (PVC) RDE 21"]
-		RugosidadLista=[]
 		
-		RugosidadDic=dict()
+		rugosidadLista=[0.1500, 0.1500, 0.2500,0.2500,0.0070,0.0070,0.0015,0.0015]
+
+
+		rugosidadDic=dict()
 		
+		for i in range(0,len(MaterialTuberiaLista)):
+			rugosidadDic[MaterialTuberiaLista[i]] = rugosidadLista[i]
+		
+		rugosidadAbsoluta= rugosidadDic[listaEU[0]]
+		
+
+
+
+		'listaEU[1]'
+		diametroNominalLista= [6,8,10,12,14,16,18,20,24]
+		tuplasEntradas=list()
+		
+		for elemento in MaterialTuberiaLista:
+			tuplaL = tuple()
+			for diam in diametroNominalLista:
+				tuplaL = (elemento,diam)
+				tuplasEntradas.append(tuplaL)
+		listaValoresDiametroInterno= [0.154, 0.203, 0.255, 0.303, 0.333, 0.381, 0.429, 0.478, 0.575, 0.146, 0.194, 0.243, 0.289, 0.318, 0.364, 0.41, 0.456, 0.548, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.155, 0.202, 0.252, 0.299, 0.328, 0.375, 0.422, 0.469, 0.563, 0.152, 0.198, 0.247, 0.293, 0.322, 0.368, 0.414, 0.46, 0.552]
+		diametroInternoDic= dict()
+		for i in range(0,len(listaValoresDiametroInterno)):
+			diametroInternoDic[tuplasEntradas[i]]= listaValoresDiametroInterno[i]
+
+
+		diametroInternoTuberiaLavado = diametroInternoDic[(listaEU[0],listaEU[1])]
+		listaEntradaTemp1.append(diametroInternoTuberiaLavado)
+		
+		#Volver2
+
+
+
+
+
 
 
 
