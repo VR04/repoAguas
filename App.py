@@ -3131,7 +3131,7 @@ def openFiltroWindow():
 		listaAnchoSeccion=list()
 		listaAnchoSeccion2=list()
 		ind=0
-
+		
 		for elemento in listaSeccionTuberia:
 			if elemento == '10 X 10':
 				ind=ind+1
@@ -3169,9 +3169,11 @@ def openFiltroWindow():
 
 		Vf=120
 		Vmax=150
+
 		arenaFilOpNormal=caudal*86400*(1/Vf)
 		arenaFilFueraServ=caudal*86400*(1/Vmax)
 		arenaFilFueraServ2 = arenaFilOpNormal - arenaFilFueraServ
+
 		if arenaFilOpNormal/arenaFilFueraServ2 < 3.0:
 			numMinFiltros=3
 		else:
@@ -3182,6 +3184,7 @@ def openFiltroWindow():
 			numFiltros = int(0.044*sqrt(caudal*86400))+1
 	
 
+
 		areaFiltro = arenaFilOpNormal/numFiltros
 		ladoFiltro= sqrt(areaFiltro)
 		
@@ -3190,8 +3193,12 @@ def openFiltroWindow():
 
 		listaDiametroOrificios= [1/4,3/8,1/2,5/8]
 
-		listaAreasOrificios= [0.0000317,0.0000713,0.0001267,0.0001979]
+		listaAreasOrificios= [0.00003166921744359,0.00007125573924809,0.00012667686977437,0.00019793260902246]
 
+		
+		
+
+		
 		areaOrificiosDic = dict()
 
 		for i in range(0,len(listaDiametroOrificios)):
@@ -3224,20 +3231,23 @@ def openFiltroWindow():
 
 		longitudLaterales= (ladoFiltro/2) - (anchoMultiple/2) -0.05
 		listaArbolDreanejFiltros.append(longitudLaterales)
-
-		numLatPUDF= round(2*(ladoFiltro/distanciaLaterales),0)
+		
+		
+		numLatPUDF= 2*round((ladoFiltro/distanciaLaterales),0)
 		listaArbolDreanejFiltros.append(numLatPUDF)
 
-		numOrif= 2*int(longitudLaterales/distanciaOrificios)+1
+		numOrif= 2*(int(longitudLaterales/distanciaOrificios)+1)
 		listaArbolDreanejFiltros.append(numOrif)
 
-		#Borrar
-		numOrif=26.0
+		
 
 		numOrifPUDF=numLatPUDF*numOrif
 		listaArbolDreanejFiltros.append(numOrifPUDF)
 
-		areaTotalOrificios= numOrifPUDF*areaOrificiosDic[diametroOrificios]*(1/areaFiltro)
+		print(numOrifPUDF, areaOrificiosDic[diametroOrificios],areaFiltro)
+
+
+		areaTotalOrificios= float(numOrifPUDF)*areaOrificiosDic[diametroOrificios]*(1.0/areaFiltro)
 		listaArbolDreanejFiltros.append(areaTotalOrificios)
 
 
@@ -3374,7 +3384,7 @@ def openFiltroWindow():
 
 		listaDiametroOrificios= [1/4,3/8,1/2,5/8]
 
-		listaAreasOrificios= [0.0000317,0.0000713,0.0001267,0.0001979]
+		listaAreasOrificios= [0.00003166921744359,0.00007125573924809,0.00012667686977437,0.00019793260902246]
 
 		areaOrificiosDic = dict()
 
@@ -3403,14 +3413,13 @@ def openFiltroWindow():
 		longitudLaterales= (ladoFiltro/2) - (anchoMultiple/2) -0.05
 		listaArbolDreanejFiltros.append(longitudLaterales)
 
-		numLatPUDF= round(2*(ladoFiltro/distanciaLaterales),0)
+		numLatPUDF= 2*round((ladoFiltro/distanciaLaterales),0)
 		listaArbolDreanejFiltros.append(numLatPUDF)
 
-		numOrif= 2*int(longitudLaterales/distanciaOrificios)+1
+		numOrif= 2*(int(longitudLaterales/distanciaOrificios)+1)
 		listaArbolDreanejFiltros.append(numOrif)
 
-		#Borrar
-		numOrif=26.0
+		
 
 		numOrifPUDF=numLatPUDF*numOrif
 		listaArbolDreanejFiltros.append(numOrifPUDF)
@@ -4079,6 +4088,83 @@ def openFiltroWindow():
 
 		perdidacargaLechoGravaLavadoWindow.mainloop()
 
+
+
+	def perdidacargaLechoGravaLavado_2(tempValue,d60,tasaE):
+
+		
+		if tasaE.get() == "Tasa":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la tasa.")
+			return None
+		else:
+			tasa = tasaE.get()
+
+		perdidacargaLechoGravaLavadoWindow = tk.Toplevel()
+		perdidacargaLechoGravaLavadoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		perdidacargaLechoGravaLavadoWindow.geometry("600x400") 
+		perdidacargaLechoGravaLavadoWindow.resizable(0,0)	
+		perdidacargaLechoGravaLavadoWindow.configure(background="#9DC4AA")
+
+		perdidacargaLechoGravaLavadoFrame=LabelFrame(perdidacargaLechoGravaLavadoWindow, text="Cálculos para la pérdida de carga a través del lecho de grava (Dixon)", font=("Yu Gothic bold", 11))
+		perdidacargaLechoGravaLavadoFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolperdidacargaLechoGravaLavado_frame = Frame(perdidacargaLechoGravaLavadoFrame)
+		arbolperdidacargaLechoGravaLavado_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolperdidacargaLechoGravaLavado_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolperdidacargaLechoGravaLavado_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolperdidacargaLechoGravaLavado= ttk.Treeview(arbolperdidacargaLechoGravaLavado_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolperdidacargaLechoGravaLavado.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolperdidacargaLechoGravaLavado.xview)
+		sedScrollY.configure(command=arbolperdidacargaLechoGravaLavado.yview)
+		#Define columnas.
+		arbolperdidacargaLechoGravaLavado["columns"]= (
+		"Tasa de filtración", 
+		"Profundidad del lecho de grava",
+		"Pérdida de carga a través del lecho de grava",
+		)
+
+		#Headings
+		arbolperdidacargaLechoGravaLavado.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolperdidacargaLechoGravaLavado["columns"]:
+			arbolperdidacargaLechoGravaLavado.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolperdidacargaLechoGravaLavado["columns"])+1) :
+				arbolperdidacargaLechoGravaLavado.column(f"#{i}",width=700, stretch=False)	
+		arbolperdidacargaLechoGravaLavado.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolperdidacargaLechoGravaLavado.tag_configure("evenrow", background= "#1FCCDB")
+		arbolperdidacargaLechoGravaLavado.tag_configure("oddrow", background= "#9DC4AA")    
+
+		listaperdidacargaLechoGravaLavado=list()
+		if tasa == "Tasa media":
+			velocidadLavado= 120/(24*60)
+		elif tasa == "Tasa máxima":
+			velocidadLavado= 150/(24*60)
+		
+		listaperdidacargaLechoGravaLavado.append(velocidadLavado)
+
+		profundidadLechoGrava= 0.100+0.075+0.075+0.100+0.100
+
+		listaperdidacargaLechoGravaLavado.append(profundidadLechoGrava)
+
+		perdidaLechoGrava= velocidadLavado*profundidadLechoGrava*(1/3)
+
+		listaperdidacargaLechoGravaLavado.append(perdidaLechoGrava)
+
+		newDataTreeview(arbolperdidacargaLechoGravaLavado,listaperdidacargaLechoGravaLavado)
+
+		perdidacargaLechoGravaLavadoWindow.mainloop()
+
 	def valuePerdidaCargaSistemaDrenajeLavado(tempValue,d60, caudal,listaEntradaDrenaje):
 		
 		listaperdidaCargaSistemaDrenajeLavadoLavado=list()
@@ -4161,12 +4247,93 @@ def openFiltroWindow():
 		coeficienteDeOrificio=0.6
 		listaperdidaCargaSistemaDrenajeLavadoLavado.append(coeficienteDeOrificio)
 
-		areaTotalOrificios=round(ValueDrenajeFiltro2(caudal,listaEntradaDrenaje)[5],4)
+		areaTotalOrificios=(ValueDrenajeFiltro2(caudal,listaEntradaDrenaje)[5])
 		listaperdidaCargaSistemaDrenajeLavadoLavado.append(areaTotalOrificios)
 
 		print(velocidadDeLavado, coeficienteDeOrificio, areaTotalOrificios)
+		#Pendiente. Valor extraño
+		perdidaCargaSistemaDrenaje= (1.0/(2.0*9.806))*((velocidadDeLavado/(coeficienteDeOrificio*areaTotalOrificios))**2)
+		listaperdidaCargaSistemaDrenajeLavadoLavado.append(perdidaCargaSistemaDrenaje)
 
-		perdidaCargaSistemaDrenaje= (1/(2.0*9.806))*((velocidadDeLavado/(coeficienteDeOrificio*areaTotalOrificios))**2)
+
+		newDataTreeview(arbolperdidaCargaSistemaDrenajeLavadoLavado,listaperdidaCargaSistemaDrenajeLavadoLavado)
+
+		perdidaCargaSistemaDrenajeLavadoLavadoWindow.mainloop()
+
+
+	def perdidaCargaSistemaDrenajeLavado_2(tempValue,d60, caudal,listaEntradaDrenaje, tasaE):
+
+		if tasaE.get() == "Tasa":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la tasa.")
+			return None
+		else:
+			tasa = tasaE.get()
+
+
+		perdidaCargaSistemaDrenajeLavadoLavadoWindow = tk.Toplevel()
+		perdidaCargaSistemaDrenajeLavadoLavadoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		perdidaCargaSistemaDrenajeLavadoLavadoWindow.geometry("600x400") 
+		perdidaCargaSistemaDrenajeLavadoLavadoWindow.resizable(0,0)	
+		perdidaCargaSistemaDrenajeLavadoLavadoWindow.configure(background="#9DC4AA")
+
+		perdidaCargaSistemaDrenajeLavadoLavadoFrame=LabelFrame(perdidaCargaSistemaDrenajeLavadoLavadoWindow, text="Cálculos para la pérdida de carga a través del sistema de drenaje durante el lavado", font=("Yu Gothic bold", 11))
+		perdidaCargaSistemaDrenajeLavadoLavadoFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolperdidaCargaSistemaDrenajeLavadoLavado_frame = Frame(perdidaCargaSistemaDrenajeLavadoLavadoFrame)
+		arbolperdidaCargaSistemaDrenajeLavadoLavado_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolperdidaCargaSistemaDrenajeLavadoLavado_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolperdidaCargaSistemaDrenajeLavadoLavado_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolperdidaCargaSistemaDrenajeLavadoLavado= ttk.Treeview(arbolperdidaCargaSistemaDrenajeLavadoLavado_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolperdidaCargaSistemaDrenajeLavadoLavado.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolperdidaCargaSistemaDrenajeLavadoLavado.xview)
+		sedScrollY.configure(command=arbolperdidaCargaSistemaDrenajeLavadoLavado.yview)
+		#Define columnas.
+		arbolperdidaCargaSistemaDrenajeLavadoLavado["columns"]= (
+		"Tasa de filtración",
+		"Coeficiente de orificio",
+		"Área total de orificios/ área filtrante",
+		"Pérdida de carga a través del sistema de drenaje",
+		)
+
+		#Headings
+		arbolperdidaCargaSistemaDrenajeLavadoLavado.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolperdidaCargaSistemaDrenajeLavadoLavado["columns"]:
+			arbolperdidaCargaSistemaDrenajeLavadoLavado.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolperdidaCargaSistemaDrenajeLavadoLavado["columns"])+1) :
+				arbolperdidaCargaSistemaDrenajeLavadoLavado.column(f"#{i}",width=700, stretch=False)	
+		arbolperdidaCargaSistemaDrenajeLavadoLavado.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolperdidaCargaSistemaDrenajeLavadoLavado.tag_configure("evenrow", background= "#1FCCDB")
+		arbolperdidaCargaSistemaDrenajeLavadoLavado.tag_configure("oddrow", background= "#9DC4AA")    
+
+		listaperdidaCargaSistemaDrenajeLavadoLavado=list()
+		
+		if tasa == "Tasa media":
+			velocidadDeLavado= 120.0/86400.0
+		elif tasa == "Tasa máxima":
+			velocidadDeLavado= 150.0/86400.0
+		listaperdidaCargaSistemaDrenajeLavadoLavado.append(velocidadDeLavado)
+
+		coeficienteDeOrificio=0.6
+		listaperdidaCargaSistemaDrenajeLavadoLavado.append(coeficienteDeOrificio)
+
+		areaTotalOrificios=(ValueDrenajeFiltro2(caudal,listaEntradaDrenaje)[5])
+		listaperdidaCargaSistemaDrenajeLavadoLavado.append(areaTotalOrificios)
+
+	
+
+		perdidaCargaSistemaDrenaje= (1.0/(2.0*9.806))*((velocidadDeLavado/(coeficienteDeOrificio*areaTotalOrificios))**2)
 		listaperdidaCargaSistemaDrenajeLavadoLavado.append(perdidaCargaSistemaDrenaje)
 
 
@@ -4175,6 +4342,247 @@ def openFiltroWindow():
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow.mainloop()
 
 	
+	def ValuePerdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista):
+		
+		
+
+		listaE
+		listaEU=list()
+		i=0
+		for elemento in listaE:
+			try:
+				if i==0 or i==1 or i==4 or i==5:
+					if elemento.get() == "Material de la tubería de lavado":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el material de la tubería de lavado")
+						return None
+					elif elemento.get() == "Diámetro nominal de la tubería de lavado":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro nominal de la tubería de lavado")
+						return None
+
+					elif elemento.get() == "Codo 90° radio":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el valor del codo 90° radio")
+						return None
+					
+					
+					elif elemento.get() == "Tipo de entrada":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el tipo de entrada del accesorio")
+						return None
+
+					else:  
+						if i==0 or i==4 or i==5:
+							listaEU.append(elemento.get())
+						else:
+							listaEU.append(float(elemento.get()))
+					
+						i=i+1
+				else:
+					
+					if i==2 and (float(elemento.get())>50.0 or float(elemento.get())<5.0):
+						messagebox.showwarning(title="Error", message="El valor de la longitud de la tubería de lavado debe estar entre 5 y 50 metros.")
+						return None
+
+					elif i==3 and (float(elemento.get())>0.1 or float(elemento.get())<0.00001):
+						messagebox.showwarning(title="Error", message="El valor del factor de fricción debe estar entre 0.00001 y 0.1")
+						return None   
+					else:
+						listaEU.append(float(elemento.get()))
+					i=i+1
+			except:
+				messagebox.showwarning(title="Error", message="El valor ingresado no es un número")
+				return None
+			
+		listaEU.append(temperatureValue)
+		
+		
+		
+
+		listaEntradaTemp1=list()
+		listaEntradaTemp2=list()
+		listaEntradaTemp3=list()
+		
+
+		#DatosPara1        
+		
+	
+
+		#Tablas1
+		MaterialTuberiaLista=["Acero al carbono API 5L SCH-40","Acero al carbono API 5L SCH-80","Hierro dúctil C30",
+		"Hierro dúctil C40","Polietileno de alta densidad (PEAD) PE 100 RDE 21","Polietileno de alta densidad (PEAD) PE 100 RDE 17",
+		"Policluro de vinilo (PVC) RDE 26","Policluro de vinilo (PVC) RDE 21"]
+		
+		rugosidadLista=[0.1500, 0.1500, 0.2500,0.2500,0.0070,0.0070,0.0015,0.0015]
+
+
+		rugosidadDic=dict()
+		
+		for i in range(0,len(MaterialTuberiaLista)):
+			rugosidadDic[MaterialTuberiaLista[i]] = rugosidadLista[i]
+		
+		print(listaEU)
+
+		rugosidadAbsoluta= rugosidadDic[listaEU[0]]
+		
+		listaEntradaTemp1.append(rugosidadAbsoluta)
+
+
+	
+		diametroNominalLista= [6,8,10,12,14,16,18,20,24]
+		tuplasEntradas=list()
+		
+		for elemento in MaterialTuberiaLista:
+			tuplaL = tuple()
+			for diam in diametroNominalLista:
+				tuplaL = (elemento,diam)
+				tuplasEntradas.append(tuplaL)
+		listaValoresDiametroInterno= [0.154, 0.203, 0.255, 0.303, 0.333, 0.381, 0.429, 0.478, 0.575, 0.146, 0.194, 0.243, 0.289, 0.318, 0.364, 0.41, 0.456, 0.548, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.155, 0.202, 0.252, 0.299, 0.328, 0.375, 0.422, 0.469, 0.563, 0.152, 0.198, 0.247, 0.293, 0.322, 0.368, 0.414, 0.46, 0.552]
+		diametroInternoDic= dict()
+		for i in range(0,len(listaValoresDiametroInterno)):
+			diametroInternoDic[tuplasEntradas[i]]= listaValoresDiametroInterno[i]
+
+
+		diametroInternoTuberiaLavado = diametroInternoDic[(listaEU[0],listaEU[1])]
+		listaEntradaTemp1.append(diametroInternoTuberiaLavado)
+
+		caudalLavado = ValueConsumoAguaLavado(listaE1,temperatureValue,d60,caudalLista)[5]
+		velocidadFlujoTuberiaLavado = (4.0*caudalLavado)*(1.0/(pi*(diametroInternoTuberiaLavado**2)))
+		listaEntradaTemp1.append(velocidadFlujoTuberiaLavado)
+		
+		cabezaVelocidad = (velocidadFlujoTuberiaLavado**2)*(1/(2*9.806))
+		listaEntradaTemp1.append(cabezaVelocidad)
+
+		valorTemperaturas=list()
+		tablaTemperaturaViscocidadCinematica=dict()
+
+
+		for i in range(0,36):    
+			valorTemperaturas.append(i)
+					
+		valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
+		,1.386e-06, 1.346e-06, 1.308e-06, 1.271e-06, 1.237e-06, 1.204e-06, 
+		1.172e-06, 1.141e-06, 1.112e-06, 1.084e-06, 1.057e-06, 1.032e-06, 1.007e-06, 9.83e-07, 9.6e-07, 9.38e-07, 9.17e-07, 8.96e-07, 8.76e-07, 8.57e-07, 8.39e-07, 8.21e-07, 8.04e-07, 7.88e-07, 7.72e-07, 7.56e-07, 7.41e-07, 7.27e-07]
+
+		for ind in range(0,len(valorTemperaturas)):
+			tablaTemperaturaViscocidadCinematica[valorTemperaturas[ind]]=valorViscocidad[ind]
+
+		viscocidadCinematica= tablaTemperaturaViscocidadCinematica[temperatureValue]
+
+		listaEntradaTemp1.append(viscocidadCinematica)
+
+		numeroReynolds= velocidadFlujoTuberiaLavado*diametroInternoTuberiaLavado*(1/viscocidadCinematica)
+		listaEntradaTemp1.append(numeroReynolds)
+
+		factorFriccion=listaEU[3]
+
+		for i in range(0,5):
+			factorFriccion= (1/(-2*log10(((rugosidadAbsoluta/1000)*(1/(3.7*diametroInternoTuberiaLavado)))+(2.51*(1/(numeroReynolds*sqrt(factorFriccion)))))))**2
+		
+		listaEntradaTemp1.append(factorFriccion)
+
+		perdidaCargaTuberiaLavadoDW= factorFriccion*(listaEU[2]/diametroInternoTuberiaLavado)*(velocidadFlujoTuberiaLavado**2)*(1/(2*9.806))
+
+		listaEntradaTemp1.append(perdidaCargaTuberiaLavadoDW)
+			
+
+		#DatosPara2
+
+	
+		coeficienteRugosidadHazenLista = [140, 140, 140, 140, 150, 150, 150, 150]
+
+		rugosidadHazenDic=dict()
+		
+		for i in range(0,len(MaterialTuberiaLista)):
+			rugosidadHazenDic[MaterialTuberiaLista[i]] = coeficienteRugosidadHazenLista[i]
+
+		coeficienteRugosidadHazen= rugosidadHazenDic[listaEU[0]]
+		listaEntradaTemp2.append(coeficienteRugosidadHazen)
+
+		longitudTuberiaLavado = listaEU[2]
+		listaEntradaTemp2.append(longitudTuberiaLavado)
+
+		diametroNominalTuberiaLavado = listaEU[1]
+		listaEntradaTemp2.append(diametroNominalTuberiaLavado)
+
+		listaEntradaTemp2.append(diametroInternoTuberiaLavado)
+
+		listaEntradaTemp2.append(velocidadFlujoTuberiaLavado)
+
+		perdidaCargaUnitariaTuberiaLavado = (velocidadFlujoTuberiaLavado*(1/(0.354597213*coeficienteRugosidadHazen*(diametroInternoTuberiaLavado**0.63))))**(1/0.54)
+
+		listaEntradaTemp2.append(perdidaCargaUnitariaTuberiaLavado)
+
+		perdidaCargaTuberiaLavadoSinAccesorios = perdidaCargaUnitariaTuberiaLavado*longitudTuberiaLavado
+
+		listaEntradaTemp2.append(perdidaCargaTuberiaLavadoSinAccesorios)
+			
+		#DatosPara3
+	
+		
+		tuplasEntradas2=list()
+		diametroNominalLista= [6,8,10,12,14,16,18,20,24]
+		accesoriosLista = ["Válvula de compuerta completamente abierta",
+		"Codo 90° radio corto (r/d 1)",
+		"Codo 90° radio mediano (r/d 3)",
+		"Tee en sentido recto",
+		"Tee en sentido lateral",
+		"Unión",
+		"Entrada recta a tope",
+		"Entrada con boca acampanada",
+		"Salida del tubo"]
+
+		for elemento in accesoriosLista:
+					tuplaL = tuple()
+					for diam in diametroNominalLista:
+						tuplaL = (elemento,diam)
+						tuplasEntradas2.append(tuplaL)
+
+
+		listaValoresCoeficientePerdidaMenor= [
+		0.120,	0.110,	0.110,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,
+		0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,
+		0.180,	0.168,	0.168,	0.156,	0.156,	0.156,	0.144,	0.144,	0.144,
+		0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,
+		0.900,	0.840,	0.840,	0.780,	0.780,	0.780,	0.720,	0.720,	0.720,
+		0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,
+		0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,
+		0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,
+		1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000]
+
+
+		CoeficientePerdidaMenorDic= dict()
+		for i in range(0,len(listaValoresCoeficientePerdidaMenor)):
+			CoeficientePerdidaMenorDic[tuplasEntradas2[i]]= listaValoresCoeficientePerdidaMenor[i]
+
+		accesoriosListaEntrada= ["Válvula de compuerta completamente abierta",
+		f"{listaEU[4]}",
+		"Tee en sentido recto",
+		"Tee en sentido lateral",
+		"Unión",
+		f"{listaEU[5]}",
+		"Salida del tubo"]
+
+		
+		'''materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada y temperatureValue'''	
+		sumaCoeficientesPerdidaMenor= 0
+		
+		for element in accesoriosListaEntrada:
+			sumaCoeficientesPerdidaMenor=sumaCoeficientesPerdidaMenor+ CoeficientePerdidaMenorDic[(element,listaEU[1])]
+
+		peridaCargaTuberiaLavadoAccesorios= sumaCoeficientesPerdidaMenor*cabezaVelocidad
+		for elemento in accesoriosListaEntrada:
+			listaEntradaTemp3=list()
+			listaEntradaTemp3.append(elemento)
+			listaEntradaTemp3.append(listaEU[1])
+			listaEntradaTemp3.append(1)
+			listaEntradaTemp3.append(CoeficientePerdidaMenorDic[(elemento,listaEU[1])])
+			listaEntradaTemp3.append(sumaCoeficientesPerdidaMenor)
+			listaEntradaTemp3.append(peridaCargaTuberiaLavadoAccesorios)
+		
+		listaSalida = [listaEntradaTemp1,listaEntradaTemp2,peridaCargaTuberiaLavadoAccesorios]
+
+		return listaSalida
+
+
+
 	def perdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista):
 		
 	
@@ -4266,7 +4674,7 @@ def openFiltroWindow():
 		"Diámetro interno de la tubería de lavado",
 		"Velocidad de flujo en la tubería de lavado",
 		"Cabeza de velocidad",
-		f"Viscosidad cinemática del agua a {listaEU[4]} °C ",
+		f"Viscosidad cinemática del agua a {temperatureValue} °C ",
 		"Número de Reynolds",
 		"Factor de fricción (Iteración 4)",
 		"Pérdida de carga en la tubería de lavado(Sin accesorios)", 
@@ -4569,6 +4977,365 @@ def openFiltroWindow():
 			newDataTreeview(arbolperdidaCargaTuberiaLavado_AC, listaEntradaTemp3)
 
 		perdidaCargaTuberiaLavado_DW_HW2Window.mainloop()
+
+
+	def perdidaCargaTuberiaLavado_DW_HW2_2(listaE,temperatureValue,listaE1, d60,caudalLista,tasa):
+		
+	
+
+		listaE
+		listaEU=list()
+		i=0
+		for elemento in listaE:
+			try:
+				if i==0 or i==1 or i==4 or i==5:
+					if elemento.get() == "Material de la tubería de lavado":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el material de la tubería de lavado")
+						return None
+					elif elemento.get() == "Diámetro nominal de la tubería de lavado":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro nominal de la tubería de lavado")
+						return None
+
+					elif elemento.get() == "Codo 90° radio":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el valor del codo 90° radio")
+						return None
+					
+					
+					elif elemento.get() == "Tipo de entrada":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el tipo de entrada del accesorio")
+						return None
+
+					else:  
+						if i==0 or i==4 or i==5:
+							listaEU.append(elemento.get())
+						else:
+							listaEU.append(float(elemento.get()))
+					
+						i=i+1
+				else:
+					
+					if i==2 and (float(elemento.get())>2.5 or float(elemento.get())<1.5):
+						messagebox.showwarning(title="Error", message="El valor de la longitud de la tubería de lavado debe estar entre 5 y 50 metros.")
+						return None
+
+					elif i==3 and (float(elemento.get())>0.1 or float(elemento.get())<0.00001):
+						messagebox.showwarning(title="Error", message="El valor del factor de fricción debe estar entre 0.00001 y 0.1")
+						return None   
+					else:
+						listaEU.append(float(elemento.get()))
+					i=i+1
+			except:
+				messagebox.showwarning(title="Error", message="El valor ingresado no es un número")
+				return None
+			
+		listaEU.append(temperatureValue)
+		
+
+
+		perdidaCargaTuberiaLavado_DW_HW2Window = tk.Toplevel()
+		perdidaCargaTuberiaLavado_DW_HW2Window.iconbitmap(bitmap='icons\\agua.ico')
+		perdidaCargaTuberiaLavado_DW_HW2Window.geometry("1000x500") 
+		perdidaCargaTuberiaLavado_DW_HW2Window.resizable(0,0)	
+		perdidaCargaTuberiaLavado_DW_HW2Window.configure(background="#9DC4AA")
+
+
+
+
+		##Panel:
+		PanelPerdidaCargaTuberiaLavado = ttk.Notebook(perdidaCargaTuberiaLavado_DW_HW2Window)
+		PanelPerdidaCargaTuberiaLavado.pack(fill=BOTH, expand=TRUE)
+		###########Frame Principal1
+		PerdidaCargaTuberiaLavado_DWFrame=LabelFrame(PanelPerdidaCargaTuberiaLavado, text="Estimación de la pérdida de carga en la tubería de lavado", font=("Yu Gothic bold", 11))
+		PerdidaCargaTuberiaLavado_DWFrame.pack(side=TOP, fill=BOTH,expand=True)
+		PanelPerdidaCargaTuberiaLavado.add(PerdidaCargaTuberiaLavado_DWFrame,text="Darcy - Weisbach")
+		#Frame Treeview
+		arbolPerdidaCargaTuberiaLavado_DW_frame = LabelFrame(PerdidaCargaTuberiaLavado_DWFrame, text="Darcy - Weisbach", font=("Yu Gothic bold", 11))
+		arbolPerdidaCargaTuberiaLavado_DW_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolPerdidaCargaTuberiaLavado_DW_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolPerdidaCargaTuberiaLavado_DW_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolPerdidaCargaTuberiaLavado_DW= ttk.Treeview(arbolPerdidaCargaTuberiaLavado_DW_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolPerdidaCargaTuberiaLavado_DW.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolPerdidaCargaTuberiaLavado_DW.xview)
+		sedScrollY.configure(command=arbolPerdidaCargaTuberiaLavado_DW.yview)
+		#Define columnas.
+		arbolPerdidaCargaTuberiaLavado_DW["columns"]= (
+		"Rugosidad absoluta de la tubería",
+		"Diámetro interno de la tubería del efluente",
+		"Caudal de filtración",
+		"Velocidad de flujo en la tubería del efluente",
+		"Cabeza de velocidad",
+		f"Viscosidad cinemática del agua a {temperatureValue} °C ",
+		"Número de Reynolds",
+		"Factor de fricción (Iteración 4)",
+		"Pérdida de carga en la tubería de lavado(Sin accesorios)", 
+		)
+
+		#Headings
+		arbolPerdidaCargaTuberiaLavado_DW.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolPerdidaCargaTuberiaLavado_DW["columns"]:
+			arbolPerdidaCargaTuberiaLavado_DW.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolPerdidaCargaTuberiaLavado_DW["columns"])+1) :
+				arbolPerdidaCargaTuberiaLavado_DW.column(f"#{i}",width=500, stretch=False)	
+		arbolPerdidaCargaTuberiaLavado_DW.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolPerdidaCargaTuberiaLavado_DW.tag_configure("oddrow", background= "#1FCCDB")
+		arbolPerdidaCargaTuberiaLavado_DW.tag_configure("evenrow", background= "#9DC4AA")
+
+
+
+		##########Frame principal3
+		perdidaCargaTuberiaLavado_ACFrame=LabelFrame(PanelPerdidaCargaTuberiaLavado, text="Estimación de la pérdida de carga en la tubería de lavado por accesorios", font=("Yu Gothic bold", 11))
+		perdidaCargaTuberiaLavado_ACFrame.pack(side=TOP, fill=BOTH,expand=True)
+		PanelPerdidaCargaTuberiaLavado.add(perdidaCargaTuberiaLavado_ACFrame,text="Accesorios")
+		#Frame Treeview
+		arbolperdidaCargaTuberiaLavado_AC_frame = LabelFrame(perdidaCargaTuberiaLavado_ACFrame, text="Accesorios", font=("Yu Gothic bold", 11))
+		arbolperdidaCargaTuberiaLavado_AC_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolperdidaCargaTuberiaLavado_AC_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolperdidaCargaTuberiaLavado_AC_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolperdidaCargaTuberiaLavado_AC= ttk.Treeview(arbolperdidaCargaTuberiaLavado_AC_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolperdidaCargaTuberiaLavado_AC.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolperdidaCargaTuberiaLavado_AC.xview)
+		sedScrollY.configure(command=arbolperdidaCargaTuberiaLavado_AC.yview)
+		#Define columnas.
+		arbolperdidaCargaTuberiaLavado_AC["columns"]= (
+		"Accesorio",
+		"Diámetro nominal",
+		"Cantidad",
+		"Coeficiente de pérdida menor",
+		"Sumatoria de coeficientes de pérdida menor",
+		"Pérdida de carga en la tubería de lavado por accesorios"
+		)
+
+		#Headings
+		arbolperdidaCargaTuberiaLavado_AC.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolperdidaCargaTuberiaLavado_AC["columns"]:
+			arbolperdidaCargaTuberiaLavado_AC.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolperdidaCargaTuberiaLavado_AC["columns"])+1) :
+				arbolperdidaCargaTuberiaLavado_AC.column(f"#{i}",width=500, stretch=False)	
+		arbolperdidaCargaTuberiaLavado_AC.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolperdidaCargaTuberiaLavado_AC.tag_configure("oddrow", background= "#1FCCDB")
+		arbolperdidaCargaTuberiaLavado_AC.tag_configure("evenrow", background= "#9DC4AA")
+
+
+
+		############Insersión datos.
+	
+		
+		contadorFiltro = 0
+
+		listaEntradaTemp1=list()
+		listaEntradaTemp2=list()
+		listaEntradaTemp3=list()
+		datosSalida=list()
+
+		#DatosPara1        
+		
+	
+
+		#Tablas1
+		MaterialTuberiaLista=["Acero al carbono API 5L SCH-40","Acero al carbono API 5L SCH-80","Hierro dúctil C30",
+		"Hierro dúctil C40","Polietileno de alta densidad (PEAD) PE 100 RDE 21","Polietileno de alta densidad (PEAD) PE 100 RDE 17",
+		"Policluro de vinilo (PVC) RDE 26","Policluro de vinilo (PVC) RDE 21"]
+		
+		rugosidadLista=[0.1500, 0.1500, 0.2500,0.2500,0.0070,0.0070,0.0015,0.0015]
+
+
+		rugosidadDic=dict()
+		
+		for i in range(0,len(MaterialTuberiaLista)):
+			rugosidadDic[MaterialTuberiaLista[i]] = rugosidadLista[i]
+		
+		rugosidadAbsoluta= rugosidadDic[listaEU[0]]
+		
+		listaEntradaTemp1.append(rugosidadAbsoluta)
+
+		'''materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada y temperatureValue'''	
+
+
+		'listaEU[1]'
+		diametroNominalLista= [6,8,10,12,14,16,18,20,24]
+		tuplasEntradas=list()
+		
+		for elemento in MaterialTuberiaLista:
+			tuplaL = tuple()
+			for diam in diametroNominalLista:
+				tuplaL = (elemento,diam)
+				tuplasEntradas.append(tuplaL)
+		listaValoresDiametroInterno= [0.154, 0.203, 0.255, 0.303, 0.333, 0.381, 0.429, 0.478, 0.575, 0.146, 0.194, 0.243, 0.289, 0.318, 0.364, 0.41, 0.456, 0.548, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.155, 0.202, 0.252, 0.299, 0.328, 0.375, 0.422, 0.469, 0.563, 0.152, 0.198, 0.247, 0.293, 0.322, 0.368, 0.414, 0.46, 0.552]
+		diametroInternoDic= dict()
+		for i in range(0,len(listaValoresDiametroInterno)):
+			diametroInternoDic[tuplasEntradas[i]]= listaValoresDiametroInterno[i]
+
+
+		diametroInternoTuberiaLavado = diametroInternoDic[(listaEU[0],listaEU[1])]
+		listaEntradaTemp1.append(diametroInternoTuberiaLavado)
+
+		if tasa == "Tasa media":
+			caudalLavado = (120.0/86400.0)*ValuepredimensionamientoFiltros(caudalLista)[8]
+		elif tasa == "Tasa máxima":
+			caudalLavado = (150.0/86400.0)*ValuepredimensionamientoFiltros(caudalLista)[8]
+
+		listaEntradaTemp1.append(caudalLavado)
+
+		velocidadFlujoTuberiaLavado = (4.0*caudalLavado)*(1.0/(pi*(diametroInternoTuberiaLavado**2)))
+		listaEntradaTemp1.append(velocidadFlujoTuberiaLavado)
+		
+		cabezaVelocidad = (velocidadFlujoTuberiaLavado**2)*(1/(2*9.806))
+		listaEntradaTemp1.append(cabezaVelocidad)
+
+		valorTemperaturas=list()
+		tablaTemperaturaViscocidadCinematica=dict()
+
+
+		for i in range(0,36):    
+			valorTemperaturas.append(i)
+					
+		valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
+		,1.386e-06, 1.346e-06, 1.308e-06, 1.271e-06, 1.237e-06, 1.204e-06, 
+		1.172e-06, 1.141e-06, 1.112e-06, 1.084e-06, 1.057e-06, 1.032e-06, 1.007e-06, 9.83e-07, 9.6e-07, 9.38e-07, 9.17e-07, 8.96e-07, 8.76e-07, 8.57e-07, 8.39e-07, 8.21e-07, 8.04e-07, 7.88e-07, 7.72e-07, 7.56e-07, 7.41e-07, 7.27e-07]
+
+		for ind in range(0,len(valorTemperaturas)):
+			tablaTemperaturaViscocidadCinematica[valorTemperaturas[ind]]=valorViscocidad[ind]
+
+		viscocidadCinematica= tablaTemperaturaViscocidadCinematica[temperatureValue]
+
+		listaEntradaTemp1.append(viscocidadCinematica)
+
+		numeroReynolds= velocidadFlujoTuberiaLavado*diametroInternoTuberiaLavado*(1/viscocidadCinematica)
+		listaEntradaTemp1.append(numeroReynolds)
+
+		factorFriccion=listaEU[3]
+
+		for i in range(0,5):
+			factorFriccion= (1/(-2*log10(((rugosidadAbsoluta/1000)*(1/(3.7*diametroInternoTuberiaLavado)))+(2.51*(1/(numeroReynolds*sqrt(factorFriccion)))))))**2
+		
+		listaEntradaTemp1.append(factorFriccion)
+
+		perdidaCargaTuberiaLavadoDW= factorFriccion*(listaEU[2]/diametroInternoTuberiaLavado)*(velocidadFlujoTuberiaLavado**2)*(1/(2*9.806))
+
+		listaEntradaTemp1.append(perdidaCargaTuberiaLavadoDW)
+		
+		newDataTreeview(arbolPerdidaCargaTuberiaLavado_DW, listaEntradaTemp1)
+
+			
+
+		#DatosPara2
+
+		
+	
+		coeficienteRugosidadHazenLista = [140, 140, 140, 140, 150, 150, 150, 150]
+
+		rugosidadHazenDic=dict()
+		
+		for i in range(0,len(MaterialTuberiaLista)):
+			rugosidadHazenDic[MaterialTuberiaLista[i]] = coeficienteRugosidadHazenLista[i]
+
+		coeficienteRugosidadHazen= rugosidadHazenDic[listaEU[0]]
+		listaEntradaTemp2.append(coeficienteRugosidadHazen)
+
+		longitudTuberiaLavado = listaEU[2]
+		listaEntradaTemp2.append(longitudTuberiaLavado)
+
+		diametroNominalTuberiaLavado = listaEU[1]
+		listaEntradaTemp2.append(diametroNominalTuberiaLavado)
+
+		listaEntradaTemp2.append(diametroInternoTuberiaLavado)
+
+		listaEntradaTemp2.append(velocidadFlujoTuberiaLavado)
+
+		perdidaCargaUnitariaTuberiaLavado = (velocidadFlujoTuberiaLavado*(1/(0.354597213*coeficienteRugosidadHazen*(diametroInternoTuberiaLavado**0.63))))**(1/0.54)
+
+		listaEntradaTemp2.append(perdidaCargaUnitariaTuberiaLavado)
+
+		perdidaCargaTuberiaLavadoSinAccesorios = perdidaCargaUnitariaTuberiaLavado*longitudTuberiaLavado
+
+		listaEntradaTemp2.append(perdidaCargaTuberiaLavadoSinAccesorios)
+
+		
+			
+		#DatosPara3
+	
+		
+		tuplasEntradas2=list()
+		diametroNominalLista= [6,8,10,12,14,16,18,20,24]
+		accesoriosLista = ["Válvula de compuerta completamente abierta",
+		"Codo 90° radio corto (r/d 1)",
+		"Codo 90° radio mediano (r/d 3)",
+		"Tee en sentido recto",
+		"Tee en sentido lateral",
+		"Unión",
+		"Entrada recta a tope",
+		"Entrada con boca acampanada",
+		"Salida del tubo"]
+
+		for elemento in accesoriosLista:
+					tuplaL = tuple()
+					for diam in diametroNominalLista:
+						tuplaL = (elemento,diam)
+						tuplasEntradas2.append(tuplaL)
+
+
+		listaValoresCoeficientePerdidaMenor= [
+		0.120,	0.110,	0.110,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,
+		0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,
+		0.180,	0.168,	0.168,	0.156,	0.156,	0.156,	0.144,	0.144,	0.144,
+		0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,
+		0.900,	0.840,	0.840,	0.780,	0.780,	0.780,	0.720,	0.720,	0.720,
+		0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,
+		0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,
+		0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,
+		1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000]
+
+
+		CoeficientePerdidaMenorDic= dict()
+		for i in range(0,len(listaValoresCoeficientePerdidaMenor)):
+			CoeficientePerdidaMenorDic[tuplasEntradas2[i]]= listaValoresCoeficientePerdidaMenor[i]
+
+		accesoriosListaEntrada= ["Válvula de compuerta completamente abierta",
+		"Tee en sentido recto",
+		f"{listaEU[5]}",
+		"Salida del tubo"]
+
+		
+		'''materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada y temperatureValue'''	
+		sumaCoeficientesPerdidaMenor= 0
+		
+		for element in accesoriosListaEntrada:
+			sumaCoeficientesPerdidaMenor=sumaCoeficientesPerdidaMenor+ CoeficientePerdidaMenorDic[(element,listaEU[1])]
+
+		peridaCargaTuberiaLavadoAccesorios= sumaCoeficientesPerdidaMenor*cabezaVelocidad
+		for elemento in accesoriosListaEntrada:
+			listaEntradaTemp3=list()
+			listaEntradaTemp3.append(elemento)
+			listaEntradaTemp3.append(listaEU[1])
+			listaEntradaTemp3.append(1)
+			listaEntradaTemp3.append(CoeficientePerdidaMenorDic[(elemento,listaEU[1])])
+			listaEntradaTemp3.append(sumaCoeficientesPerdidaMenor)
+			listaEntradaTemp3.append(peridaCargaTuberiaLavadoAccesorios)
+			newDataTreeview(arbolperdidaCargaTuberiaLavado_AC, listaEntradaTemp3)
+
+		perdidaCargaTuberiaLavado_DW_HW2Window.mainloop()
 				
 
 	def perdidaCargaTuberiaLavado_DW_HW(TemperatureValue,listaE, d60,caudalLista):
@@ -4635,7 +5402,7 @@ def openFiltroWindow():
 		tipoEntradaName = OptionMenu(frameperdidaCargaTuberiaLavado_DW_HW, tipoEntrada, *listaValoresTemp3)
 		
 
-		#Volver
+	
 		
 		longitudTuberiaLavadoLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Longitud de la tubería de lavado [5m - 50m]:", font =("Yu Gothic",9))
 
@@ -4697,12 +5464,143 @@ def openFiltroWindow():
 
 
 		perdidaCargaTuberiaLavado_DW_HWWindow.mainloop()
+	
+	def perdidaCargaTuberiaLavado_DW_HW_2(TemperatureValue,listaE, d60,caudalLista, tasaE):
+
+		if tasaE.get() == "Tasa":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la tasa.")
+			return None
+		else:
+			tasa = tasaE.get()
+			
+		perdidaCargaTuberiaLavado_DW_HWWindow = tk.Toplevel()
+		perdidaCargaTuberiaLavado_DW_HWWindow.iconbitmap(bitmap='icons\\agua.ico')
+		perdidaCargaTuberiaLavado_DW_HWWindow.geometry("800x600") 
+		perdidaCargaTuberiaLavado_DW_HWWindow.resizable(0,0)	
+		perdidaCargaTuberiaLavado_DW_HWWindow.configure(background="#9DC4AA")
+
+		frameperdidaCargaTuberiaLavado_DW_HW= LabelFrame(perdidaCargaTuberiaLavado_DW_HWWindow, text=f"Estimación de la pérdida de carga en la tubería de lavado a {tasa}",font=("Yu Gothic bold", 11))
+		frameperdidaCargaTuberiaLavado_DW_HW.pack(side=TOP,fill=BOTH,expand=True)
+
+		def newEntryFiltroP(lista):
+			for elemento in lista:
+				if elemento == materialTuberiaLavado:
+					materialTuberiaLavado.set("Material de la tubería de lavado")
+				elif elemento ==diametroNominalTuberiaLavado:
+					diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
+				else:
+					elemento.delete(0, END)
 
 
-	def perdidaCargaTotalLavado(tempValue,d60):
+
+
+		inicialLabel=Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Datos adicionales para cálculos: ",font=("Yu Gothic bold",15))
+
+
+
+
+		materialTuberiaLavado = StringVar()
+		materialTuberiaLavado.set("Material de la tubería de lavado")
+		listaValoresTemp=["Acero al carbono API 5L SCH-40","Acero al carbono API 5L SCH-80","Hierro dúctil C30",
+		"Hierro dúctil C40","Polietileno de alta densidad (PEAD) PE 100 RDE 21","Polietileno de alta densidad (PEAD) PE 100 RDE 17",
+		"Policluro de vinilo (PVC) RDE 26","Policluro de vinilo (PVC) RDE 21"]
+
+		materialTuberiaLavadoName = OptionMenu(frameperdidaCargaTuberiaLavado_DW_HW, materialTuberiaLavado, *listaValoresTemp)
+		materialTuberiaLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
+
+
+
+		diametroNominalTuberiaLavado = StringVar()
+		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
+		listaValoresTemp1=["6","8","10","12","14","16","18","20","24"]
+		diametroNominalTuberiaLavadoName = OptionMenu(frameperdidaCargaTuberiaLavado_DW_HW, diametroNominalTuberiaLavado, *listaValoresTemp1)
+		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+
+		#NombrePendiente
+		codoRadio = StringVar()
+		codoRadio.set("Codo 90° radio")
+		listaValoresTemp3=['Codo 90° radio corto (r/d 1)', 'Codo 90° radio mediano (r/d 3)']
+		codoRadioName = OptionMenu(frameperdidaCargaTuberiaLavado_DW_HW, codoRadio, *listaValoresTemp3)
+		
+
+		
+		tipoEntrada = StringVar()
+		tipoEntrada.set("Tipo de entrada")
+		listaValoresTemp3=['Entrada recta a tope', 'Entrada con boca acampanada']
+		tipoEntradaName = OptionMenu(frameperdidaCargaTuberiaLavado_DW_HW, tipoEntrada, *listaValoresTemp3)
+		
+
+	
+		
+		longitudTuberiaLavadoLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Longitud de la tubería del efluente [5m - 50m]:", font =("Yu Gothic",9))
+
+		factorFriccionLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccion el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
+
+
+		divisorAccesoriosLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el tipo de accesorio", font=("Yu Gothic bold",10))
+
+
+		longitudTuberiaLavado = Entry(frameperdidaCargaTuberiaLavado_DW_HW)
+		factorFriccion = Entry(frameperdidaCargaTuberiaLavado_DW_HW)
+
+
+
+
+		listaEntradas=[materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada]
+
+		listaLabel=[inicialLabel, materialTuberiaLabel , materialTuberiaLavadoName, diametroNominalTuberiaLavadoLabel, diametroNominalTuberiaLavadoName,longitudTuberiaLavadoLabel, factorFriccionLabel,divisorAccesoriosLabel,tipoEntradaName,]
+
+		alturaInicialLabel=20
+		m=0
+		for elemento in listaLabel:
+			elemento.place(x=50,y=alturaInicialLabel)
+			alturaInicialLabel+=40
+			m=m+1
+			if m==3:
+				alturaInicialEntradas=alturaInicialLabel
+		
+		i=0
+		for elemento in listaEntradas:
+				if i == 0 or i==1 or i==4 or i==5:
+					i=i+1
+					alturaInicialEntradas+=40
+				else: 
+					i=i+1
+					elemento.place(x=400,y=alturaInicialEntradas)
+					alturaInicialEntradas+=40
+
+		#Botones.#
+		
+		botonCalcular = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Calcular la estimación de carga en la tubería de lavado.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTuberiaLavado_DW_HW2_2(listaEntradas,TemperatureValue,listaE, d60,caudalLista,tasa))
+		botonNewEntry = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botones=[botonCalcular,botonNewEntry]
+		alturaBotones=450
+		for elemento in botones:
+			elemento.place(x=40, y=alturaBotones)
+			alturaBotones= alturaBotones+50
+
+		#Borrar
+
+		materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
+		diametroNominalTuberiaLavado.set("10")
+		longitudTuberiaLavado.insert(0,"1.5")
+		factorFriccion.insert(0,"0.0200")
+	
+		tipoEntrada.set('Entrada con boca acampanada')
+		
+		#NOBorrar
+		codoRadio.set('Codo 90° radio mediano (r/d 3)')
+
+
+
+		perdidaCargaTuberiaLavado_DW_HWWindow.mainloop()
+
+
+	def perdidaCargaTotalLavado2(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1):
+		
 		perdidaCargaTotalLavadoWindow = tk.Toplevel()
 		perdidaCargaTotalLavadoWindow.iconbitmap(bitmap='icons\\agua.ico')
-		perdidaCargaTotalLavadoWindow.geometry("600x400") 
+		perdidaCargaTotalLavadoWindow.geometry("600x600") 
 		perdidaCargaTotalLavadoWindow.resizable(0,0)	
 		perdidaCargaTotalLavadoWindow.configure(background="#9DC4AA")
 
@@ -4727,7 +5625,7 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolperdidaCargaTotalLavado.yview)
 		#Define columnas.
 		arbolperdidaCargaTotalLavado["columns"]= (
-		"Pérdida debida a","Representación","Pérdida de carga", "[m]"
+		"Razón","hi","Pérdida de carga [m]"
 		
 		)
 
@@ -4746,22 +5644,349 @@ def openFiltroWindow():
 		arbolperdidaCargaTotalLavado.tag_configure("oddrow", background= "#9DC4AA")    
 
 		listaperdidaCargaTotalLavado=list()
+
+		listaValuePerdidaCargaTuberiaLavado = ValuePerdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista)
 		
-		perdidaTotalLista= [valuePerdidaCargaLechoExpandido()[3], valuePerdidacargaLechoGravaLavado(tempValue,d60)[2],  
-		valuePerdidaCargaSistemaDrenajeLavado(tempValue,d60, caudal,listaEntradaDrenaje)[3],]
+		perdidaCargaLechoExpandido = valuePerdidaCargaLechoExpandido()[3]
+		perdidaCargaLechoGrava = valuePerdidacargaLechoGravaLavado(temperatureValue,d60)[2]
+		perdidaCargaSistemaDrenaje = valuePerdidaCargaSistemaDrenajeLavado(temperatureValue,d60, caudal,listaEntradaDrenaje)[3]
+		perdidaCargaDW= listaValuePerdidaCargaTuberiaLavado[0][7]
+		perdidaCargaHZ= listaValuePerdidaCargaTuberiaLavado[1][6]
+		perdidaCargaAccesorios= listaValuePerdidaCargaTuberiaLavado[2]
 		
-		#Volver2
+	
+
+		perdidaTotalListaSinHZ= [perdidaCargaLechoExpandido, perdidaCargaLechoGrava, 
+		perdidaCargaSistemaDrenaje, perdidaCargaDW, perdidaCargaAccesorios] 
+		
+		perdidaTotalListaSinDW= [perdidaCargaLechoExpandido, perdidaCargaLechoGrava, 
+		perdidaCargaSistemaDrenaje, perdidaCargaHZ, perdidaCargaAccesorios]
+
+		perdidaCargaTotalSinHZ=0.0
+		for elemento in perdidaTotalListaSinHZ:
+			perdidaCargaTotalSinHZ=perdidaCargaTotalSinHZ+elemento 
+
+		perdidaCargaTotalSinDW=0.0
+		for elemento in perdidaTotalListaSinDW:
+			perdidaCargaTotalSinDW=perdidaCargaTotalSinDW+elemento 
 
 
-		newDataTreeview(arbolperdidaCargaTotalLavado,listaperdidaCargaTotalLavado)
+
+
+		perdidaTotalFinal= [perdidaCargaLechoExpandido, perdidaCargaLechoGrava, 
+		perdidaCargaSistemaDrenaje, perdidaCargaDW, perdidaCargaHZ, perdidaCargaAccesorios,perdidaCargaTotalSinHZ,
+		perdidaCargaTotalSinDW] 
+
+
+		listaDebidoA= [ 'Pérdida de carga a través del lecho expandido',					
+		'Pérdida de carga a través del lecho de grava',					
+		'Pérdidad de carga a través del sistema de drenaje',					
+		'Pérdida de carga en la tubería de lavado (Darcy - Weisbach)',	
+		'Pérdida de carga en la tubería de lavado (Hazen - Williams)',				
+		'Pérdida de carga  por accesorios en la tubería de lavado',					
+		'Pérdidad de carga total durante el lavado con Darcy - Weisbach',
+		'Pérdidad de carga total durante el lavado con Hazen - Williams']
+		j=1
+		for i in range(0,len(perdidaTotalFinal)):
+			listaperdidaCargaTotalLavado=list()
+			listaperdidaCargaTotalLavado.append(listaDebidoA[i])
+			listaperdidaCargaTotalLavado.append(f"h{j}")
+			listaperdidaCargaTotalLavado.append(perdidaTotalFinal[i])
+			newDataTreeview(arbolperdidaCargaTotalLavado,listaperdidaCargaTotalLavado)
+			if i==3 and j==4:
+				pass
+			elif j==5 or j=="b":
+				j="b"
+			else:
+				j=j+1
+			
 
 		perdidaCargaTotalLavadoWindow.mainloop()
 
-	def verificacionVelocidadesDiseñoTuberias():
-		#Luego
+
+	def perdidaCargaTotalLavadoMain(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista):
+		
+		
+	
+		perdidaCargaTotalLavadoMainWindow = tk.Toplevel()
+		perdidaCargaTotalLavadoMainWindow.iconbitmap(bitmap='icons\\agua.ico')
+		perdidaCargaTotalLavadoMainWindow.geometry("800x600") 
+		perdidaCargaTotalLavadoMainWindow.resizable(0,0)	
+		perdidaCargaTotalLavadoMainWindow.configure(background="#9DC4AA")
+
+		frameperdidaCargaTotalLavadoMain= LabelFrame(perdidaCargaTotalLavadoMainWindow, text="Datos adicionales para el cálculo de la pérdida total durante el lavado.",font=("Yu Gothic bold", 11))
+		frameperdidaCargaTotalLavadoMain.pack(side=TOP,fill=BOTH,expand=True)
+
+		def newEntryFiltroP(lista):
+			for elemento in lista:
+				if elemento == materialTuberiaLavado:
+					materialTuberiaLavado.set("Material de la tubería de lavado")
+				elif elemento ==diametroNominalTuberiaLavado:
+					diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
+				elif elemento==codoRadio:
+					codoRadio.set("Codo 90° radio")
+				elif elemento==tipoEntrada:
+					tipoEntrada.set("Tipo de entrada")
+				else:
+					elemento.delete(0, END)
+
+
+
+
+		inicialLabel=Label(frameperdidaCargaTotalLavadoMain, text="Datos adicionales para cálculos: ",font=("Yu Gothic bold",15))
+
+
+
+
+		materialTuberiaLavado = StringVar()
+		materialTuberiaLavado.set("Material de la tubería de lavado")
+		listaValoresTemp=["Acero al carbono API 5L SCH-40","Acero al carbono API 5L SCH-80","Hierro dúctil C30",
+		"Hierro dúctil C40","Polietileno de alta densidad (PEAD) PE 100 RDE 21","Polietileno de alta densidad (PEAD) PE 100 RDE 17",
+		"Policluro de vinilo (PVC) RDE 26","Policluro de vinilo (PVC) RDE 21"]
+
+		materialTuberiaLavadoName = OptionMenu(frameperdidaCargaTotalLavadoMain, materialTuberiaLavado, *listaValoresTemp)
+		materialTuberiaLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
+
+
+
+		diametroNominalTuberiaLavado = StringVar()
+		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
+		listaValoresTemp1=["6","8","10","12","14","16","18","20","24"]
+		diametroNominalTuberiaLavadoName = OptionMenu(frameperdidaCargaTotalLavadoMain, diametroNominalTuberiaLavado, *listaValoresTemp1)
+		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+
+		#NombrePendiente
+		codoRadio = StringVar()
+		codoRadio.set("Codo 90° radio")
+		listaValoresTemp3=['Codo 90° radio corto (r/d 1)', 'Codo 90° radio mediano (r/d 3)']
+		codoRadioName = OptionMenu(frameperdidaCargaTotalLavadoMain, codoRadio, *listaValoresTemp3)
+
+
+
+		tipoEntrada = StringVar()
+		tipoEntrada.set("Tipo de entrada")
+		listaValoresTemp3=['Entrada recta a tope', 'Entrada con boca acampanada']
+		tipoEntradaName = OptionMenu(frameperdidaCargaTotalLavadoMain, tipoEntrada, *listaValoresTemp3)
+
+
+	
+
+		longitudTuberiaLavadoLabel = Label(frameperdidaCargaTotalLavadoMain, text="Longitud de la tubería de lavado [5m - 50m]:", font =("Yu Gothic",9))
+
+		factorFriccionLabel = Label(frameperdidaCargaTotalLavadoMain, text="Seleccion el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
+
+
+		divisorAccesoriosLabel = Label(frameperdidaCargaTotalLavadoMain, text="Seleccione los tipos de accesorios", font=("Yu Gothic bold",10))
+
+
+		longitudTuberiaLavado = Entry(frameperdidaCargaTotalLavadoMain)
+		factorFriccion = Entry(frameperdidaCargaTotalLavadoMain)
+
+
+
+
+		listaEntradas=[materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada]
+
+		listaLabel=[inicialLabel, materialTuberiaLabel , materialTuberiaLavadoName, diametroNominalTuberiaLavadoLabel, diametroNominalTuberiaLavadoName,longitudTuberiaLavadoLabel, factorFriccionLabel,divisorAccesoriosLabel, codoRadioName,tipoEntradaName,]
+
+		alturaInicialLabel=20
+		m=0
+		for elemento in listaLabel:
+			elemento.place(x=50,y=alturaInicialLabel)
+			alturaInicialLabel+=40
+			m=m+1
+			if m==3:
+				alturaInicialEntradas=alturaInicialLabel
+
+		i=0
+		for elemento in listaEntradas:
+				if i == 0 or i==1 or i==4 or i==5:
+					i=i+1
+					alturaInicialEntradas+=40
+				else: 
+					i=i+1
+					elemento.place(x=400,y=alturaInicialEntradas)
+					alturaInicialEntradas+=40
+
+		#Botones.
+		botonCalcular = HoverButton(frameperdidaCargaTotalLavadoMain, text="Calcular la pérdida de carga total durante el lavado", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTotalLavado2(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE))
+		botonNewEntry = HoverButton(frameperdidaCargaTotalLavadoMain, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botones=[botonCalcular,botonNewEntry]
+		alturaBotones=450
+		for elemento in botones:
+			elemento.place(x=40, y=alturaBotones)
+			alturaBotones= alturaBotones+50
+
+		#Borrar
+
+		materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
+		diametroNominalTuberiaLavado.set("10")
+		longitudTuberiaLavado.insert(0,"20")
+		factorFriccion.insert(0,"0.0200")
+		codoRadio.set('Codo 90° radio mediano (r/d 3)')
+		tipoEntrada.set('Entrada con boca acampanada')
+
+
+
+
+
+		perdidaCargaTotalLavadoMainWindow.mainloop()
+
+
+	def verificacionVelocidadesDiseñoTuberiaMain(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista):
+		
+		if listaEntradaDrenaje[2].get() == "Sección transversal":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la sección transversal")
+			return None
+		else:
+			seccionTransvMultiple=listaEntradaDrenaje[2].get()
+			
+		
+
+		verificacionVelocidadesDiseñoTuberiaMainWindow = tk.Toplevel()
+		verificacionVelocidadesDiseñoTuberiaMainWindow.iconbitmap(bitmap='icons\\agua.ico')
+		verificacionVelocidadesDiseñoTuberiaMainWindow.geometry("800x600") 
+		verificacionVelocidadesDiseñoTuberiaMainWindow.resizable(0,0)	
+		verificacionVelocidadesDiseñoTuberiaMainWindow.configure(background="#9DC4AA")
+
+																												
+
+		frameverificacionVelocidadesDiseñoTuberiaMain= LabelFrame(verificacionVelocidadesDiseñoTuberiaMainWindow, text="Datos adicionales para el cálculo de las velocidades de diseño en las tuberías del filtro durante el lavado ",font=("Yu Gothic bold", 11))
+		frameverificacionVelocidadesDiseñoTuberiaMain.pack(side=TOP,fill=BOTH,expand=True)
+
+		def newEntryFiltroP(lista):
+			for elemento in lista:
+				if elemento == materialTuberiaLavado:
+					materialTuberiaLavado.set("Material de la tubería de lavado")
+				elif elemento ==diametroNominalTuberiaLavado:
+					diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
+				else:
+					elemento.delete(0, END)
+
+
+
+
+		inicialLabel=Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Datos adicionales para cálculos: ",font=("Yu Gothic bold",15))
+
+
+
+
+		materialTuberiaLavado = StringVar()
+		materialTuberiaLavado.set("Material de la tubería de lavado")
+		listaValoresTemp=["Acero al carbono API 5L SCH-40","Acero al carbono API 5L SCH-80","Hierro dúctil C30",
+		"Hierro dúctil C40","Polietileno de alta densidad (PEAD) PE 100 RDE 21","Polietileno de alta densidad (PEAD) PE 100 RDE 17",
+		"Policluro de vinilo (PVC) RDE 26","Policluro de vinilo (PVC) RDE 21"]
+
+		materialTuberiaLavadoName = OptionMenu(frameverificacionVelocidadesDiseñoTuberiaMain, materialTuberiaLavado, *listaValoresTemp)
+		materialTuberiaLabel= Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
+
+
+
+		diametroNominalTuberiaLavado = StringVar()
+		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
+		listaValoresTemp1=["6","8","10","12","14","16","18","20","24"]
+		diametroNominalTuberiaLavadoName = OptionMenu(frameverificacionVelocidadesDiseñoTuberiaMain, diametroNominalTuberiaLavado, *listaValoresTemp1)
+		diametroNominalTuberiaLavadoLabel= Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+
+		#NombrePendiente
+		codoRadio = StringVar()
+		codoRadio.set("Codo 90° radio")
+		listaValoresTemp3=['Codo 90° radio corto (r/d 1)', 'Codo 90° radio mediano (r/d 3)']
+		codoRadioName = OptionMenu(frameverificacionVelocidadesDiseñoTuberiaMain, codoRadio, *listaValoresTemp3)
+
+
+
+		tipoEntrada = StringVar()
+		tipoEntrada.set("Tipo de entrada")
+		listaValoresTemp3=['Entrada recta a tope', 'Entrada con boca acampanada']
+		tipoEntradaName = OptionMenu(frameverificacionVelocidadesDiseñoTuberiaMain, tipoEntrada, *listaValoresTemp3)
+
+
+
+
+		longitudTuberiaLavadoLabel = Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Longitud de la tubería de lavado [5m - 50m]:", font =("Yu Gothic",9))
+
+		factorFriccionLabel = Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccion el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
+
+		longitudTuberiaLavado = Entry(frameverificacionVelocidadesDiseñoTuberiaMain)
+		factorFriccion = Entry(frameverificacionVelocidadesDiseñoTuberiaMain)
+
+
+
+
+		listaEntradas=[materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada]
+
+		listaLabel=[inicialLabel, materialTuberiaLabel , materialTuberiaLavadoName, diametroNominalTuberiaLavadoLabel, diametroNominalTuberiaLavadoName,longitudTuberiaLavadoLabel, factorFriccionLabel]
+
+		alturaInicialLabel=20
+		m=0
+		for elemento in listaLabel:
+			elemento.place(x=50,y=alturaInicialLabel)
+			alturaInicialLabel+=40
+			m=m+1
+			if m==3:
+				alturaInicialEntradas=alturaInicialLabel
+
+		i=0
+		for elemento in listaEntradas:
+				if i == 0 or i==1 or i==4 or i==5:
+					i=i+1
+					alturaInicialEntradas+=40
+				else: 
+					i=i+1
+					elemento.place(x=400,y=alturaInicialEntradas)
+					alturaInicialEntradas+=40
+		
+		#Botones.
+		botonCalcular = HoverButton(frameverificacionVelocidadesDiseñoTuberiaMain, text="Calcular las velocidades de diseño en las tuberías del filtro", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: verificacionVelocidadesDiseñoTuberias(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE))
+		botonNewEntry = HoverButton(frameverificacionVelocidadesDiseñoTuberiaMain, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botones=[botonCalcular,botonNewEntry]
+		alturaBotones=450
+		for elemento in botones:
+			elemento.place(x=40, y=alturaBotones)
+			alturaBotones= alturaBotones+50
+
+		#Borrar
+
+		materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
+		diametroNominalTuberiaLavado.set("10")
+		longitudTuberiaLavado.insert(0,"20")
+		factorFriccion.insert(0,"0.0200")
+
+		#NOBORRAR.
+		codoRadio.set('Codo 90° radio mediano (r/d 3)')
+		tipoEntrada.set('Entrada con boca acampanada')
+
+
+
+
+
+		verificacionVelocidadesDiseñoTuberiaMainWindow.mainloop()
+
+
+
+
+
+
+
+	def verificacionVelocidadesDiseñoTuberias(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1):
+		
+		if listaEntradaDrenaje[2].get() == "Sección transversal":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la sección transversal")
+			return None
+		else:
+			seccionTransvMultiple=listaEntradaDrenaje[2].get()
+
+		if listaEntradaDrenaje[4].get() == "Diámetro de los laterales":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los laterales")
+			return None
+		else:
+			diametroLaterales=listaEntradaDrenaje[4].get()
+		
+
 		verificacionVelocidadesDiseñoTuberiasWindow = tk.Toplevel()
 		verificacionVelocidadesDiseñoTuberiasWindow.iconbitmap(bitmap='icons\\agua.ico')
-		verificacionVelocidadesDiseñoTuberiasWindow.geometry("600x400") 
+		verificacionVelocidadesDiseñoTuberiasWindow.geometry("1200x400") 
 		verificacionVelocidadesDiseñoTuberiasWindow.resizable(0,0)	
 		verificacionVelocidadesDiseñoTuberiasWindow.configure(background="#9DC4AA")
 
@@ -4786,6 +6011,9 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolverificacionVelocidadesDiseñoTuberias.yview)
 		#Define columnas.
 		arbolverificacionVelocidadesDiseñoTuberias["columns"]= (
+			"Velocidad de diseño",
+			"Rango de diseño (m/s)",
+			"Calculada (m/s)",
 		
 		)
 
@@ -4802,12 +6030,76 @@ def openFiltroWindow():
 		#Striped row tags
 		arbolverificacionVelocidadesDiseñoTuberias.tag_configure("evenrow", background= "#1FCCDB")
 		arbolverificacionVelocidadesDiseñoTuberias.tag_configure("oddrow", background= "#9DC4AA")    
+		#Tablas
+		
+		listaSeccionTuberia=['6 X 6', '8 X 8', '10 X 10', '12 X 12', '14 X 14', '16 X 16', '18 X 18','20 X 20']
+
+		listaAreaSeccion=list()
+
+		ind=0
+
+		for elemento in listaSeccionTuberia:
+			if elemento == '10 X 10':
+				ind=ind+1
+			if ind==0:
+				listaAreaSeccion.append((float(elemento[0])*0.0254)**2)
+			else:
+				listaAreaSeccion.append((float(elemento[0:2])*0.0254)**2)
+
+		AreaSeccionDic=dict()
+
+		for j in range(0,len(listaSeccionTuberia)):
+			AreaSeccionDic[listaSeccionTuberia[j]]=listaAreaSeccion[j]
+			
+		listaDiametroLaterales= ("1 1/2", "2", "2 1/2", "3")
+		listaAreasLaterales=[0.0011401,0.0020268,0.0031669,0.0045604]
+		areaLateralesDic=dict()
+
+		for i in range(0, len(listaDiametroLaterales)):
+			areaLateralesDic[listaDiametroLaterales[i]]=listaAreasLaterales[i]
+
+
+
+
+
+
 
 		listaverificacionVelocidadesDiseñoTuberias=list()
 
+		listaVelocidadDiseño=["Velocidad en la tubería de lavado","Velocidad en tubería de drenaje en lavado (múltiple)",
+		"Velocidad en tubería de drenaje en lavado (laterales)"]
+		listaRangoDiseño=["1.5 - 3.0","0.9 - 2.4", "0.9 - 2.4"]
+		
+		velocidadTuberiaLavado= ValuePerdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista)[0][2]
+		velocidadTuberiaDrenajeMultiple= ValueConsumoAguaLavado(listaE1, temperatureValue, d60, caudalLista)[5] *(1.0/AreaSeccionDic[seccionTransvMultiple])
+		velocidadTuberiaDrenajeLaterales = ValueConsumoAguaLavado(listaE1, temperatureValue, d60, caudalLista)[5]/(( ValueDrenajeFiltro2(caudal,listaEntradaDrenaje)[2])*areaLateralesDic[diametroLaterales])
+
+		listaCalculada=[velocidadTuberiaLavado, velocidadTuberiaDrenajeMultiple, velocidadTuberiaDrenajeLaterales]
+		
+	
+
+		for i in range(0, len(listaVelocidadDiseño)):
+			listaverificacionVelocidadesDiseñoTuberias=list()
+			listaverificacionVelocidadesDiseñoTuberias.append(listaVelocidadDiseño[i])
+			listaverificacionVelocidadesDiseñoTuberias.append(listaRangoDiseño[i])
+			listaverificacionVelocidadesDiseñoTuberias.append(listaCalculada[i])
+			newDataTreeview(arbolverificacionVelocidadesDiseñoTuberias,listaverificacionVelocidadesDiseñoTuberias)
 
 
-		newDataTreeview(arbolverificacionVelocidadesDiseñoTuberias,listaverificacionVelocidadesDiseñoTuberias)
+		if velocidadTuberiaLavado<1.5:
+			messagebox.showinfo(title="Información", message="La velocidad en la tubería de lavado es baja, seleccione otro diámetro.")
+		elif velocidadTuberiaLavado>3.0:
+			messagebox.showinfo(title="Información", message="La velocidad en la tubería de lavado es alta, seleccione otro diámetro.")
+
+		if velocidadTuberiaDrenajeMultiple<0.9:
+			messagebox.showinfo(title="Información", message="La velocidad en el múltiple es baja, seleccion otra sección")
+		elif velocidadTuberiaDrenajeMultiple>2.4:
+			messagebox.showinfo(title="Información", message="La velocidad en el múltiple es alta, seleccion otra sección")
+
+		if velocidadTuberiaDrenajeLaterales<0.9:
+			messagebox.showinfo(title="Información", message="La velocidad en el lateral es baja, seleccione otro diámetro o distanciamiento")
+		elif velocidadTuberiaDrenajeLaterales>2.4:
+			messagebox.showinfo(title="Información", message="La velocidad en el lateral es alta, seleccione otro diámetro o distanciamiento")
 
 		verificacionVelocidadesDiseñoTuberiasWindow.mainloop()
 
@@ -5043,12 +6335,13 @@ def openFiltroWindow():
 
 		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga a través\n del sistema de drenaje durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado(valorTemperatura,d60, caudalMedio, listaEntradaDrenaje) )
 
-		botonPerdidaCargaTuberiaLavado_DW = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga en la tubería de lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW_HW(valorTemperatura,listaEntradaExtra,d60,listaCaudal)) 
+		botonPerdidaCargaTuberiaLavado_DW = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga en la tubería\n de lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW_HW(valorTemperatura,listaEntradaExtra,d60,listaCaudal)) 
 
-		botonPerdidaCargaTotalLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga total durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavado(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje) )
+		botonPerdidaCargaTotalLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga total durante\n el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavadoMain(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal) )
 
-		botonVerificacionVelocidadesDiseñoTuberias = HoverButton(hidraulicaSistemaLavadoMainFrame, text="10", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: verificacionVelocidadesDiseñoTuberias() )
+		botonVerificacionVelocidadesDiseñoTuberias = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Verificación de velocidad de diseño\n en tuberías de filtro durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: verificacionVelocidadesDiseñoTuberiaMain(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal) )
 
+		#Pendiente: Revisar manejo de errores de Lista Entrada Drenaje y otros. (En pérdida de carga Total)
 
 			
 		listaBotones=[botonVelocidadLavadoExpansionLechoFiltrante ,botonConsumoAguaLavado ,
@@ -5080,12 +6373,285 @@ def openFiltroWindow():
 
 
 
-		#HidraulicaFin
+	def canaletasDeLavado():
+		return 0
+	
+	def dimensionesYCotasFiltros():
+		return 0 
+
+
+	def perdidaEnergiaLechoLimpio(listaTamiz, listaAR, optnValue, listaCaudal):
+		#PerdidaLechoLimpio
+		try: 
+			caudalMedio=float(listaCaudal[0].get())
+			
+		except:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
+			return None
+
+		listaNTamizTemp=listaTamiz.copy()
+		listaARetenidaTemp=listaAR.copy()
+		listaNTamiz=list()
+		listaARetenida=list()
+
+		if listaNTamizTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de los números de tamiz.")
+			return None
+		if listaARetenidaTemp[0].get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta algún dato de la arena retenida.")
+			return None
+		if optnValue.get() == "Seleccione la temperatura":
+			messagebox.showwarning(title="Error", message="Hace falta elegir el valor de la temperatura del agua a tratar.")
+			return None
+		else:
+			valorTemperatura= int(optnValue.get())
+
+
+		for ind in range(0, len(listaNTamizTemp)):
+			if listaNTamizTemp[ind].get() == "" and ind%2==0:
+				break
+			elif listaNTamizTemp[ind].get() == "" and ind%2 != 0:
+				messagebox.showwarning(title="Error", message="Hace falta el rango de la derecha de alguna entrada.")
+				return None
+			else:
+				try:
+					CountControl=0
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m: 
+							CountControl=CountControl+1
+					for m in [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]:
+						if int(listaNTamizTemp[ind].get()) != m and CountControl==18:
+							messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no coincide con los valores estándar para número de tamiz. Pulse el botón para conocerlos.")
+							return None
+					if  ind%2 != 0:
+						guardaValColumna2 = int(listaNTamizTemp[ind].get())	
+					
+					if ind !=0 and ind%2==0 and int(listaNTamizTemp[ind].get()) != guardaValColumna2:
+						messagebox.showwarning(title="Error", message=f"El valor donde finaliza un rango debe ser el valor inicial del siguiente rango.")
+						return None
+					if ind != 0 and int(listaNTamizTemp[ind].get()) < variableControlCreciente:
+						messagebox.showwarning(title="Error", message=f"Los valores de los rangos de número de tamiz deben ir en orden creciente.")
+						return None
+					variableControlCreciente=int(listaNTamizTemp[ind].get())
+
+					
+					listaNTamiz.append(int(listaNTamizTemp[ind].get()))
+
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
+
+
+		for ind in range(0, len(listaARetenidaTemp)):
+			if listaARetenidaTemp[ind].get() == "" and ind != 0:
+				break
+			else:
+				try:
+					listaARetenida.append(float(listaARetenidaTemp[ind].get()))
+				except:
+					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
+					return None
+		if len(listaARetenida) != len(listaNTamiz)/2:
+			messagebox.showwarning(title="Error", message="La cantidad de datos ingresados en los rangos de número de tamiz no coincide con la cantidad de datos de arena retendia.")
+			return None
+		
+		
+		sumaPorcentajes=0
+		for elemento in listaARetenida:
+			sumaPorcentajes= sumaPorcentajes + elemento
+		
+		
+		if sumaPorcentajes != 100:
+			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
+			return None
+
+		listaEntradaTemp=list()
+		datosSalida=list()
+		
+		
+		#Borrar
+		################Datos temporales:
+		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
+		listaARetenida=[16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
+		caudalMedio=0.04404
+		
+		################
+			
+
+
 		
 
-	def perdidaEnergiaLechoLimpio():
-		#Lecholimpio
-		return 0 
+		
+		perdidaEnergiaLechoLimpioMainWindow = tk.Toplevel()
+		perdidaEnergiaLechoLimpioMainWindow.iconbitmap(bitmap='icons\\agua.ico')
+		perdidaEnergiaLechoLimpioMainWindow.geometry("800x600") 
+		perdidaEnergiaLechoLimpioMainWindow.resizable(0,0)	
+		perdidaEnergiaLechoLimpioMainWindow.configure(background="#9DC4AA")
+
+		perdidaEnergiaLechoLimpioMainFrame=LabelFrame(perdidaEnergiaLechoLimpioMainWindow, text="Datos adicionales para calcular la pérdida de energía durante filtrado con lecho limpio", font=("Yu Gothic bold", 11))
+		perdidaEnergiaLechoLimpioMainFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		
+		
+		diametroOrificios = StringVar()
+		diametroOrificios.set("Diametro de los orificios")
+		listaValoresTempDiametroOrificios=list()
+		listaValoresTempDiametroOrificios.append("1/4")
+		listaValoresTempDiametroOrificios.append("3/8")
+		listaValoresTempDiametroOrificios.append("1/2")
+		listaValoresTempDiametroOrificios.append("5/8")
+		diametroOrificiosName = OptionMenu(perdidaEnergiaLechoLimpioMainFrame, diametroOrificios, *listaValoresTempDiametroOrificios)
+		diametroOrificiosLabel= Label(perdidaEnergiaLechoLimpioMainWindow, text="Seleccione el diámetro de los orificios:", font=("Yu Gothic bold", 11))
+		
+
+		
+		distanciaOrificios = StringVar()
+		distanciaOrificios.set("Distancia entre los orificios")
+		listaValoresTempDistanciaOrificios=list()
+		listaValoresTempDistanciaOrificios.append("0.750")
+		listaValoresTempDistanciaOrificios.append("0.100")
+		listaValoresTempDistanciaOrificios.append("0.125")
+		listaValoresTempDistanciaOrificios.append("0.150")
+		distanciaOrificiosName = OptionMenu(perdidaEnergiaLechoLimpioMainFrame, distanciaOrificios, *listaValoresTempDistanciaOrificios)
+		distanciaOrificiosLabel= Label(perdidaEnergiaLechoLimpioMainWindow, text="Seleccione la distancia entre orificios:", font=("Yu Gothic bold", 11))
+
+
+		seccionTransversal = StringVar()
+		seccionTransversal.set("Sección transversal")
+		listaValoresTempSeccionTransversal=list()
+		listaValoresTempSeccionTransversal.append("6 X 6")
+		listaValoresTempSeccionTransversal.append("8 X 8")
+		listaValoresTempSeccionTransversal.append("10 X 10")
+		listaValoresTempSeccionTransversal.append("12 X 12")
+		listaValoresTempSeccionTransversal.append("14 X 14")
+		listaValoresTempSeccionTransversal.append("16 X 16")
+		listaValoresTempSeccionTransversal.append("18 X 18")
+		listaValoresTempSeccionTransversal.append("20 X 20")
+		seccionTransversalName = OptionMenu(perdidaEnergiaLechoLimpioMainFrame, seccionTransversal, *listaValoresTempSeccionTransversal)
+		seccionTransversalLabel= Label(perdidaEnergiaLechoLimpioMainWindow, text="Seleccione la sección transversal comercial del múltiple:", font=("Yu Gothic bold", 11))
+
+
+		distanciaLaterales = StringVar()
+		distanciaLaterales.set("Distancia entre laterales")
+		listaValoresTempDistanciaLaterales=list()
+		listaValoresTempDistanciaLaterales.append("0.20")
+		listaValoresTempDistanciaLaterales.append("0.25")
+		listaValoresTempDistanciaLaterales.append("0.30")
+		distanciaLateralesName = OptionMenu(perdidaEnergiaLechoLimpioMainFrame, distanciaLaterales, *listaValoresTempDistanciaLaterales)
+		distanciaLateralesLabel= Label(perdidaEnergiaLechoLimpioMainWindow, text="Seleccione la distancia entre laterales:", font=("Yu Gothic bold", 11))
+		
+
+		
+		diametroEntreLaterales = StringVar()
+		diametroEntreLaterales.set("Diámetro de los laterales")
+		listaValoresTempDiametroEntreLaterales=list()
+		listaValoresTempDiametroEntreLaterales.append("1 1/2")
+		listaValoresTempDiametroEntreLaterales.append("2")
+		listaValoresTempDiametroEntreLaterales.append("2 1/2")
+		listaValoresTempDiametroEntreLaterales.append("3")
+		diametroEntreLateralesName = OptionMenu(perdidaEnergiaLechoLimpioMainFrame, diametroEntreLaterales, *listaValoresTempDiametroEntreLaterales)
+		diametroEntreLateralesLabel= Label(perdidaEnergiaLechoLimpioMainWindow, text="Seleccione el diámetro de los laterales:", font=("Yu Gothic bold", 11))
+
+		tiempoRetrolavado = StringVar()
+		tiempoRetrolavado.set("Tiempo de retrolavado")
+		listaValoresTemptiempoRetrolavado=list()
+		listaValoresTemptiempoRetrolavado.append("10")
+		listaValoresTemptiempoRetrolavado.append("11")
+		listaValoresTemptiempoRetrolavado.append("12")
+		listaValoresTemptiempoRetrolavado.append("13")
+		listaValoresTemptiempoRetrolavado.append("14")
+		tiempoRetrolavadoName = OptionMenu(perdidaEnergiaLechoLimpioMainFrame, tiempoRetrolavado, *listaValoresTemptiempoRetrolavado)
+		tiempoRetrolavadoLabel= Label(perdidaEnergiaLechoLimpioMainWindow, text="Seleccione el tiempo de retrolavado.", font=("Yu Gothic bold", 11))
+
+		
+		TasaElegir = StringVar()
+		TasaElegir.set("Tasa")
+		listaValoresTempTasaElegir=list()
+		listaValoresTempTasaElegir.append("Tasa media")
+		listaValoresTempTasaElegir.append("Tasa máxima")
+		TasaElegirName = OptionMenu(perdidaEnergiaLechoLimpioMainFrame, TasaElegir, *listaValoresTempTasaElegir)
+		TasaElegirLabel= Label(perdidaEnergiaLechoLimpioMainWindow, text="Seleccione la tasa.", font=("Yu Gothic bold", 11))
+
+
+
+
+
+
+		listaEntradaDrenaje2=[diametroOrificiosName,distanciaOrificiosName,seccionTransversalName,distanciaLateralesName, diametroEntreLateralesName,tiempoRetrolavadoName,TasaElegirName]
+		listaLabel= [diametroOrificiosLabel,distanciaOrificiosLabel, seccionTransversalLabel, distanciaLateralesLabel, diametroEntreLateralesLabel,tiempoRetrolavadoLabel,TasaElegirLabel]
+		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
+		listaEntradaExtra=[tiempoRetrolavado]
+		
+		#Borrar
+
+		diametroOrificios.set("1/4")
+		distanciaOrificios.set("0.100")
+		seccionTransversal.set("14 X 14")
+		distanciaLaterales.set("0.25")
+		diametroEntreLaterales.set("1 1/2")
+		tiempoRetrolavado.set("12")
+
+		
+		
+
+		altIn= 30
+		altIn2=30
+		for ind in range(0,len(listaLabel)):
+			if ind%2==0:
+				listaLabel[ind].place(x=20,y=altIn)
+				listaEntradaDrenaje2[ind].place(x=20, y= altIn+20)
+				altIn=altIn+80
+			else:
+				listaLabel[ind].place(x=500,y=altIn2)
+				listaEntradaDrenaje2[ind].place(x=500, y= altIn2+20)
+				altIn2=altIn2+80
+			
+		#BotonesPerdidaEnergiaLechoLimpio
+		#Volver1
+
+		#TasaElegir
+	
+		botonPerdidacargaLechoGravaLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del lecho de grava durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado_2(valorTemperatura,d60,TasaElegir) ) 
+
+		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del sistema de drenaje durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado_2(valorTemperatura,d60, caudalMedio, listaEntradaDrenaje, TasaElegir) )
+
+		botonPerdidaCargaTuberiaLavado_DW = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga en la tubería\n de lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW_HW_2(valorTemperatura,listaEntradaExtra,d60,listaCaudal,TasaElegir)) 
+
+		botonPerdidaCargaTotalLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga total durante\n el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavadoMain(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal) )
+
+		botonCanaletasLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Canaletas de lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: canaletasDeLavado() )
+		
+		botonDimensionesYCotasFiltros = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Dimensiones y cotas en los filtros", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: dimensionesYCotasFiltros() )
+			
+		listaBotones=[botonPerdidacargaLechoGravaLavado ,botonPerdidaCargaSistemaDrenajeLavado 
+		,botonPerdidaCargaTuberiaLavado_DW,botonPerdidaCargaTotalLavado, botonCanaletasLavado, botonDimensionesYCotasFiltros]
+			
+		counter= 0
+		altIn2= altIn
+		for elemento in listaBotones:
+			if counter < 3:
+				elemento.place(x=20,y=altIn)
+				altIn=altIn+60
+				counter=counter+1
+			else: 
+				elemento.place(x=500,y=altIn2)
+				altIn2=altIn2+60
+		
+			
+
+		
+		listaCU = valorCoeficienteDeUniformidad(listaTamiz,listaAR)
+		d10= listaCU[0]
+		CU=listaCU[1]
+		d60=d10*CU
+
+		##return [d10,CU]
+		
+		perdidaEnergiaLechoLimpioMainWindow.mainloop()
+
+
+
+        
 
 
 	mainWindow.withdraw()
@@ -5163,7 +6729,7 @@ def openFiltroWindow():
 
 	botonHidraulicaSistemaLavado = HoverButton(frameFiltro, text="Hidráulica del sistema de lavado", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: hidraulicaSistemaLavado(listaNumTamiz,listaAR,tempAgua, entradasCaudal))
 
-	botonPerdidaEnergiaLechoLimpio = HoverButton(frameFiltro, text="Pérdidas de energía durante el filtrado con lecho limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: perdidaEnergiaLechoLimpio())
+	botonPerdidaEnergiaLechoLimpio = HoverButton(frameFiltro, text="Pérdidas de energía durante el filtrado con lecho limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: perdidaEnergiaLechoLimpio(listaNumTamiz,listaAR,tempAgua, entradasCaudal))
  
 			
 
