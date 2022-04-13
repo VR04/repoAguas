@@ -5059,7 +5059,7 @@ def openFiltroWindow():
 				else:
 					
 					if i==2 and (float(elemento.get())>2.5 or float(elemento.get())<1.5):
-						messagebox.showwarning(title="Error", message="El valor de la longitud de la tubería de lavado debe estar entre 5 y 50 metros.")
+						messagebox.showwarning(title="Error", message="El valor de la longitud de la tubería del efluente debe estar entre 1.5 y 2.5 metros.")
 						return None
 
 					elif i==3 and (float(elemento.get())>0.1 or float(elemento.get())<0.00001):
@@ -5272,7 +5272,7 @@ def openFiltroWindow():
 				else:
 					
 					if i==2 and (float(elemento.get())>2.5 or float(elemento.get())<1.5):
-						messagebox.showwarning(title="Error", message="El valor de la longitud de la tubería de lavado debe estar entre 5 y 50 metros.")
+						messagebox.showwarning(title="Error", message="El valor de la longitud de la tubería del efluente debe estar entre 1.5 y 2.5 metros.")
 						return None
 
 					elif i==3 and (float(elemento.get())>0.1 or float(elemento.get())<0.00001):
@@ -5628,7 +5628,7 @@ def openFiltroWindow():
 		
 		longitudTuberiaLavadoLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Longitud de la tubería de lavado [5m - 50m]:", font =("Yu Gothic",9))
 
-		factorFriccionLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccion el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
+		factorFriccionLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
 
 
 		divisorAccesoriosLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione los tipos de accesorios", font=("Yu Gothic bold",10))
@@ -5756,7 +5756,7 @@ def openFiltroWindow():
 		
 		longitudTuberiaLavadoLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Longitud de la tubería del efluente [5m - 50m]:", font =("Yu Gothic",9))
 
-		factorFriccionLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccion el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
+		factorFriccionLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
 
 
 		divisorAccesoriosLabel = Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el tipo de accesorio", font=("Yu Gothic bold",10))
@@ -6087,7 +6087,7 @@ def openFiltroWindow():
 
 		longitudTuberiaLavadoLabel = Label(frameperdidaCargaTotalLavadoMain, text="Longitud de la tubería de lavado [5m - 50m]:", font =("Yu Gothic",9))
 
-		factorFriccionLabel = Label(frameperdidaCargaTotalLavadoMain, text="Seleccion el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
+		factorFriccionLabel = Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
 
 
 		divisorAccesoriosLabel = Label(frameperdidaCargaTotalLavadoMain, text="Seleccione los tipos de accesorios", font=("Yu Gothic bold",10))
@@ -6217,7 +6217,7 @@ def openFiltroWindow():
 
 		longitudTuberiaLavadoLabel = Label(frameperdidaCargaTotalLavadoMain, text="Longitud de la tubería del efluente [5m - 50m]:", font =("Yu Gothic",9))
 
-		factorFriccionLabel = Label(frameperdidaCargaTotalLavadoMain, text="Seleccion el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
+		factorFriccionLabel = Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
 
 
 		divisorAccesoriosLabel = Label(frameperdidaCargaTotalLavadoMain, text="Seleccione los tipos de accesorios", font=("Yu Gothic bold",10))
@@ -6351,7 +6351,7 @@ def openFiltroWindow():
 
 		longitudTuberiaLavadoLabel = Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Longitud de la tubería de lavado [5m - 50m]:", font =("Yu Gothic",9))
 
-		factorFriccionLabel = Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccion el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
+		factorFriccionLabel = Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccione el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
 
 		longitudTuberiaLavado = Entry(frameverificacionVelocidadesDiseñoTuberiaMain)
 		factorFriccion = Entry(frameverificacionVelocidadesDiseñoTuberiaMain)
@@ -6816,13 +6816,477 @@ def openFiltroWindow():
 		
 		hidraulicaSistemaLavadoMainWindow.mainloop()
 
-
-
-	def canaletasDeLavado():
-		return 0
+	def canaletasDeLavado2(tempValue,d60, listaCaudal, listaExtra, ValorNuevo):
+		
+		if ValorNuevo.get() == "Ancho de la canaleta":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el ancho de la canaleta")
+			return None
+		else:
+			anchoCanaleta = float(ValorNuevo.get())
 	
-	def dimensionesYCotasFiltros():
-		return 0 
+
+
+		canaletasDeLavado2Window = tk.Toplevel()
+		canaletasDeLavado2Window.iconbitmap(bitmap='icons\\agua.ico')
+		canaletasDeLavado2Window.geometry("600x400") 
+		canaletasDeLavado2Window.resizable(0,0)	
+		canaletasDeLavado2Window.configure(background="#9DC4AA")
+
+		canaletasDeLavado2Frame=LabelFrame(canaletasDeLavado2Window, text="Cálculos para las canaletas de lavado.", font=("Yu Gothic bold", 11))
+		canaletasDeLavado2Frame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolcanaletasDeLavado2_frame = Frame(canaletasDeLavado2Frame)
+		arbolcanaletasDeLavado2_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolcanaletasDeLavado2_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolcanaletasDeLavado2_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolcanaletasDeLavado2= ttk.Treeview(arbolcanaletasDeLavado2_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolcanaletasDeLavado2.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolcanaletasDeLavado2.xview)
+		sedScrollY.configure(command=arbolcanaletasDeLavado2.yview)
+		#Define columnas.
+		arbolcanaletasDeLavado2["columns"]= (
+			'Espaciamiento entre ejes de canaletas (asumido)',
+			'Longitud del filtro',
+			'Número de canaletas',					
+			'Caudal de lavado',				
+			'Caudal de lavado ecuado por cada canaleta',
+			'Profundidad máxima del agua en la canaleta',							
+			'Borde libre de la canaleta',	
+			'Altura total interna de la canaleta',
+			'Profundidad del lecho fijo',				
+			'Profundidad del lecho expandido',					
+			'Altura de la canaleta sobre el medio filtrante',
+			'Espaciamiento entre ejes de canaletas (corregido)',					
+			'Distancia de seguridad entre lecho expandido y fondo canaleta'
+
+		)
+
+		#Headings
+		arbolcanaletasDeLavado2.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arbolcanaletasDeLavado2["columns"]:
+			arbolcanaletasDeLavado2.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arbolcanaletasDeLavado2["columns"])+1) :
+				arbolcanaletasDeLavado2.column(f"#{i}",width=700, stretch=False)	
+		arbolcanaletasDeLavado2.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolcanaletasDeLavado2.tag_configure("evenrow", background= "#1FCCDB")
+		arbolcanaletasDeLavado2.tag_configure("oddrow", background= "#9DC4AA")    
+
+		listacanaletasDeLavado2=list()
+		espaciamientoEntreEjesCanaletas=1.5
+		listacanaletasDeLavado2.append(espaciamientoEntreEjesCanaletas)
+		
+		longitudFiltro= ValuepredimensionamientoFiltros(listaCaudal)[9]
+		listacanaletasDeLavado2.append(longitudFiltro)
+
+		numeroCanaletas= round(longitudFiltro/espaciamientoEntreEjesCanaletas,0)
+		listacanaletasDeLavado2.append(numeroCanaletas)
+
+		caudalLavado = ValueConsumoAguaLavado(listaExtra, tempValue, d60, listaCaudal)[5]
+		listacanaletasDeLavado2.append(caudalLavado)
+
+		caudalLavadoEcuadoCanaleta = caudalLavado/float(numeroCanaletas)
+		listacanaletasDeLavado2.append(caudalLavadoEcuadoCanaleta)
+
+		
+		profundidadMaximaAguaCanaleta = (caudalLavadoEcuadoCanaleta/(anchoCanaleta*1.38))**(2/3)
+		listacanaletasDeLavado2.append(profundidadMaximaAguaCanaleta)
+
+		if profundidadMaximaAguaCanaleta/2 <0.05:
+			bordeLibreCanaleta=0.05
+		elif profundidadMaximaAguaCanaleta/2 > 0.1:
+			bordeLibreCanaleta=0.1
+		else:
+			bordeLibreCanaleta= bordeLibreCanaleta*(0.5)
+
+		listacanaletasDeLavado2.append(bordeLibreCanaleta)
+
+		alturaTotalInternaCanaleta= round(profundidadMaximaAguaCanaleta+bordeLibreCanaleta,2)
+		listacanaletasDeLavado2.append(alturaTotalInternaCanaleta)
+
+		profundidadLechoFijo= 0.64
+
+		listacanaletasDeLavado2.append(profundidadLechoFijo)
+
+		profundidadLechoExpandido = ValuevelocidadLavadoExpansionLechoFiltrante(tempValue, d60)[9]
+
+		listacanaletasDeLavado2.append(profundidadLechoExpandido)
+
+		alturaCanaletaMedioFiltrante = ((0.75*profundidadLechoFijo)+alturaTotalInternaCanaleta+(alturaTotalInternaCanaleta+profundidadLechoFijo))*(1/2)
+		
+		listacanaletasDeLavado2.append(alturaCanaletaMedioFiltrante)
+
+		espaciamientoEjesCorregido= longitudFiltro/numeroCanaletas
+		
+		listacanaletasDeLavado2.append(espaciamientoEjesCorregido)
+
+		distanciaSeguridadLechoExpandidoYFondoCanaleta = alturaCanaletaMedioFiltrante -(profundidadLechoExpandido-profundidadLechoFijo)
+
+		listacanaletasDeLavado2.append(distanciaSeguridadLechoExpandidoYFondoCanaleta)
+
+
+				
+
+		newDataTreeview(arbolcanaletasDeLavado2,listacanaletasDeLavado2)
+
+		canaletasDeLavado2Window.mainloop()
+
+	def dimensionesYCotasFiltros(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1,tasa):
+
+		
+		#Volver2
+		listaE
+		listaEU=list()
+		i=0
+		for elemento in listaE:
+			try:
+				if i==0 or i==1 or i==4 or i==5 or i==6:
+					if elemento.get() == "Material de la tubería de lavado":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el material de la tubería de lavado")
+						return None
+					elif elemento.get() == "Diámetro nominal de la tubería de lavado":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro nominal de la tubería de lavado")
+						return None
+
+					elif elemento.get() == "Codo 90° radio":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el valor del codo 90° radio")
+						return None
+					
+					
+					elif elemento.get() == "Tipo de entrada":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el tipo de entrada del accesorio")
+						return None
+					
+					elif elemento.get() == "Ancho de la canaleta":
+						messagebox.showwarning(title="Error", message="Hace falta seleccionar el ancho de la canaleta")
+						return None
+					else:  
+						if i==0 or i==4 or i==5:
+							listaEU.append(elemento.get())
+						else:
+							listaEU.append(float(elemento.get()))
+					
+						i=i+1
+				else:
+					
+					if i==2 and (float(elemento.get())>2.5 or float(elemento.get())<1.5):
+						messagebox.showwarning(title="Error", message="El valor de la longitud de la tubería del efluente debe estar entre 1.5 y 2.5 metros.")
+						return None
+
+					elif i==3 and (float(elemento.get())>0.1 or float(elemento.get())<0.00001):
+						messagebox.showwarning(title="Error", message="El valor del factor de fricción debe estar entre 0.00001 y 0.1")
+						return None   
+					
+						
+
+
+					
+					elif i==7 and (float(elemento.get())>0.2 or float(elemento.get())<0.15):
+						messagebox.showwarning(title="Error", message="El nivel del vertedero sobre el lecho fijo de arena debe estar entre 0.15 y 0.20")
+						return None   
+
+					elif i==8 and (float(elemento.get())>2.0 or float(elemento.get())<1.8):
+						messagebox.showwarning(title="Error", message="El valor de la energía disponible de filtración debe estar entre 1.8 y 2.0")
+						return None 
+
+
+					elif i==9 and (float(elemento.get())>0.50 or float(elemento.get())<0.40):
+						messagebox.showwarning(title="Error", message="El valor del borde libre debe estar entre 0.40 y 0.50")
+						return None 
+
+					else:
+						listaEU.append(float(elemento.get()))
+					i=i+1
+			except:
+				messagebox.showwarning(title="Error", message="El valor ingresado no es un número")
+				return None
+			
+		
+
+
+
+		dimensionesYCotasFiltrosWindow = tk.Toplevel()
+		dimensionesYCotasFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
+		dimensionesYCotasFiltrosWindow.geometry("600x600") 
+		dimensionesYCotasFiltrosWindow.resizable(0,0)	
+		dimensionesYCotasFiltrosWindow.configure(background="#9DC4AA")
+
+		dimensionesYCotasFiltrosFrame=LabelFrame(dimensionesYCotasFiltrosWindow, text="Cálculo de dimensiones y cotas en los filtros", font=("Yu Gothic bold", 11))
+		dimensionesYCotasFiltrosFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arboldimensionesYCotasFiltros_frame = Frame(dimensionesYCotasFiltrosFrame)
+		arboldimensionesYCotasFiltros_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arboldimensionesYCotasFiltros_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arboldimensionesYCotasFiltros_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arboldimensionesYCotasFiltros= ttk.Treeview(arboldimensionesYCotasFiltros_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arboldimensionesYCotasFiltros.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arboldimensionesYCotasFiltros.xview)
+		sedScrollY.configure(command=arboldimensionesYCotasFiltros.yview)
+		#Define columnas.
+		arboldimensionesYCotasFiltros["columns"]= (
+
+		'Profundidad del lecho de grava',		
+		'Profundidad del lecho fijo de arena',	
+		'Pérdida de energía total a tasa media de filtración con lecho limpio',
+		'Nivel de la lámina de agua con lecho limpio',
+		'Nivel de la lámina de agua con pérdida de energía máxima',
+		'Altura interna total del filtro',
+
+		
+		)
+
+		#Headings
+		arboldimensionesYCotasFiltros.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arboldimensionesYCotasFiltros["columns"]:
+			arboldimensionesYCotasFiltros.heading(col, text=col,anchor=CENTER)	
+
+		for i in range(0,len(arboldimensionesYCotasFiltros["columns"])+1) :
+				arboldimensionesYCotasFiltros.column(f"#{i}",width=700, stretch=False)	
+		arboldimensionesYCotasFiltros.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arboldimensionesYCotasFiltros.tag_configure("evenrow", background= "#1FCCDB")
+		arboldimensionesYCotasFiltros.tag_configure("oddrow", background= "#9DC4AA")    
+
+		#CálculoPérdidaTotal
+		listadimensionesYCotasFiltros=list()
+		tasa="Tasa media"
+		listaValuePerdidaCargaTuberiaLavado = valuePerdidaCargaTuberiaLavado_DW_HW2_2(listaE,temperatureValue,listaE1, d60,caudalLista,tasa)
+		perdidaCargaLechoGrava = valuePerdidacargaLechoGravaLavado_2(temperatureValue,d60,tasa)[2]
+		perdidaCargaSistemaDrenaje = valuePerdidaCargaSistemaDrenajeLavado_2(temperatureValue,d60, caudal,listaEntradaDrenaje,tasa)[3]
+		
+		perdidaCargaDW= listaValuePerdidaCargaTuberiaLavado[8]
+		perdidaCargaAccesorios= listaValuePerdidaCargaTuberiaLavado[9]
+		
+
+		perdidaTotalLista= [perdidaCargaLechoGrava, 
+		perdidaCargaSistemaDrenaje, perdidaCargaDW, perdidaCargaAccesorios] 
+		
+
+		perdidaCargaTotal =0.0
+		for elemento in perdidaTotalLista:
+			perdidaCargaTotal= perdidaCargaTotal +elemento 
+
+		#############perdidaCargaTotal
+		
+		#Insersión datos. 
+		profundidadLechoGrava = 0.450
+		listadimensionesYCotasFiltros.append(profundidadLechoGrava)
+		profundidadLechoFijoArena= 0.640
+		listadimensionesYCotasFiltros.append(profundidadLechoFijoArena)
+		listadimensionesYCotasFiltros.append(perdidaCargaTotal)
+		nivelLaminaAguaLechoLimpio= profundidadLechoGrava+ profundidadLechoFijoArena+listaEU[7]+perdidaCargaTotal
+		listadimensionesYCotasFiltros.append(nivelLaminaAguaLechoLimpio)
+
+		nivelLaminaAguaPerdidaEnergiaMaxima= profundidadLechoGrava+ profundidadLechoFijoArena+listaEU[7]+listaEU[8]
+		listadimensionesYCotasFiltros.append(nivelLaminaAguaPerdidaEnergiaMaxima)
+
+		alturaInternaTotal = nivelLaminaAguaPerdidaEnergiaMaxima+ listaEU[9]
+		listadimensionesYCotasFiltros.append(alturaInternaTotal)
+		 
+		
+		#Volver
+
+
+		newDataTreeview(arboldimensionesYCotasFiltros,listadimensionesYCotasFiltros)
+		
+		dimensionesYCotasFiltrosWindow.mainloop()
+	
+
+
+		
+
+	def canaletasDeLavadoYDimensionesFiltros(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,tasaE):
+			
+		if tasaE.get() == "Tasa":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la tasa.")
+			return None
+		else:
+			tasa = tasaE.get()
+
+		canaletasDeLavadoYDimensionesFiltrosWindow = tk.Toplevel()
+		canaletasDeLavadoYDimensionesFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
+		canaletasDeLavadoYDimensionesFiltrosWindow.geometry("800x650") 
+		canaletasDeLavadoYDimensionesFiltrosWindow.resizable(0,0)	
+		canaletasDeLavadoYDimensionesFiltrosWindow.configure(background="#9DC4AA")
+
+		framecanaletasDeLavadoYDimensionesFiltros= LabelFrame(canaletasDeLavadoYDimensionesFiltrosWindow, text= f"Datos adicionales para el cálculo de la pérdida total a {tasa} de filtración con lecho limpio",font=("Yu Gothic bold", 11))
+		framecanaletasDeLavadoYDimensionesFiltros.pack(side=TOP,fill=BOTH,expand=True)
+
+		def newEntryFiltroP(lista):
+			for elemento in lista:
+				if elemento == materialTuberiaLavado:
+					materialTuberiaLavado.set("Material de la tubería de lavado")
+				elif elemento ==diametroNominalTuberiaLavado:
+					diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
+				elif elemento==tipoEntrada:
+					tipoEntrada.set("Tipo de entrada")
+				else:
+					elemento.delete(0, END)
+
+
+
+
+		inicialLabel=Label(framecanaletasDeLavadoYDimensionesFiltros, text="Datos adicionales para cálculos: ",font=("Yu Gothic bold",15))
+
+
+
+
+		materialTuberiaLavado = StringVar()
+		materialTuberiaLavado.set("Material de la tubería de lavado")
+		listaValoresTemp=["Acero al carbono API 5L SCH-40","Acero al carbono API 5L SCH-80","Hierro dúctil C30",
+		"Hierro dúctil C40","Polietileno de alta densidad (PEAD) PE 100 RDE 21","Polietileno de alta densidad (PEAD) PE 100 RDE 17",
+		"Policluro de vinilo (PVC) RDE 26","Policluro de vinilo (PVC) RDE 21"]
+
+		materialTuberiaLavadoName = OptionMenu(framecanaletasDeLavadoYDimensionesFiltros, materialTuberiaLavado, *listaValoresTemp)
+		materialTuberiaLabel= Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
+
+
+
+		diametroNominalTuberiaLavado = StringVar()
+		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
+		listaValoresTemp1=["6","8","10","12","14","16","18","20","24"]
+		diametroNominalTuberiaLavadoName = OptionMenu(framecanaletasDeLavadoYDimensionesFiltros, diametroNominalTuberiaLavado, *listaValoresTemp1)
+		diametroNominalTuberiaLavadoLabel= Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+
+		#NombrePendiente
+		codoRadio = StringVar()
+		codoRadio.set("Codo 90° radio")
+		listaValoresTemp3=['Codo 90° radio corto (r/d 1)', 'Codo 90° radio mediano (r/d 3)']
+		codoRadioName = OptionMenu(framecanaletasDeLavadoYDimensionesFiltros, codoRadio, *listaValoresTemp3)
+
+
+
+		tipoEntrada = StringVar()
+		tipoEntrada.set("Tipo de entrada")
+		listaValoresTemp3=['Entrada recta a tope', 'Entrada con boca acampanada']
+		tipoEntradaName = OptionMenu(framecanaletasDeLavadoYDimensionesFiltros, tipoEntrada, *listaValoresTemp3)
+
+		AnchoCanaleta = StringVar()
+		AnchoCanaleta.set("Ancho de la canaleta")
+		listaValoresTemp3=['0.10','0.15','0.20','0.25','0.30','0.35']
+		AnchoCanaletaName = OptionMenu(framecanaletasDeLavadoYDimensionesFiltros, AnchoCanaleta, *listaValoresTemp3)
+
+
+		
+
+
+		longitudTuberiaLavadoLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Longitud de la tubería del efluente [5m - 50m]:", font =("Yu Gothic",9))
+
+		factorFriccionLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
+		
+		divisorAccesoriosLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione los tipos de accesorios", font=("Yu Gothic bold",10))
+		
+		divisorCanaletasLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione los valores para las canaletas de lavado:", font=("Yu Gothic bold",10))
+		
+		divisorDimensionesYCotasFiltrosLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione los valores para las dimensiones y cotas en los filtros:", font=("Yu Gothic bold",10))
+
+		alturaVertederoControlLechoFijoLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Introduzca el nivel de vertedero sobre el lecho fijo de arena [0.15m - 0.20m]:", font=("Yu Gothic bold",10))
+
+		energiaDisponibleFiltracionLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Introduzca la energía disponible de filtración [1.8m - 2.0m]", font=("Yu Gothic bold",10))
+
+		bordeLibreLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Introduzca el valor del borde libre [0.40m - 0.50m]", font=("Yu Gothic bold",10))
+
+
+		longitudTuberiaLavado = Entry(framecanaletasDeLavadoYDimensionesFiltros)
+		factorFriccion = Entry(framecanaletasDeLavadoYDimensionesFiltros)	
+
+
+		alturaVertederoControlLechoFijo = Entry(framecanaletasDeLavadoYDimensionesFiltros)	
+		energiaDisponibleFiltracion = Entry(framecanaletasDeLavadoYDimensionesFiltros)	
+		bordeLibre = Entry(framecanaletasDeLavadoYDimensionesFiltros)	
+
+		
+
+
+
+
+		listaEntradas=[materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada,AnchoCanaleta,
+		alturaVertederoControlLechoFijo, energiaDisponibleFiltracion, bordeLibre]
+
+		listaLabel=[inicialLabel, materialTuberiaLabel , materialTuberiaLavadoName, diametroNominalTuberiaLavadoLabel, 
+		diametroNominalTuberiaLavadoName,longitudTuberiaLavadoLabel, factorFriccionLabel,divisorAccesoriosLabel,tipoEntradaName,
+		divisorCanaletasLabel, AnchoCanaletaName, divisorDimensionesYCotasFiltrosLabel, alturaVertederoControlLechoFijoLabel,
+		 energiaDisponibleFiltracionLabel,
+		bordeLibreLabel]
+
+		alturaInicialLabel=20
+		m=0
+		for elemento in listaLabel:
+			elemento.place(x=50,y=alturaInicialLabel)
+			alturaInicialLabel+=35
+			m=m+1
+			if m==3:
+				alturaInicialEntradas=alturaInicialLabel
+			if m==12:
+				alturaInicialEntradas2= alturaInicialLabel
+
+		i=0
+		for elemento in listaEntradas:
+				if i == 0 or i==1 or i==4 or i==5 or i==6:
+					i=i+1
+					alturaInicialEntradas+=35
+				else: 
+					if i>6:
+						elemento.place(x=600,y=alturaInicialEntradas2)
+						alturaInicialEntradas2+=35
+					else:	
+						i=i+1
+						elemento.place(x=400,y=alturaInicialEntradas)
+						alturaInicialEntradas+=35
+
+
+	
+
+		#BotonesCanaletasDimensiones
+		botonCalcularCanaletas = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Cálculos canaletas de lavado", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: canaletasDeLavado2(TemperatureValue,d60, caudalLista,listaE, listaEntradas[6]))
+		botonCalcularDimensionesYCotasFiltros = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Cálculos dimensiones y cotas en los filtros", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: dimensionesYCotasFiltros(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE,tasa))
+		botonNewEntry = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botones=[botonCalcularCanaletas, botonCalcularDimensionesYCotasFiltros, botonNewEntry]
+		alturaBotones= alturaInicialEntradas2-10
+		for elemento in botones:
+			elemento.place(x=40, y=alturaBotones)
+			alturaBotones= alturaBotones+30
+
+		#Borrar
+
+		materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
+		diametroNominalTuberiaLavado.set("10")
+		longitudTuberiaLavado.insert(0,"1.50")
+		factorFriccion.insert(0,"0.0200")	
+		tipoEntrada.set('Entrada con boca acampanada')
+		alturaVertederoControlLechoFijo.insert(0,"0.2")
+		energiaDisponibleFiltracion.insert(0,"1.8")
+		bordeLibre.insert(0,"0.4")
+		AnchoCanaleta.set("0.15")
+		#NOBorrar
+		codoRadio.set('Codo 90° radio mediano (r/d 3)')
+		
+
+
+
+
+		canaletasDeLavadoYDimensionesFiltrosWindow.mainloop()
 
 
 	def perdidaEnergiaLechoLimpio(listaTamiz, listaAR, optnValue, listaCaudal):
@@ -7035,7 +7499,7 @@ def openFiltroWindow():
 		distanciaLaterales.set("0.25")
 		diametroEntreLaterales.set("1 1/2")
 		tiempoRetrolavado.set("12")
-
+		TasaElegir.set('Tasa media')
 		
 		
 
@@ -7052,24 +7516,20 @@ def openFiltroWindow():
 				altIn2=altIn2+80
 			
 		#BotonesPerdidaEnergiaLechoLimpio
-		#Volver1
+		
 
 		#TasaElegir
 	
 		botonPerdidacargaLechoGravaLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del lecho de grava durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado_2(valorTemperatura,d60,TasaElegir) ) 
-
 		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del sistema de drenaje durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado_2(valorTemperatura,d60, caudalMedio, listaEntradaDrenaje, TasaElegir) )
-
 		botonPerdidaCargaTuberiaLavado_DW = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga en la tubería\n de lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW_HW_2(valorTemperatura,listaEntradaExtra,d60,listaCaudal,TasaElegir)) 
+		botonPerdidaCargaTotalLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga total durante\n el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavadoMain_2(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal,TasaElegir))
+		botonCanaletasLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Canaletas de lavado &\n dimensiones y cotas en los filtros", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: canaletasDeLavadoYDimensionesFiltros(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal,TasaElegir) )
+		botonLimpiarEntradas =  HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Limpiar Entradas", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: print("Limpio") )
 
-		botonPerdidaCargaTotalLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga total durante\n el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavadoMain_2(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal,TasaElegir) )
-
-		botonCanaletasLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Canaletas de lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: canaletasDeLavado() )
-		
-		botonDimensionesYCotasFiltros = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Dimensiones y cotas en los filtros", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: dimensionesYCotasFiltros() )
 			
 		listaBotones=[botonPerdidacargaLechoGravaLavado ,botonPerdidaCargaSistemaDrenajeLavado 
-		,botonPerdidaCargaTuberiaLavado_DW,botonPerdidaCargaTotalLavado, botonCanaletasLavado, botonDimensionesYCotasFiltros]
+		,botonPerdidaCargaTuberiaLavado_DW,botonPerdidaCargaTotalLavado, botonCanaletasLavado, botonLimpiarEntradas]
 			
 		counter= 0
 		altIn2= altIn
