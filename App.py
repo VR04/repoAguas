@@ -68,8 +68,10 @@ def openSedWindow():
 			bandera=bandera+1
 			v0=v1
 			v1= (listaE[6]/listaE[4])*(sin(listaE[10]) + ((listaE[7]/listaE[5]) - 0.058*v0*(listaE[5]/listaE[3]) )*cos(listaE[10]))
-			if bandera>100:
+			if bandera>200:
 				break
+
+		v0=round( (listaE[6]/listaE[4])*(sin(listaE[10]) + ((listaE[7]/listaE[5]))*cos(listaE[10]))/(1+(0.058*(listaE[6]/listaE[4])*cos(listaE[10])*(listaE[5]/listaE[3]))),5)
 		return v0
 
 	def tiempoDeRetencionCanal(listaE):
@@ -81,7 +83,7 @@ def openSedWindow():
 		return round(vuelta)
 
 	def longitudOcupadaPlacas(listaE):
-		valor= (listaE[7]*cos(listaE[10]))+ ((listaE[5]*numeroCanalesModulo(listaE) + (numeroCanalesModulo(listaE)+1)*listaE[8])/sin(listaE[10]))
+		valor= ((listaE[5]*numeroCanalesModulo(listaE) + (numeroCanalesModulo(listaE)-1)*listaE[8])/sin(listaE[10]))
 		return valor
 	def alturaPlacas(listaE):
 		return listaE[7]*sin(listaE[10])
@@ -93,16 +95,16 @@ def openSedWindow():
 		return listaE[12]+listaE[11]+ alturaPlacas(listaE)
 
 	def volumenTanqueSedimentacion(listaE):
-		return (alturaDeSedimentacion(listaE)*longitudOcupadaPlacas(listaE)*listaE[9]) - ((numeroCanalesModulo(listaE)+1)*listaE[7]*listaE[8]*listaE[9]) 
+		return (alturaDeSedimentacion(listaE)*longitudOcupadaPlacas(listaE)*listaE[9]) - ((numeroCanalesModulo(listaE)-1)*listaE[7]*listaE[8]*listaE[9]) 
 
 	def tiempoRetencionTotal(listaE):
-		return volumenTanqueSedimentacion(listaE)*(1/60)*(1/listaE[2])
+		return volumenTanqueSedimentacion(listaE)*(1.0/60.0)*(1/listaE[2])
 
 	def cargaSuperficial(listaE):
 		return (listaE[2]*86400)/(longitudOcupadaPlacas(listaE)*listaE[9])
 
 	def relacionLongitudAncho(listaE):
-		return f"{round(longitudOcupadaPlacas(listaE)/listaE[9],1)}:1"
+		return f"1:{round(longitudOcupadaPlacas(listaE)/listaE[9],1)}"
 
 	def alturaTolvaLodos(listaE):
 		return (listaE[9]- listaE[17])*(1/2)*tan(listaE[16])
@@ -127,6 +129,7 @@ def openSedWindow():
 		return longitudOcupadaPlacas(listaE)+listaE[15]
 
 	def diametroNominalMult(listaE):
+		#Pendiente1
 		try:
 			m=longitudDelMultipleDescarga(listaE)
 			if 2<=m<=3.5:
@@ -140,6 +143,7 @@ def openSedWindow():
 		return valor 
 
 	def diametroInternoMultiple(listaE):
+		#Pendiente2
 		try:
 			j=diametroNominalMult(listaE)
 			if j==4:
@@ -236,18 +240,28 @@ def openSedWindow():
 	listaSed=list()
 	def calcularSed(lista_ent):
 		lista_entry=[0]*20
-
+		
 		for entryID in range(0,len(lista_ent)):
 			try:
-				if entryID != 4:
-					lista_entry[entryID]=(float(lista_ent[entryID].get()))
-				else: 
+				if entryID == 4:				
+					
 					lista_entry[entryID]= lista_ent[entryID].get()
+					
+				else: 
+										
+					lista_entry[entryID]=(float(lista_ent[entryID].get()))
+				
 			except:
 				messagebox.showwarning(message="El ingreso de datos es erróneo, vuelva a intentarlo", title= "¡Cuidado!")
 				return None
+			
+
+
+		if lista_entry[10]>60.0 or lista_entry[10]<45:
+			messagebox.showwarning(message="El valor del ángulo de inclinación de la placa debe estar entre 45° y 60°", title= "¡Cuidado!")
+			return None
 		#Quitar
-		lista_entry=[0.05726,4,0.01432,0.000001007,lista_ent[4].get(),0.05,23,1.2192,0.004,1.2192,60.00,0.60,0.60,0.30,0.20,0.30,55,0.10,10,0.01]
+		#lista_entry=[0.05726,4,0.01432,0.000001007,lista_ent[4].get(),0.05,23,1.2192,0.004,1.2192,60.00,0.60,0.60,0.30,0.20,0.30,55,0.10,10,0.01]
 		#Quitar
 
 
@@ -364,7 +378,8 @@ def openSedWindow():
 		"Separación entre orificios del múltiple [m]",
 		"Separación entre orificios del múltiple (confirmada) [m]"
 		])
-		df.to_excel("DatosSed_Clase.xlsx")
+		#Pendiente
+		#df.to_excel("DatosSed_Clase.xlsx")
 			
 	
 
@@ -719,7 +734,18 @@ def openSedWindow():
 	arbolSed.tag_configure("oddrow", background= "#1FCCDB")
 	arbolSed.tag_configure("evenrow", background= "#9DC4AA")
 	
+	#Borrar
+	listaInsert=[0.05726,4,0.014315,0.000001007,'Placas paralelas',0.05,23,1.2192,0.004,1.2192,60.00,0.60,0.60,0.30,0.20,0.30,55,0.10,10,0.01]
+	
+	
 
+	for i in range(0,len(lista_entradas)):
+		if listaInsert[i] == 'Placas paralelas':
+			valueEfiCriticaName.set("Placas paralelas")
+		else:
+			lista_entradas[i].insert(0,f'{listaInsert[i]}')
+			
+		
 	sedWindow.mainloop()
 
 
@@ -825,6 +851,7 @@ def openFiltroWindow():
 		listaARetenidaTemp=lista2.copy()
 		listaNTamiz=list()
 		listaARetenida=list()
+
 		if listaNTamizTemp[0].get() == "":
 			messagebox.showwarning(title="Error", message="Hace falta algún dato de los números de tamiz.")
 			return None
@@ -876,17 +903,22 @@ def openFiltroWindow():
 				except:
 					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
 					return None
+
 		if len(listaARetenida) != len(listaNTamiz)/2:
 			messagebox.showwarning(title="Error", message="La cantidad de datos ingresados en los rangos de número de tamiz no coincide con la cantidad de datos de arena retendia.")
 			return None
 		
 		
 		sumaPorcentajes=0
+		
 		for elemento in listaARetenida:
 			sumaPorcentajes= sumaPorcentajes + elemento
+
+			
 		
-		
-		if sumaPorcentajes != 100:
+
+		#Volver
+		if round(sumaPorcentajes,4) != 100.0:
 			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
 			return None
 	
@@ -958,10 +990,7 @@ def openFiltroWindow():
 		listaEntradaTemp=list()
 		datosSalida=list()
 		
-		################Datos temporales:
-		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-		listaARetenida= [16.20, 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
-		################
+		
 		
 		
 		#Tabla Tamaño Abertura Tamiz
@@ -1097,7 +1126,7 @@ def openFiltroWindow():
 			sumaPorcentajes= sumaPorcentajes + elemento
 		
 		
-		if sumaPorcentajes != 100:
+		if round(sumaPorcentajes,4) != 100.0:
 			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
 			return None
 	
@@ -1168,11 +1197,7 @@ def openFiltroWindow():
 		listaEntradaTemp=list()
 		datosSalida=list()
 		
-		################Datos temporales:
-		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-		##listaARetenida= [16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
-		listaARetenida= [16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
-		################
+
 		
 		
 		#Tabla Tamaño Abertura Tamiz
@@ -1547,14 +1572,7 @@ def openFiltroWindow():
 			datosSalida=list()
 			
 					
-			################Datos temporales:
-			listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-			listaARetenida=[16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
-			listaEU=["Erosionada", 0.64, 2.65,0.45,5,3]
-			valorTemperatura=3
 			
-			################
-
 
 			if listaEU[0] == "Angular":
 				listaEU.append(0.73)
@@ -1939,13 +1957,7 @@ def openFiltroWindow():
 			datosSalida=list()
 			
 					
-			################Datos temporales:
-			listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-			listaARetenida=[16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
-			listaEU=[listaEU[0], 0.64, 2.65,0.45,5,3]
-			valorTemperatura=3
 			
-			################
 
 
 			if listaEU[0] == "Afilada":
@@ -2173,7 +2185,7 @@ def openFiltroWindow():
 			sumaPorcentajes= sumaPorcentajes + elemento
 
 
-		if sumaPorcentajes != 100:
+		if round(sumaPorcentajes,4) != 100.0:
 			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
 			return None
 
@@ -2343,17 +2355,14 @@ def openFiltroWindow():
 			sumaPorcentajes= sumaPorcentajes + elemento
 		
 		
-		if sumaPorcentajes != 100:
+		if round(sumaPorcentajes,4) != 100.0:
 			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
 			return None
 
 		listaEntradaTemp=list()
 		datosSalida=list()
 		
-		################Datos temporales:
-		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-		listaARetenida=[16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
-		################
+		
 		
 		#Tabla Tamaño Abertura Tamiz
 		TamañoTamiz= [4,6,8,12,14,18,20,25,30,35,40,45,50,60,70,80,100,140]
@@ -2983,9 +2992,7 @@ def openFiltroWindow():
 			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
 			return None
 
-		#Borrar 
-		caudalMedio= 0.04404
-
+		
 
 		contadorFiltro = 0
 
@@ -3462,8 +3469,6 @@ def openFiltroWindow():
 			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
 			return None
 
-		#Borrar
-		caudalMedio=0.04404
 		
 		drenajeFiltrosMainWindow = tk.Toplevel()
 		drenajeFiltrosMainWindow.iconbitmap(bitmap='icons\\agua.ico')
@@ -6635,7 +6640,7 @@ def openFiltroWindow():
 			sumaPorcentajes= sumaPorcentajes + elemento
 		
 		
-		if sumaPorcentajes != 100:
+		if round(sumaPorcentajes,4) != 100.0:
 			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
 			return None
 
@@ -6643,13 +6648,6 @@ def openFiltroWindow():
 		datosSalida=list()
 		
 		
-		#Borrar
-		################Datos temporales:
-		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-		listaARetenida=[16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
-		caudalMedio=0.04404
-		
-		################
 			
 	
 
@@ -6945,7 +6943,7 @@ def openFiltroWindow():
 	def dimensionesYCotasFiltros(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1,tasa):
 
 		
-		#Volver2
+		
 		listaE
 		listaEU=list()
 		i=0
@@ -7105,7 +7103,7 @@ def openFiltroWindow():
 		listadimensionesYCotasFiltros.append(alturaInternaTotal)
 		 
 		
-		#Volver
+		
 
 
 		newDataTreeview(arboldimensionesYCotasFiltros,listadimensionesYCotasFiltros)
@@ -7370,7 +7368,7 @@ def openFiltroWindow():
 			sumaPorcentajes= sumaPorcentajes + elemento
 		
 		
-		if sumaPorcentajes != 100:
+		if round(sumaPorcentajes,4) != 100.0:
 			messagebox.showwarning(title="Error", message="La suma de porcentajes de arena retenida es diferente de 100.")
 			return None
 
@@ -7378,13 +7376,6 @@ def openFiltroWindow():
 		datosSalida=list()
 		
 		
-		#Borrar
-		################Datos temporales:
-		listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-		listaARetenida=[16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
-		caudalMedio=0.04404
-		
-		################
 			
 
 
@@ -7760,20 +7751,30 @@ def openFiltroWindow():
 	aR12 = Entry(frameFiltro, width=6)
 
 	
-	#Borrar
-	nT11.insert(0,14)
-	nT12.insert(0,20)
-	nT21.delete(0,END)
-	aR1.insert(0,100)
-	tempAgua.set("3")
-	caudalMedio.insert(0,"0.04404")
-	#Borrar
 	
 
 	listaNumTamiz=[nT11,nT12,nT21,nT22,nT31,nT32,nT41,nT42,nT51,nT52,nT61,nT62,nT71,nT72,nT81,nT82,nT91,nT92,nT101,nT102,nT111,nT112,nT121,nT122]
 	listaSepnT=[labelSepnT1, labelSepnT2, labelSepnT3, labelSepnT4, labelSepnT5, labelSepnT6, labelSepnT7, labelSepnT8, labelSepnT9, labelSepnT10, labelSepnT11, labelSepnT12]	
 	listaAR=[aR1,aR2,aR3,aR4,aR5,aR6,aR7,aR8,aR9,aR10,aR11,aR12]
-
+	
+	#Borrar
+	
+	
+	tempAgua.set("3")
+	caudalMedio.insert(0,"0.04404")
+	listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
+	listaARetenida= [16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
+	for i in range(0, len(listaNTamiz)):
+		listaNumTamiz[i].insert(0, listaNTamiz[i])
+		listaNumTamiz[i+1].delete(0,END)
+	
+	
+	for i in range(0, len(listaARetenida)):
+		listaAR[i].insert(0,listaARetenida[i])
+		
+	
+	#Borrar
+	
 
 	i=0
 	alturaInicial = 99
@@ -8186,7 +8187,7 @@ def openFloculadorWindow():
 
 
 mainWindow = Tk()
-mainWindow.title("Diseño de plantas de potabilización")
+mainWindow.title("FlocSedFil")
 mainWindow.iconbitmap(bitmap='icons\\agua.ico')
 mainWindow.geometry("370x350")
 #Anchoxalto
