@@ -2961,7 +2961,7 @@ def openFiltroWindow():
 		#Striped row tags
 		arbolPredimensionamientoFiltros.tag_configure("evenrow", background= "#1FCCDB")
 		arbolPredimensionamientoFiltros.tag_configure("oddrow", background= "#9DC4AA")
-		#Volver
+
 		
 		contadorFiltro = 0
 
@@ -3605,6 +3605,23 @@ def openFiltroWindow():
 		
 		botonCalculoDrenaje = HoverButton(drenajeFiltrosMainFrame, text="Cálculos para el drenaje del filtro", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: drenajeFiltro2(caudalMedio,listaEntradaDrenaje))
 		botonCalculoDrenaje.place(x=0, y=altIn)
+		
+		
+		def newEntryFiltroDrenaje(lista): 
+			lista2= [
+						"Diametro de los orificios",
+						"Distancia entre los orificios",
+						"Sección transversal",
+						"Distancia entre laterales",
+						"Diámetro de los laterales"]
+
+			for i in range(0, len(lista)):
+					lista[i].set(lista2[i])
+
+
+
+		botonLimpiarEntradasDrenaje = HoverButton(drenajeFiltrosMainFrame, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: newEntryFiltroDrenaje(listaEntradaDrenaje))
+		botonLimpiarEntradasDrenaje.place(x=0, y=altIn+80)		
 		#Pendiente: Botón Limpiar Entradas
 	
 		
@@ -4155,7 +4172,7 @@ def openFiltroWindow():
 		return listaperdidacargaLechoGravaLavado
 
 	
-	def perdidacargaLechoGravaLavado_2(tempValue,d60,tasaE):
+	def perdidacargaLechoGravaLavado_2(tasaE):
 
 		
 		if tasaE.get() == "Tasa":
@@ -4258,7 +4275,7 @@ def openFiltroWindow():
 
 	def perdidaCargaSistemaDrenajeLavado(tempValue,d60, caudal,listaEntradaDrenaje):
 
-		#Volver2
+		
 		if listaEntradaDrenaje[0].get() == "Diametro de los orificios":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los orificios.")
 			return None
@@ -4384,7 +4401,7 @@ def openFiltroWindow():
 
 
 
-	def perdidaCargaSistemaDrenajeLavado_2(tempValue,d60, caudal,listaEntradaDrenaje, tasaE):
+	def perdidaCargaSistemaDrenajeLavado_2(caudal,listaEntradaDrenaje, tasaE):
 
 		if tasaE.get() == "Tasa":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar la tasa.")
@@ -4392,6 +4409,37 @@ def openFiltroWindow():
 		else:
 			tasa = tasaE.get()
 
+		if listaEntradaDrenaje[0].get() == "Diametro de los orificios":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los orificios.")
+			return None
+		else:
+			diametroOrificios=float(listaEntradaDrenaje[0].get()[0])/float(listaEntradaDrenaje[0].get()[2])
+
+		if listaEntradaDrenaje[1].get() == "Distancia entre los orificios":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la distancia entre los orificios")
+			return None
+		else:
+			distanciaOrificios=float(listaEntradaDrenaje[1].get())
+
+
+		if listaEntradaDrenaje[2].get() == "Sección transversal":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la sección transversal")
+			return None
+		else:
+			seccionTransvMultiple=listaEntradaDrenaje[2].get()
+
+		if listaEntradaDrenaje[3].get() == "Distancia entre laterales":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la distancia entre laterales")
+			return None
+		else:
+			distanciaLaterales=float(listaEntradaDrenaje[3].get())
+
+
+		if listaEntradaDrenaje[4].get() == "Diámetro de los laterales":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los laterales")
+			return None
+		else:
+			diametroLaterales=listaEntradaDrenaje[4].get()
 
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow = tk.Toplevel()
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow.iconbitmap(bitmap='icons\\agua.ico')
@@ -5777,6 +5825,12 @@ def openFiltroWindow():
 		else:
 			tasa = tasaE.get()
 			
+		if listaE[0].get() == "Tiempo de retrolavado":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el tiempo de retrolavado")
+			return None
+		
+
+
 		perdidaCargaTuberiaLavado_DW_HWWindow = tk.Toplevel()
 		perdidaCargaTuberiaLavado_DW_HWWindow.iconbitmap(bitmap='icons\\agua.ico')
 		perdidaCargaTuberiaLavado_DW_HWWindow.geometry("800x600") 
@@ -6305,6 +6359,45 @@ def openFiltroWindow():
 			return None
 		else:
 			tasa = tasaE.get()
+
+
+		if listaE[0].get() == "Tiempo de retrolavado":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el tiempo de retrolavado")
+			return None
+		else:
+			tiempoRetrolavado = float(listaE[0].get())
+
+		if listaEntradaDrenaje[0].get() == "Diametro de los orificios":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los orificios.")
+			return None
+		else:
+			diametroOrificios=float(listaEntradaDrenaje[0].get()[0])/float(listaEntradaDrenaje[0].get()[2])
+
+		if listaEntradaDrenaje[1].get() == "Distancia entre los orificios":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la distancia entre los orificios")
+			return None
+		else:
+			distanciaOrificios=float(listaEntradaDrenaje[1].get())
+
+
+		if listaEntradaDrenaje[2].get() == "Sección transversal":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la sección transversal")
+			return None
+		else:
+			seccionTransvMultiple=listaEntradaDrenaje[2].get()
+
+		if listaEntradaDrenaje[3].get() == "Distancia entre laterales":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la distancia entre laterales")
+			return None
+		else:
+			distanciaLaterales=float(listaEntradaDrenaje[3].get())
+
+
+		if listaEntradaDrenaje[4].get() == "Diámetro de los laterales":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los laterales")
+			return None
+		else:
+			diametroLaterales=listaEntradaDrenaje[4].get()
 	
 		perdidaCargaTotalLavadoMainWindow = tk.Toplevel()
 		perdidaCargaTotalLavadoMainWindow.iconbitmap(bitmap='icons\\agua.ico')
@@ -6998,15 +7091,33 @@ def openFiltroWindow():
 
 		botonVerificacionVelocidadesDiseñoTuberias = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Verificación de velocidad de diseño\n en tuberías de filtro durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: verificacionVelocidadesDiseñoTuberiaMain(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal) )
 
-		#Pendiente: Revisar manejo de errores de Lista Entrada Drenaje y otros. (En pérdida de carga Total)
+	
+
+				
+		def newEntryFiltroHidraulica(lista): 
+			lista2= [
+						"Diametro de los orificios",
+						"Distancia entre los orificios",
+						"Sección transversal",
+						"Distancia entre laterales",
+						"Diámetro de los laterales",
+						"Tiempo de retrolavado"]
+
+			for i in range(0, len(lista)):
+					lista[i].set(lista2[i])
+
+		botonLimpiarEntradasHidraulica = HoverButton(hidraulicaSistemaLavadoMainFrame, text="L\ni\nm\np\ni\na\nr\n\ne\nn\nt\nr\na\nd\na\ns", activebackground="#9DC4AA", anchor=CENTER , width=3, height=16, bg= "#09C5CE", font =("Courier",9), command= lambda: newEntryFiltroHidraulica(listaEntradaDrenaje+listaEntradaExtra))
 
 			
+
 		listaBotones=[botonVelocidadLavadoExpansionLechoFiltrante ,botonConsumoAguaLavado ,
 		botonPerdidaCargaLechoExpandido ,botonPerdidacargaLechoGravaLavado ,botonPerdidaCargaSistemaDrenajeLavado 
 		,botonPerdidaCargaTuberiaLavado_DW,botonPerdidaCargaTotalLavado ,botonVerificacionVelocidadesDiseñoTuberias]
 		 
 		counter= 0
 		altIn2= altIn
+		botonLimpiarEntradasHidraulica.place(x=400, y=altIn)
+
 		for elemento in listaBotones:
 			if counter < 4:
 				elemento.place(x=20,y=altIn)
@@ -7724,17 +7835,40 @@ def openFiltroWindow():
 		
 
 		#TasaElegir
+		#Volver
+
+
 		#Pendiente: MANEJOR DE ERRORES.
-		botonPerdidacargaLechoGravaLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del lecho de grava durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado_2(valorTemperatura,d60,TasaElegir) ) 
-		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del sistema de drenaje durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado_2(valorTemperatura,d60, caudalMedio, listaEntradaDrenaje, TasaElegir) )
+		botonPerdidacargaLechoGravaLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del lecho de grava durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado_2(TasaElegir) ) 
+		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del sistema de drenaje durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado_2(caudalMedio, listaEntradaDrenaje, TasaElegir) )
 		botonPerdidaCargaTuberiaLavado_DW = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga en la tubería\n de lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW_HW_2(valorTemperatura,listaEntradaExtra,d60,listaCaudal,TasaElegir)) 
 		botonPerdidaCargaTotalLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga total durante\n el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavadoMain_2(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal,TasaElegir))
 		botonCanaletasLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Canaletas de lavado &\n dimensiones y cotas en los filtros", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: canaletasDeLavadoYDimensionesFiltros(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal,TasaElegir) )
-		botonLimpiarEntradas =  HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Limpiar Entradas", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: print("Limpio") )
+		
 
-			
+		def newEntryPerdidaTotal(lista): 
+			lista2= [
+						"Diametro de los orificios",
+						"Distancia entre los orificios",
+						"Sección transversal",
+						"Distancia entre laterales",
+						"Diámetro de los laterales",
+						"Tiempo de retrolavado",
+						"Tasa"]
+
+			for i in range(0, len(lista)):
+					lista[i].set(lista2[i])
+		
+		listaTasa= [TasaElegir]
+		botonLimpiarEntradasPerdidaTotal =  HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Limpiar Entradas", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: newEntryPerdidaTotal(listaEntradaDrenaje+listaEntradaExtra+listaTasa))
+
+
+		 
+
+		
+
 		listaBotones=[botonPerdidacargaLechoGravaLavado ,botonPerdidaCargaSistemaDrenajeLavado 
-		,botonPerdidaCargaTuberiaLavado_DW,botonPerdidaCargaTotalLavado, botonCanaletasLavado, botonLimpiarEntradas]
+		,botonPerdidaCargaTuberiaLavado_DW,botonPerdidaCargaTotalLavado, botonCanaletasLavado, botonLimpiarEntradasPerdidaTotal]
 			
 		counter= 0
 		altIn2= altIn
