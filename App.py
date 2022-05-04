@@ -4890,7 +4890,7 @@ def openFiltroWindow():
 		"Coeficiente de rugosidad de Hazen-Williams",
 		"Longitud de la tubería de lavado",
 		"Diámetro nominal de la tubería de lavado",
-		"Diámetro intero de la tubería de lavado",
+		"Diámetro interno de la tubería de lavado",
 		"Velocidad de flujo en la tubería de lavado",
 		"Pérdida de carga unitaria en la tubería de lavado",
 		"Pérdida de carga en la tubería de lavado(Sin accersorios)",
@@ -4989,17 +4989,41 @@ def openFiltroWindow():
 
 
 		'listaEU[1]'
-		diametroNominalLista= [6,8,10,12,14,16,18,20,24]
+		diametroNominal = [
+		(6, 8, 10, 12, 14, 16, 18, 20, 24), 
+		(6, 8, 10, 12, 14, 16, 18, 20, 22, 24),
+		(300,350,400,450,500,600),
+		(150, 200, 250, 300, 350, 400, 450, 500, 600), 
+		(160, 200, 250, 315, 355, 400), 
+		(160, 200, 250, 315, 355, 400), 
+		(6, 8, 10, 12, 14, 16, 18, 20, 24), 
+		(6, 8, 10, 12, 14, 16, 18, 20, 24)]
+
 		tuplasEntradas=list()
 		
+		i=-1
+
 		for elemento in MaterialTuberiaLista:
 			tuplaL = tuple()
-			for diam in diametroNominalLista:
+			i=i+1
+			print(i)
+			for diam in diametroNominal[i]:
 				tuplaL = (elemento,diam)
 				tuplasEntradas.append(tuplaL)
-		listaValoresDiametroInterno= [0.154, 0.203, 0.255, 0.303, 0.333, 0.381, 0.429, 0.478, 0.575, 0.146, 0.194, 0.243, 0.289, 0.318, 0.364, 0.41, 0.456, 0.548, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.155, 0.202, 0.252, 0.299, 0.328, 0.375, 0.422, 0.469, 0.563, 0.152, 0.198, 0.247, 0.293, 0.322, 0.368, 0.414, 0.46, 0.552]
+
+		listaValoresDiametroInterno= [
+		0.154, 0.203, 0.255, 0.303, 0.333, 0.381, 0.429, 0.478, 0.575,
+		0.146, 0.194, 0.243, 0.289, 0.318, 0.364, 0.41, 0.456,0.502, 0.548,
+		0.316,0.365,0.416,0.466,0.517,0.618, 
+		0.161,0.213,0.263,0.314,0.364,0.413,0.463,0.513,0.613, 
+		0.145,0.181,0.226,0.285,0.321,0.362,
+		0.141,0.176,0.220,0.278,0.313,0.353, 
+		0.155, 0.202, 0.252, 0.299, 0.328, 0.375, 0.422, 0.469, 0.563, 
+		0.152, 0.198, 0.247, 0.293, 0.322, 0.368, 0.414, 0.46, 0.552]
 		diametroInternoDic= dict()
+
 		for i in range(0,len(listaValoresDiametroInterno)):
+
 			diametroInternoDic[tuplasEntradas[i]]= listaValoresDiametroInterno[i]
 
 
@@ -5050,7 +5074,7 @@ def openFiltroWindow():
 			
 
 		#DatosPara2
-
+		
 		
 	
 		coeficienteRugosidadHazenLista = [140, 140, 140, 140, 150, 150, 150, 150]
@@ -5687,7 +5711,7 @@ def openFiltroWindow():
 				
 
 	def perdidaCargaTuberiaLavado_DW_HW(TemperatureValue,listaE, d60,caudalLista):
-
+		
 		if listaE[0].get() == "Tiempo de retrolavado":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el tiempo de retrolavado")
 			return None
@@ -5721,24 +5745,46 @@ def openFiltroWindow():
 		inicialLabel=Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Datos adicionales para cálculos: ",font=("Yu Gothic bold",15))
 
 
-
-
-		materialTuberiaLavado = StringVar()
-		materialTuberiaLavado.set("Material de la tubería de lavado")
 		listaValoresTemp=["Acero al carbono API 5L SCH-40","Acero al carbono API 5L SCH-80","Hierro dúctil C30",
 		"Hierro dúctil C40","Polietileno de alta densidad (PEAD) PE 100 RDE 21","Polietileno de alta densidad (PEAD) PE 100 RDE 17",
 		"Policluro de vinilo (PVC) RDE 26","Policluro de vinilo (PVC) RDE 21"]
 
-		materialTuberiaLavadoName = OptionMenu(frameperdidaCargaTuberiaLavado_DW_HW, materialTuberiaLavado, *listaValoresTemp)
+		["6","8","10","12","14","16","18","20","24"]
+		
+		#Volver
+
+		Valores=[(6, 8, 10, 12, 14, 16, 18, 20, 24), 
+		(6, 8, 10, 12, 14, 16, 18, 20, 22, 24),
+		(300,350,400,450,500,600),
+		(150, 200, 250, 300, 350, 400, 450, 500, 600), 
+		(160, 200, 250, 315, 355, 400), 
+		(160, 200, 250, 315, 355, 400), 
+		(6, 8, 10, 12, 14, 16, 18, 20, 24), 
+		(6, 8, 10, 12, 14, 16, 18, 20, 24)]
+
+		opcionesDic = dict()
+
+		for i in range(0, len(listaValoresTemp)):
+			opcionesDic[listaValoresTemp[i]]=Valores[i] 
+
+
+
+		def on_combobox_select(event):
+			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
+			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
+
+		materialTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="30", state="readonly", values=tuple(opcionesDic.keys()))
+		materialTuberiaLavado.bind("<<ComboboxSelected>>", on_combobox_select)
+		materialTuberiaLavado.set("Material de la tubería de lavado")
+
 		materialTuberiaLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
 
 
-
-		diametroNominalTuberiaLavado = StringVar()
+		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="30", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
-		listaValoresTemp1=["6","8","10","12","14","16","18","20","24"]
-		diametroNominalTuberiaLavadoName = OptionMenu(frameperdidaCargaTuberiaLavado_DW_HW, diametroNominalTuberiaLavado, *listaValoresTemp1)
 		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+		
+
 
 		#NombrePendiente
 		codoRadio = StringVar()
@@ -5772,7 +5818,7 @@ def openFiltroWindow():
 
 		listaEntradas=[materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada]
 
-		listaLabel=[inicialLabel, materialTuberiaLabel , materialTuberiaLavadoName, diametroNominalTuberiaLavadoLabel, diametroNominalTuberiaLavadoName,longitudTuberiaLavadoLabel, factorFriccionLabel,divisorAccesoriosLabel, codoRadioName,tipoEntradaName,]
+		listaLabel=[inicialLabel, materialTuberiaLabel , materialTuberiaLavado, diametroNominalTuberiaLavadoLabel, diametroNominalTuberiaLavado,longitudTuberiaLavadoLabel, factorFriccionLabel,divisorAccesoriosLabel, codoRadioName,tipoEntradaName,]
 
 		alturaInicialLabel=20
 		m=0
@@ -7447,6 +7493,44 @@ def openFiltroWindow():
 		else:
 			tasa = tasaE.get()
 
+		if listaEntradaDrenaje[0].get() == "Diametro de los orificios":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los orificios.")
+			return None
+
+		if listaEntradaDrenaje[1].get() == "Distancia entre los orificios":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la distancia entre los orificios")
+			return None
+		else:
+			distanciaOrificios=float(listaEntradaDrenaje[1].get())
+
+
+		if listaEntradaDrenaje[2].get() == "Sección transversal":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la sección transversal")
+			return None
+		else:
+			seccionTransvMultiple=listaEntradaDrenaje[2].get()
+
+		if listaEntradaDrenaje[3].get() == "Distancia entre laterales":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar la distancia entre laterales")
+			return None
+		else:
+			distanciaLaterales=float(listaEntradaDrenaje[3].get())
+
+
+		if listaEntradaDrenaje[4].get() == "Diámetro de los laterales":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los laterales")
+			return None
+		else:
+			diametroLaterales=listaEntradaDrenaje[4].get()
+
+		if listaE[0].get() == "Tiempo de retrolavado":
+			messagebox.showwarning(title="Error", message="Hace falta seleccionar el tiempo de retrolavado")
+			return None
+		else:
+			tiempoRetrolavado = float(listaE[0].get())
+
+		
+
 		canaletasDeLavadoYDimensionesFiltrosWindow = tk.Toplevel()
 		canaletasDeLavadoYDimensionesFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
 		canaletasDeLavadoYDimensionesFiltrosWindow.geometry("800x650") 
@@ -7835,10 +7919,10 @@ def openFiltroWindow():
 		
 
 		#TasaElegir
-		#Volver
+		
 
 
-		#Pendiente: MANEJOR DE ERRORES.
+		#Pendiente: Quitar elementos que no se usan en manejo de errores. 
 		botonPerdidacargaLechoGravaLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del lecho de grava durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado_2(TasaElegir) ) 
 		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del sistema de drenaje durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado_2(caudalMedio, listaEntradaDrenaje, TasaElegir) )
 		botonPerdidaCargaTuberiaLavado_DW = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga en la tubería\n de lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW_HW_2(valorTemperatura,listaEntradaExtra,d60,listaCaudal,TasaElegir)) 
@@ -8572,15 +8656,19 @@ my_canvas.create_text(175,20, text= "Seleccione una de las siguientes opciones:"
 #Buttons
 
 boton_sed= HoverButton(frame, text="Sedimentador alta tasa", activebackground="#9DC4AA", justify=CENTER, width=50, height=2, bg= "#09C5CE", font =("Courier",9), command= openSedWindow)
-boton_sed_window = my_canvas.create_window(5,110, anchor= "nw", window=boton_sed)
+boton_sed_window = my_canvas.create_window(5,160, anchor= "nw", window=boton_sed)
 
 boton_filtro= HoverButton(frame, text="Filtro rápido", activebackground="#9DC4AA", justify=CENTER, width=50, height=2, bg= "#09C5CE", font =("Courier",9), command=openFiltroWindow)
-boton_filtro_window = my_canvas.create_window(5,160, anchor= "nw", window=boton_filtro)
+boton_filtro_window = my_canvas.create_window(5,210, anchor= "nw", window=boton_filtro)
 
 boton_floc= HoverButton(frame, text="Floculador Alabama", activebackground="#9DC4AA", justify=CENTER, width=50, height=2, bg= "#09C5CE", font =("Courier",9), command=openFloculadorWindow)
-boton_floc_window = my_canvas.create_window(5,210, anchor= "nw", window=boton_floc)
+boton_floc_window = my_canvas.create_window(5,110, anchor= "nw", window=boton_floc)
+
 
 '''
+5,110
+5,160
+5,210
 #09C5CE
 #9DC4AA
 #83C740
