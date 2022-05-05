@@ -4597,17 +4597,40 @@ def openFiltroWindow():
 
 
 	
-		diametroNominalLista= [6,8,10,12,14,16,18,20,24]
+		diametroNominal = [(6, 8, 10, 12, 14, 16, 18, 20, 24), 
+		(6, 8, 10, 12, 14, 16, 18, 20, 22, 24),
+		(300,350,400,450,500,600),
+		(150, 200, 250, 300, 350, 400, 450, 500, 600), 
+		(160.0, 200.0, 250.0, 315.0, 355.0, 400.0), 
+		(160.0, 200.0, 250.0, 315.0, 355.0, 400.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0)]
+
 		tuplasEntradas=list()
 		
+		i=-1
+
 		for elemento in MaterialTuberiaLista:
 			tuplaL = tuple()
-			for diam in diametroNominalLista:
+			i=i+1
+			for diam in diametroNominal[i]:
 				tuplaL = (elemento,diam)
 				tuplasEntradas.append(tuplaL)
-		listaValoresDiametroInterno= [0.154, 0.203, 0.255, 0.303, 0.333, 0.381, 0.429, 0.478, 0.575, 0.146, 0.194, 0.243, 0.289, 0.318, 0.364, 0.41, 0.456, 0.548, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.155, 0.202, 0.252, 0.299, 0.328, 0.375, 0.422, 0.469, 0.563, 0.152, 0.198, 0.247, 0.293, 0.322, 0.368, 0.414, 0.46, 0.552]
+
+		listaValoresDiametroInterno= [
+		0.154, 0.203, 0.255, 0.303, 0.333, 0.381, 0.429, 0.478, 0.575,
+		0.146, 0.194, 0.243, 0.289, 0.318, 0.364, 0.41, 0.456,0.502, 0.548,
+		0.316,0.365,0.416,0.466,0.517,0.618, 
+		0.161,0.213,0.263,0.314,0.364,0.413,0.463,0.513,0.613, 
+		0.145,0.181,0.226,0.285,0.321,0.362,
+		0.141,0.176,0.220,0.278,0.313,0.353, 
+		0.155, 0.202, 0.252, 0.299, 0.328, 0.375, 0.422, 0.469, 0.563, 
+		0.152, 0.198, 0.247, 0.293, 0.322, 0.368, 0.414, 0.46, 0.552]
 		diametroInternoDic= dict()
+
+
 		for i in range(0,len(listaValoresDiametroInterno)):
+
 			diametroInternoDic[tuplasEntradas[i]]= listaValoresDiametroInterno[i]
 
 
@@ -4686,10 +4709,11 @@ def openFiltroWindow():
 		listaEntradaTemp2.append(perdidaCargaTuberiaLavadoSinAccesorios)
 			
 		#DatosPara3
-	
+
+
 		
-		tuplasEntradas2=list()
-		diametroNominalLista= [6,8,10,12,14,16,18,20,24]
+		
+		
 		accesoriosLista = ["Válvula de compuerta completamente abierta",
 		"Codo 90° radio corto (r/d 1)",
 		"Codo 90° radio mediano (r/d 3)",
@@ -4700,28 +4724,42 @@ def openFiltroWindow():
 		"Entrada con boca acampanada",
 		"Salida del tubo"]
 
-		for elemento in accesoriosLista:
-					tuplaL = tuple()
-					for diam in diametroNominalLista:
-						tuplaL = (elemento,diam)
-						tuplasEntradas2.append(tuplaL)
+		diametroNominalLista = [
+		150,160,200,250,300,315,350,355,400,450,500,600,700,800,900,1000,6,8,10,12,14,16,18,20,24,28,32,34,36,40
+		]
+		tuplasEntradas2=[]
 
+		for elemento in accesoriosLista:
+			tuplaL = tuple()
+			for diam in diametroNominalLista:
+				tuplaL = (elemento,diam)
+				tuplasEntradas2.append(tuplaL)
 
 		listaValoresCoeficientePerdidaMenor= [
-		0.120,	0.110,	0.110,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,
-		0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,
-		0.180,	0.168,	0.168,	0.156,	0.156,	0.156,	0.144,	0.144,	0.144,
-		0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,
-		0.900,	0.840,	0.840,	0.780,	0.780,	0.780,	0.720,	0.720,	0.720,
-		0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,
-		0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,
-		0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,
-		1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000]
+
+		0.12,	0.12,	0.11,	0.11,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.120,	0.110,	0.110,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.10,	0.10,	0.10,	0.10,	0.10,
+
+		0.30,	0.30,	0.28,	0.28,	0.26,	0.26,	0.26,	0.26,	0.26,	0.24,	0.24,	0.24,	0.22,	0.22,	0.22,	0.22,	0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,	0.22,	0.22,	0.22,	0.22,	0.22,
+
+		0.180,	0.178,	0.168,	0.168,	0.156,	0.156,	0.156,	0.156,	0.156,	0.144,	0.144,	0.144,	0.132,	0.132,	0.132,	0.132,	0.180,	0.168,	0.168,	0.156,	0.156,	0.156,	0.144,	0.144,	0.144,	0.13,	0.13,	0.13,	0.13,	0.13,
+
+		0.30,	0.30,	0.28,	0.28,	0.26,	0.26,	0.26,	0.26,	0.26,	0.24,	0.24,	0.24,	0.22,	0.22,	0.22,	0.22,	0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,	0.22,	0.22,	0.22,	0.22,	0.22,
+
+		0.90,	0.90,	0.84,	0.84,	0.78,	0.78,	0.78,	0.78,	0.78,	0.72,	0.72,	0.72,	0.66,	0.66,	0.66,	0.66,	0.900,	0.840,	0.840,	0.780,	0.780,	0.780,	0.720,	0.720,	0.720,	0.66,	0.66,	0.66,	0.66,	0.66,
+
+		0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.30,	0.30,	0.30,	0.30,	0.30,
+
+		0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.50,	0.50,	0.50,	0.50,	0.50,
+
+		0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.10,	0.10,	0.10,	0.10,	0.10,
+
+		1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.00,	1.00,	1.00,	1.00,	1.00]
 
 
 		CoeficientePerdidaMenorDic= dict()
 		for i in range(0,len(listaValoresCoeficientePerdidaMenor)):
 			CoeficientePerdidaMenorDic[tuplasEntradas2[i]]= listaValoresCoeficientePerdidaMenor[i]
+
 
 		accesoriosListaEntrada= ["Válvula de compuerta completamente abierta",
 		f"{listaEU[4]}",
@@ -4731,6 +4769,7 @@ def openFiltroWindow():
 		f"{listaEU[5]}",
 		"Salida del tubo"]
 
+		
 		
 		'''materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada y temperatureValue'''	
 		sumaCoeficientesPerdidaMenor= 0
@@ -4964,7 +5003,7 @@ def openFiltroWindow():
 		listaEntradaTemp1=list()
 		listaEntradaTemp2=list()
 		listaEntradaTemp3=list()
-		datosSalida=list()
+		
 
 		#DatosPara1        
 		
@@ -4989,15 +5028,16 @@ def openFiltroWindow():
 
 
 		'listaEU[1]'
-		diametroNominal = [
-		(6, 8, 10, 12, 14, 16, 18, 20, 24), 
-		(6, 8, 10, 12, 14, 16, 18, 20, 22, 24),
-		(300,350,400,450,500,600),
-		(150, 200, 250, 300, 350, 400, 450, 500, 600), 
-		(160, 200, 250, 315, 355, 400), 
-		(160, 200, 250, 315, 355, 400), 
-		(6, 8, 10, 12, 14, 16, 18, 20, 24), 
-		(6, 8, 10, 12, 14, 16, 18, 20, 24)]
+		diametroNominal = [(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0),
+		(300.0,350.0,400.0,450.0,500.0,600.0),
+		(150.0, 200.0, 250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 600.0), 
+		(160.0, 200.0, 250.0, 315.0, 355.0, 400.0), 
+		(160.0, 200.0, 250.0, 315.0, 355.0, 400.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0)]
+		
+
 
 		tuplasEntradas=list()
 		
@@ -5006,7 +5046,6 @@ def openFiltroWindow():
 		for elemento in MaterialTuberiaLista:
 			tuplaL = tuple()
 			i=i+1
-			print(i)
 			for diam in diametroNominal[i]:
 				tuplaL = (elemento,diam)
 				tuplasEntradas.append(tuplaL)
@@ -5122,23 +5161,37 @@ def openFiltroWindow():
 		"Entrada con boca acampanada",
 		"Salida del tubo"]
 
+		diametroNominalLista = [
+		150,160,200,250,300,315,350,355,400,450,500,600,700,800,900,1000,6,8,10,12,14,16,18,20,24,28,32,34,36,40
+		]
+		tuplasEntradas2=[]
+
 		for elemento in accesoriosLista:
-					tuplaL = tuple()
-					for diam in diametroNominalLista:
-						tuplaL = (elemento,diam)
-						tuplasEntradas2.append(tuplaL)
+			tuplaL = tuple()
+			for diam in diametroNominalLista:
+				tuplaL = (elemento,diam)
+				tuplasEntradas2.append(tuplaL)
 
 
 		listaValoresCoeficientePerdidaMenor= [
-		0.120,	0.110,	0.110,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,
-		0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,
-		0.180,	0.168,	0.168,	0.156,	0.156,	0.156,	0.144,	0.144,	0.144,
-		0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,
-		0.900,	0.840,	0.840,	0.780,	0.780,	0.780,	0.720,	0.720,	0.720,
-		0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,
-		0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,
-		0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,
-		1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000]
+
+		0.12,	0.12,	0.11,	0.11,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.120,	0.110,	0.110,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.10,	0.10,	0.10,	0.10,	0.10,
+
+		0.30,	0.30,	0.28,	0.28,	0.26,	0.26,	0.26,	0.26,	0.26,	0.24,	0.24,	0.24,	0.22,	0.22,	0.22,	0.22,	0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,	0.22,	0.22,	0.22,	0.22,	0.22,
+
+		0.180,	0.178,	0.168,	0.168,	0.156,	0.156,	0.156,	0.156,	0.156,	0.144,	0.144,	0.144,	0.132,	0.132,	0.132,	0.132,	0.180,	0.168,	0.168,	0.156,	0.156,	0.156,	0.144,	0.144,	0.144,	0.13,	0.13,	0.13,	0.13,	0.13,
+
+		0.30,	0.30,	0.28,	0.28,	0.26,	0.26,	0.26,	0.26,	0.26,	0.24,	0.24,	0.24,	0.22,	0.22,	0.22,	0.22,	0.300,	0.280,	0.280,	0.260,	0.260,	0.260,	0.240,	0.240,	0.240,	0.22,	0.22,	0.22,	0.22,	0.22,
+
+		0.90,	0.90,	0.84,	0.84,	0.78,	0.78,	0.78,	0.78,	0.78,	0.72,	0.72,	0.72,	0.66,	0.66,	0.66,	0.66,	0.900,	0.840,	0.840,	0.780,	0.780,	0.780,	0.720,	0.720,	0.720,	0.66,	0.66,	0.66,	0.66,	0.66,
+
+		0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.30,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.300,	0.30,	0.30,	0.30,	0.30,	0.30,
+
+		0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.50,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.500,	0.50,	0.50,	0.50,	0.50,	0.50,
+
+		0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.10,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.100,	0.10,	0.10,	0.10,	0.10,	0.10,
+
+		1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.00,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.000,	1.00,	1.00,	1.00,	1.00,	1.00]
 
 
 		CoeficientePerdidaMenorDic= dict()
@@ -5749,18 +5802,17 @@ def openFiltroWindow():
 		"Hierro dúctil C40","Polietileno de alta densidad (PEAD) PE 100 RDE 21","Polietileno de alta densidad (PEAD) PE 100 RDE 17",
 		"Policluro de vinilo (PVC) RDE 26","Policluro de vinilo (PVC) RDE 21"]
 
-		["6","8","10","12","14","16","18","20","24"]
 		
 		#Volver
 
-		Valores=[(6, 8, 10, 12, 14, 16, 18, 20, 24), 
-		(6, 8, 10, 12, 14, 16, 18, 20, 22, 24),
-		(300,350,400,450,500,600),
-		(150, 200, 250, 300, 350, 400, 450, 500, 600), 
-		(160, 200, 250, 315, 355, 400), 
-		(160, 200, 250, 315, 355, 400), 
-		(6, 8, 10, 12, 14, 16, 18, 20, 24), 
-		(6, 8, 10, 12, 14, 16, 18, 20, 24)]
+		Valores=[(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0),
+		(300.0,350.0,400.0,450.0,500.0,600.0),
+		(150.0, 200.0, 250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 600.0), 
+		(160.0, 200.0, 250.0, 315.0, 355.0, 400.0), 
+		(160.0, 200.0, 250.0, 315.0, 355.0, 400.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0)]
 
 		opcionesDic = dict()
 
@@ -5768,12 +5820,13 @@ def openFiltroWindow():
 			opcionesDic[listaValoresTemp[i]]=Valores[i] 
 
 
+		#Pendiente: ValoresDeAccesoriofinalconPolietileno21YDiametro200
 
 		def on_combobox_select(event):
 			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
 
-		materialTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="30", state="readonly", values=tuple(opcionesDic.keys()))
+		materialTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="50", state="readonly", values=tuple(opcionesDic.keys()))
 		materialTuberiaLavado.bind("<<ComboboxSelected>>", on_combobox_select)
 		materialTuberiaLavado.set("Material de la tubería de lavado")
 
@@ -6302,24 +6355,42 @@ def openFiltroWindow():
 		inicialLabel=Label(frameperdidaCargaTotalLavadoMain, text="Datos adicionales para cálculos: ",font=("Yu Gothic bold",15))
 
 
-
-
-		materialTuberiaLavado = StringVar()
-		materialTuberiaLavado.set("Material de la tubería de lavado")
 		listaValoresTemp=["Acero al carbono API 5L SCH-40","Acero al carbono API 5L SCH-80","Hierro dúctil C30",
 		"Hierro dúctil C40","Polietileno de alta densidad (PEAD) PE 100 RDE 21","Polietileno de alta densidad (PEAD) PE 100 RDE 17",
 		"Policluro de vinilo (PVC) RDE 26","Policluro de vinilo (PVC) RDE 21"]
 
-		materialTuberiaLavadoName = OptionMenu(frameperdidaCargaTotalLavadoMain, materialTuberiaLavado, *listaValoresTemp)
+
+		Valores=[(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0),
+		(300.0,350.0,400.0,450.0,500.0,600.0),
+		(150.0, 200.0, 250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 600.0), 
+		(160.0, 200.0, 250.0, 315.0, 355.0, 400.0), 
+		(160.0, 200.0, 250.0, 315.0, 355.0, 400.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0)]
+		opcionesDic = dict()
+
+		for i in range(0, len(listaValoresTemp)):
+			opcionesDic[listaValoresTemp[i]]=Valores[i] 
+
+
+		def on_combobox_select(event):
+			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
+			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
+
+		materialTuberiaLavado = ttk.Combobox(frameperdidaCargaTotalLavadoMain, width="50", state="readonly", values=tuple(opcionesDic.keys()))
+		materialTuberiaLavado.bind("<<ComboboxSelected>>", on_combobox_select)
+		materialTuberiaLavado.set("Material de la tubería de lavado")
+
 		materialTuberiaLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
 
 
-
-		diametroNominalTuberiaLavado = StringVar()
+		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTotalLavadoMain, width="30", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
-		listaValoresTemp1=["6","8","10","12","14","16","18","20","24"]
-		diametroNominalTuberiaLavadoName = OptionMenu(frameperdidaCargaTotalLavadoMain, diametroNominalTuberiaLavado, *listaValoresTemp1)
 		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+
+
+		
 
 		#NombrePendiente
 		codoRadio = StringVar()
@@ -6353,7 +6424,7 @@ def openFiltroWindow():
 
 		listaEntradas=[materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada]
 
-		listaLabel=[inicialLabel, materialTuberiaLabel , materialTuberiaLavadoName, diametroNominalTuberiaLavadoLabel, diametroNominalTuberiaLavadoName,longitudTuberiaLavadoLabel, factorFriccionLabel,divisorAccesoriosLabel, codoRadioName,tipoEntradaName,]
+		listaLabel=[inicialLabel, materialTuberiaLabel , materialTuberiaLavado, diametroNominalTuberiaLavadoLabel, diametroNominalTuberiaLavado,longitudTuberiaLavadoLabel, factorFriccionLabel,divisorAccesoriosLabel, codoRadioName,tipoEntradaName,]
 
 		alturaInicialLabel=20
 		m=0
@@ -6637,22 +6708,39 @@ def openFiltroWindow():
 
 
 
-
-		materialTuberiaLavado = StringVar()
-		materialTuberiaLavado.set("Material de la tubería de lavado")
 		listaValoresTemp=["Acero al carbono API 5L SCH-40","Acero al carbono API 5L SCH-80","Hierro dúctil C30",
 		"Hierro dúctil C40","Polietileno de alta densidad (PEAD) PE 100 RDE 21","Polietileno de alta densidad (PEAD) PE 100 RDE 17",
 		"Policluro de vinilo (PVC) RDE 26","Policluro de vinilo (PVC) RDE 21"]
 
-		materialTuberiaLavadoName = OptionMenu(frameverificacionVelocidadesDiseñoTuberiaMain, materialTuberiaLavado, *listaValoresTemp)
+
+		Valores=[(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0),
+		(300.0,350.0,400.0,450.0,500.0,600.0),
+		(150.0, 200.0, 250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 600.0), 
+		(160.0, 200.0, 250.0, 315.0, 355.0, 400.0), 
+		(160.0, 200.0, 250.0, 315.0, 355.0, 400.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0), 
+		(6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 24.0)]
+
+		opcionesDic = dict()
+
+		for i in range(0, len(listaValoresTemp)):
+			opcionesDic[listaValoresTemp[i]]=Valores[i] 
+
+
+		def on_combobox_select(event):
+			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
+			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
+
+		materialTuberiaLavado = ttk.Combobox(frameverificacionVelocidadesDiseñoTuberiaMain, width="50", state="readonly", values=tuple(opcionesDic.keys()))
+		materialTuberiaLavado.bind("<<ComboboxSelected>>", on_combobox_select)
+		materialTuberiaLavado.set("Material de la tubería de lavado")
+
 		materialTuberiaLabel= Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
 
 
-
-		diametroNominalTuberiaLavado = StringVar()
+		diametroNominalTuberiaLavado = ttk.Combobox(frameverificacionVelocidadesDiseñoTuberiaMain, width="30", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
-		listaValoresTemp1=["6","8","10","12","14","16","18","20","24"]
-		diametroNominalTuberiaLavadoName = OptionMenu(frameverificacionVelocidadesDiseñoTuberiaMain, diametroNominalTuberiaLavado, *listaValoresTemp1)
 		diametroNominalTuberiaLavadoLabel= Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
 
 		#NombrePendiente
@@ -6683,7 +6771,7 @@ def openFiltroWindow():
 
 		listaEntradas=[materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada]
 
-		listaLabel=[inicialLabel, materialTuberiaLabel , materialTuberiaLavadoName, diametroNominalTuberiaLavadoLabel, diametroNominalTuberiaLavadoName,longitudTuberiaLavadoLabel, factorFriccionLabel]
+		listaLabel=[inicialLabel, materialTuberiaLabel , materialTuberiaLavado, diametroNominalTuberiaLavadoLabel, diametroNominalTuberiaLavado,longitudTuberiaLavadoLabel, factorFriccionLabel]
 
 		alturaInicialLabel=20
 		m=0
@@ -7921,7 +8009,7 @@ def openFiltroWindow():
 		#TasaElegir
 		
 
-
+		
 		#Pendiente: Quitar elementos que no se usan en manejo de errores. 
 		botonPerdidacargaLechoGravaLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del lecho de grava durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado_2(TasaElegir) ) 
 		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de carga a través\n del sistema de drenaje durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado_2(caudalMedio, listaEntradaDrenaje, TasaElegir) )
