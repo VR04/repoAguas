@@ -162,7 +162,8 @@ def openSedWindow():
 
 
 	oP1=["Floc de alumbre", "Floc con alumbre y polielectrolitos"]
-	tipoFloc = ttk.Combobox(frameSed, width="30", state="readonly", values=oP1)
+	tipoFloc = ttk.Combobox(frameSed, width="40", state="readonly", values=oP1)
+	tipoFloc.set("Seleccion el tipo de floc")
 	oP2 = {
 	"Placas planas paralelas": ("Acero inoxidable AISI 316","Polietileno alta densidad (HDPE)","Poliestireno de alto impacto(HIPS)") , 
 	"Placas onduladas paralelas":("Acrilonitrilo butadieno estireno (ABS)","Polipropileno (PP)"),
@@ -171,11 +172,12 @@ def openSedWindow():
 	
 	
 	def onComboboxSelect1(event):
-		materialTipoCelda.set("Material")
-		materialTipoCelda.config(values=oP2(tipoCelda.get()))
+		dimensionesTipoCeldaMaterial.set("Seleccione las dimensiones del tipo de celda")
+		materialTipoCelda.set("Seleccione el material del tipo de celda")
+		materialTipoCelda.config(values=oP2[tipoCelda.get()])
 
 	def onComboboxSelect2(event):
-		dimensionesTipoCeldaMaterial.set("Dimensiones")
+		dimensionesTipoCeldaMaterial.set("Seleccione las dimensiones del tipo de celda")
 		oP2 = {
 			"Placas planas paralelas": ("Acero inoxidable AISI 316","Polietileno alta densidad (HDPE)","Poliestireno de alto impacto(HIPS)") , 
 			"Placas onduladas paralelas":("Acrilonitrilo butadieno estireno (ABS)","Polipropileno (PP)"),
@@ -193,8 +195,8 @@ def openSedWindow():
 		('1200 x 1500', '1200 x 2000', '1200 x 2500', '1200 x 3000'), 
 		('1200 x 1500', '1200 x 2000', '1200 x 2500', '1200 x 3000')]
 
-		if ((tipoCelda.get(),materialTipoCelda.get())==("Material","Dimensiones")):
-			dimensionesTipoCeldaMaterial.set("Dimensiones")
+		if ((tipoCelda.get(),materialTipoCelda.get())==("Seleccione el material del tipo de celda","Seleccione las dimensiones del tipo de celda")):
+			dimensionesTipoCeldaMaterial.set("Seleccione las dimensiones del tipo de celda")
 		for i in range(0,len(combinacionesTipoCeldaMaterial)):
 			if ((tipoCelda.get(),materialTipoCelda.get())== combinacionesTipoCeldaMaterial[i]):
 				dimensionesTipoCeldaMaterial.config(values=dimensiones[i])
@@ -202,16 +204,17 @@ def openSedWindow():
 
 		
 
-	tipoCelda = ttk.Combobox(frameSed, width="30", state="readonly",values=tuple(oP2.keys()))
+	tipoCelda = ttk.Combobox(frameSed, width="40", state="readonly",values=tuple(oP2.keys()))
 	tipoCelda.bind("<<ComboboxSelected>>", onComboboxSelect1)
+	tipoCelda.set("Seleccione el tipo de celda")
 	
 
-	materialTipoCelda = ttk.Combobox(frameSed, width="30", state="readonly")
+	materialTipoCelda = ttk.Combobox(frameSed, width="40", state="readonly")
 	materialTipoCelda.bind("<<ComboboxSelected>>", onComboboxSelect2)
-	materialTipoCelda.set("Material")
+	materialTipoCelda.set("Seleccione el material del tipo de celda")
 	
-	dimensionesTipoCeldaMaterial = ttk.Combobox(frameSed, width="30", state="readonly")
-	dimensionesTipoCeldaMaterial.set("Dimensiones")
+	dimensionesTipoCeldaMaterial = ttk.Combobox(frameSed, width="40", state="readonly")
+	dimensionesTipoCeldaMaterial.set("Seleccione las dimensiones del tipo de celda")
 	
 
 	
@@ -237,8 +240,8 @@ def openSedWindow():
 		'1 1/2 (RDE 21)',
 		'2 (RDE 21)']
 	
-	diametroNominalOrificionesMultipleDescarga=materialTipoCelda = ttk.Combobox(frameSed, width="30", state="readonly",values= diametroNominalLista)
-	
+	diametroNominalOrificionesMultipleDescarga = ttk.Combobox(frameSed, width="65", state="readonly",values= diametroNominalLista)
+	diametroNominalOrificionesMultipleDescarga.set("Seleccione el diámetro nominal de los orificios del múltiple de descarga")
 	
 
 	lista_entradas=[factorMayoracionCaudalMD,
@@ -246,7 +249,8 @@ def openSedWindow():
 	temperaturaEntry, tipoFloc,tipoCelda,
 	materialTipoCelda,
 	dimensionesTipoCeldaMaterial,
-	anguloInclinacion, numeroUnidades,
+	anguloInclinacion, 
+	numeroUnidades,
 	distanciaPlacas,
 	longitudPlacas, 
 	distanciaCanaletasRecoleccion,
@@ -288,7 +292,8 @@ def openSedWindow():
 	propiedadesFisicasAguaLabel,
 	temperaturaEntry,
 	datosEntradaParametrosBasicosLabel,
-	tipoFloc,tipoCelda,
+	tipoFloc,
+	tipoCelda,
 	materialTipoCelda,
 	dimensionesTipoCeldaMaterial,
 	anguloInclinacionLabel,
@@ -297,7 +302,6 @@ def openSedWindow():
 	longitudPlacasLabel,
 	distanciaCanaletasRecoleccionLabel,
 	distanciaVerticalDistribucionPlacasLabel,
-	diametroNominalOrificionesMultipleDescarga,
 	bordeLibreLabel,
 	espesorMurosLabel,
 	pendienteTransversalTolvaLabel,
@@ -344,23 +348,21 @@ def openSedWindow():
 				yInicial=yInicial + 40
 				j=j+1
 		
-		elif 7<=i<14 :
+		elif 7<=i<16 :
 			if i==7:
 				listaLabels[i].place(x=450, y=yInicial2)
 				yInicial2=yInicial2 + 30
 			else:
-				lista_entradas[j].place(x=600, y=yInicial2)
+				lista_entradas[j].place(x=650, y=yInicial2)
 				listaLabels[i].place(x=450, y=yInicial2)
 				yInicial2=yInicial2 + 30
 				j=j+1
 		else:
-			if i==14:
+
+				lista_entradas[j].place(x=1100, y=yInicial3)
 				listaLabels[i].place(x=800, y=yInicial3)
 				yInicial3=yInicial3 + 30
-			else:
-				lista_entradas[j].place(x=900, y=yInicial3)
-				listaLabels[i].place(x=800, y=yInicial3)
-				yInicial3=yInicial3 + 30
+				
 				j=j+1
 		i=i+1
 
