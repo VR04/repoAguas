@@ -52,7 +52,7 @@ contadorFiltro=0
 contador2 = 0
 contadorFloculador=0
 
-def openSedWindow():
+'''def openSedWindow():
 
 	def velocidadPromedioFlujo(listaEntrada):
 		vuelta= (listaEntrada[6]/listaEntrada[4])*(sin(listaEntrada[10]) + (listaEntrada[7]/listaEntrada[5])*cos(listaEntrada[10]))
@@ -745,6 +745,143 @@ def openSedWindow():
 		else:
 			lista_entradas[i].insert(0,f'{listaInsert[i]}')
 			
+		
+	sedWindow.mainloop()'''
+
+def openSedWindow():
+
+	def calcularSed(lista_ent):
+		lista_entry=[0]*20
+		
+		for entryID in range(0,len(lista_ent)):
+			try:
+				if entryID == 4:				
+					
+					lista_entry[entryID]= lista_ent[entryID].get()
+					
+				else: 
+										
+					lista_entry[entryID]=(float(lista_ent[entryID].get()))
+				
+			except:
+				messagebox.showwarning(message="El ingreso de datos es erróneo, vuelva a intentarlo", title= "¡Cuidado!")
+				return None
+			
+
+
+		if lista_entry[10]>60.0 or lista_entry[10]<45:
+			messagebox.showwarning(message="El valor del ángulo de inclinación de la placa debe estar entre 45° y 60°", title= "¡Cuidado!")
+			return None
+
+			
+	def formulaN(archivo):
+		forWindow= tk.Toplevel()
+		forWindow.iconbitmap(bitmap='icons\\agua.ico')
+		forWindow.geometry("800x600") 
+		forWindow.resizable(0,0)
+		forWindow.configure(background="#9DC4AA")
+		framefor=Frame(forWindow)
+		framefor.pack(side=TOP, fill=BOTH, expand=True)
+		ima= PhotoImage(file=archivo)
+		l=Label(framefor, image=ima)
+		l.pack()
+		forWindow.mainloop()
+
+
+	def newDataTreeview(tree,listaS):
+		global contador
+		
+		if contador%2 ==0:
+			
+			tree.insert("",END,text= f"{contador+1}", values=(listaS[20],listaS[21],listaS[22],listaS[23],listaS[24],listaS[25],listaS[26],listaS[27],listaS[28],listaS[29],listaS[30],listaS[31],listaS[32],listaS[33],listaS[34],listaS[35],listaS[36],listaS[37],listaS[38],listaS[39],listaS[40],listaS[41],listaS[42],listaS[43],listaS[44],listaS[45],listaS[46],listaS[47],listaS[48],listaS[49],listaS[50]),
+			iid=contador, tags=("evenrow",))	
+		else:	
+			tree.insert("",END,text= f"{contador+1}", values=(listaS[20],listaS[21],listaS[22],listaS[23],listaS[24],listaS[25],listaS[26],listaS[27],listaS[28],listaS[29],listaS[30],listaS[31],listaS[32],listaS[33],listaS[34],listaS[35],listaS[36],listaS[37],listaS[38],listaS[39],listaS[40],listaS[41],listaS[42],listaS[43],listaS[44],listaS[45],listaS[46],listaS[47],listaS[48],listaS[49],listaS[50]),
+				iid=contador, tags=("oddrow",))
+		contador=contador+1
+		
+		
+	def newEntrySed(lista,optionValue):
+		for elemento in lista:
+			if elemento != optionValue:
+				elemento.delete(0, END)
+			else:
+				optionValue.set("Seleccione")	
+		
+
+	def deleteSedTable(arbol):
+		global contador
+		m= arbol.get_children()	
+		for j in m:
+			arbol.delete(j)
+		contador=0
+		
+	
+
+
+
+	mainWindow.withdraw()
+	sedWindow= tk.Toplevel()
+	sedWindow.protocol("WM_DELETE_WINDOW", on_closing)
+	sedWindow.iconbitmap(bitmap='icons\\agua.ico')
+	sedWindow.geometry("1366x680") 
+	sedWindow.resizable(1366,763)
+	sedWindow.configure(background="#9DC4AA")
+
+	##Panel:
+	panel = ttk.Notebook(sedWindow)
+	panel.pack(fill=BOTH, expand=TRUE)
+
+	frameSed= LabelFrame(panel, text="Sedimentador de alta tasa")
+	frameSed.pack(side=TOP,fill=BOTH,expand=True)
+	panel.add(frameSed, text="Cálculos")
+	
+	
+	
+	
+
+	labelIntroduccion = Label(frameSed, text="Datos de entrada para parámetros básicos: ",font=("Yu Gothic bold",10))
+
+	caudalDiseñoLabel = Label(frameSed, text="Caudales de diseño", font =("Yu Gothic",9))
+	caudalEntryLabel = Label(frameSed, text="Q = Caudal de diseño (QMD)[m^3/s]: ", font =("Yu Gothic",9))
+	caudalEntry = Entry(frameSed)
+	caudalEntry.focus()
+	
+	
+	
+
+	
+	
+	lista_entradas=[caudalEntry,
+	]
+	
+	
+	listaLabels=[]
+
+	imageAtras= PhotoImage(file="images\\atras.png")
+	#BotonesSed.
+	botonAtras= HoverButton(frameSed, image=imageAtras, width=100, height=40, bg= None, command=lambda: returnMainWindow(sedWindow))
+	botonAtras.place(x=0,y=10)
+
+	botonCalcular2 = HoverButton(frameSed, text="Calcular parámetros básicos de diseño", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: calcularSed(lista_entradas))
+	botonCalcular2.place(x=320,y=415)
+
+	botonNewEntry2 = HoverButton(frameSed, text="Limpiar entradas", activebackground="#9DC4AA", width=20, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntrySed(lista_entradas, valueEfiCriticaName))
+	botonNewEntry2.place(x=160,y=415)
+	
+	
+	
+	#Borrar
+	'''listaInsert=[0.05726,4,0.014315,0.000001007,'Placas paralelas',0.05,23,1.2192,0.004,1.2192,60.00,0.60,0.60,0.30,0.20,0.30,55,0.10,10,0.01]
+	
+	
+
+	for i in range(0,len(lista_entradas)):
+		if listaInsert[i] == 'Placas paralelas':
+			valueEfiCriticaName.set("Placas paralelas")
+		else:
+			lista_entradas[i].insert(0,f'{listaInsert[i]}')
+	'''
 		
 	sedWindow.mainloop()
 
