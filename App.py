@@ -316,16 +316,22 @@ def openSedWindow():
 	botonAtras= HoverButton(frameSed, image=imageAtras, width=100, height=40, bg= None, command=lambda: returnMainWindow(sedWindow))
 	botonAtras.place(x=0,y=10)
 	#Volver
-	botonDeterminacionParametrosBasicosDiseno = HoverButton(frameSed, text="Determinación de parámetros básicos de diseño", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
-	botonCanaletasRecoleccionAgua = HoverButton(frameSed, text="", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
-	botonTiempoRetencionTotalTanque = HoverButton(frameSed, text="", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
-	botonDimensionesDelSedimentador = HoverButton(frameSed, text="", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
-	botonDiseñoSistemaEvacuacionLodos = HoverButton(frameSed, text="", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
-	botonLimpiarEntradas = HoverButton(frameSed, text="Limpiar entradas", activebackground="#9DC4AA", width=20, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntrySed(lista_entradas))
-	
-	listaBotones=[botonDeterminacionParametrosBasicosDiseno,botonCanaletasRecoleccionAgua,
-	botonTiempoRetencionTotalTanque, botonDimensionesDelSedimentador,
-	botonDiseñoSistemaEvacuacionLodos, botonLimpiarEntradas]
+
+	botonParametrosDeDiseñoSedimentadorAltaTasa = HoverButton(frameSed, text="Parámetros de diseño de sedimentadores de alta tasa", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
+	botonDeterminacionParametrosBasicosDiseno = HoverButton(frameSed, text="Determinación de parámetros básicos de diseño", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
+	botonCanaletasRecoleccionAgua = HoverButton(frameSed, text="Canaletas de recolección de agua clarificada", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
+	botonTiempoRetencionTotalTanque = HoverButton(frameSed, text="Tiempo de retención total en el tanque", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
+	botonDimensionesDelSedimentador = HoverButton(frameSed, text="Dimensiones del sedimentador", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
+	botonDiseñoSistemaEvacuacionLodos = HoverButton(frameSed, text="Diseño del sistema de evacuación de lodos", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
+	botonLimpiarEntradas = HoverButton(frameSed, text="L\nimpiar entradas", activebackground="#9DC4AA", width=5, height=15, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntrySed(lista_entradas))
+	#Volver
+	listaBotones=[botonParametrosDeDiseñoSedimentadorAltaTasa,
+	botonDeterminacionParametrosBasicosDiseno,
+	botonCanaletasRecoleccionAgua,
+	botonTiempoRetencionTotalTanque, 
+	botonDimensionesDelSedimentador,
+	botonDiseñoSistemaEvacuacionLodos, 
+	botonLimpiarEntradas]
 
 	
 	#UbicacionElementos
@@ -367,49 +373,17 @@ def openSedWindow():
 		i=i+1
 
 
+		varX= [0, 450, 800]
+		yBotones=yInicial
 
-
-	'''
-	lista_entradas=[factorMayoracionCaudalMD,
-	factorMayoracionCaudalMH,caudalMedioEntry,
-	temperaturaEntry, tipoFloc,tipoCelda,
-	materialTipoCelda,
-	dimensionesTipoCeldaMaterial,
-	anguloInclinacion, numeroUnidades,
-	distanciaPlacas,
-	longitudPlacas, 
-	distanciaCanaletasRecoleccion,
-	distanciaVerticalDistribucionPlacas,
-	bordeLibre,
-	espesorMuros,
-	pendienteTransversalTolva,
-	anchoBasePlanaTolva,
-	velocidadMinimaArrastre,
-	diametroNominalOrificionesMultipleDescarga
-	]
-
-	listaLabels=[labelIntroduccion,
-	caudalDiseñoLabel,
-	factorMayoracionCaudalMDLabel,
-	factorMayoracionCaudalMHLabel,
-	caudalEntryLabel,
-	propiedadesFisicasAguaLabel,
-	temperaturaEntry,
-	datosEntradaParametrosBasicosLabel,
-	tipoFloc,tipoCelda,
-	materialTipoCelda,
-	dimensionesTipoCeldaMaterial,
-	anguloInclinacionLabel,
-	numeroUnidadesLabel,
-	distanciaPlacasLabel,
-	longitudPlacasLabel,
-	distanciaCanaletasRecoleccionLabel,
-	distanciaVerticalDistribucionPlacasLabel,
-	diametroNominalOrificionesMultipleDescarga
-	]
+		for i in range(0,3):
+			
+			listaBotones[i].place(x=varX[0],y=yBotones)
+			listaBotones[i+3].place(x=varX[2], y=yBotones)
+			listaBotones[6].place(x=600,y=yBotones-100)
+			
+			yBotones=yBotones+50
 	
-	
-	'''
 
 
 
