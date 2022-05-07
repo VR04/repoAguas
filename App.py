@@ -54,6 +54,18 @@ contadorFloculador=0
 
 
 def openSedWindow():
+	#Style
+	style = ttk.Style()
+	#Pick a theme
+	style.theme_use("clam")
+
+	#Configure colors
+
+	style.configure("Treeview",background="#9DC4AA", foreground="black", rowheight=40,fieldbackground="#9DC4AA")
+	style.configure("Treeview.Heading", foreground="black", font =("Courier",12))
+	#Change selected color
+	style.map("Treeview", background=[("selected", "#09C5CE")])	 
+
 	def calcularSed(lista_ent):
 		lista_entry=[0]*20
 		
@@ -97,11 +109,11 @@ def openSedWindow():
 		
 		if contador%2 ==0:
 			
-			tree.insert("",END,text= f"{contador+1}", values=(listaS[20],listaS[21],listaS[22],listaS[23],listaS[24],listaS[25],listaS[26],listaS[27],listaS[28],listaS[29],listaS[30],listaS[31],listaS[32],listaS[33],listaS[34],listaS[35],listaS[36],listaS[37],listaS[38],listaS[39],listaS[40],listaS[41],listaS[42],listaS[43],listaS[44],listaS[45],listaS[46],listaS[47],listaS[48],listaS[49],listaS[50]),
-			iid=contador, tags=("evenrow",))	
+			tree.insert("",END,text= f"{contador+1}", values=listaS,
+			iid=contador, tags=("evenrow"))	
 		else:	
-			tree.insert("",END,text= f"{contador+1}", values=(listaS[20],listaS[21],listaS[22],listaS[23],listaS[24],listaS[25],listaS[26],listaS[27],listaS[28],listaS[29],listaS[30],listaS[31],listaS[32],listaS[33],listaS[34],listaS[35],listaS[36],listaS[37],listaS[38],listaS[39],listaS[40],listaS[41],listaS[42],listaS[43],listaS[44],listaS[45],listaS[46],listaS[47],listaS[48],listaS[49],listaS[50]),
-				iid=contador, tags=("oddrow",))
+			tree.insert("",END,text= f"{contador+1}", values=listaS,
+				iid=contador, tags=("oddrow"))
 		contador=contador+1
 		
 		
@@ -121,14 +133,501 @@ def openSedWindow():
 		contador=0
 		
 	
+	def parametrosDeDiseñoSedimentadorAltaTasa():
+		
+		parametrosDeDiseñoSedimentadorAltaTasaWindow = tk.Toplevel()
+		parametrosDeDiseñoSedimentadorAltaTasaWindow.iconbitmap(bitmap='icons\\agua.ico')
+		parametrosDeDiseñoSedimentadorAltaTasaWindow.geometry("700x600") 
+		parametrosDeDiseñoSedimentadorAltaTasaWindow.resizable(0,0)	
+		parametrosDeDiseñoSedimentadorAltaTasaWindow.configure(background="#9DC4AA")
 
+		parametrosDeDiseñoSedimentadorAltaTasaFrame=LabelFrame(parametrosDeDiseñoSedimentadorAltaTasaWindow, text="Parámetros de diseño de sedimentador de alta tasa", font=("Yu Gothic bold", 11))
+		parametrosDeDiseñoSedimentadorAltaTasaFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolparametrosDeDiseñoSedimentadorAltaTasa_frame = Frame(parametrosDeDiseñoSedimentadorAltaTasaFrame)
+		arbolparametrosDeDiseñoSedimentadorAltaTasa_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolparametrosDeDiseñoSedimentadorAltaTasa_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolparametrosDeDiseñoSedimentadorAltaTasa_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolparametrosDeDiseñoSedimentadorAltaTasa= ttk.Treeview(arbolparametrosDeDiseñoSedimentadorAltaTasa_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolparametrosDeDiseñoSedimentadorAltaTasa.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolparametrosDeDiseñoSedimentadorAltaTasa.xview)
+		sedScrollY.configure(command=arbolparametrosDeDiseñoSedimentadorAltaTasa.yview)
+		#Define columnas.
+		arbolparametrosDeDiseñoSedimentadorAltaTasa["columns"]= (
+		"1","2","3")
+
+		#Headings
+		arbolparametrosDeDiseñoSedimentadorAltaTasa.heading("#0",text="ID", anchor=CENTER)
+
+
+		def formulaN(archivo):
+			forWindow= tk.Toplevel()
+			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			forWindow.geometry("1000x350") 
+			forWindow.resizable(0,0)
+			forWindow.configure(background="#9DC4AA")
+			framefor=Frame(forWindow)
+			framefor.pack(side=TOP, fill=BOTH, expand=True)
+			ima= PhotoImage(file=archivo)
+			l=Label(framefor, image=ima)
+			l.pack()
+			forWindow.mainloop()
+
+		for col in arbolparametrosDeDiseñoSedimentadorAltaTasa["columns"]:
+			arbolparametrosDeDiseñoSedimentadorAltaTasa.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+
+		
+		arbolparametrosDeDiseñoSedimentadorAltaTasa.column("#0",width=0, stretch=False)
+		arbolparametrosDeDiseñoSedimentadorAltaTasa.column("#1",width=450, stretch=False)	
+		arbolparametrosDeDiseñoSedimentadorAltaTasa.column("#2",width=100, stretch=False)	
+		arbolparametrosDeDiseñoSedimentadorAltaTasa.column("#3",width=150, stretch=False)	
+		#Striped row tags
+		arbolparametrosDeDiseñoSedimentadorAltaTasa.tag_configure("evenrow", background= "#1FCCDB")
+		arbolparametrosDeDiseñoSedimentadorAltaTasa.tag_configure("oddrow", background= "#9DC4AA")
+
+
+
+
+
+
+		encabezadosLista=["Carga superficial en placas angostas",
+		"Carga superficial en placas profundas",
+		"Velocidad de sedimentación crítica para floc de alumbre",
+		"Velocidad de sedimentación crítica para floc de alumbre y polielectrolitos",
+		"Tiempo de retención en placas",
+		"Tiempo de retención en tubos",
+		"Inclinación de placas",
+		"Número de Reynolds",
+		"Tasa de rebose",
+		"Distancia entre placas",
+		"Profundidad",
+		"Fracción del tanque a tasa acelerada"]
+
+		listaparametrosDeDiseñoSedimentadorAltaTasa =[ "120 - 185",
+		"200 - 300",
+		"12 - 23",
+		"16 - 29",
+		"10 - 15",
+		"6 - 10",
+		"60",
+		"100 - 250",
+		"1,7 - 3,3",
+		"5 - 6",
+		"3 - 5",
+		"< 75"]
+
+		unidadesLista = [	
+		"m^3/m^2/d",
+		"m^3/m^2/d",
+		"m/d",
+		"m/d",
+		"min",
+		"min",
+		"°",
+		"",
+		"L/s.m",
+		"cm",
+		"m",
+		"%"
+		]
+
+
+		for i in range(0, len(encabezadosLista)):
+			listaTemp=list()
+			listaTemp.append(encabezadosLista[i])
+			listaTemp.append(listaparametrosDeDiseñoSedimentadorAltaTasa[i])
+			listaTemp.append(unidadesLista[i])
+			newDataTreeview(arbolparametrosDeDiseñoSedimentadorAltaTasa,listaTemp)
+
+	def determinacionParametrosBasicosDiseno():
+		determinacionParametrosBasicosDisenoWindow = tk.Toplevel()
+		determinacionParametrosBasicosDisenoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		determinacionParametrosBasicosDisenoWindow.geometry("600x400") 
+		determinacionParametrosBasicosDisenoWindow.resizable(0,0)	
+		determinacionParametrosBasicosDisenoWindow.configure(background="#9DC4AA")
+
+		determinacionParametrosBasicosDisenoFrame=LabelFrame(determinacionParametrosBasicosDisenoWindow, text="Determinación de parámetro básicos de diseño", font=("Yu Gothic bold", 11))
+		determinacionParametrosBasicosDisenoFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arboldeterminacionParametrosBasicosDiseno_frame = Frame(determinacionParametrosBasicosDisenoFrame)
+		arboldeterminacionParametrosBasicosDiseno_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arboldeterminacionParametrosBasicosDiseno_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arboldeterminacionParametrosBasicosDiseno_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arboldeterminacionParametrosBasicosDiseno= ttk.Treeview(arboldeterminacionParametrosBasicosDiseno_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arboldeterminacionParametrosBasicosDiseno.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arboldeterminacionParametrosBasicosDiseno.xview)
+		sedScrollY.configure(command=arboldeterminacionParametrosBasicosDiseno.yview)
+		#Define columnas.
+		arboldeterminacionParametrosBasicosDiseno["columns"]= (
+		"1","2","3")
+
+		#Headings
+		arboldeterminacionParametrosBasicosDiseno.heading("#0",text="ID", anchor=CENTER)
+
+
+		def formulaN(archivo):
+			forWindow= tk.Toplevel()
+			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			forWindow.geometry("1000x350") 
+			forWindow.resizable(0,0)
+			forWindow.configure(background="#9DC4AA")
+			framefor=Frame(forWindow)
+			framefor.pack(side=TOP, fill=BOTH, expand=True)
+			ima= PhotoImage(file=archivo)
+			l=Label(framefor, image=ima)
+			l.pack()
+			forWindow.mainloop()
+
+		for col in arboldeterminacionParametrosBasicosDiseno["columns"]:
+			arboldeterminacionParametrosBasicosDiseno.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+
+		for i in range(0,len(arboldeterminacionParametrosBasicosDiseno["columns"])+1) :
+				arboldeterminacionParametrosBasicosDiseno.column(f"#{i}",width=700, stretch=False)	
+		arboldeterminacionParametrosBasicosDiseno.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arboldeterminacionParametrosBasicosDiseno.tag_configure("evenrow", background= "#1FCCDB")
+		arboldeterminacionParametrosBasicosDiseno.tag_configure("oddrow", background= "#9DC4AA")
+
+
+
+
+		listadeterminacionParametrosBasicosDiseno=list()
+
+
+		encabezadosLista=[]
+
+		for i in range(0, len(encabezadosLista)):
+			listaTemp=list()
+			listaTemp.append(encabezadosLista[i])
+			listaTemp.append(listadeterminacionParametrosBasicosDiseno[i])
+			newDataTreeview(arboldeterminacionParametrosBasicosDiseno,listaTemp)
+
+		determinacionParametrosBasicosDisenoWindow.mainloop()
+		
+
+	def canaletasRecoleccionAgua():
+		canaletasRecoleccionAguaWindow = tk.Toplevel()
+		canaletasRecoleccionAguaWindow.iconbitmap(bitmap='icons\\agua.ico')
+		canaletasRecoleccionAguaWindow.geometry("600x400") 
+		canaletasRecoleccionAguaWindow.resizable(0,0)	
+		canaletasRecoleccionAguaWindow.configure(background="#9DC4AA")
+
+		canaletasRecoleccionAguaFrame=LabelFrame(canaletasRecoleccionAguaWindow, text="Canaletas de recolección de agua clarificada", font=("Yu Gothic bold", 11))
+		canaletasRecoleccionAguaFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolcanaletasRecoleccionAgua_frame = Frame(canaletasRecoleccionAguaFrame)
+		arbolcanaletasRecoleccionAgua_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arbolcanaletasRecoleccionAgua_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolcanaletasRecoleccionAgua_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolcanaletasRecoleccionAgua= ttk.Treeview(arbolcanaletasRecoleccionAgua_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolcanaletasRecoleccionAgua.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arbolcanaletasRecoleccionAgua.xview)
+		sedScrollY.configure(command=arbolcanaletasRecoleccionAgua.yview)
+		#Define columnas.
+		arbolcanaletasRecoleccionAgua["columns"]= (
+		"1","2","3")
+
+		#Headings
+		arbolcanaletasRecoleccionAgua.heading("#0",text="ID", anchor=CENTER)
+
+
+		def formulaN(archivo):
+			forWindow= tk.Toplevel()
+			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			forWindow.geometry("1000x350") 
+			forWindow.resizable(0,0)
+			forWindow.configure(background="#9DC4AA")
+			framefor=Frame(forWindow)
+			framefor.pack(side=TOP, fill=BOTH, expand=True)
+			ima= PhotoImage(file=archivo)
+			l=Label(framefor, image=ima)
+			l.pack()
+			forWindow.mainloop()
+
+		for col in arbolcanaletasRecoleccionAgua["columns"]:
+			arbolcanaletasRecoleccionAgua.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+
+		for i in range(0,len(arbolcanaletasRecoleccionAgua["columns"])+1) :
+				arbolcanaletasRecoleccionAgua.column(f"#{i}",width=700, stretch=False)	
+		arbolcanaletasRecoleccionAgua.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arbolcanaletasRecoleccionAgua.tag_configure("evenrow", background= "#1FCCDB")
+		arbolcanaletasRecoleccionAgua.tag_configure("oddrow", background= "#9DC4AA")
+
+
+
+
+		listacanaletasRecoleccionAgua=list()
+
+
+		encabezadosLista=[]
+
+		for i in range(0, len(encabezadosLista)):
+			listaTemp=list()
+			listaTemp.append(encabezadosLista[i])
+			listaTemp.append(listacanaletasRecoleccionAgua[i])
+			newDataTreeview(arbolcanaletasRecoleccionAgua,listaTemp)
+
+		canaletasRecoleccionAguaWindow.mainloop()
+
+
+	def tiempoRetencionTotalTanque():
+		tiempoRetencionTotalTanqueWindow = tk.Toplevel()
+		tiempoRetencionTotalTanqueWindow.iconbitmap(bitmap='icons\\agua.ico')
+		tiempoRetencionTotalTanqueWindow.geometry("600x400") 
+		tiempoRetencionTotalTanqueWindow.resizable(0,0)	
+		tiempoRetencionTotalTanqueWindow.configure(background="#9DC4AA")
+
+		tiempoRetencionTotalTanqueFrame=LabelFrame(tiempoRetencionTotalTanqueWindow, text="Tiempo de retención total en el tanque", font=("Yu Gothic bold", 11))
+		tiempoRetencionTotalTanqueFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arboltiempoRetencionTotalTanque_frame = Frame(tiempoRetencionTotalTanqueFrame)
+		arboltiempoRetencionTotalTanque_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arboltiempoRetencionTotalTanque_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arboltiempoRetencionTotalTanque_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arboltiempoRetencionTotalTanque= ttk.Treeview(arboltiempoRetencionTotalTanque_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arboltiempoRetencionTotalTanque.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arboltiempoRetencionTotalTanque.xview)
+		sedScrollY.configure(command=arboltiempoRetencionTotalTanque.yview)
+		#Define columnas.
+		arboltiempoRetencionTotalTanque["columns"]= (
+		"1","2","3")
+
+		#Headings
+		arboltiempoRetencionTotalTanque.heading("#0",text="ID", anchor=CENTER)
+
+
+		def formulaN(archivo):
+			forWindow= tk.Toplevel()
+			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			forWindow.geometry("1000x350") 
+			forWindow.resizable(0,0)
+			forWindow.configure(background="#9DC4AA")
+			framefor=Frame(forWindow)
+			framefor.pack(side=TOP, fill=BOTH, expand=True)
+			ima= PhotoImage(file=archivo)
+			l=Label(framefor, image=ima)
+			l.pack()
+			forWindow.mainloop()
+
+		for col in arboltiempoRetencionTotalTanque["columns"]:
+			arboltiempoRetencionTotalTanque.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+
+		for i in range(0,len(arboltiempoRetencionTotalTanque["columns"])+1) :
+				arboltiempoRetencionTotalTanque.column(f"#{i}",width=700, stretch=False)	
+		arboltiempoRetencionTotalTanque.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arboltiempoRetencionTotalTanque.tag_configure("evenrow", background= "#1FCCDB")
+		arboltiempoRetencionTotalTanque.tag_configure("oddrow", background= "#9DC4AA")
+
+
+
+
+		listatiempoRetencionTotalTanque=list()
+
+
+		encabezadosLista=[]
+
+		for i in range(0, len(encabezadosLista)):
+			listaTemp=list()
+			listaTemp.append(encabezadosLista[i])
+			listaTemp.append(listatiempoRetencionTotalTanque[i])
+			newDataTreeview(arboltiempoRetencionTotalTanque,listaTemp)
+
+		tiempoRetencionTotalTanqueWindow.mainloop()
+
+	def dimensionesDelSedimentador():
+		dimensionesDelSedimentadorWindow = tk.Toplevel()
+		dimensionesDelSedimentadorWindow.iconbitmap(bitmap='icons\\agua.ico')
+		dimensionesDelSedimentadorWindow.geometry("600x400") 
+		dimensionesDelSedimentadorWindow.resizable(0,0)	
+		dimensionesDelSedimentadorWindow.configure(background="#9DC4AA")
+
+		dimensionesDelSedimentadorFrame=LabelFrame(dimensionesDelSedimentadorWindow, text="Dimensiones del sedimentador", font=("Yu Gothic bold", 11))
+		dimensionesDelSedimentadorFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arboldimensionesDelSedimentador_frame = Frame(dimensionesDelSedimentadorFrame)
+		arboldimensionesDelSedimentador_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arboldimensionesDelSedimentador_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arboldimensionesDelSedimentador_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arboldimensionesDelSedimentador= ttk.Treeview(arboldimensionesDelSedimentador_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arboldimensionesDelSedimentador.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arboldimensionesDelSedimentador.xview)
+		sedScrollY.configure(command=arboldimensionesDelSedimentador.yview)
+		#Define columnas.
+		arboldimensionesDelSedimentador["columns"]= (
+		"1","2","3")
+
+		#Headings
+		arboldimensionesDelSedimentador.heading("#0",text="ID", anchor=CENTER)
+
+
+		def formulaN(archivo):
+			forWindow= tk.Toplevel()
+			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			forWindow.geometry("1000x350") 
+			forWindow.resizable(0,0)
+			forWindow.configure(background="#9DC4AA")
+			framefor=Frame(forWindow)
+			framefor.pack(side=TOP, fill=BOTH, expand=True)
+			ima= PhotoImage(file=archivo)
+			l=Label(framefor, image=ima)
+			l.pack()
+			forWindow.mainloop()
+
+		for col in arboldimensionesDelSedimentador["columns"]:
+			arboldimensionesDelSedimentador.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+
+		for i in range(0,len(arboldimensionesDelSedimentador["columns"])+1) :
+				arboldimensionesDelSedimentador.column(f"#{i}",width=700, stretch=False)	
+		arboldimensionesDelSedimentador.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arboldimensionesDelSedimentador.tag_configure("evenrow", background= "#1FCCDB")
+		arboldimensionesDelSedimentador.tag_configure("oddrow", background= "#9DC4AA")
+
+
+
+
+		listadimensionesDelSedimentador=list()
+
+
+		encabezadosLista=[]
+
+		for i in range(0, len(encabezadosLista)):
+			listaTemp=list()
+			listaTemp.append(encabezadosLista[i])
+			listaTemp.append(listadimensionesDelSedimentador[i])
+			newDataTreeview(arboldimensionesDelSedimentador,listaTemp)
+
+		dimensionesDelSedimentadorWindow.mainloop()
+
+	def disenoSistemaEvacuacionLodos():
+		disenoSistemaEvacuacionLodosWindow = tk.Toplevel()
+		disenoSistemaEvacuacionLodosWindow.iconbitmap(bitmap='icons\\agua.ico')
+		disenoSistemaEvacuacionLodosWindow.geometry("600x400") 
+		disenoSistemaEvacuacionLodosWindow.resizable(0,0)	
+		disenoSistemaEvacuacionLodosWindow.configure(background="#9DC4AA")
+
+		disenoSistemaEvacuacionLodosFrame=LabelFrame(disenoSistemaEvacuacionLodosWindow, text="Diseño del sistema de evacuación de lodos", font=("Yu Gothic bold", 11))
+		disenoSistemaEvacuacionLodosFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arboldisenoSistemaEvacuacionLodos_frame = Frame(disenoSistemaEvacuacionLodosFrame)
+		arboldisenoSistemaEvacuacionLodos_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		sedScrollX=Scrollbar(arboldisenoSistemaEvacuacionLodos_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arboldisenoSistemaEvacuacionLodos_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arboldisenoSistemaEvacuacionLodos= ttk.Treeview(arboldisenoSistemaEvacuacionLodos_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arboldisenoSistemaEvacuacionLodos.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		sedScrollX.configure(command=arboldisenoSistemaEvacuacionLodos.xview)
+		sedScrollY.configure(command=arboldisenoSistemaEvacuacionLodos.yview)
+		#Define columnas.
+		arboldisenoSistemaEvacuacionLodos["columns"]= (
+		"1","2","3")
+
+		#Headings
+		arboldisenoSistemaEvacuacionLodos.heading("#0",text="ID", anchor=CENTER)
+
+
+		def formulaN(archivo):
+			forWindow= tk.Toplevel()
+			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			forWindow.geometry("1000x350") 
+			forWindow.resizable(0,0)
+			forWindow.configure(background="#9DC4AA")
+			framefor=Frame(forWindow)
+			framefor.pack(side=TOP, fill=BOTH, expand=True)
+			ima= PhotoImage(file=archivo)
+			l=Label(framefor, image=ima)
+			l.pack()
+			forWindow.mainloop()
+
+		for col in arboldisenoSistemaEvacuacionLodos["columns"]:
+			arboldisenoSistemaEvacuacionLodos.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+
+		for i in range(0,len(arboldisenoSistemaEvacuacionLodos["columns"])+1) :
+				arboldisenoSistemaEvacuacionLodos.column(f"#{i}",width=700, stretch=False)	
+		arboldisenoSistemaEvacuacionLodos.column("#0",width=0, stretch=False)
+
+		#Striped row tags
+		arboldisenoSistemaEvacuacionLodos.tag_configure("evenrow", background= "#1FCCDB")
+		arboldisenoSistemaEvacuacionLodos.tag_configure("oddrow", background= "#9DC4AA")
+
+
+
+
+		listadisenoSistemaEvacuacionLodos=list()
+
+
+		encabezadosLista=[]
+
+		for i in range(0, len(encabezadosLista)):
+			listaTemp=list()
+			listaTemp.append(encabezadosLista[i])
+			listaTemp.append(listadisenoSistemaEvacuacionLodos[i])
+			newDataTreeview(arboldisenoSistemaEvacuacionLodos,listaTemp)
+
+		disenoSistemaEvacuacionLodosWindow.mainloop()
+		
+		
+		
 
 
 	mainWindow.withdraw()
 	sedWindow= tk.Toplevel()
 	sedWindow.protocol("WM_DELETE_WINDOW", on_closing)
 	sedWindow.iconbitmap(bitmap='icons\\agua.ico')
-	sedWindow.geometry("1300x600") 
+	sedWindow.geometry("1240x600") 
 	#sedWindow.geometry("1366x680") 
 	#sedWindow.resizable(1366,763)
 	sedWindow.resizable(0,0)
@@ -220,7 +719,8 @@ def openSedWindow():
 	
 	
 	anguloInclinacion = Entry(frameSed)
-	numeroUnidades = Entry(frameSed)
+	numeroUnidades = ttk.Combobox(frameSed, width="40", state="readonly",values=["2","3","4","5","6","7","8"])
+	numeroUnidades.set("Seleccione el número de unidades")
 	distanciaPlacas = Entry(frameSed)
 	longitudPlacas = Entry(frameSed)
 	distanciaCanaletasRecoleccion = Entry(frameSed)
@@ -272,7 +772,6 @@ def openSedWindow():
 	propiedadesFisicasAguaLabel = Label(frameSed, text="Propiedades físicas del agua a tratar.", font =("Yu Gothic bold",10))
 	datosEntradaParametrosBasicosLabel = Label(frameSed, text="Datos de entrada para parámetros básicos.", font =("Yu Gothic bold",10))
 	anguloInclinacionLabel = Label(frameSed, text="Ángulo de inclinación:", font =("Yu Gothic",9))
-	numeroUnidadesLabel = Label(frameSed, text="Número de unidades:", font =("Yu Gothic",9))
 	distanciaPlacasLabel = Label(frameSed, text="Distancia entre placas:", font =("Yu Gothic",9))
 	longitudPlacasLabel = Label(frameSed, text="Longitud ocupada por las placas:", font =("Yu Gothic",9))
 	distanciaCanaletasRecoleccionLabel = Label(frameSed, text="Distancia entre las canaletas de recolección: ", font =("Yu Gothic",9))
@@ -297,7 +796,7 @@ def openSedWindow():
 	materialTipoCelda,
 	dimensionesTipoCeldaMaterial,
 	anguloInclinacionLabel,
-	numeroUnidadesLabel,
+	numeroUnidades,
 	distanciaPlacasLabel,
 	longitudPlacasLabel,
 	distanciaCanaletasRecoleccionLabel,
@@ -315,22 +814,22 @@ def openSedWindow():
 	#BotonesSed.
 	botonAtras= HoverButton(frameSed, image=imageAtras, width=100, height=40, bg= None, command=lambda: returnMainWindow(sedWindow))
 	botonAtras.place(x=0,y=10)
-	#Volver
+	
 
-	botonParametrosDeDiseñoSedimentadorAltaTasa = HoverButton(frameSed, text="Parámetros de diseño de sedimentadores de alta tasa", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
-	botonDeterminacionParametrosBasicosDiseno = HoverButton(frameSed, text="Determinación de parámetros básicos de diseño", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
-	botonCanaletasRecoleccionAgua = HoverButton(frameSed, text="Canaletas de recolección de agua clarificada", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
-	botonTiempoRetencionTotalTanque = HoverButton(frameSed, text="Tiempo de retención total en el tanque", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
-	botonDimensionesDelSedimentador = HoverButton(frameSed, text="Dimensiones del sedimentador", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
-	botonDiseñoSistemaEvacuacionLodos = HoverButton(frameSed, text="Diseño del sistema de evacuación de lodos", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(1))
-	botonLimpiarEntradas = HoverButton(frameSed, text="L\nimpiar entradas", activebackground="#9DC4AA", width=5, height=15, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntrySed(lista_entradas))
-	#Volver
+	botonParametrosDeDiseñoSedimentadorAltaTasa = HoverButton(frameSed, text="Parámetros de diseño de sedimentadores de alta tasa", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: parametrosDeDiseñoSedimentadorAltaTasa())
+	botonDeterminacionParametrosBasicosDiseno = HoverButton(frameSed, text="Determinación de parámetros básicos de diseño", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: determinacionParametrosBasicosDiseno())
+	botonCanaletasRecoleccionAgua = HoverButton(frameSed, text="Canaletas de recolección de agua clarificada", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: canaletasRecoleccionAgua())
+	botonTiempoRetencionTotalTanque = HoverButton(frameSed, text="Tiempo de retención total en el tanque", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: tiempoRetencionTotalTanque())
+	botonDimensionesDelSedimentador = HoverButton(frameSed, text="Dimensiones del sedimentador", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: dimensionesDelSedimentador())
+	botonDisenoSistemaEvacuacionLodos = HoverButton(frameSed, text="Diseño del sistema de evacuación de lodos", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: disenoSistemaEvacuacionLodos())
+	botonLimpiarEntradas = HoverButton(frameSed, text="Limpiar entradas", activebackground="#9DC4AA", width=40, height=2, bg= "#09C5CE", font =("Courier",8),command= lambda: newEntrySed(lista_entradas))
+
 	listaBotones=[botonParametrosDeDiseñoSedimentadorAltaTasa,
 	botonDeterminacionParametrosBasicosDiseno,
 	botonCanaletasRecoleccionAgua,
 	botonTiempoRetencionTotalTanque, 
 	botonDimensionesDelSedimentador,
-	botonDiseñoSistemaEvacuacionLodos, 
+	botonDisenoSistemaEvacuacionLodos, 
 	botonLimpiarEntradas]
 
 	
@@ -380,11 +879,14 @@ def openSedWindow():
 			
 			listaBotones[i].place(x=varX[0],y=yBotones)
 			listaBotones[i+3].place(x=varX[2], y=yBotones)
-			listaBotones[6].place(x=600,y=yBotones-100)
+			listaBotones[6].place(x=470,y=yBotones-50)
 			
 			yBotones=yBotones+50
 	
+	##CalculosAdicionalesDatosEntradaBásicos
 
+
+	espesorPlacas = 8
 
 
 
