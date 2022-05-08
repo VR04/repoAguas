@@ -142,7 +142,125 @@ def openSedWindow():
 		for j in m:
 			arbol.delete(j)
 		contador=0
-		
+	
+	def datosEntradaParametrosBasicosCalculos(tipoFloc, tipoCelda, materialCelda, dimensiones, anguloInclinacion, numeroUnidades,distanciaPlacas, caudalMD,factorMayoracionCMD, temperatura):
+			#ENTRANVALORESYAOBTENIDOS. CON get()
+			
+			oP2 = {
+			"Placas planas paralelas": ("Acero inoxidable AISI 316","Polietileno alta densidad (HDPE)","Poliestireno de alto impacto(HIPS)") , 
+			"Placas onduladas paralelas":("Acrilonitrilo butadieno estireno (ABS)","Polipropileno (PP)"),
+			"Conductos cuadrados":("Acrilonitrilo butadieno estireno (ABS)","Polipropileno (PP)")}
+			
+			dimensionesLista= [	
+			('1219 x 1219', '1219 x 2438', '1524 x 1524', '1524 x 3048'), 
+			('1200 x 1200', '1200 x 1400', '1200 x 1600', '1200 x 1800', '1200 x 2000', '1200 x 2200', '1200 x 2400', '1200 x 2600', '1200 x 2800', '1200 x 3000'), 
+			('1200 x 1200', '1200 x 1500', '1200 x 2400', '1200 x 3000'), 
+			('1200 x 1200', '1200 x 1400', '1200 x 1600', '1200 x 1800', '1200 x 2000', '1200 x 2200', '1200 x 2400', '1200 x 2600', '1200 x 2800', '1200 x 3000'), 
+			('1200 x 1200', '1200 x 1400', '1200 x 1600', '1200 x 1800', '1200 x 2000', '1200 x 2200', '1200 x 2400', '1200 x 2600', '1200 x 2800', '1200 x 3000'), 
+			('1200 x 1500', '1200 x 2000', '1200 x 2500', '1200 x 3000'), 
+			('1200 x 1500', '1200 x 2000', '1200 x 2500', '1200 x 3000')]
+
+			combinacionesTipoCeldaMaterialDimension = list()
+
+			i=0
+			for elemento in tuple(oP2.keys()):
+				for ele2 in oP2[elemento]:
+					for dim in dimensionesLista[i]:
+						combinacionesTipoCeldaMaterialDimension.append((elemento, ele2, dim))
+					i=i+1
+
+			espesorDic= dict()
+			espesorLista= [
+			4,
+			4,
+			4,
+			5,
+			8,
+			8,
+			8,
+			8,
+			8,
+			8,
+			8,
+			8,
+			8,
+			8,
+			3,
+			5,
+			3,
+			5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+			1.5,
+
+			]
+
+
+
+
+
+			for i in range(0, len(combinacionesTipoCeldaMaterialDimension)):
+				espesorDic[combinacionesTipoCeldaMaterialDimension[i]]= espesorLista[i]
+
+			espesor = espesorDic[tipoCelda, materialCelda, dimensiones]
+			
+			EficienciaCriticaLista=[1,1.3,1.375]
+			eficienciaCriticaDic = dict()
+			i=0
+			for elemento in tuple(oP2.keys()):
+				eficienciaCriticaDic[elemento]=EficienciaCriticaLista[i]
+				i=i+1
+			
+			eficienciaCritica= eficienciaCriticaDic[tipoCelda]
+			caudalDiseño = caudalMD*factorMayoracionCMD
+			caudalUnidad = caudalDiseño/numeroUnidades
+
+			
+			valorTemperaturas=list()
+			tablaTemperaturaViscocidadCinematica=dict()
+
+
+			for i in range(0,36):    
+				valorTemperaturas.append(i)
+						
+			valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
+			,1.386e-06, 1.346e-06, 1.308e-06, 1.271e-06, 1.237e-06, 1.204e-06, 
+			1.172e-06, 1.141e-06, 1.112e-06, 1.084e-06, 1.057e-06, 1.032e-06, 1.007e-06, 9.83e-07, 9.6e-07, 9.38e-07, 9.17e-07, 8.96e-07, 8.76e-07, 8.57e-07, 8.39e-07, 8.21e-07, 8.04e-07, 7.88e-07, 7.72e-07, 7.56e-07, 7.41e-07, 7.27e-07]
+
+			for ind in range(0,len(valorTemperaturas)):
+				tablaTemperaturaViscocidadCinematica[valorTemperaturas[ind]]=valorViscocidad[ind]
+			
+			viscosidadCinematica = tablaTemperaturaViscocidadCinematica[temperatura]
+			
+			listaSalida=[tipoFloc,tipoCelda,materialCelda, dimensiones,espesor,anguloInclinacion,eficienciaCritica, caudalDiseño, numeroUnidades,
+			caudalUnidad,viscosidadCinematica,distanciaPlacas]
+
+			return listaSalida
 	
 	def parametrosDeDiseñoSedimentadorAltaTasa():
 		
@@ -296,7 +414,15 @@ def openSedWindow():
 			else:
 				parametrosCombobox.append(listaComboBox[i].get())
 		#Verifica que no sean nulos.
-		
+		if tipoCelda == "Conductos cuadrados":
+			labels=["ángulo de inclinación", "lado interno de los conductos","caudal medio diario",
+			"factor de mayoración del caudal máximo diario", "longitud ocupada por los módulos"]
+		else: 
+
+			labels=["ángulo de inclinación", "distancia entre placas","caudal medio diario",
+			"factor de mayoración del caudal máximo diario", "longitud ocupada por las placas"]
+
+
 		labels=["ángulo de inclinación", "distancia entre placas ó lado interno de los conductos","caudal medio diario",
 		"factor de mayoración del caudal máximo diario", "longitud ocupada por los módulos"]
 		for i in range(0, len(listaSinComboBox)):
@@ -332,11 +458,11 @@ def openSedWindow():
 			messagebox.showwarning(title="Error", message="Alguno de los datos ingresados no es un número.")
 			return None	
 
-		anguloInclinacion = listaDeterminacionParametrosBasicosDiseno[4].get()
-		distanciaPlacas = listaDeterminacionParametrosBasicosDiseno[6].get()
-		caudalMedio = listaDeterminacionParametrosBasicosDiseno[7].get()
-		factorMayoracionCaudalMD = listaDeterminacionParametrosBasicosDiseno[8].get()
-		longitudPlacas = listaDeterminacionParametrosBasicosDiseno[10].get()
+		anguloInclinacion = float(listaDeterminacionParametrosBasicosDiseno[4].get())
+		distanciaPlacas = float(listaDeterminacionParametrosBasicosDiseno[6].get())
+		caudalMedio = float(listaDeterminacionParametrosBasicosDiseno[7].get())
+		factorMayoracionCaudalMD = float(listaDeterminacionParametrosBasicosDiseno[8].get())
+		longitudPlacas = float(listaDeterminacionParametrosBasicosDiseno[10].get())
 
 		tipoFloc = parametrosCombobox[0]
 		tipoCelda = parametrosCombobox[1]
@@ -466,7 +592,7 @@ def openSedWindow():
 
 	def canaletasRecoleccionAgua(listaCanaletasRecoleccionAgua, tipoCelda):
 		#ManejoEntradasCanaletasRecoleccionAgua
-		#Volver
+	
 
 		if tipoCelda == "Seleccione el tipo de celda":
 			messagebox.showwarning(title="Error", message=f"Hace falta seleccionar el tipo de celda")
@@ -585,23 +711,110 @@ def openSedWindow():
 		canaletasRecoleccionAguaWindow.mainloop()
 
 
-	def tiempoRetencionTotalTanque(listaTiempoRetencionTotalTanque):
+	def tiempoRetencionTotalTanque(listaTiempoRetencionTotalTanque, tipoCelda):
+		#manejoErroresTiempoRetencionTotalTanque
+		'''
+			listaEntradaParametrosBasicos=[0= tipoFloc, 1= tipoCelda, 2= materialTipoCelda, 3= dimensionesTipoCeldaMaterial,
+			4= anguloInclinacion, 5= numeroUnidades,
+			6=distanciaPlacas, 7= caudalMedioEntry, 8= factorMayoracionCaudalMD, 9= temperaturaEntry]
+			listaDeterminacionParametrosBasicosDiseno() = listaEntradaParametrosBasicos + [10 = longitudPlacas] 
+			listaCanaletasRecoleccionAgua = [distanciaCanaletasRecoleccion,longitudPlacas]
+			listaTiempoRetencionTotalTanque = listaDeterminacionParametrosBasicosDiseno + [11 = distanciaVerticalDistribucionPlacas] + 12=distanciaCanaletasRecoleccion
+		'''
 		
-		'''
-	listaEntradaParametrosBasicos=[tipoFloc = 0 ,tipoCelda = 1, materialTipoCelda =2 , dimensionesTipoCeldaMaterial =3 
-	,anguloInclinacion =4
-	,numeroUnidades =5,
-	distanciaPlacas = 6, 
-	caudalMedioEntry = 7, 
-	factorMayoracionCaudalMD = 8,temperaturaEntry=  9]
+		inicialesComboBox=["Seleccione el tipo de floc","Seleccione el tipo de celda",
+		f"Seleccione el material de {tipoCelda}", f"Seleccione las dimensiones de {tipoCelda}", "Seleccione el número de unidades","Seleccione la temperatura"]
+		
+		listaComboBox=[listaTiempoRetencionTotalTanque[0],listaTiempoRetencionTotalTanque[1],listaTiempoRetencionTotalTanque[2],
+		listaTiempoRetencionTotalTanque[3],listaTiempoRetencionTotalTanque[5], listaTiempoRetencionTotalTanque[9]]
 
-	listaDeterminacionParametrosBasicosDiseno = listaEntradaParametrosBasicos + [longitudPlacas = 10]
+		listaSinComboBox=[listaTiempoRetencionTotalTanque[4],listaTiempoRetencionTotalTanque[6],
+		listaTiempoRetencionTotalTanque[7],listaTiempoRetencionTotalTanque[8], listaTiempoRetencionTotalTanque[10], 
+		listaTiempoRetencionTotalTanque[11], listaTiempoRetencionTotalTanque[12]]
 
-	listaCanaletasRecoleccionAgua = [distanciaCanaletasRecoleccion,longitudPlacas]
-	listaTiempoRetencionTotalTanque = listaDeterminacionParametrosBasicosDiseno + [distanciaVerticalDistribucionPlacas] + listaCanaletasRecoleccionAgua
-	listaDimensionesDelSedimentador = listaTiempoRetencionTotalTanque + [bordeLibre,espesorMuros,pendienteTransversalTolva,anchoBasePlanaTolva] 
-	listaDisenoSistemaEvacuacionLodos = listaDimensionesDelSedimentador + [velocidadMinimaArrastre,longitudPlacas, diametroNominalOrificionesMultipleDescarga]
-		'''
+		parametrosCombobox=list()
+
+		for i in range(0,len(listaComboBox)):
+			if listaComboBox[i].get()[0:10] == "Seleccione":
+				messagebox.showwarning(title="Error", message=f"Hace falta seleccionar {inicialesComboBox[i][10:].lower()}")
+				return None	
+			else:
+				parametrosCombobox.append(listaComboBox[i].get())
+		#Verifica que no sean nulos.
+
+		if tipoCelda == "Conductos cuadrados":
+			labels=["ángulo de inclinación", "lado interno de los conductos","caudal medio diario",
+				"factor de mayoración del caudal máximo diario", "longitud ocupada por los módulos", 
+				"distancia vertical de los orificios de distribución a placas" 
+				,"distancia entre canaletas de recolección"]
+		else: 
+
+			labels=["ángulo de inclinación", "distancia entre placas","caudal medio diario",
+			"factor de mayoración del caudal máximo diario", "longitud ocupada por las placas",
+			"distancia vertical de los orificios de distribución a placas","distancia entre canaletas de recolección"]
+
+		for i in range(0, len(listaSinComboBox)):
+			if listaSinComboBox[i].get() == "":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labels[i]} ")	
+				return None
+
+		try:
+			if float(listaTiempoRetencionTotalTanque[4].get()) != 60.0  :
+				messagebox.showwarning(title="Error", message="El valor del ángulo de inclinación solo puede ser 60°")	
+				return None
+			elif float(listaTiempoRetencionTotalTanque[6].get())>6.0 or float(listaTiempoRetencionTotalTanque[6].get())<5.0:
+				if tipoCelda == "Conductos cuadrados":
+					messagebox.showwarning(title="Error", message=f"El valor del lado interno de los conductos cuadrados no puede ser menor que 5 ni mayor que 6.")	
+					return None
+				else: 
+					messagebox.showwarning(title="Error", message=f"El valor de la distancia entre placas no puede ser menor que 5 ni mayor que 6.")	
+					return None
+			elif float(listaTiempoRetencionTotalTanque[7].get())<0.01 or float(listaTiempoRetencionTotalTanque[7].get())>0.2:
+				messagebox.showwarning(title="Error", message="El valor del caudal medio diario debe estar entre 0.01 y 0.2")	
+				return None
+			elif float(listaTiempoRetencionTotalTanque[8].get())>1.3 or float(listaTiempoRetencionTotalTanque[8].get())<1:
+				messagebox.showwarning(title="Error", message="El valor de factoración de mayoración del caudal máximo diario debe estar entre 1 y 1.3")	
+				return None
+			elif float(listaTiempoRetencionTotalTanque[10].get())<2 or float(listaTiempoRetencionTotalTanque[10].get())>12:
+				if tipoCelda == "Conductos cuadrados":
+					messagebox.showwarning(title="Error", message="La longitud ocupada por los módulos no puede ser menor que 2 ni mayor a 12")	
+					return None
+				else:
+					messagebox.showwarning(title="Error", message="La longitud ocupada por las placas no puede ser menor que 2 ni mayor a 12")	
+					return None
+			elif float(listaTiempoRetencionTotalTanque[11].get())<0.6 or float(listaTiempoRetencionTotalTanque[11].get())>0.9:
+				messagebox.showwarning(title="Error", message="La distancia vertical de orificios de distribución a placas debe estar entre 0.6 y 0.9")	
+				return None
+
+			elif float(listaTiempoRetencionTotalTanque[12].get())<0.9 or float(listaTiempoRetencionTotalTanque[12].get())>1.2:
+				messagebox.showwarning(title="Error", message="La distancia entre canaletas de recolección debe estar entre 0.9 y 1.2")	
+				return None
+		except:
+			messagebox.showwarning(title="Error", message="Alguno de los datos ingresados no es un número.")
+			return None	
+
+		anguloInclinacion = float(listaTiempoRetencionTotalTanque[4].get())
+		distanciaPlacas = float(listaTiempoRetencionTotalTanque[6].get())
+		caudalMedio = float(listaTiempoRetencionTotalTanque[7].get())
+		factorMayoracionCaudalMD = float(listaTiempoRetencionTotalTanque[8].get())
+		longitudPlacas = float(listaTiempoRetencionTotalTanque[10].get())
+		distanciaVerticalDistribucionPlacas = float(listaTiempoRetencionTotalTanque[11].get())
+		distanciaCanaletasRecoleccion= float(listaTiempoRetencionTotalTanque[12].get())
+
+
+		tipoFloc = parametrosCombobox[0]
+		tipoCelda = parametrosCombobox[1]
+		materialTipoCelda = parametrosCombobox[2]
+		dimensionesTipoCeldaMaterial = parametrosCombobox[3]
+		numeroUnidades = parametrosCombobox[4]
+		temperatura=  parametrosCombobox[5]
+
+
+		
+
+
+		##
+
 		tiempoRetencionTotalTanqueWindow = tk.Toplevel()
 		tiempoRetencionTotalTanqueWindow.iconbitmap(bitmap='icons\\agua.ico')
 		tiempoRetencionTotalTanqueWindow.geometry("600x400") 
@@ -689,17 +902,136 @@ def openSedWindow():
 
 		tiempoRetencionTotalTanqueWindow.mainloop()
 
-	def dimensionesDelSedimentador(listaDimensionesDelSedimentador):
+	def dimensionesDelSedimentador(listaDimensionesDelSedimentador, tipoCelda):
+		#ManejoErroresDimensionesDelSedimentador
 
 		'''
-	listaEntradaParametrosBasicos=[tipoFloc,tipoCelda, materialTipoCelda, dimensionesTipoCeldaMaterial,anguloInclinacion,numeroUnidades,
-	distanciaPlacas, caudalMedioEntry, factorMayoracionCaudalMD,temperaturaEntry]
-	listaDeterminacionParametrosBasicosDiseno = listaEntradaParametrosBasicos + [longitudPlacas] 
-	listaCanaletasRecoleccionAgua = [distanciaCanaletasRecoleccion,longitudPlacas]
-	listaTiempoRetencionTotalTanque = listaDeterminacionParametrosBasicosDiseno + [distanciaVerticalDistribucionPlacas] + listaCanaletasRecoleccionAgua
-	listaDimensionesDelSedimentador = listaTiempoRetencionTotalTanque + [bordeLibre,espesorMuros,pendienteTransversalTolva,anchoBasePlanaTolva] 
-	listaDisenoSistemaEvacuacionLodos = listaDimensionesDelSedimentador + [velocidadMinimaArrastre,longitudPlacas, diametroNominalOrificionesMultipleDescarga]
+			listaEntradaParametrosBasicos=[0= tipoFloc, 1= tipoCelda, 2= materialTipoCelda, 3= dimensionesTipoCeldaMaterial,
+				4= anguloInclinacion, 5= numeroUnidades,
+				6=distanciaPlacas, 7= caudalMedioEntry, 8= factorMayoracionCaudalMD, 9= temperaturaEntry]
+				listaDeterminacionParametrosBasicosDiseno() = listaEntradaParametrosBasicos + [10 = longitudPlacas] 
+				listaCanaletasRecoleccionAgua = [distanciaCanaletasRecoleccion,longitudPlacas]
+				listaTiempoRetencionTotalTanque = listaDeterminacionParametrosBasicosDiseno + [11 = distanciaVerticalDistribucionPlacas] + 12=distanciaCanaletasRecoleccion
+			listaDimensionesDelSedimentador = listaTiempoRetencionTotalTanque + [13= bordeLibre,
+			14 = espesorMuros, 15 = pendienteTransversalTolva, 16 = anchoBasePlanaTolva] 
+			
+	
 		'''
+		#VolverAntes
+		inicialesComboBox=["Seleccione el tipo de floc","Seleccione el tipo de celda",
+		f"Seleccione el material de {tipoCelda}", f"Seleccione las dimensiones de {tipoCelda}", "Seleccione el número de unidades","Seleccione la temperatura"]
+		
+		listaComboBox=[listaDimensionesDelSedimentador[0],listaDimensionesDelSedimentador[1],listaDimensionesDelSedimentador[2],
+		listaDimensionesDelSedimentador[3],listaDimensionesDelSedimentador[5], listaDimensionesDelSedimentador[9]]
+
+		listaSinComboBox=[listaDimensionesDelSedimentador[4],listaDimensionesDelSedimentador[6],
+		listaDimensionesDelSedimentador[7],listaDimensionesDelSedimentador[8], listaDimensionesDelSedimentador[10], 
+		listaDimensionesDelSedimentador[11], listaDimensionesDelSedimentador[12], 
+		
+		listaDimensionesDelSedimentador[13],
+		listaDimensionesDelSedimentador[14],listaDimensionesDelSedimentador[15],listaDimensionesDelSedimentador[16]]
+
+		parametrosCombobox=list()
+
+		for i in range(0,len(listaComboBox)):
+			if listaComboBox[i].get()[0:10] == "Seleccione":
+				messagebox.showwarning(title="Error", message=f"Hace falta seleccionar {inicialesComboBox[i][10:].lower()}")
+				return None	
+			else:
+				parametrosCombobox.append(listaComboBox[i].get())
+		#Verifica que no sean nulos.
+
+		if tipoCelda == "Conductos cuadrados":
+			labels=["ángulo de inclinación", "lado interno de los conductos","caudal medio diario",
+				"factor de mayoración del caudal máximo diario", "longitud ocupada por los módulos", 
+				"distancia vertical de los orificios de distribución a placas" 
+				,"distancia entre canaletas de recolección","borde libre", "espesor de muros de concreto",
+				"pendiente transversal de la tolva de lodos", "ancho de la base plana de la tolva de lodos"]
+		else: 
+
+			labels=["ángulo de inclinación", "distancia entre placas","caudal medio diario",
+			"factor de mayoración del caudal máximo diario", "longitud ocupada por las placas",
+			"distancia vertical de los orificios de distribución a placas","distancia entre canaletas de recolección",
+			"borde libre", "espesor de muros de concreto",
+			"pendiente transversal de la tolva de lodos", "ancho de la base plana de la tolva de lodos"]
+
+		for i in range(0, len(listaSinComboBox)):
+			if listaSinComboBox[i].get() == "":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labels[i]} ")	
+				return None
+
+		try:
+			if float(listaDimensionesDelSedimentador[4].get()) != 60.0  :
+				messagebox.showwarning(title="Error", message="El valor del ángulo de inclinación solo puede ser 60°")	
+				return None
+			elif float(listaDimensionesDelSedimentador[6].get())>6.0 or float(listaDimensionesDelSedimentador[6].get())<5.0:
+				if tipoCelda == "Conductos cuadrados":
+					messagebox.showwarning(title="Error", message=f"El valor del lado interno de los conductos cuadrados no puede ser menor que 5 ni mayor que 6.")	
+					return None
+				else: 
+					messagebox.showwarning(title="Error", message=f"El valor de la distancia entre placas no puede ser menor que 5 ni mayor que 6.")	
+					return None
+			elif float(listaDimensionesDelSedimentador[7].get())<0.01 or float(listaDimensionesDelSedimentador[7].get())>0.2:
+				messagebox.showwarning(title="Error", message="El valor del caudal medio diario debe estar entre 0.01 y 0.2")	
+				return None
+			elif float(listaDimensionesDelSedimentador[8].get())>1.3 or float(listaDimensionesDelSedimentador[8].get())<1:
+				messagebox.showwarning(title="Error", message="El valor de factoración de mayoración del caudal máximo diario debe estar entre 1 y 1.3")	
+				return None
+			elif float(listaDimensionesDelSedimentador[10].get())<2 or float(listaDimensionesDelSedimentador[10].get())>12:
+				if tipoCelda == "Conductos cuadrados":
+					messagebox.showwarning(title="Error", message="La longitud ocupada por los módulos no puede ser menor que 2 ni mayor a 12")	
+					return None
+				else:
+					messagebox.showwarning(title="Error", message="La longitud ocupada por las placas no puede ser menor que 2 ni mayor a 12")	
+					return None
+			elif float(listaDimensionesDelSedimentador[11].get())<0.6 or float(listaDimensionesDelSedimentador[11].get())>0.9:
+				messagebox.showwarning(title="Error", message="La distancia vertical de orificios de distribución a placas debe estar entre 0.6 y 0.9")	
+				return None
+
+			elif float(listaDimensionesDelSedimentador[12].get())<0.9 or float(listaDimensionesDelSedimentador[12].get())>1.2:
+				messagebox.showwarning(title="Error", message="La distancia entre canaletas de recolección debe estar entre 0.9 y 1.2")	
+				return None
+			
+			elif float(listaDimensionesDelSedimentador[13].get())<0.3 or float(listaDimensionesDelSedimentador[13].get())>0.5:
+				messagebox.showwarning(title="Error", message="El valor del borde libre debe estar entre 0.3 y 0.5")	
+				return None
+			
+			elif float(listaDimensionesDelSedimentador[14].get())<0.3 or float(listaDimensionesDelSedimentador[14].get())>0.5:
+				messagebox.showwarning(title="Error", message="El espesor de muros de concreto debe estar entre 0.3 y 0.5")	
+				return None
+			
+			elif float(listaDimensionesDelSedimentador[15].get())<45.0 or float(listaDimensionesDelSedimentador[15].get())>60.0:
+				messagebox.showwarning(title="Error", message="La pendiente transversal de la tolva de lodos debe estar entre 45° y 60°")	
+				return None
+			
+			elif float(listaDimensionesDelSedimentador[16].get())<0.1 or float(listaDimensionesDelSedimentador[16].get())>0.2:
+				messagebox.showwarning(title="Error", message="El ancho de la base plana de la tolva de lodos debe estar entre 0.1 y 0.2")	
+				return None
+		except:
+			messagebox.showwarning(title="Error", message="Alguno de los datos ingresados no es un número.")
+			return None	
+
+		anguloInclinacion = float(listaDimensionesDelSedimentador[4].get())
+		distanciaPlacas = float(listaDimensionesDelSedimentador[6].get())
+		caudalMedio = float(listaDimensionesDelSedimentador[7].get())
+		factorMayoracionCaudalMD = float(listaDimensionesDelSedimentador[8].get())
+		longitudPlacas = float(listaDimensionesDelSedimentador[10].get())
+		distanciaVerticalDistribucionPlacas = float(listaDimensionesDelSedimentador[11].get())
+		distanciaCanaletasRecoleccion= float(listaDimensionesDelSedimentador[12].get())
+		bordeLibre = float(listaDimensionesDelSedimentador[13].get())
+		espesorMuros = float(listaDimensionesDelSedimentador[14].get())
+		pendienteTransversalTolva = float(listaDimensionesDelSedimentador[15].get())
+		anchoBasePlanaTolva = float(listaDimensionesDelSedimentador[16].get())
+
+		tipoFloc = parametrosCombobox[0]
+		tipoCelda = parametrosCombobox[1]
+		materialTipoCelda = parametrosCombobox[2]
+		dimensionesTipoCeldaMaterial = parametrosCombobox[3]
+		numeroUnidades = parametrosCombobox[4]
+		temperatura=  parametrosCombobox[5]
+
+
+		#####
 		dimensionesDelSedimentadorWindow = tk.Toplevel()
 		dimensionesDelSedimentadorWindow.iconbitmap(bitmap='icons\\agua.ico')
 		dimensionesDelSedimentadorWindow.geometry("600x400") 
@@ -796,16 +1128,155 @@ def openSedWindow():
 
 		dimensionesDelSedimentadorWindow.mainloop()
 
-	def disenoSistemaEvacuacionLodos(listaDisenoSistemaEvacuacionLodos):
+	def disenoSistemaEvacuacionLodos(listaDisenoSistemaEvacuacionLodos, tipoCelda):
+		#ManejoErroresDisenoSistemaEvacuacionLodos
+		
 		'''
-	listaEntradaParametrosBasicos=[tipoFloc,tipoCelda, materialTipoCelda, dimensionesTipoCeldaMaterial,anguloInclinacion,numeroUnidades,
-	distanciaPlacas, caudalMedioEntry, factorMayoracionCaudalMD,temperaturaEntry]
-	listaDeterminacionParametrosBasicosDiseno = listaEntradaParametrosBasicos + [longitudPlacas] 
-	listaCanaletasRecoleccionAgua = [distanciaCanaletasRecoleccion,longitudPlacas]
-	listaTiempoRetencionTotalTanque = listaDeterminacionParametrosBasicosDiseno + [distanciaVerticalDistribucionPlacas] + listaCanaletasRecoleccionAgua
-	listaDimensionesDelSedimentador = listaTiempoRetencionTotalTanque + [bordeLibre,espesorMuros,pendienteTransversalTolva,anchoBasePlanaTolva] 
-	listaDisenoSistemaEvacuacionLodos = listaDimensionesDelSedimentador + [velocidadMinimaArrastre,longitudPlacas, diametroNominalOrificionesMultipleDescarga]
+		
+			listaEntradaParametrosBasicos=[0= tipoFloc, 1= tipoCelda, 2= materialTipoCelda, 3= dimensionesTipoCeldaMaterial,
+				4= anguloInclinacion, 5= numeroUnidades,
+				6=distanciaPlacas, 7= caudalMedioEntry, 8= factorMayoracionCaudalMD, 9= temperaturaEntry]
+				listaDeterminacionParametrosBasicosDiseno() = listaEntradaParametrosBasicos + [10 = longitudPlacas] 
+				listaCanaletasRecoleccionAgua = [distanciaCanaletasRecoleccion,longitudPlacas]
+				listaTiempoRetencionTotalTanque = listaDeterminacionParametrosBasicosDiseno + [11 = distanciaVerticalDistribucionPlacas] + 12=distanciaCanaletasRecoleccion
+			listaDimensionesDelSedimentador = listaTiempoRetencionTotalTanque + [13= bordeLibre,
+			14 = espesorMuros, 15 = pendienteTransversalTolva, 16 = anchoBasePlanaTolva] 
+
+			listaDisenoSistemaEvacuacionLodos = listaDimensionesDelSedimentador + [17 = velocidadMinimaArrastre, 18 = diametroNominalOrificionesMultipleDescarga]
+			("Seleccione el diámetro nominal de los orificios del múltiple de descarga")
 		'''
+
+		#Volver
+
+		inicialesComboBox=["Seleccione el tipo de floc","Seleccione el tipo de celda",
+		f"Seleccione el material de {tipoCelda}", f"Seleccione las dimensiones de {tipoCelda}", "Seleccione el número de unidades","Seleccione la temperatura",
+		"Seleccione el diámetro nominal de los orificios del múltiple de descarga"]
+
+		listaComboBox=[listaDisenoSistemaEvacuacionLodos[0],listaDisenoSistemaEvacuacionLodos[1],listaDisenoSistemaEvacuacionLodos[2],
+		listaDisenoSistemaEvacuacionLodos[3],listaDisenoSistemaEvacuacionLodos[5], listaDisenoSistemaEvacuacionLodos[9], 
+		listaDisenoSistemaEvacuacionLodos[18]]
+
+		listaSinComboBox=[listaDisenoSistemaEvacuacionLodos[4],listaDisenoSistemaEvacuacionLodos[6],
+		listaDisenoSistemaEvacuacionLodos[7],listaDisenoSistemaEvacuacionLodos[8], listaDisenoSistemaEvacuacionLodos[10], 
+		listaDisenoSistemaEvacuacionLodos[11], listaDisenoSistemaEvacuacionLodos[12], 
+
+		listaDisenoSistemaEvacuacionLodos[13],
+		listaDisenoSistemaEvacuacionLodos[14],listaDisenoSistemaEvacuacionLodos[15],listaDisenoSistemaEvacuacionLodos[16],
+		listaDisenoSistemaEvacuacionLodos[17]]
+
+		parametrosCombobox=list()
+
+		for i in range(0,len(listaComboBox)):
+			if listaComboBox[i].get()[0:10] == "Seleccione":
+				messagebox.showwarning(title="Error", message=f"Hace falta seleccionar {inicialesComboBox[i][10:].lower()}")
+				return None	
+			else:
+				parametrosCombobox.append(listaComboBox[i].get())
+		#Verifica que no sean nulos.
+
+		if tipoCelda == "Conductos cuadrados":
+			labels=["ángulo de inclinación", "lado interno de los conductos","caudal medio diario",
+				"factor de mayoración del caudal máximo diario", "longitud ocupada por los módulos", 
+				"distancia vertical de los orificios de distribución a placas" 
+				,"distancia entre canaletas de recolección","borde libre", "espesor de muros de concreto",
+				"pendiente transversal de la tolva de lodos", "ancho de la base plana de la tolva de lodos",
+				"velocidad mínima de arrastre asignada"]
+		else: 
+
+			labels=["ángulo de inclinación", "distancia entre placas","caudal medio diario",
+			"factor de mayoración del caudal máximo diario", "longitud ocupada por las placas",
+			"distancia vertical de los orificios de distribución a placas","distancia entre canaletas de recolección",
+			"borde libre", "espesor de muros de concreto",
+			"pendiente transversal de la tolva de lodos", "ancho de la base plana de la tolva de lodos",
+			"velocidad mínima de arrastre asignada"]
+
+		for i in range(0, len(listaSinComboBox)):
+			if listaSinComboBox[i].get() == "":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labels[i]} ")	
+				return None
+
+		try:
+			if float(listaDisenoSistemaEvacuacionLodos[4].get()) != 60.0  :
+				messagebox.showwarning(title="Error", message="El valor del ángulo de inclinación solo puede ser 60°")	
+				return None
+			elif float(listaDisenoSistemaEvacuacionLodos[6].get())>6.0 or float(listaDisenoSistemaEvacuacionLodos[6].get())<5.0:
+				if tipoCelda == "Conductos cuadrados":
+					messagebox.showwarning(title="Error", message=f"El valor del lado interno de los conductos cuadrados no puede ser menor que 5 ni mayor que 6.")	
+					return None
+				else: 
+					messagebox.showwarning(title="Error", message=f"El valor de la distancia entre placas no puede ser menor que 5 ni mayor que 6.")	
+					return None
+			elif float(listaDisenoSistemaEvacuacionLodos[7].get())<0.01 or float(listaDisenoSistemaEvacuacionLodos[7].get())>0.2:
+				messagebox.showwarning(title="Error", message="El valor del caudal medio diario debe estar entre 0.01 y 0.2")	
+				return None
+			elif float(listaDisenoSistemaEvacuacionLodos[8].get())>1.3 or float(listaDisenoSistemaEvacuacionLodos[8].get())<1:
+				messagebox.showwarning(title="Error", message="El valor de factoración de mayoración del caudal máximo diario debe estar entre 1 y 1.3")	
+				return None
+			elif float(listaDisenoSistemaEvacuacionLodos[10].get())<2 or float(listaDisenoSistemaEvacuacionLodos[10].get())>12:
+				if tipoCelda == "Conductos cuadrados":
+					messagebox.showwarning(title="Error", message="La longitud ocupada por los módulos no puede ser menor que 2 ni mayor a 12")	
+					return None
+				else:
+					messagebox.showwarning(title="Error", message="La longitud ocupada por las placas no puede ser menor que 2 ni mayor a 12")	
+					return None
+			elif float(listaDisenoSistemaEvacuacionLodos[11].get())<0.6 or float(listaDisenoSistemaEvacuacionLodos[11].get())>0.9:
+				messagebox.showwarning(title="Error", message="La distancia vertical de orificios de distribución a placas debe estar entre 0.6 y 0.9")	
+				return None
+
+			elif float(listaDisenoSistemaEvacuacionLodos[12].get())<0.9 or float(listaDisenoSistemaEvacuacionLodos[12].get())>1.2:
+				messagebox.showwarning(title="Error", message="La distancia entre canaletas de recolección debe estar entre 0.9 y 1.2")	
+				return None
+			
+			elif float(listaDisenoSistemaEvacuacionLodos[13].get())<0.3 or float(listaDisenoSistemaEvacuacionLodos[13].get())>0.5:
+				messagebox.showwarning(title="Error", message="El valor del borde libre debe estar entre 0.3 y 0.5")	
+				return None
+			
+			elif float(listaDisenoSistemaEvacuacionLodos[14].get())<0.3 or float(listaDisenoSistemaEvacuacionLodos[14].get())>0.5:
+				messagebox.showwarning(title="Error", message="El espesor de muros de concreto debe estar entre 0.3 y 0.5")	
+				return None
+			
+			elif float(listaDisenoSistemaEvacuacionLodos[15].get())<45.0 or float(listaDisenoSistemaEvacuacionLodos[15].get())>60.0:
+				messagebox.showwarning(title="Error", message="La pendiente transversal de la tolva de lodos debe estar entre 45° y 60°")	
+				return None
+			
+			elif float(listaDisenoSistemaEvacuacionLodos[16].get())<0.1 or float(listaDisenoSistemaEvacuacionLodos[16].get())>0.2:
+				messagebox.showwarning(title="Error", message="El ancho de la base plana de la tolva de lodos debe estar entre 0.1 y 0.2")	
+				return None
+			
+			elif float(listaDisenoSistemaEvacuacionLodos[17].get())<0.01 or float(listaDisenoSistemaEvacuacionLodos[17].get())>0.02:
+				messagebox.showwarning(title="Error", message="La velocidad mínima de arrastre asignada debe estar entre 0.01 y 0.02")	
+				return None
+		except:
+			messagebox.showwarning(title="Error", message="Alguno de los datos ingresados no es un número.")
+			return None	
+
+		anguloInclinacion = float(listaDisenoSistemaEvacuacionLodos[4].get())
+		distanciaPlacas = float(listaDisenoSistemaEvacuacionLodos[6].get())
+		caudalMedio = float(listaDisenoSistemaEvacuacionLodos[7].get())
+		factorMayoracionCaudalMD = float(listaDisenoSistemaEvacuacionLodos[8].get())
+		longitudPlacas = float(listaDisenoSistemaEvacuacionLodos[10].get())
+		distanciaVerticalDistribucionPlacas = float(listaDisenoSistemaEvacuacionLodos[11].get())
+		distanciaCanaletasRecoleccion= float(listaDisenoSistemaEvacuacionLodos[12].get())
+		bordeLibre = float(listaDisenoSistemaEvacuacionLodos[13].get())
+		espesorMuros = float(listaDisenoSistemaEvacuacionLodos[14].get())
+		pendienteTransversalTolva = float(listaDisenoSistemaEvacuacionLodos[15].get())
+		anchoBasePlanaTolva = float(listaDisenoSistemaEvacuacionLodos[16].get())
+		velocidadMinimaArrastre = float(listaDisenoSistemaEvacuacionLodos[17].get())
+
+
+		tipoFloc = parametrosCombobox[0]
+		tipoCelda = parametrosCombobox[1]
+		materialTipoCelda = parametrosCombobox[2]
+		dimensionesTipoCeldaMaterial = parametrosCombobox[3]
+		numeroUnidades = parametrosCombobox[4]
+		temperatura=  parametrosCombobox[5]
+		diametroNominalOrificionesMultipleDescarga = parametrosCombobox[6]
+
+
+
+
+
+		###
 		disenoSistemaEvacuacionLodosWindow = tk.Toplevel()
 		disenoSistemaEvacuacionLodosWindow.iconbitmap(bitmap='icons\\agua.ico')
 		disenoSistemaEvacuacionLodosWindow.geometry("600x400") 
@@ -907,124 +1378,7 @@ def openSedWindow():
 
 		disenoSistemaEvacuacionLodosWindow.mainloop()
 		
-		def datosEntradaParametrosBasicosCalculos(tipoFloc, tipoCelda, materialCelda, dimensiones, anguloInclinacion, numeroUnidades,distanciaPlacas, caudalMD,factorMayoracionCMD, temperatura):
-			#ENTRANVALORESYAOBTENIDOS. CON get()
-			
-			oP2 = {
-			"Placas planas paralelas": ("Acero inoxidable AISI 316","Polietileno alta densidad (HDPE)","Poliestireno de alto impacto(HIPS)") , 
-			"Placas onduladas paralelas":("Acrilonitrilo butadieno estireno (ABS)","Polipropileno (PP)"),
-			"Conductos cuadrados":("Acrilonitrilo butadieno estireno (ABS)","Polipropileno (PP)")}
-			
-			dimensionesLista= [	
-			('1219 x 1219', '1219 x 2438', '1524 x 1524', '1524 x 3048'), 
-			('1200 x 1200', '1200 x 1400', '1200 x 1600', '1200 x 1800', '1200 x 2000', '1200 x 2200', '1200 x 2400', '1200 x 2600', '1200 x 2800', '1200 x 3000'), 
-			('1200 x 1200', '1200 x 1500', '1200 x 2400', '1200 x 3000'), 
-			('1200 x 1200', '1200 x 1400', '1200 x 1600', '1200 x 1800', '1200 x 2000', '1200 x 2200', '1200 x 2400', '1200 x 2600', '1200 x 2800', '1200 x 3000'), 
-			('1200 x 1200', '1200 x 1400', '1200 x 1600', '1200 x 1800', '1200 x 2000', '1200 x 2200', '1200 x 2400', '1200 x 2600', '1200 x 2800', '1200 x 3000'), 
-			('1200 x 1500', '1200 x 2000', '1200 x 2500', '1200 x 3000'), 
-			('1200 x 1500', '1200 x 2000', '1200 x 2500', '1200 x 3000')]
-
-			combinacionesTipoCeldaMaterialDimension = list()
-
-			i=0
-			for elemento in tuple(oP2.keys()):
-				for ele2 in oP2[elemento]:
-					for dim in dimensionesLista[i]:
-						combinacionesTipoCeldaMaterialDimension.append((elemento, ele2, dim))
-					i=i+1
-
-			espesorDic= dict()
-			espesorLista= [
-			4,
-			4,
-			4,
-			5,
-			8,
-			8,
-			8,
-			8,
-			8,
-			8,
-			8,
-			8,
-			8,
-			8,
-			3,
-			5,
-			3,
-			5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-			1.5,
-
-			]
-
-
-
-
-
-			for i in range(0, len(combinacionesTipoCeldaMaterialDimension)):
-				espesorDic[combinacionesTipoCeldaMaterialDimension[i]]= espesorLista[i]
-
-			espesor = espesorDic[tipoCelda, materialCelda, dimensiones]
-			
-			EficienciaCriticaLista=[1,1.3,1.375]
-			eficienciaCriticaDic = dict()
-			i=0
-			for elemento in tuple(oP2.keys()):
-				eficienciaCriticaDic[elemento]=EficienciaCriticaLista[i]
-				i=i+1
-			
-			eficienciaCritica= eficienciaCriticaDic[tipoCelda]
-			caudalDiseño = caudalMD*factorMayoracionCMD
-			caudalUnidad = caudalDiseño/numeroUnidades
-
-			
-			valorTemperaturas=list()
-			tablaTemperaturaViscocidadCinematica=dict()
-
-
-			for i in range(0,36):    
-				valorTemperaturas.append(i)
-						
-			valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
-			,1.386e-06, 1.346e-06, 1.308e-06, 1.271e-06, 1.237e-06, 1.204e-06, 
-			1.172e-06, 1.141e-06, 1.112e-06, 1.084e-06, 1.057e-06, 1.032e-06, 1.007e-06, 9.83e-07, 9.6e-07, 9.38e-07, 9.17e-07, 8.96e-07, 8.76e-07, 8.57e-07, 8.39e-07, 8.21e-07, 8.04e-07, 7.88e-07, 7.72e-07, 7.56e-07, 7.41e-07, 7.27e-07]
-
-			for ind in range(0,len(valorTemperaturas)):
-				tablaTemperaturaViscocidadCinematica[valorTemperaturas[ind]]=valorViscocidad[ind]
-			
-			viscosidadCinematica = tablaTemperaturaViscocidadCinematica[temperatura]
-			
-			listaSalida=[tipoFloc,tipoCelda,materialCelda, dimensiones,espesor,anguloInclinacion,eficienciaCritica, caudalDiseño, numeroUnidades,
-			caudalUnidad,viscosidadCinematica,distanciaPlacas]
-
-			return listaSalida
+		
 
 
 
@@ -1120,9 +1474,6 @@ def openSedWindow():
 			if ((tipoCelda.get(),materialTipoCelda.get())== combinacionesTipoCeldaMaterial[i]):
 				dimensionesTipoCeldaMaterial.config(values=dimensiones[i])
 		
-
-	
-	
 
 	tipoCelda = ttk.Combobox(frameSed, width="51", state="readonly",values=tuple(oP2.keys()))
 	tipoCelda.bind("<<ComboboxSelected>>", onComboboxSelect1)
@@ -1271,9 +1622,9 @@ def openSedWindow():
 	distanciaPlacas, caudalMedioEntry, factorMayoracionCaudalMD,temperaturaEntry]
 	listaDeterminacionParametrosBasicosDiseno = listaEntradaParametrosBasicos + [longitudPlacas] 
 	listaCanaletasRecoleccionAgua = [distanciaCanaletasRecoleccion,longitudPlacas]
-	listaTiempoRetencionTotalTanque = listaDeterminacionParametrosBasicosDiseno + [distanciaVerticalDistribucionPlacas] + listaCanaletasRecoleccionAgua
+	listaTiempoRetencionTotalTanque = listaDeterminacionParametrosBasicosDiseno + [distanciaVerticalDistribucionPlacas] + [distanciaCanaletasRecoleccion]
 	listaDimensionesDelSedimentador = listaTiempoRetencionTotalTanque + [bordeLibre,espesorMuros,pendienteTransversalTolva,anchoBasePlanaTolva] 
-	listaDisenoSistemaEvacuacionLodos = listaDimensionesDelSedimentador + [velocidadMinimaArrastre,longitudPlacas, diametroNominalOrificionesMultipleDescarga]  
+	listaDisenoSistemaEvacuacionLodos = listaDimensionesDelSedimentador + [velocidadMinimaArrastre, diametroNominalOrificionesMultipleDescarga]  
 
 
 	imageAtras= PhotoImage(file="images\\atras.png")
@@ -1284,9 +1635,9 @@ def openSedWindow():
 	botonParametrosDeDiseñoSedimentadorAltaTasa = HoverButton(frameSed, text="Parámetros de diseño de sedimentadores de alta tasa", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: parametrosDeDiseñoSedimentadorAltaTasa())
 	botonDeterminacionParametrosBasicosDiseno = HoverButton(frameSed, text="Determinación de parámetros básicos de diseño", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: determinacionParametrosBasicosDiseno(listaDeterminacionParametrosBasicosDiseno, tipoCelda.get()))
 	botonCanaletasRecoleccionAgua = HoverButton(frameSed, text="Canaletas de recolección de agua clarificada", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: canaletasRecoleccionAgua(listaCanaletasRecoleccionAgua,tipoCelda.get()))
-	botonTiempoRetencionTotalTanque = HoverButton(frameSed, text="Tiempo de retención total en el tanque", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: tiempoRetencionTotalTanque(listaTiempoRetencionTotalTanque))
-	botonDimensionesDelSedimentador = HoverButton(frameSed, text="Dimensiones del sedimentador", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: dimensionesDelSedimentador(listaDimensionesDelSedimentador))
-	botonDisenoSistemaEvacuacionLodos = HoverButton(frameSed, text="Diseño del sistema de evacuación de lodos", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: disenoSistemaEvacuacionLodos(listaDisenoSistemaEvacuacionLodos))
+	botonTiempoRetencionTotalTanque = HoverButton(frameSed, text="Tiempo de retención total en el tanque", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: tiempoRetencionTotalTanque(listaTiempoRetencionTotalTanque,tipoCelda.get()))
+	botonDimensionesDelSedimentador = HoverButton(frameSed, text="Dimensiones del sedimentador", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: dimensionesDelSedimentador(listaDimensionesDelSedimentador, tipoCelda.get()))
+	botonDisenoSistemaEvacuacionLodos = HoverButton(frameSed, text="Diseño del sistema de evacuación de lodos", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: disenoSistemaEvacuacionLodos(listaDisenoSistemaEvacuacionLodos,tipoCelda.get()))
 	botonLimpiarEntradas = HoverButton(frameSed, text="Limpiar entradas", activebackground="#9DC4AA", width=40, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntrySed(lista_entradas,listaLabelReiniciar))
 
 	listaBotones=[botonParametrosDeDiseñoSedimentadorAltaTasa,
@@ -1744,7 +2095,7 @@ def openFiltroWindow():
 
 		coeficienteDUWindow = tk.Toplevel()
 		coeficienteDUWindow.iconbitmap(bitmap='icons\\agua.ico')
-		coeficienteDUWindow.geometry("1000x200") 
+		coeficienteDUWindow.geometry("1200x150") 
 		coeficienteDUWindow.resizable(0,0)	
 		coeficienteDUWindow.configure(background="#9DC4AA")
 		
@@ -1917,7 +2268,7 @@ def openFiltroWindow():
 		def tamañod(x1,y1,x2,y2,numero):
 			tamañoD10Window = tk.Toplevel()
 			tamañoD10Window.iconbitmap(bitmap='icons\\agua.ico')
-			tamañoD10Window.geometry("1000x200") 
+			tamañoD10Window.geometry("1200x300") 
 			tamañoD10Window.resizable(0,0)	
 			tamañoD10Window.configure(background="#9DC4AA")
 			coeficienteDUFrame10=LabelFrame(tamañoD10Window, text="Tamaño Efectio d{} del medio filtrante".format(getSub(f"{numero}")), font=("Yu Gothic bold", 11))
@@ -1941,10 +2292,7 @@ def openFiltroWindow():
 			sedScrollY.configure(command=arbolCoeficienteDU10.yview)
 			#Define columnas.
 			arbolCoeficienteDU10["columns"]= (
-			"Valores para referencia",
-			"Tamaño de abertura del tamiz [mm]",
-			"Acumulado de arena que pasa [%]",
-			"Tamaño d{} [mm]".format(getSub(f"{numero}"))
+			"1","2","3"
 			)
 
 			#Headings
@@ -1954,8 +2302,7 @@ def openFiltroWindow():
 		
 			
 			for i in range(0,len(arbolCoeficienteDU10["columns"])) :
-					arbolCoeficienteDU10.column(f"#{i}",width=500, stretch=False)	
-			arbolCoeficienteDU10.column("#4",width=600, stretch=True)	
+					arbolCoeficienteDU10.column(f"#{i}",width=500, stretch=False)		
 			arbolCoeficienteDU10.column("#0",width=0, stretch=False)
 
 			#Striped row tags
@@ -1964,18 +2311,27 @@ def openFiltroWindow():
 
 			lista1=list()
 			lista2=list()
-			lista1.append("(x1,y1)")
+			lista1.append("(x1,\ny1)")
 			lista1.append(x1)
 			lista1.append(y1)
 			lista1.append(calculo2CU(numero,x1,y1,x2,y2))
-			lista2.append("(x2,y2)")
+			lista2.append("(x2,\ny2)")
 			lista2.append(x2)
 			lista2.append(y2)
 			lista2.append(calculo2CU(numero,x1,y1,x2,y2))
 			listaInsertar=[lista1,lista2]
 			
-			for elemento in listaInsertar:
-				newDataTreeview(arbolCoeficienteDU10,elemento)
+			listaEncabezados=["Valores para referencia",
+			"Tamaño de abertura del tamiz [mm]",
+			"Acumulado de arena que pasa [%]",
+			"Tamaño d{} [mm]".format(getSub(f"{numero}"))]
+			
+			for i in range(len(listaEncabezados)):
+				listaTemp=list()
+				listaTemp.append(listaEncabezados[i])
+				listaTemp.append(lista1[i])
+				listaTemp.append(lista2[i])
+				newDataTreeview(arbolCoeficienteDU10,listaTemp)
 
 
 
@@ -3505,7 +3861,7 @@ def openFiltroWindow():
 		
 		predimensionamientoFiltrosWindow = tk.Toplevel()
 		predimensionamientoFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
-		predimensionamientoFiltrosWindow.geometry("600x400") 
+		predimensionamientoFiltrosWindow.geometry("1000x500") 
 		predimensionamientoFiltrosWindow.resizable(0,0)	
 		predimensionamientoFiltrosWindow.configure(background="#9DC4AA")
 
@@ -3566,7 +3922,7 @@ def openFiltroWindow():
 			arbolPredimensionamientoFiltros.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
 
 		for i in range(0,len(arbolPredimensionamientoFiltros["columns"])+1) :
-				arbolPredimensionamientoFiltros.column(f"#{i}",width=700, stretch=False)	
+				arbolPredimensionamientoFiltros.column(f"#{i}",width=500, stretch=False)	
 		arbolPredimensionamientoFiltros.column("#0",width=0, stretch=False)
 
 		#Striped row tags
@@ -3730,7 +4086,7 @@ def openFiltroWindow():
 			
 		drenajeFiltrosWindow = tk.Toplevel()
 		drenajeFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
-		drenajeFiltrosWindow.geometry("600x400") 
+		drenajeFiltrosWindow.geometry("1000x450") 
 		drenajeFiltrosWindow.resizable(0,0)	
 		drenajeFiltrosWindow.configure(background="#9DC4AA")
 
@@ -3755,16 +4111,7 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolDrenajeFiltros.yview)
 		#Define columnas.
 		arbolDrenajeFiltros["columns"]= (
-		
-		"B{} = Ancho del múltiple".format(getSub("mul")),
-		"L{} = Longitud de los laterales".format(getSub("lat")),
-		"N{} = Número de laterales por unidad de filtración".format(getSub("lat")),
-		" = Número de orificios por lateral",
-		"N{} = Número de orificios por unidad de filtración".format(getSub("ori")),
-		"Área total de orificios/ área filtrante",
-		"Área transversal del lateral / área de orificios del lateral",
-		"Área transversal del múltiple / área transversal de laterales",
-		"Longitud de lateral / diámetro de lateral",
+		"1","2"
 		)
 
 		#Headings
@@ -3774,7 +4121,7 @@ def openFiltroWindow():
 			arbolDrenajeFiltros.heading(col, text=col,anchor=CENTER)	
 
 		for i in range(0,len(arbolDrenajeFiltros["columns"])+1) :
-				arbolDrenajeFiltros.column(f"#{i}",width=700, stretch=False)	
+				arbolDrenajeFiltros.column(f"#{i}",width=500, stretch=False)	
 		arbolDrenajeFiltros.column("#0",width=0, stretch=False)
 
 		#Striped row tags
@@ -3930,7 +4277,22 @@ def openFiltroWindow():
 		longitudLateral= longitudLaterales/(diametroLaterales*0.0254)
 		listaArbolDreanejFiltros.append(longitudLateral)
 
-		newDataTreeview(arbolDrenajeFiltros,listaArbolDreanejFiltros)
+
+		listaEncabezados = ["B{} = Ancho del múltiple".format(getSub("mul")),
+		"L{} = Longitud de los laterales".format(getSub("lat")),
+		"N{} = Número de laterales por unidad de filtración".format(getSub("lat")),
+		" = Número de orificios por lateral",
+		"N{} = Número de orificios por unidad de filtración".format(getSub("ori")),
+		"Área total de orificios/ área filtrante",
+		"Área transversal del lateral / área de orificios del lateral",
+		"Área transversal del múltiple / área transversal de laterales",
+		"Longitud de lateral / diámetro de lateral",]
+		
+		for i in range(0, len(listaEncabezados)):
+			listaTemp= list()
+			listaTemp.append(listaEncabezados[i])
+			listaTemp.append(listaArbolDreanejFiltros[i])
+			newDataTreeview(arbolDrenajeFiltros,listaTemp)
 		
 		drenajeFiltrosWindow.mainloop()
 	
@@ -4233,7 +4595,7 @@ def openFiltroWindow():
 
 		botonLimpiarEntradasDrenaje = HoverButton(drenajeFiltrosMainFrame, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: newEntryFiltroDrenaje(listaEntradaDrenaje))
 		botonLimpiarEntradasDrenaje.place(x=0, y=altIn+80)		
-		#Pendiente: Botón Limpiar Entradas
+		
 	
 		
 		
@@ -6521,7 +6883,7 @@ def openFiltroWindow():
 		materialTuberiaLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
 
 
-		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="30", state="readonly")
+		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
 		
@@ -6675,7 +7037,7 @@ def openFiltroWindow():
 		materialTuberiaLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
 
 
-		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="30", state="readonly")
+		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
 
@@ -7093,7 +7455,7 @@ def openFiltroWindow():
 		materialTuberiaLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
 
 
-		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTotalLavadoMain, width="30", state="readonly")
+		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTotalLavadoMain, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
 
@@ -7283,7 +7645,7 @@ def openFiltroWindow():
 		materialTuberiaLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
 
 
-		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTotalLavadoMain, width="30", state="readonly")
+		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTotalLavadoMain, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
 
@@ -7465,7 +7827,7 @@ def openFiltroWindow():
 		materialTuberiaLabel= Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
 
 
-		diametroNominalTuberiaLavado = ttk.Combobox(frameverificacionVelocidadesDiseñoTuberiaMain, width="30", state="readonly")
+		diametroNominalTuberiaLavado = ttk.Combobox(frameverificacionVelocidadesDiseñoTuberiaMain, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 		diametroNominalTuberiaLavadoLabel= Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
 
@@ -8401,7 +8763,7 @@ def openFiltroWindow():
 		materialTuberiaLabel= Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione el material de la tubería de lavado:",font=("Yu Gothic bold",10))
 		
 
-		diametroNominalTuberiaLavado = ttk.Combobox(framecanaletasDeLavadoYDimensionesFiltros, width="30", state="readonly")
+		diametroNominalTuberiaLavado = ttk.Combobox(framecanaletasDeLavadoYDimensionesFiltros, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 		diametroNominalTuberiaLavadoLabel= Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
 
@@ -9132,12 +9494,13 @@ def openFloculadorWindow():
 		
 		CFloculadorWindow = tk.Toplevel()
 		CFloculadorWindow.iconbitmap(bitmap='icons\\agua.ico')
-		CFloculadorWindow.geometry("1000x200") 
+		#Volver3
+		CFloculadorWindow.geometry("600x800") 
 		CFloculadorWindow.resizable(0,0)	
 		CFloculadorWindow.configure(background="#9DC4AA")
 
 		#Frame Treeview
-		arbolCFloculador_frame = LabelFrame(CFloculadorWindow, text="Principales caracterísiticas del filtro", font=("Yu Gothic bold", 11))
+		arbolCFloculador_frame = LabelFrame(CFloculadorWindow, text="Visualización de los cálculos para floculador alabama", font=("Yu Gothic bold", 11))
 		arbolCFloculador_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
@@ -9154,17 +9517,7 @@ def openFloculadorWindow():
 		sedScrollY.configure(command=arbolCFloculador.yview)
 		#Define columnas.
 		arbolCFloculador["columns"]= (
-		"V = Volumen floculador [m^3]",
-		"#c = Número de cámaras [und]",
-		"{} = Velocidad de flujo entre codos [m/s]".format(getSub("v")),
-		"H\' = Pérdida Pasamuro [m]",
-		"H\'\' = Perdida Codo [m]",
-		"H\'\'\' = Perdidas Orificio [m]",
-		"H = Perdida total floculador [m]",
-		"Pc = Perdidas de carga en las 12 cámaras [m]",
-		"G = Gradiente de mezcla [s^(-1)]",
-		"Gt = Numero de camp",
-		"P = Pendiente [%]"
+		"1","2","Unidades"
 		)
 
 		#Headings
@@ -9174,15 +9527,9 @@ def openFloculadorWindow():
 			arbolCFloculador.heading(col, text=col,anchor=CENTER)
 
 		for i in range(0,len(arbolCFloculador["columns"])) :
-				arbolCFloculador.column(f"#{i}",width=300, stretch=False)	
+				arbolCFloculador.column(f"#{i}",width=200, stretch=False)	
 
 		
-		arbolCFloculador.column("#3",width=600, stretch=False)
-		arbolCFloculador.column("#7",width=500, stretch=False)
-		arbolCFloculador.column("#8",width=600, stretch=False)
-		arbolCFloculador.column("#9",width=600, stretch=False)
-		arbolCFloculador.column("#10",width=600, stretch=False)
-
 		arbolCFloculador.column("#0",width=0, stretch=False)
 
 		#Striped row tags
@@ -9206,16 +9553,48 @@ def openFloculadorWindow():
 		for valor in listaValores:
 			listaEntrada.append(valor)
 
-		newDataTreeview(arbolCFloculador,listaEntrada)
+		listaEncabezados = [
+		"V = Volumen floculador [m^3]",
+		"#c = Número de cámaras [und]",
+		"{} = Velocidad de flujo entre codos [m/s]".format(getSub("v")),
+		"H\' = Pérdida Pasamuro [m]",
+		"H\'\' = Perdida Codo [m]",
+		"H\'\'\' = Perdidas Orificio [m]",
+		"H = Perdida total floculador [m]",
+		"Pc = Perdidas de carga en las 12 cámaras [m]",
+		"G = Gradiente de mezcla [s^(-1)]",
+		"Gt = Numero de camp",
+		"P = Pendiente [%]"
+		]
+		listaUnidades = ["m^3",
+				"unid",
+				"m/s",
+				"m",
+				"m",
+				"m",
+				"m",
+				"m",
+				"s^(-1)",
+				"",
+				"%",
+				]
+		for i in range(0, len(listaEncabezados)):
+			listaTemp=list()
+			listaTemp.append(listaEncabezados[i])
+			listaTemp.append(listaEntrada[i])
+			listaTemp.append(listaUnidades[i])
+			newDataTreeview(arbolCFloculador,listaTemp)
+
 		if velFlujoCodos>=0.25 and velFlujoCodos<=0.65:
 			messagebox.showinfo(title="Información", message="El valor de la velocidad de flujo entre codos cumple. Se encuentra entre 0.25 y 0.65.")
 		else:
-			messagebox.showarning(title="¡Cuidado!", message="El valor de la velocidad de flujo entre codos NO cumple. No se encuentra entre 0.25 y 0.65.")
+			
+			messagebox.showwarning(title="¡Cuidado!", message="El valor de la velocidad de flujo entre codos NO cumple. No se encuentra entre 0.25 y 0.65.")
 		
 		if gradienteMezcla>=35 and gradienteMezcla<=55:
 			messagebox.showinfo(title="Información", message="El valor del gradiente de mezcla cumple. Se encuentra entre 35 y 55.")
 		else:
-			messagebox.showarning(title="¡Cuidado!", message="El valor del gradiente de mezcla NO cumple. No se encuentra entre 35 y 55.")
+			messagebox.showwarning(title="¡Cuidado!", message="El valor del gradiente de mezcla NO cumple. No se encuentra entre 35 y 55.")
 		
 		
 		
@@ -9232,7 +9611,7 @@ def openFloculadorWindow():
 				messagebox.showwarning(title="Error", message="Uno o varios de los valores ingresados no son números")
 				return None
 		##########Datos eliminar
-		listaE2 = [57.26,20.00,0.39,0.45964,0.51,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]		
+		listaE2 = [57.26,20.00,0.39,0.45964,0.51,1.30,1.60,2.75,998.30,0.00000101,0,20.00,0.76,0.80]		
 		############
 		listaE=list()
 		numeroCamaras=12
@@ -9454,7 +9833,7 @@ def openFloculadorWindow():
 	#Borrar
 	listaValores=[57.26,20.00,0.39,0.45964,0.508,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]
 	for i in range(0, len(listaValores)):
-		if i == 9:
+		if i == 10:
 			pass
 		else:
 			listaEntry[i].insert(0, listaValores[i])
