@@ -8159,6 +8159,7 @@ def openFiltroWindow():
 				except:
 					messagebox.showwarning(title="Error", message="Alguno de los valores ingresados no es un número")
 					return None
+				
 		if len(listaARetenida) != len(listaNTamiz)/2:
 			messagebox.showwarning(title="Error", message="La cantidad de datos ingresados en los rangos de número de tamiz no coincide con la cantidad de datos de arena retendia.")
 			return None
