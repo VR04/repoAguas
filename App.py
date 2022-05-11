@@ -9612,7 +9612,11 @@ def openFloculadorWindow():
 				messagebox.showwarning(title="Error", message="Uno o varios de los valores ingresados no son números")
 				return None
 		##########Datos eliminar
-		listaE2 = [57.26,20.00,0.39,0.45964,0.51,1.30,1.60,2.75,998.30,0.00000101,0,20.00,0.76,0.80]		
+		# listaE2 = [57.26,20.00,0.39,0.45964,0.51,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]	
+
+		# [caudalDiseño,tiempoFloculacion,diametroInterconexion,diametroInterno,diametroExterno,
+# 				ancho,longitud,altura,densidadAgua,viscocidadCinematica,gravedad,temperatura,
+# 				coeficienteDescarga,coeficienteDescargaOrificios]	
 		############
 		listaE=list()
 		numeroCamaras=12
@@ -9697,6 +9701,7 @@ def openFloculadorWindow():
 		velocidadFlujoCodos=listaE[5-4]/listaE[12-4]
 		arenaOrificio= pi*(diametroInternoOrificio**2)*(1/4)
 		coeficienteDescarga= listaE[23-4]
+
 		perdidaPasamuros= (listaE[5-4]**2)/((2*listaE[20-4])*(coeficienteDescarga**2)*(listaE[12-4]**2))
 		perdidaCodo= (0.4)*((velocidadFlujoCodos**2)/(2*listaE[20-4]))
 		perdidaOrificio= (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(arenaOrificio**2))
