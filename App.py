@@ -534,9 +534,8 @@ def openSedWindow():
 		arboldeterminacionParametrosBasicosDiseno.tag_configure("oddrow", background= "#9DC4AA")
 
 
-
-
 		listadeterminacionParametrosBasicosDiseno=list()
+
 
 		if tipoCelda == "Conductos cuadrados":
 			encabezadosLista=["Longitud ocupada por los módulos (longitud de tanque)",
@@ -577,7 +576,26 @@ def openSedWindow():
 						"m/d",
 						"",
 						"min"]
-		listadeterminacionParametrosBasicosDiseno= [0]*len(encabezadosLista)
+		#Volver2
+		listaSalidaDatosEntradaPrametrosBasicosCalculos = datosEntradaParametrosBasicosCalculos(tipoFloc, tipoCelda, materialTipoCelda, dimensionesTipoCeldaMaterial, anguloInclinacion, numeroUnidades,distanciaPlacas, caudalMedio,factorMayoracionCaudalMD, temperatura)
+		# listaSalida=[0 = tipoFloc,1 = tipoCelda,
+		# 2= materialCelda, 3= dimensiones,
+		# 4= espesor,5= anguloInclinacion,6= eficienciaCritica, 
+		# 7=caudalDiseño, 8=numeroUnidades,
+		# 9= caudalUnidad,10=viscosidadCinematica,11=distanciaPlacas]
+
+		
+
+		listadeterminacionParametrosBasicosDiseno.append(longitudPlacas)
+		anchoModulos=float(dimensionesTipoCeldaMaterial[dimensionesTipoCeldaMaterial.find('x')+2:])/1000.0
+		listadeterminacionParametrosBasicosDiseno.append(anchoModulos)
+		largoPlaca = float(dimensionesTipoCeldaMaterial[:dimensionesTipoCeldaMaterial.find('x')-1])/1000.0
+		listadeterminacionParametrosBasicosDiseno.append(largoPlaca)
+		cargaSuperficial = (listaSalidaDatosEntradaPrametrosBasicosCalculos[9]*86400.0)/(longitudPlacas*anchoModulos)
+		listadeterminacionParametrosBasicosDiseno.append(cargaSuperficial)
+		numeroConductosLargoUnidad= 0
+		listadeterminacionParametrosBasicosDiseno.append()
+		
 
 
 		for i in range(0, len(encabezadosLista)):
@@ -917,7 +935,7 @@ def openSedWindow():
 			
 	
 		'''
-		#VolverAntes
+		
 		inicialesComboBox=["Seleccione el tipo de floc","Seleccione el tipo de celda",
 		f"Seleccione el material de {tipoCelda}", f"Seleccione las dimensiones de {tipoCelda}", "Seleccione el número de unidades","Seleccione la temperatura"]
 		
@@ -1029,6 +1047,12 @@ def openSedWindow():
 		dimensionesTipoCeldaMaterial = parametrosCombobox[3]
 		numeroUnidades = parametrosCombobox[4]
 		temperatura=  parametrosCombobox[5]
+
+
+
+
+
+		
 
 
 		#####
@@ -9495,7 +9519,6 @@ def openFloculadorWindow():
 		
 		CFloculadorWindow = tk.Toplevel()
 		CFloculadorWindow.iconbitmap(bitmap='icons\\agua.ico')
-		#Volver3
 		CFloculadorWindow.geometry("600x800") 
 		CFloculadorWindow.resizable(0,0)	
 		CFloculadorWindow.configure(background="#9DC4AA")
