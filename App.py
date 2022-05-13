@@ -8,6 +8,7 @@ import pandas as pd
 from math import pi,sin,cos,tan,sqrt,log10
 from functools import partial
 
+
 class HoverButton(Button):
 		def __init__(self, master, **kw):
 			Button.__init__(self,master=master,**kw)
@@ -143,9 +144,10 @@ def openSedWindow():
 			arbol.delete(j)
 		contador=0
 	
-	def datosEntradaParametrosBasicosCalculos(tipoFloc, tipoCelda, materialCelda, dimensiones, anguloInclinacion, numeroUnidades,distanciaPlacas, caudalMD,factorMayoracionCMD, temperatura):
+	def datosEntradaParametrosBasicosCalculos(tipoFloc, tipoCelda, materialCelda, dimensiones, anguloInclinacion, numeroUnidades2,distanciaPlacas, caudalMD,factorMayoracionCMD, temperatura2):
 			#ENTRANVALORESYAOBTENIDOS. CON get()
-			
+			numeroUnidades = float(numeroUnidades2)
+			temperatura = float(temperatura2)
 			oP2 = {
 			"Placas planas paralelas": ("Acero inoxidable AISI 316","Polietileno alta densidad (HDPE)","Poliestireno de alto impacto(HIPS)") , 
 			"Placas onduladas paralelas":("Acrilonitrilo butadieno estireno (ABS)","Polipropileno (PP)"),
@@ -586,16 +588,42 @@ def openSedWindow():
 
 		
 
-		listadeterminacionParametrosBasicosDiseno.append(longitudPlacas)
+		listadeterminacionParametrosBasicosDiseno.append(round(longitudPlacas,3))
 		anchoModulos=float(dimensionesTipoCeldaMaterial[dimensionesTipoCeldaMaterial.find('x')+2:])/1000.0
-		listadeterminacionParametrosBasicosDiseno.append(anchoModulos)
+		listadeterminacionParametrosBasicosDiseno.append(round(anchoModulos,3))
 		largoPlaca = float(dimensionesTipoCeldaMaterial[:dimensionesTipoCeldaMaterial.find('x')-1])/1000.0
-		listadeterminacionParametrosBasicosDiseno.append(largoPlaca)
+		listadeterminacionParametrosBasicosDiseno.append(round(largoPlaca,3))
 		cargaSuperficial = (listaSalidaDatosEntradaPrametrosBasicosCalculos[9]*86400.0)/(longitudPlacas*anchoModulos)
-		listadeterminacionParametrosBasicosDiseno.append(cargaSuperficial)
-		numeroConductosLargoUnidad= 0
-		listadeterminacionParametrosBasicosDiseno.append()
+		listadeterminacionParametrosBasicosDiseno.append(round(cargaSuperficial,3))
+		numeroConductosLargoUnidad= round(((longitudPlacas*sin(anguloInclinacion*(pi/180.0))) + (listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))/((listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)+(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0)),0)
+		listadeterminacionParametrosBasicosDiseno.append(round(numeroConductosLargoUnidad,0))
+		velocidadPromedioFlujoConductos = listaSalidaDatosEntradaPrametrosBasicosCalculos[9]/((numeroConductosLargoUnidad)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)*(anchoModulos))
 		
+		print("vel", velocidadPromedioFlujoConductos)
+		print(listaSalidaDatosEntradaPrametrosBasicosCalculos[9],numeroConductosLargoUnidad,(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0),(anchoModulos))
+		listadeterminacionParametrosBasicosDiseno.append(round(velocidadPromedioFlujoConductos,4))
+		longitudRelativaSedimentador =  largoPlaca/(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)
+		listadeterminacionParametrosBasicosDiseno.append(round(longitudRelativaSedimentador,3))
+		longitudRelativaRegionTransicion = (0.058*velocidadPromedioFlujoConductos*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0))/listaSalidaDatosEntradaPrametrosBasicosCalculos[10]
+		
+		listadeterminacionParametrosBasicosDiseno.append(round(longitudRelativaRegionTransicion,3))
+		
+		if longitudRelativaRegionTransicion<longitudRelativaSedimentador:
+			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador-longitudRelativaRegionTransicion
+		else:
+			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador
+
+		listadeterminacionParametrosBasicosDiseno.append(round(longitudRelativaRegionTransicionCorregida,2))
+		#ERROR
+		print(listaSalidaDatosEntradaPrametrosBasicosCalculos[6],(velocidadPromedioFlujoConductos*86400.0),sin(anguloInclinacion*pi*(1/180.0)),longitudRelativaRegionTransicionCorregida,cos(anguloInclinacion*pi*(1/180.0)))
+		
+		velocidadSedimentacionCritica = ((listaSalidaDatosEntradaPrametrosBasicosCalculos[6])*(velocidadPromedioFlujoConductos*86400.0))/((sin(anguloInclinacion*pi*(1/180.0)))+(longitudRelativaRegionTransicionCorregida*cos(anguloInclinacion*pi*(1/180.0))))
+		
+		listadeterminacionParametrosBasicosDiseno.append(round(velocidadSedimentacionCritica,3))
+		numeroReynolds = round(velocidadPromedioFlujoConductos*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100)*(1/listaSalidaDatosEntradaPrametrosBasicosCalculos[10]) ,0)
+		listadeterminacionParametrosBasicosDiseno.append(numeroReynolds)
+		tiempoRetencionCadaConjunto = (largoPlaca/velocidadPromedioFlujoConductos)/60.0
+		listadeterminacionParametrosBasicosDiseno.append(round(tiempoRetencionCadaConjunto,3))
 
 
 		for i in range(0, len(encabezadosLista)):
