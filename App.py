@@ -480,7 +480,7 @@ def openSedWindow():
 		
 		determinacionParametrosBasicosDisenoWindow = tk.Toplevel()
 		determinacionParametrosBasicosDisenoWindow.iconbitmap(bitmap='icons\\agua.ico')
-		determinacionParametrosBasicosDisenoWindow.geometry("600x400") 
+		determinacionParametrosBasicosDisenoWindow.geometry("620x420") 
 		determinacionParametrosBasicosDisenoWindow.resizable(0,0)	
 		determinacionParametrosBasicosDisenoWindow.configure(background="#9DC4AA")
 
@@ -492,16 +492,16 @@ def openSedWindow():
 		arboldeterminacionParametrosBasicosDiseno_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		sedScrollX=Scrollbar(arboldeterminacionParametrosBasicosDiseno_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
+		#sedScrollX=Scrollbar(arboldeterminacionParametrosBasicosDiseno_frame,orient=HORIZONTAL)
+		#sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arboldeterminacionParametrosBasicosDiseno_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arboldeterminacionParametrosBasicosDiseno= ttk.Treeview(arboldeterminacionParametrosBasicosDiseno_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arboldeterminacionParametrosBasicosDiseno= ttk.Treeview(arboldeterminacionParametrosBasicosDiseno_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set)
 		arboldeterminacionParametrosBasicosDiseno.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		sedScrollX.configure(command=arboldeterminacionParametrosBasicosDiseno.xview)
+		# sedScrollX.configure(command=arboldeterminacionParametrosBasicosDiseno.xview)
 		sedScrollY.configure(command=arboldeterminacionParametrosBasicosDiseno.yview)
 		#Define columnas.
 		arboldeterminacionParametrosBasicosDiseno["columns"]= (
@@ -527,9 +527,13 @@ def openSedWindow():
 		for col in arboldeterminacionParametrosBasicosDiseno["columns"]:
 			arboldeterminacionParametrosBasicosDiseno.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
 
-		for i in range(0,len(arboldeterminacionParametrosBasicosDiseno["columns"])+1) :
-				arboldeterminacionParametrosBasicosDiseno.column(f"#{i}",width=700, stretch=False)	
+		arboldeterminacionParametrosBasicosDiseno.column("#1",width=400, stretch=False)
+		arboldeterminacionParametrosBasicosDiseno.column("#2",width=100, stretch=False)
+		arboldeterminacionParametrosBasicosDiseno.column("#3",width=100, stretch=False)
+					
 		arboldeterminacionParametrosBasicosDiseno.column("#0",width=0, stretch=False)
+		
+		
 
 		#Striped row tags
 		arboldeterminacionParametrosBasicosDiseno.tag_configure("evenrow", background= "#1FCCDB")
@@ -578,7 +582,7 @@ def openSedWindow():
 						"m/d",
 						"",
 						"min"]
-		#Volver2
+		
 		listaSalidaDatosEntradaPrametrosBasicosCalculos = datosEntradaParametrosBasicosCalculos(tipoFloc, tipoCelda, materialTipoCelda, dimensionesTipoCeldaMaterial, anguloInclinacion, numeroUnidades,distanciaPlacas, caudalMedio,factorMayoracionCaudalMD, temperatura)
 		# listaSalida=[0 = tipoFloc,1 = tipoCelda,
 		# 2= materialCelda, 3= dimensiones,
@@ -599,8 +603,6 @@ def openSedWindow():
 		listadeterminacionParametrosBasicosDiseno.append(round(numeroConductosLargoUnidad,0))
 		velocidadPromedioFlujoConductos = listaSalidaDatosEntradaPrametrosBasicosCalculos[9]/((numeroConductosLargoUnidad)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)*(anchoModulos))
 		
-		print("vel", velocidadPromedioFlujoConductos)
-		print(listaSalidaDatosEntradaPrametrosBasicosCalculos[9],numeroConductosLargoUnidad,(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0),(anchoModulos))
 		listadeterminacionParametrosBasicosDiseno.append(round(velocidadPromedioFlujoConductos,4))
 		longitudRelativaSedimentador =  largoPlaca/(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)
 		listadeterminacionParametrosBasicosDiseno.append(round(longitudRelativaSedimentador,3))
@@ -614,9 +616,7 @@ def openSedWindow():
 			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador
 
 		listadeterminacionParametrosBasicosDiseno.append(round(longitudRelativaRegionTransicionCorregida,2))
-		#ERROR
-		print(listaSalidaDatosEntradaPrametrosBasicosCalculos[6],(velocidadPromedioFlujoConductos*86400.0),sin(anguloInclinacion*pi*(1/180.0)),longitudRelativaRegionTransicionCorregida,cos(anguloInclinacion*pi*(1/180.0)))
-		
+	
 		velocidadSedimentacionCritica = ((listaSalidaDatosEntradaPrametrosBasicosCalculos[6])*(velocidadPromedioFlujoConductos*86400.0))/((sin(anguloInclinacion*pi*(1/180.0)))+(longitudRelativaRegionTransicionCorregida*cos(anguloInclinacion*pi*(1/180.0))))
 		
 		listadeterminacionParametrosBasicosDiseno.append(round(velocidadSedimentacionCritica,3))
@@ -674,13 +674,14 @@ def openSedWindow():
 			messagebox.showwarning(title="Error", message="Alguno de los datos ingresados no es un número.")
 			return None	
 
+
 		''' 
 	listaCanaletasRecoleccionAgua = [distanciaCanaletasRecoleccion,longitudPlacas]
 
 		'''
 		canaletasRecoleccionAguaWindow = tk.Toplevel()
 		canaletasRecoleccionAguaWindow.iconbitmap(bitmap='icons\\agua.ico')
-		canaletasRecoleccionAguaWindow.geometry("600x400") 
+		canaletasRecoleccionAguaWindow.geometry("520x200") 
 		canaletasRecoleccionAguaWindow.resizable(0,0)	
 		canaletasRecoleccionAguaWindow.configure(background="#9DC4AA")
 
@@ -692,20 +693,20 @@ def openSedWindow():
 		arbolcanaletasRecoleccionAgua_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		sedScrollX=Scrollbar(arbolcanaletasRecoleccionAgua_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollX=Scrollbar(arbolcanaletasRecoleccionAgua_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arbolcanaletasRecoleccionAgua_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolcanaletasRecoleccionAgua= ttk.Treeview(arbolcanaletasRecoleccionAgua_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolcanaletasRecoleccionAgua= ttk.Treeview(arbolcanaletasRecoleccionAgua_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set
 		arbolcanaletasRecoleccionAgua.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		sedScrollX.configure(command=arbolcanaletasRecoleccionAgua.xview)
+		#sedScrollX.configure(command=arbolcanaletasRecoleccionAgua.xview)
 		sedScrollY.configure(command=arbolcanaletasRecoleccionAgua.yview)
 		#Define columnas.
 		arbolcanaletasRecoleccionAgua["columns"]= (
-		"1","2","3")
+		"1","2","Unidades")
 
 		#Headings
 		arbolcanaletasRecoleccionAgua.heading("#0",text="ID", anchor=CENTER)
@@ -726,27 +727,39 @@ def openSedWindow():
 
 		for col in arbolcanaletasRecoleccionAgua["columns"]:
 			arbolcanaletasRecoleccionAgua.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
-
-		for i in range(0,len(arbolcanaletasRecoleccionAgua["columns"])+1) :
-				arbolcanaletasRecoleccionAgua.column(f"#{i}",width=700, stretch=False)	
+		
+		
 		arbolcanaletasRecoleccionAgua.column("#0",width=0, stretch=False)
+		arbolcanaletasRecoleccionAgua.column("#1",width=300, stretch=False)
+		arbolcanaletasRecoleccionAgua.column("#2",width=100, stretch=False)
+		arbolcanaletasRecoleccionAgua.column("#3",width=100, stretch=False)
+		
+
 
 		#Striped row tags
 		arbolcanaletasRecoleccionAgua.tag_configure("evenrow", background= "#1FCCDB")
 		arbolcanaletasRecoleccionAgua.tag_configure("oddrow", background= "#9DC4AA")
 
-
-
-
 		listacanaletasRecoleccionAgua=list()
-
 
 		encabezadosLista=["Distancia entre canaletas de recolección",
 		"Número de canaletas de recolección por módulo",
 		"Distancia entre canaletas de recolección (ajustado)"]
 		unidadesLista=["m","und","m"]
 
-		listacanaletasRecoleccionAgua=[0]*len(encabezadosLista)
+
+		
+		listacanaletasRecoleccionAgua.append(round(distanciaCanaletasRecoleccion,3))
+		
+		numeroCanaletasRecoleccionModulo= int(longitudPlacas/distanciaCanaletasRecoleccion)
+		
+		listacanaletasRecoleccionAgua.append(numeroCanaletasRecoleccionModulo)
+
+		distanciaCanaletasRecoleccionAjustado = longitudPlacas/numeroCanaletasRecoleccionModulo
+		
+		listacanaletasRecoleccionAgua.append(round(distanciaCanaletasRecoleccionAjustado,3))
+		
+		
 		for i in range(0, len(encabezadosLista)):
 			listaTemp=list()
 			listaTemp.append(encabezadosLista[i])
@@ -857,13 +870,9 @@ def openSedWindow():
 
 
 		
-
-
-		##
-
 		tiempoRetencionTotalTanqueWindow = tk.Toplevel()
 		tiempoRetencionTotalTanqueWindow.iconbitmap(bitmap='icons\\agua.ico')
-		tiempoRetencionTotalTanqueWindow.geometry("600x400") 
+		tiempoRetencionTotalTanqueWindow.geometry("560x200") 
 		tiempoRetencionTotalTanqueWindow.resizable(0,0)	
 		tiempoRetencionTotalTanqueWindow.configure(background="#9DC4AA")
 
@@ -888,7 +897,7 @@ def openSedWindow():
 		sedScrollY.configure(command=arboltiempoRetencionTotalTanque.yview)
 		#Define columnas.
 		arboltiempoRetencionTotalTanque["columns"]= (
-		"1","2","3")
+		"1","2","Unidades")
 
 		#Headings
 		arboltiempoRetencionTotalTanque.heading("#0",text="ID", anchor=CENTER)
@@ -897,7 +906,7 @@ def openSedWindow():
 		def formulaN(archivo):
 			forWindow= tk.Toplevel()
 			forWindow.iconbitmap(bitmap='icons\\agua.ico')
-			forWindow.geometry("1000x350") 
+			forWindow.geometry("540x80") 
 			forWindow.resizable(0,0)
 			forWindow.configure(background="#9DC4AA")
 			framefor=Frame(forWindow)
@@ -910,16 +919,15 @@ def openSedWindow():
 		for col in arboltiempoRetencionTotalTanque["columns"]:
 			arboltiempoRetencionTotalTanque.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
 
-		for i in range(0,len(arboltiempoRetencionTotalTanque["columns"])+1) :
-				arboltiempoRetencionTotalTanque.column(f"#{i}",width=700, stretch=False)	
+			
 		arboltiempoRetencionTotalTanque.column("#0",width=0, stretch=False)
+		arboltiempoRetencionTotalTanque.column("#1",width=340, stretch=False)
+		arboltiempoRetencionTotalTanque.column("#2",width=100, stretch=False)
+		arboltiempoRetencionTotalTanque.column("#3",width=100, stretch=False)
 
 		#Striped row tags
 		arboltiempoRetencionTotalTanque.tag_configure("evenrow", background= "#1FCCDB")
 		arboltiempoRetencionTotalTanque.tag_configure("oddrow", background= "#9DC4AA")
-
-
-
 
 		listatiempoRetencionTotalTanque=list()
 
@@ -937,7 +945,50 @@ def openSedWindow():
 						"m",
 						"m^3",
 						"min"]
-		listatiempoRetencionTotalTanque=[0]*len(encabezadosLista)
+
+		
+		#CalculosDeterminacionParametrosBasicos
+
+		listaSalidaDatosEntradaPrametrosBasicosCalculos = datosEntradaParametrosBasicosCalculos(tipoFloc, tipoCelda, materialTipoCelda, dimensionesTipoCeldaMaterial, anguloInclinacion, numeroUnidades,distanciaPlacas, caudalMedio,factorMayoracionCaudalMD, temperatura)
+				
+		anchoModulos=float(dimensionesTipoCeldaMaterial[dimensionesTipoCeldaMaterial.find('x')+2:])/1000.0
+		largoPlaca = float(dimensionesTipoCeldaMaterial[:dimensionesTipoCeldaMaterial.find('x')-1])/1000.0
+		cargaSuperficial = (listaSalidaDatosEntradaPrametrosBasicosCalculos[9]*86400.0)/(longitudPlacas*anchoModulos)
+		numeroConductosLargoUnidad= round(((longitudPlacas*sin(anguloInclinacion*(pi/180.0))) + (listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))/((listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)+(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0)),0)
+		velocidadPromedioFlujoConductos = listaSalidaDatosEntradaPrametrosBasicosCalculos[9]/((numeroConductosLargoUnidad)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)*(anchoModulos))
+		longitudRelativaSedimentador =  largoPlaca/(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)
+		longitudRelativaRegionTransicion = (0.058*velocidadPromedioFlujoConductos*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0))/listaSalidaDatosEntradaPrametrosBasicosCalculos[10]
+		if longitudRelativaRegionTransicion<longitudRelativaSedimentador:
+			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador-longitudRelativaRegionTransicion
+		else:
+			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador
+
+		velocidadSedimentacionCritica = ((listaSalidaDatosEntradaPrametrosBasicosCalculos[6])*(velocidadPromedioFlujoConductos*86400.0))/((sin(anguloInclinacion*pi*(1/180.0)))+(longitudRelativaRegionTransicionCorregida*cos(anguloInclinacion*pi*(1/180.0))))
+		numeroReynolds = round(velocidadPromedioFlujoConductos*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100)*(1/listaSalidaDatosEntradaPrametrosBasicosCalculos[10]) ,0)
+		tiempoRetencionCadaConjunto = (largoPlaca/velocidadPromedioFlujoConductos)/60.0
+	
+		#CalculosCanaletasRecoleccion
+
+		numeroCanaletasRecoleccionModulo= int(longitudPlacas/distanciaCanaletasRecoleccion)
+		distanciaCanaletasRecoleccionAjustado = longitudPlacas/numeroCanaletasRecoleccionModulo		
+		#Volver2
+
+		listatiempoRetencionTotalTanque.append(round(distanciaVerticalDistribucionPlacas,3))
+		alturaPlacas = largoPlaca*sin(anguloInclinacion*pi*(1/180.0))
+		listatiempoRetencionTotalTanque.append(round(alturaPlacas,3))	
+
+		nivelAguaSobrePlacas = distanciaCanaletasRecoleccionAjustado*(velocidadPromedioFlujoConductos*86400.0)/432.0
+		listatiempoRetencionTotalTanque.append(round(nivelAguaSobrePlacas,3))
+
+		alturaSedimentacion = distanciaVerticalDistribucionPlacas+alturaPlacas+nivelAguaSobrePlacas
+		listatiempoRetencionTotalTanque.append(round(alturaSedimentacion,3))
+		
+		volumenSedimentacionTanque = alturaSedimentacion*(longitudPlacas)*(anchoModulos) - ((numeroConductosLargoUnidad -1.0)*(largoPlaca)*(anchoModulos)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))
+		listatiempoRetencionTotalTanque.append(round(volumenSedimentacionTanque,3))
+
+		tiempoRetencionTotalResultado = volumenSedimentacionTanque/(60.0*listaSalidaDatosEntradaPrametrosBasicosCalculos[9])
+		listatiempoRetencionTotalTanque.append(round(tiempoRetencionTotalResultado,3))
+
 
 		for i in range(0, len(encabezadosLista)):
 			listaTemp=list()
@@ -1198,7 +1249,7 @@ def openSedWindow():
 			("Seleccione el diámetro nominal de los orificios del múltiple de descarga")
 		'''
 
-		#Volver
+		
 
 		inicialesComboBox=["Seleccione el tipo de floc","Seleccione el tipo de celda",
 		f"Seleccione el material de {tipoCelda}", f"Seleccione las dimensiones de {tipoCelda}", "Seleccione el número de unidades","Seleccione la temperatura",
