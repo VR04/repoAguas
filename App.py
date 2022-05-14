@@ -884,16 +884,16 @@ def openSedWindow():
 		arboltiempoRetencionTotalTanque_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		sedScrollX=Scrollbar(arboltiempoRetencionTotalTanque_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
+		#sedScrollX=Scrollbar(arboltiempoRetencionTotalTanque_frame,orient=HORIZONTAL)
+		#sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arboltiempoRetencionTotalTanque_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arboltiempoRetencionTotalTanque= ttk.Treeview(arboltiempoRetencionTotalTanque_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arboltiempoRetencionTotalTanque= ttk.Treeview(arboltiempoRetencionTotalTanque_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set,
 		arboltiempoRetencionTotalTanque.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		sedScrollX.configure(command=arboltiempoRetencionTotalTanque.xview)
+		#sedScrollX.configure(command=arboltiempoRetencionTotalTanque.xview)
 		sedScrollY.configure(command=arboltiempoRetencionTotalTanque.yview)
 		#Define columnas.
 		arboltiempoRetencionTotalTanque["columns"]= (
@@ -1137,7 +1137,7 @@ def openSedWindow():
 		#####
 		dimensionesDelSedimentadorWindow = tk.Toplevel()
 		dimensionesDelSedimentadorWindow.iconbitmap(bitmap='icons\\agua.ico')
-		dimensionesDelSedimentadorWindow.geometry("600x400") 
+		dimensionesDelSedimentadorWindow.geometry("520x400") 
 		dimensionesDelSedimentadorWindow.resizable(0,0)	
 		dimensionesDelSedimentadorWindow.configure(background="#9DC4AA")
 
@@ -1149,16 +1149,16 @@ def openSedWindow():
 		arboldimensionesDelSedimentador_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		sedScrollX=Scrollbar(arboldimensionesDelSedimentador_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollX=Scrollbar(arboldimensionesDelSedimentador_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arboldimensionesDelSedimentador_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arboldimensionesDelSedimentador= ttk.Treeview(arboldimensionesDelSedimentador_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arboldimensionesDelSedimentador= ttk.Treeview(arboldimensionesDelSedimentador_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set
 		arboldimensionesDelSedimentador.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		sedScrollX.configure(command=arboldimensionesDelSedimentador.xview)
+		#sedScrollX.configure(command=arboldimensionesDelSedimentador.xview)
 		sedScrollY.configure(command=arboldimensionesDelSedimentador.yview)
 		#Define columnas.
 		arboldimensionesDelSedimentador["columns"]= (
@@ -1184,9 +1184,10 @@ def openSedWindow():
 		for col in arboldimensionesDelSedimentador["columns"]:
 			arboldimensionesDelSedimentador.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
 
-		for i in range(0,len(arboldimensionesDelSedimentador["columns"])+1) :
-				arboldimensionesDelSedimentador.column(f"#{i}",width=700, stretch=False)	
 		arboldimensionesDelSedimentador.column("#0",width=0, stretch=False)
+		arboldimensionesDelSedimentador.column("#1",width=300, stretch=False)
+		arboldimensionesDelSedimentador.column("#2",width=100, stretch=False)
+		arboldimensionesDelSedimentador.column("#3",width=100, stretch=False)
 
 		#Striped row tags
 		arboldimensionesDelSedimentador.tag_configure("evenrow", background= "#1FCCDB")
@@ -1218,9 +1219,68 @@ def openSedWindow():
 						"m",
 						"m",
 						"m"]
+		
+		##DatosDeterminacionParametrosBasicosDiseño
+		listaSalidaDatosEntradaPrametrosBasicosCalculos = datosEntradaParametrosBasicosCalculos(tipoFloc, tipoCelda, materialTipoCelda, dimensionesTipoCeldaMaterial, anguloInclinacion, numeroUnidades,distanciaPlacas, caudalMedio,factorMayoracionCaudalMD, temperatura)
+				
+		anchoModulos=float(dimensionesTipoCeldaMaterial[dimensionesTipoCeldaMaterial.find('x')+2:])/1000.0
+		largoPlaca = float(dimensionesTipoCeldaMaterial[:dimensionesTipoCeldaMaterial.find('x')-1])/1000.0
+		cargaSuperficial = (listaSalidaDatosEntradaPrametrosBasicosCalculos[9]*86400.0)/(longitudPlacas*anchoModulos)
+		numeroConductosLargoUnidad= round(((longitudPlacas*sin(anguloInclinacion*(pi/180.0))) + (listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))/((listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)+(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0)),0)
+		velocidadPromedioFlujoConductos = listaSalidaDatosEntradaPrametrosBasicosCalculos[9]/((numeroConductosLargoUnidad)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)*(anchoModulos))
+		longitudRelativaSedimentador =  largoPlaca/(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)
+		longitudRelativaRegionTransicion = (0.058*velocidadPromedioFlujoConductos*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0))/listaSalidaDatosEntradaPrametrosBasicosCalculos[10]
+		if longitudRelativaRegionTransicion<longitudRelativaSedimentador:
+			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador-longitudRelativaRegionTransicion
+		else:
+			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador
+
+		velocidadSedimentacionCritica = ((listaSalidaDatosEntradaPrametrosBasicosCalculos[6])*(velocidadPromedioFlujoConductos*86400.0))/((sin(anguloInclinacion*pi*(1/180.0)))+(longitudRelativaRegionTransicionCorregida*cos(anguloInclinacion*pi*(1/180.0))))
+		numeroReynolds = round(velocidadPromedioFlujoConductos*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100)*(1/listaSalidaDatosEntradaPrametrosBasicosCalculos[10]) ,0)
+		tiempoRetencionCadaConjunto = (largoPlaca/velocidadPromedioFlujoConductos)/60.0
+
+		##Tiempo retención en el tanque
+
+		#CalculosCanaletasRecoleccion
+
+		numeroCanaletasRecoleccionModulo= int(longitudPlacas/distanciaCanaletasRecoleccion)
+		distanciaCanaletasRecoleccionAjustado = longitudPlacas/numeroCanaletasRecoleccionModulo		
+		
+
+		alturaPlacas = largoPlaca*sin(anguloInclinacion*pi*(1/180.0))
+	
+		nivelAguaSobrePlacas = distanciaCanaletasRecoleccionAjustado*(velocidadPromedioFlujoConductos*86400.0)/432.0
+		
+		alturaSedimentacion = distanciaVerticalDistribucionPlacas+alturaPlacas+nivelAguaSobrePlacas
+		
+		volumenSedimentacionTanque = alturaSedimentacion*(longitudPlacas)*(anchoModulos) - ((numeroConductosLargoUnidad -1.0)*(largoPlaca)*(anchoModulos)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))
+		
+		tiempoRetencionTotalResultado = volumenSedimentacionTanque/(60.0*listaSalidaDatosEntradaPrametrosBasicosCalculos[9])
+		
 
 
-		listadimensionesDelSedimentador= [0]*len(encabezadosLista)
+
+
+		##
+
+		listadimensionesDelSedimentador.append(round(bordeLibre,3))
+		listadimensionesDelSedimentador.append(round(espesorMuros,3))
+		listadimensionesDelSedimentador.append(round(pendienteTransversalTolva,3))
+		listadimensionesDelSedimentador.append(round(anchoBasePlanaTolva,3))
+		relacionAnchoLargoTanque = round((longitudPlacas/anchoModulos),1)
+		listadimensionesDelSedimentador.append(f"1:{relacionAnchoLargoTanque}")
+		alturaTolvaLodos = ((anchoModulos-anchoBasePlanaTolva)/2.0)*tan(pendienteTransversalTolva*pi*(1/180.0))
+		listadimensionesDelSedimentador.append(round(alturaTolvaLodos,3))
+		volumenTolvaLodos = (longitudPlacas)*(alturaTolvaLodos)*( anchoBasePlanaTolva+((anchoModulos-anchoBasePlanaTolva)/2.0))
+		listadimensionesDelSedimentador.append(round(volumenTolvaLodos,3))
+		largoTotalSedimentador = (2*espesorMuros)+longitudPlacas
+		listadimensionesDelSedimentador.append(round(largoTotalSedimentador,3))
+		anchoTotalSedimentador = (anchoModulos+espesorMuros)*float(numeroUnidades)
+		listadimensionesDelSedimentador.append(round(anchoTotalSedimentador,3))
+		alturaInternaTotalSedimentador = espesorMuros+alturaTolvaLodos+bordeLibre+alturaSedimentacion 
+		listadimensionesDelSedimentador.append(round(alturaInternaTotalSedimentador,3))
+		#Volver3
+
 
 		for i in range(0, len(encabezadosLista)):
 			listaTemp=list()
@@ -1429,9 +1489,10 @@ def openSedWindow():
 		for col in arboldisenoSistemaEvacuacionLodos["columns"]:
 			arboldisenoSistemaEvacuacionLodos.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
 
-		for i in range(0,len(arboldisenoSistemaEvacuacionLodos["columns"])+1) :
-				arboldisenoSistemaEvacuacionLodos.column(f"#{i}",width=700, stretch=False)	
 		arboldisenoSistemaEvacuacionLodos.column("#0",width=0, stretch=False)
+		arboldisenoSistemaEvacuacionLodos.column("#1",width=400, stretch=False)
+		arboldisenoSistemaEvacuacionLodos.column("#2",width=100, stretch=False)
+		arboldisenoSistemaEvacuacionLodos.column("#3",width=100, stretch=False)
 
 		#Striped row tags
 		arboldisenoSistemaEvacuacionLodos.tag_configure("evenrow", background= "#1FCCDB")
@@ -1468,9 +1529,81 @@ def openSedWindow():
 					"",
 					"m"]
 
+		##CalculosDimensionesSedimentador
+		##DatosDeterminacionParametrosBasicosDiseño
+		listaSalidaDatosEntradaPrametrosBasicosCalculos = datosEntradaParametrosBasicosCalculos(tipoFloc, tipoCelda, materialTipoCelda, dimensionesTipoCeldaMaterial, anguloInclinacion, numeroUnidades,distanciaPlacas, caudalMedio,factorMayoracionCaudalMD, temperatura)
+				
+		anchoModulos=float(dimensionesTipoCeldaMaterial[dimensionesTipoCeldaMaterial.find('x')+2:])/1000.0
+		largoPlaca = float(dimensionesTipoCeldaMaterial[:dimensionesTipoCeldaMaterial.find('x')-1])/1000.0
+		cargaSuperficial = (listaSalidaDatosEntradaPrametrosBasicosCalculos[9]*86400.0)/(longitudPlacas*anchoModulos)
+		numeroConductosLargoUnidad= round(((longitudPlacas*sin(anguloInclinacion*(pi/180.0))) + (listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))/((listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)+(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0)),0)
+		velocidadPromedioFlujoConductos = listaSalidaDatosEntradaPrametrosBasicosCalculos[9]/((numeroConductosLargoUnidad)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)*(anchoModulos))
+		longitudRelativaSedimentador =  largoPlaca/(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)
+		longitudRelativaRegionTransicion = (0.058*velocidadPromedioFlujoConductos*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0))/listaSalidaDatosEntradaPrametrosBasicosCalculos[10]
+		if longitudRelativaRegionTransicion<longitudRelativaSedimentador:
+			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador-longitudRelativaRegionTransicion
+		else:
+			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador
+
+		velocidadSedimentacionCritica = ((listaSalidaDatosEntradaPrametrosBasicosCalculos[6])*(velocidadPromedioFlujoConductos*86400.0))/((sin(anguloInclinacion*pi*(1/180.0)))+(longitudRelativaRegionTransicionCorregida*cos(anguloInclinacion*pi*(1/180.0))))
+		numeroReynolds = round(velocidadPromedioFlujoConductos*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100)*(1/listaSalidaDatosEntradaPrametrosBasicosCalculos[10]) ,0)
+		tiempoRetencionCadaConjunto = (largoPlaca/velocidadPromedioFlujoConductos)/60.0
+
+		##Tiempo retención en el tanque
+
+		#CalculosCanaletasRecoleccion
+
+		numeroCanaletasRecoleccionModulo= int(longitudPlacas/distanciaCanaletasRecoleccion)
+		distanciaCanaletasRecoleccionAjustado = longitudPlacas/numeroCanaletasRecoleccionModulo		
+		
+
+		alturaPlacas = largoPlaca*sin(anguloInclinacion*pi*(1/180.0))
+	
+		nivelAguaSobrePlacas = distanciaCanaletasRecoleccionAjustado*(velocidadPromedioFlujoConductos*86400.0)/432.0
+		
+		alturaSedimentacion = distanciaVerticalDistribucionPlacas+alturaPlacas+nivelAguaSobrePlacas
+		
+		volumenSedimentacionTanque = alturaSedimentacion*(longitudPlacas)*(anchoModulos) - ((numeroConductosLargoUnidad -1.0)*(largoPlaca)*(anchoModulos)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))
+		
+		tiempoRetencionTotalResultado = volumenSedimentacionTanque/(60.0*listaSalidaDatosEntradaPrametrosBasicosCalculos[9])
+		
 
 
-		listadisenoSistemaEvacuacionLodos=[0]*len(encabezadosLista)
+
+
+		###
+
+		relacionAnchoLargoTanque = round((longitudPlacas/anchoModulos),1)
+		alturaTolvaLodos = ((anchoModulos-anchoBasePlanaTolva)/2.0)*tan(pendienteTransversalTolva*pi*(1/180.0))
+		volumenTolvaLodos = (longitudPlacas)*(alturaTolvaLodos)*( anchoBasePlanaTolva+((anchoModulos-anchoBasePlanaTolva)/2.0))
+		largoTotalSedimentador = (2*espesorMuros)+longitudPlacas
+		anchoTotalSedimentador = (anchoModulos+espesorMuros)*float(numeroUnidades)
+		alturaInternaTotalSedimentador = espesorMuros+alturaTolvaLodos+bordeLibre+alturaSedimentacion
+
+
+		##
+
+		
+
+		listadisenoSistemaEvacuacionLodos.append(round(velocidadMinimaArrastre,3))
+		longitudMultipleDescarga = longitudPlacas
+		listadisenoSistemaEvacuacionLodos.append(round(longitudMultipleDescarga,3))
+		tiranteSobreOrificiosMultipleDescarga = alturaTolvaLodos+alturaSedimentacion
+		listadisenoSistemaEvacuacionLodos.append(round(tiranteSobreOrificiosMultipleDescarga,3))
+		
+		if 2<=longitudMultipleDescarga<3.5:
+			diametroNominalMutipleDescarga = "4(RDE 13.5)"
+		elif 3.5<=longitudMultipleDescarga<6.5:
+			diametroNominalMutipleDescarga = "6(RDE 13.5)"
+		elif 6.5<=longitudMultipleDescarga<12.0:
+			diametroNominalMutipleDescarga = "8(RDE 13.5)"
+
+
+
+		#Volver4
+
+
+
 
 		for i in range(0, len(encabezadosLista)):
 			listaTemp=list()
