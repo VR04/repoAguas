@@ -1598,6 +1598,66 @@ def openSedWindow():
 		elif 6.5<=longitudMultipleDescarga<12.0:
 			diametroNominalMutipleDescarga = "8(RDE 13.5)"
 
+		listaDiametroNominal= [
+		"4(RDE 13.5)",
+		"6(RDE 13.5)",
+		"8(RDE 13.5)",
+		]
+		listaDiametroInterno = [0.09738,
+		0.14334,
+		0.18662
+		]
+		diamentroInternoDic=dict()
+
+		for i in range(0, len(listaDiametroNominal)):
+			diamentroInternoDic[listaDiametroNominal[i]]=listaDiametroInterno[i]
+
+		diametroInterno= diamentroInternoDic[diametroNominalMutipleDescarga]:
+		listadisenoSistemaEvacuacionLodos.append(round(diametroInterno,3))
+		listadisenoSistemaEvacuacionLodos.append(round(diametroNominalOrificionesMultipleDescarga,3))
+		
+		listaDiametroNominalOrificiosMultipleDescarga= [
+		'1/2 (RDE 9)',
+		'3/4 (RDE 11)',
+		'3/4 (RDE 21)',
+		'1 (RDE 13,5)',
+		'1 (RDE 21)',
+		'1 1/4 (RDE 21)',
+		'1 1/2 (RDE 21)',
+		'2 (RDE 21)'
+
+		]
+		listaDiametroInternoOrificiosMultipleDescarga = [
+		0.01660,
+		0.02181,
+		0.02363,
+		0.02848,
+		0.03020,
+		0.03814,
+		0.04368,
+		0.05458
+		]
+
+		diamentroInternoOrificiosMultipleDescargaDic=dict()
+
+		for i in range(0, len(listaDiametroNominalOrificiosMultipleDescarga)):
+			diamentroInternoOrificiosMultipleDescargaDic[listaDiametroNominalOrificiosMultipleDescarga[i]]=listaDiametroInternoOrificiosMultipleDescarga[i]		
+		
+		diametroInternoOrificiosMultipleDescarga= diamentroInternoOrificiosMultipleDescargaDic[diametroNominalOrificionesMultipleDescarga]
+
+		listadisenoSistemaEvacuacionLodos.append(round(diametroInternoOrificiosMultipleDescarga,3))
+
+		separacionOrificiosMultipleTeorica = 1.16*(diametroInternoOrificiosMultipleDescarga)*sqrt(((tiranteSobreOrificiosMultipleDescarga)**0.5)/(velocidadMinimaArrastre))
+
+		listadisenoSistemaEvacuacionLodos.append(round(separacionOrificiosMultipleTeorica,3))
+		numeroOrificiosMultipleDescarga = int(longitudMultipleDescarga/separacionOrificiosMultipleTeorica)+1
+		listadisenoSistemaEvacuacionLodos.append(numeroOrificiosMultipleDescarga)
+
+		cuadradoRelacionDiametroOrificiosYMultiplePorNumeroOrificios= ((diametroInternoOrificiosMultipleDescarga/diametroInterno)**2)*(numeroOrificiosMultipleDescarga)
+
+		listadisenoSistemaEvacuacionLodos.append(round(cuadradoRelacionDiametroOrificiosYMultiplePorNumeroOrificios,3))
+
+		listadisenoSistemaEvacuacionLodos.append(round(,3))
 
 
 		#Volver4
