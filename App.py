@@ -872,7 +872,7 @@ def openSedWindow():
 		
 		tiempoRetencionTotalTanqueWindow = tk.Toplevel()
 		tiempoRetencionTotalTanqueWindow.iconbitmap(bitmap='icons\\agua.ico')
-		tiempoRetencionTotalTanqueWindow.geometry("560x300") 
+		tiempoRetencionTotalTanqueWindow.geometry("540x300") 
 		tiempoRetencionTotalTanqueWindow.resizable(0,0)	
 		tiempoRetencionTotalTanqueWindow.configure(background="#9DC4AA")
 
@@ -953,7 +953,6 @@ def openSedWindow():
 				
 		anchoModulos=float(dimensionesTipoCeldaMaterial[dimensionesTipoCeldaMaterial.find('x')+2:])/1000.0
 		largoPlaca = float(dimensionesTipoCeldaMaterial[:dimensionesTipoCeldaMaterial.find('x')-1])/1000.0
-		cargaSuperficial = (listaSalidaDatosEntradaPrametrosBasicosCalculos[9]*86400.0)/(longitudPlacas*anchoModulos)
 		numeroConductosLargoUnidad= round(((longitudPlacas*sin(anguloInclinacion*(pi/180.0))) + (listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))/((listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)+(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0)),0)
 		velocidadPromedioFlujoConductos = listaSalidaDatosEntradaPrametrosBasicosCalculos[9]/((numeroConductosLargoUnidad)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)*(anchoModulos))
 		longitudRelativaSedimentador =  largoPlaca/(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)
@@ -963,9 +962,6 @@ def openSedWindow():
 		else:
 			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador
 
-		velocidadSedimentacionCritica = ((listaSalidaDatosEntradaPrametrosBasicosCalculos[6])*(velocidadPromedioFlujoConductos*86400.0))/((sin(anguloInclinacion*pi*(1/180.0)))+(longitudRelativaRegionTransicionCorregida*cos(anguloInclinacion*pi*(1/180.0))))
-		numeroReynolds = round(velocidadPromedioFlujoConductos*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100)*(1/listaSalidaDatosEntradaPrametrosBasicosCalculos[10]) ,0)
-		tiempoRetencionCadaConjunto = (largoPlaca/velocidadPromedioFlujoConductos)/60.0
 	
 		#CalculosCanaletasRecoleccion
 
@@ -1235,9 +1231,6 @@ def openSedWindow():
 		else:
 			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador
 
-		velocidadSedimentacionCritica = ((listaSalidaDatosEntradaPrametrosBasicosCalculos[6])*(velocidadPromedioFlujoConductos*86400.0))/((sin(anguloInclinacion*pi*(1/180.0)))+(longitudRelativaRegionTransicionCorregida*cos(anguloInclinacion*pi*(1/180.0))))
-		numeroReynolds = round(velocidadPromedioFlujoConductos*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100)*(1/listaSalidaDatosEntradaPrametrosBasicosCalculos[10]) ,0)
-		tiempoRetencionCadaConjunto = (largoPlaca/velocidadPromedioFlujoConductos)/60.0
 
 		##Tiempo retención en el tanque
 
@@ -1253,9 +1246,9 @@ def openSedWindow():
 		
 		alturaSedimentacion = distanciaVerticalDistribucionPlacas+alturaPlacas+nivelAguaSobrePlacas
 		
-		volumenSedimentacionTanque = alturaSedimentacion*(longitudPlacas)*(anchoModulos) - ((numeroConductosLargoUnidad -1.0)*(largoPlaca)*(anchoModulos)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))
 		
-		tiempoRetencionTotalResultado = volumenSedimentacionTanque/(60.0*listaSalidaDatosEntradaPrametrosBasicosCalculos[9])
+		
+		
 		
 
 
@@ -1535,7 +1528,7 @@ def openSedWindow():
 				
 		anchoModulos=float(dimensionesTipoCeldaMaterial[dimensionesTipoCeldaMaterial.find('x')+2:])/1000.0
 		largoPlaca = float(dimensionesTipoCeldaMaterial[:dimensionesTipoCeldaMaterial.find('x')-1])/1000.0
-		cargaSuperficial = (listaSalidaDatosEntradaPrametrosBasicosCalculos[9]*86400.0)/(longitudPlacas*anchoModulos)
+
 		numeroConductosLargoUnidad= round(((longitudPlacas*sin(anguloInclinacion*(pi/180.0))) + (listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))/((listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)+(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0)),0)
 		velocidadPromedioFlujoConductos = listaSalidaDatosEntradaPrametrosBasicosCalculos[9]/((numeroConductosLargoUnidad)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)*(anchoModulos))
 		longitudRelativaSedimentador =  largoPlaca/(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100.0)
@@ -1545,9 +1538,6 @@ def openSedWindow():
 		else:
 			longitudRelativaRegionTransicionCorregida= longitudRelativaSedimentador
 
-		velocidadSedimentacionCritica = ((listaSalidaDatosEntradaPrametrosBasicosCalculos[6])*(velocidadPromedioFlujoConductos*86400.0))/((sin(anguloInclinacion*pi*(1/180.0)))+(longitudRelativaRegionTransicionCorregida*cos(anguloInclinacion*pi*(1/180.0))))
-		numeroReynolds = round(velocidadPromedioFlujoConductos*(listaSalidaDatosEntradaPrametrosBasicosCalculos[11]/100)*(1/listaSalidaDatosEntradaPrametrosBasicosCalculos[10]) ,0)
-		tiempoRetencionCadaConjunto = (largoPlaca/velocidadPromedioFlujoConductos)/60.0
 
 		##Tiempo retención en el tanque
 
@@ -1563,9 +1553,9 @@ def openSedWindow():
 		
 		alturaSedimentacion = distanciaVerticalDistribucionPlacas+alturaPlacas+nivelAguaSobrePlacas
 		
-		volumenSedimentacionTanque = alturaSedimentacion*(longitudPlacas)*(anchoModulos) - ((numeroConductosLargoUnidad -1.0)*(largoPlaca)*(anchoModulos)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))
+
 		
-		tiempoRetencionTotalResultado = volumenSedimentacionTanque/(60.0*listaSalidaDatosEntradaPrametrosBasicosCalculos[9])
+
 		
 
 
@@ -1573,12 +1563,9 @@ def openSedWindow():
 
 		###
 
-		relacionAnchoLargoTanque = round((longitudPlacas/anchoModulos),1)
+		
 		alturaTolvaLodos = ((anchoModulos-anchoBasePlanaTolva)/2.0)*tan(pendienteTransversalTolva*pi*(1/180.0))
-		volumenTolvaLodos = (longitudPlacas)*(alturaTolvaLodos)*( anchoBasePlanaTolva+((anchoModulos-anchoBasePlanaTolva)/2.0))
-		largoTotalSedimentador = (2*espesorMuros)+longitudPlacas
-		anchoTotalSedimentador = (anchoModulos+espesorMuros)*float(numeroUnidades)
-		alturaInternaTotalSedimentador = espesorMuros+alturaTolvaLodos+bordeLibre+alturaSedimentacion
+		
 
 
 		##
@@ -1664,7 +1651,7 @@ def openSedWindow():
 		listadisenoSistemaEvacuacionLodos.append(round(separacionOrificiosMultipleConfirmada,3))
 
 
-		#Volver4
+		
 
 
 
