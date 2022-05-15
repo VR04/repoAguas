@@ -48,7 +48,6 @@ def on_closing():
 
 
 
-
 contador=0
 contadorFiltro=0
 contador2 = 0
@@ -424,9 +423,10 @@ def openSedWindow():
 			labels=["ángulo de inclinación", "distancia entre placas","caudal medio diario",
 			"factor de mayoración del caudal máximo diario", "longitud ocupada por las placas"]
 
-
+		#RevisarXDPendiente
 		labels=["ángulo de inclinación", "distancia entre placas ó lado interno de los conductos","caudal medio diario",
 		"factor de mayoración del caudal máximo diario", "longitud ocupada por los módulos"]
+		
 		for i in range(0, len(listaSinComboBox)):
 			if listaSinComboBox[i].get() == "":
 				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labels[i]} ")	
@@ -967,7 +967,7 @@ def openSedWindow():
 
 		numeroCanaletasRecoleccionModulo= int(longitudPlacas/distanciaCanaletasRecoleccion)
 		distanciaCanaletasRecoleccionAjustado = longitudPlacas/numeroCanaletasRecoleccionModulo		
-		#Volver2
+		
 
 		listatiempoRetencionTotalTanque.append(round(distanciaVerticalDistribucionPlacas,3))
 		alturaPlacas = largoPlaca*sin(anguloInclinacion*pi*(1/180.0))
@@ -1272,7 +1272,7 @@ def openSedWindow():
 		listadimensionesDelSedimentador.append(round(anchoTotalSedimentador,3))
 		alturaInternaTotalSedimentador = espesorMuros+alturaTolvaLodos+bordeLibre+alturaSedimentacion 
 		listadimensionesDelSedimentador.append(round(alturaInternaTotalSedimentador,3))
-		#Volver3
+		
 
 
 		for i in range(0, len(encabezadosLista)):
@@ -1858,12 +1858,12 @@ def openSedWindow():
 	
 	labelIntroduccion = Label(frameSed, text="Datos de entrada para parámetros básicos: ",font=("Yu Gothic bold",10))
 	caudalDiseñoLabel = Label(frameSed, text="Caudales de diseño", font =("Yu Gothic bold",10))
-	factorMayoracionCaudalMDLabel = Label(frameSed, text="Factor de mayoración del caudal máximo diario:", font =("Yu Gothic",9))
-	factorMayoracionCaudalMHLabel = Label(frameSed, text="Factor de mayoración del caudal máximo horario:", font =("Yu Gothic",9))
+	factorMayoracionCaudalMDLabel = Label(frameSed, text="Factor de mayoración del caudal máximo diario [m^3/s]:", font =("Yu Gothic",9))
+	factorMayoracionCaudalMHLabel = Label(frameSed, text="Factor de mayoración del caudal máximo horario [m^3/s]:", font =("Yu Gothic",9))
 	caudalEntryLabel = Label(frameSed, text="Caudal de diseño [m^3/s]: ", font =("Yu Gothic",9))
 	propiedadesFisicasAguaLabel = Label(frameSed, text="Propiedades físicas del agua a tratar.", font =("Yu Gothic bold",10))
 	datosEntradaParametrosBasicosLabel = Label(frameSed, text="Datos de entrada para parámetros básicos.", font =("Yu Gothic bold",10))
-	anguloInclinacionLabel = Label(frameSed, text="Ángulo de inclinación:", font =("Yu Gothic",8))
+	anguloInclinacionLabel = Label(frameSed, text="Ángulo de inclinación [°]:", font =("Yu Gothic",8))
 	distanciaPlacasLabel = Label(frameSed, text="Distancia del tipo de celda:", font =("Yu Gothic",8))
 	longitudPlacasLabel = Label(frameSed, text="Longitud del tipo de celda:", font =("Yu Gothic",8))
 	distanciaCanaletasRecoleccionLabel = Label(frameSed, text="Distancia entre las canaletas de recolección: ", font =("Yu Gothic",9))
@@ -9730,10 +9730,18 @@ def openFloculadorWindow():
 	#Change selected color
 	style.map("Treeview", background=[("selected", "#09C5CE")])	 
 
-	def newEntryFiltro(lista):
+	def newEntryFloculador(lista):
+		
+		i=0
 		for elemento in lista:
+			try:
+				elemento.set("Seleccione")
+				
+				i=i+1
+			except:
 				elemento.delete(0, END)
-		lista[10].insert(0,9.81)
+
+		lista[7].insert(0,9.81)
 		
 
 	def newDataTreeview(tree,listaS):
@@ -9747,42 +9755,66 @@ def openFloculadorWindow():
 				iid=contadorFloculador, tags=("oddrow",))
 		contadorFloculador=contadorFloculador+1
 	
-	def calculosFloculador(listaEntry):
+	def calculosFloculador(listaEntry,numCamaras):
 		listaE2=list()
-		for elemento in listaEntry:
+
+		labels=["caudal de diseño","diametro interno 20\'\'","diametro externo 20\'\'", "ancho",
+		"longitud", "altura", "gravedad", "coeficiente de descarga", "coeficiente de descarga orificios"]
+		labelsComboBox= ["tiempo de floculación", "temperatura"]
+		
+		listaSinComboBox=[listaEntry[0],listaEntry[2],listaEntry[3],
+		listaEntry[4],listaEntry[5],listaEntry[6],
+		listaEntry[7],listaEntry[9],listaEntry[10]]
+		
+		listaComboBox=[listaEntry[1],listaEntry[8]]
+
+		# listaEntry= [0= caudalDiseño,1=tiempoFloculacion,2=diametroInterno,
+		# 3=diametroExterno,
+		# 4=ancho,5=longitud,6=altura,7=gravedad,8=temperatura,
+		# 9=coeficienteDescarga,10=coeficienteDescargaOrificios]
+		
+		for i in range(0, len(listaComboBox)):
+			if listaComboBox[i].get() == "Seleccione":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labelsComboBox[i]} ")	
+				return None
+		for i in range(0, len(listaSinComboBox)):
+			if listaSinComboBox[i].get() == "":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labels[i]} ")	
+				return None
+		j=0
+		for elemento in listaSinComboBox:
 			try:
 				listaE2.append(float(elemento.get()))
+				j=j+1
 			except:	
-				messagebox.showwarning(title="Error", message="Uno o varios de los valores ingresados no son números")
+				messagebox.showwarning(title="Error", message=f"El/la {labels[j]} debe ser un número")
 				return None
-		#listaE2 = [57.26,20.00,0.39,0.45964,0.508,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]
-		listaE=list()
-		numeroCamaras=12
-		#Ingreso datos completos.
-		listaE.append(listaE2[0])
-		listaE.append(listaE2[0]/1000)
-		listaE.append(listaE2[1])
-		listaE.append(listaE2[1]*60)
-		listaE.append((listaE2[1]*60)/numeroCamaras)
-		listaE.append(((listaE2[1]*60)/numeroCamaras)*(listaE2[0]/1000))
-		listaE.append(listaE2[2])
-		listaE.append(listaE2[3])
-		listaE.append((listaE2[3]**2)*pi*(1/4))
-		listaE.append(listaE2[4])
-		listaE.append((listaE2[4]**2)*pi*(1/4))
-		listaE.append(listaE2[5])
-		listaE.append(listaE2[6])
-		listaE.append(listaE2[7])
-		listaE.append(listaE2[8])
-		listaE.append(listaE2[9])
-		listaE.append(listaE2[10])
-		listaE.append(listaE2[11])
-		listaE.append(listaE2[12])
-		listaE.append(listaE2[13])
 		
+		
+		caudalDiseño= listaE2[0]
+		diametroInterno = listaE2[1]
+		diametroExterno = listaE2[2]
+		ancho = listaE2[3]
+		longitud = listaE2[4]
+		altura = listaE2[5]
+		gravedad = listaE2[6]
+		coeficienteDescarga = listaE2[7]
+		coeficienteDescargaOrificios = listaE2[8]
+		tiempoFloculacion= float(listaComboBox[0].get())
+		temperatura= float(listaComboBox[1].get())
+
+
+		if caudalDiseño<10 or caudalDiseño>100:
+			messagebox.showwarning(title="Error", message=f"El valor del caudal de Diseño debe estar entre 10 y 100")
+			return None	
+		
+
+		numeroCamaras= float(numCamaras.get())
+		
+	
 		CFloculadorWindow = tk.Toplevel()
 		CFloculadorWindow.iconbitmap(bitmap='icons\\agua.ico')
-		CFloculadorWindow.geometry("600x800") 
+		CFloculadorWindow.geometry("600x590") 
 		CFloculadorWindow.resizable(0,0)	
 		CFloculadorWindow.configure(background="#9DC4AA")
 
@@ -9791,20 +9823,20 @@ def openFloculadorWindow():
 		arbolCFloculador_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		sedScrollX=Scrollbar(arbolCFloculador_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
-		sedScrollY=Scrollbar(arbolCFloculador_frame,orient=VERTICAL)
-		sedScrollY.pack(side=LEFT, fill=Y)
+		# sedScrollX=Scrollbar(arbolCFloculador_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollY=Scrollbar(arbolCFloculador_frame,orient=VERTICAL)
+		# sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolCFloculador= ttk.Treeview(arbolCFloculador_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolCFloculador= ttk.Treeview(arbolCFloculador_frame,selectmode=BROWSE, height=11,show="tree headings")#,xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
 		arbolCFloculador.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		sedScrollX.configure(command=arbolCFloculador.xview)
-		sedScrollY.configure(command=arbolCFloculador.yview)
+		# sedScrollX.configure(command=arbolCFloculador.xview)
+		# sedScrollY.configure(command=arbolCFloculador.yview)
 		#Define columnas.
 		arbolCFloculador["columns"]= (
-		"1","2","Unidades"
+		"1","2","Unidades","Adicional"
 		)
 
 		#Headings
@@ -9813,45 +9845,104 @@ def openFloculadorWindow():
 		for col in arbolCFloculador["columns"]:
 			arbolCFloculador.heading(col, text=col,anchor=CENTER)
 
-		for i in range(0,len(arbolCFloculador["columns"])) :
-				arbolCFloculador.column(f"#{i}",width=200, stretch=False)	
-
+		
 		
 		arbolCFloculador.column("#0",width=0, stretch=False)
-
+		arbolCFloculador.column("#1",width=200, stretch=False)
+		arbolCFloculador.column("#2",width=100, stretch=False)
+		arbolCFloculador.column("#3",width=100, stretch=False)
+		arbolCFloculador.column("#4",width=200, stretch=False)
 		#Striped row tags
 		arbolCFloculador.tag_configure("evenrow", background= "#1FCCDB")
 		arbolCFloculador.tag_configure("oddrow", background= "#9DC4AA")
 		contadorFloculador=0
+		
 		listaEntrada= list()
-		volFloculador = listaE[15-4]*listaE[16-4]*listaE[17-4]*numeroCamaras
-		numeroCamaras=12
-		velFlujoCodos=listaE[5-4]/listaE[12-4]
-		perdidadPasamuro = (listaE[5-4]**2)/(2*listaE[20-4]*(listaE[22-4]**2)*(listaE[12-4]**2))
-		perdidaCodo = 0.4*((velFlujoCodos**2)/(2*listaE[20-4]))
-		perdidaOrificio= (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(listaE[14-4]**2))		
-		perdidaFloculador= perdidadPasamuro+perdidaCodo+perdidaOrificio
-		perdidadCargaenCamaras=perdidaFloculador*numeroCamaras
-		gradienteMezcla=sqrt((listaE[20-4]*perdidaFloculador)/(listaE[19-4]*listaE[8-4]))
-		numeroCamp=gradienteMezcla*listaE[8-4]
-		pendiente= perdidaFloculador/listaE[16-4]
+		
+		
+
+		valorTemperaturas=list()
+		viscosidadCinematicaDic=dict()
+		for i in range(0,36):    
+			valorTemperaturas.append(i)
+						
+		valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
+		,1.386e-06, 1.346e-06, 1.308e-06, 1.271e-06, 1.237e-06, 1.204e-06, 
+		1.172e-06, 1.141e-06, 1.112e-06, 1.084e-06, 1.057e-06, 1.032e-06, 1.007e-06, 9.83e-07, 9.6e-07, 9.38e-07, 9.17e-07, 8.96e-07, 8.76e-07, 8.57e-07, 8.39e-07, 8.21e-07, 8.04e-07, 7.88e-07, 7.72e-07, 7.56e-07, 7.41e-07, 7.27e-07]
+
+		for ind in range(0,len(valorTemperaturas)):
+			viscosidadCinematicaDic[valorTemperaturas[ind]]=valorViscocidad[ind]
+		densidadDic=dict()
+
+		valorDensidad=[999.82, 999.89, 999.94, 999.98, 1000.0, 1000.0, 999.99, 
+		999.96, 999.91, 999.85, 999.77, 999.68, 999.58, 999.46, 
+		999.33, 999.19, 999.03, 998.86, 998.68, 998.49, 998.29, 
+		998.08, 997.86, 997.62, 997.38, 997.13, 996.86, 996.59,
+		996.31, 996.02, 995.71, 995.41, 995.09, 994.76, 994.43, 
+		994.08]
+
+		for ind in range(0,len(valorTemperaturas)):
+			densidadDic[valorTemperaturas[ind]]=valorDensidad[ind]
+
+		viscosidadDinamicaDic=dict()
+		viscosidadDinamicaValor = [0.001792, 0.001731, 
+		0.001673, 0.001619, 0.001567, 0.001519, 0.001473, 
+		0.001428, 0.001386, 0.001346, 0.001308, 0.001271, 
+		0.001236, 0.001203, 0.001171, 0.00114, 0.001111, 
+		0.001083, 0.001056, 0.00103, 0.001005, 0.000981, 
+		0.000958, 0.000936, 0.000914, 0.000894, 0.000874,
+		0.000855, 0.000836, 0.000818, 0.000801, 0.000784,
+		0.000768, 0.000752, 0.000737, 0.000723]
+
+		for ind in range(0,len(valorTemperaturas)):
+			viscosidadDinamicaDic[valorTemperaturas[ind]]=viscosidadDinamicaValor[ind]
+
+
+		caudalDiseñoEnM = caudalDiseño/1000.0
+		areaTuberia = pi*(diametroInterno**2)*(1/4.0)
+		areaOrificio = pi*(diametroExterno**2)*(1/4.0)
+		tiempoFloculacionS= tiempoFloculacion*60.0
+		tiempoDetencionCamara= tiempoFloculacionS/numeroCamaras
+		viscosidadCinematica = viscosidadCinematicaDic[temperatura]
+		densidad=densidadDic[temperatura]
+		viscosidadDinamica = viscosidadDinamicaDic[temperatura]
+
+
+
+		volFloculador = ancho*longitud*altura*numeroCamaras		
+		velFlujoCodos= caudalDiseñoEnM/areaTuberia
+		perdidadPasamuro = ((caudalDiseñoEnM**2))/((2*gravedad)*(coeficienteDescarga**2)*(areaTuberia**2))
+		perdidaCodo = 0.4*((velFlujoCodos**2)/(2*gravedad))
+		perdidaOrificio= (caudalDiseñoEnM**2)/((2*gravedad)*(coeficienteDescargaOrificios**2)*(areaOrificio**2))
+		perdidaTotalFloculador= perdidadPasamuro+perdidaCodo+ perdidaOrificio
+
+		perdidadCargaenCamaras= perdidaTotalFloculador*numeroCamaras
+		gradienteMezcla= sqrt((gravedad*perdidaTotalFloculador)/(tiempoDetencionCamara*viscosidadCinematica))
+		numeroCamp= gradienteMezcla*tiempoDetencionCamara
+		pendiente= perdidaTotalFloculador/longitud
+		numeroReynolds= densidad*diametroInterno*velFlujoCodos*(1/viscosidadDinamica)
+		estabilidadFloculo = (gradienteMezcla/(sqrt(numeroReynolds)))
+		
+		
 		listaValores=[volFloculador,numeroCamaras,velFlujoCodos,perdidadPasamuro,perdidaCodo,perdidaOrificio,
-		perdidaFloculador,perdidadCargaenCamaras,gradienteMezcla,numeroCamp,pendiente]
+		perdidaTotalFloculador,perdidadCargaenCamaras,gradienteMezcla,numeroCamp,pendiente, numeroReynolds,estabilidadFloculo]
 		for valor in listaValores:
-			listaEntrada.append(valor)
+			listaEntrada.append(round(valor,3))
 
 		listaEncabezados = [
-		"V = Volumen floculador [m^3]",
-		"#c = Número de cámaras [und]",
-		"{} = Velocidad de flujo entre codos [m/s]".format(getSub("v")),
-		"H\' = Pérdida Pasamuro [m]",
-		"H\'\' = Perdida Codo [m]",
-		"H\'\'\' = Perdidas Orificio [m]",
-		"H = Perdida total floculador [m]",
-		"Pc = Perdidas de carga en las 12 cámaras [m]",
-		"G = Gradiente de mezcla [s^(-1)]",
+		"V = Volumen floculador",
+		"#c = Número de cámaras",
+		"{} = Velocidad de flujo entre codos".format(getSub("v")),
+		"H\' = Pérdida Pasamuro",
+		"H\'\' = Perdida Codo",
+		"H\'\'\' = Perdidas Orificio",
+		"H = Perdida total floculador",
+		f"Pc = Perdidas de carga en las\n {numeroCamaras} cámaras",
+		"G = Gradiente de mezcla",
 		"Gt = Numero de camp",
-		"P = Pendiente [%]"
+		"P = Pendiente",
+		"Número de Reynolds",
+		"S = Estabilidad del floculo"
 		]
 		listaUnidades = ["m^3",
 				"unid",
@@ -9864,104 +9955,134 @@ def openFloculadorWindow():
 				"s^(-1)",
 				"",
 				"%",
+				"",
+				""
 				]
+
+		if velFlujoCodos>=0.25 and velFlujoCodos<=0.65:
+			cumpleVelocidadFlujoCodos="El valor de la velocidad de flujo\nentre codos cumple."
+		else:
+			cumpleVelocidadFlujoCodos = "El valor de la velocidad de flujo\nentre codos NO cumple.."
+		if gradienteMezcla>=35 and gradienteMezcla<=55:
+			cumpleGradienteMezcla= "El valor del gradiente\nde mezcla cumple."
+		else:
+			cumpleGradienteMezcla="Cuidado, el valor del gradiente\nde mezcla NO cumple."
+		if  estabilidadFloculo<0.3:
+			cumpleEstabilidadFloculo= "Cumple"
+		else:
+			cumpleEstabilidadFloculo= "No cumple"
+		listaAdicional =[
+		"",
+		"",
+		f"{cumpleVelocidadFlujoCodos}",
+		"",
+		"",
+		"",
+		"",
+		"", 
+		f"{cumpleGradienteMezcla}",
+		"",
+		"",
+		"",
+		f"{cumpleEstabilidadFloculo}"
+		]
+
+
+
 		for i in range(0, len(listaEncabezados)):
 			listaTemp=list()
 			listaTemp.append(listaEncabezados[i])
 			listaTemp.append(listaEntrada[i])
 			listaTemp.append(listaUnidades[i])
+			listaTemp.append(listaAdicional[i])
 			newDataTreeview(arbolCFloculador,listaTemp)
 
-		if velFlujoCodos>=0.25 and velFlujoCodos<=0.65:
-			messagebox.showinfo(title="Información", message="El valor de la velocidad de flujo entre codos cumple. Se encuentra entre 0.25 y 0.65.")
-		else:
-			
-			messagebox.showwarning(title="¡Cuidado!", message="El valor de la velocidad de flujo entre codos NO cumple. No se encuentra entre 0.25 y 0.65.")
-		
-		if gradienteMezcla>=35 and gradienteMezcla<=55:
-			messagebox.showinfo(title="Información", message="El valor del gradiente de mezcla cumple. Se encuentra entre 35 y 55.")
-		else:
-			messagebox.showwarning(title="¡Cuidado!", message="El valor del gradiente de mezcla NO cumple. No se encuentra entre 35 y 55.")
 		
 		
 		
 		CFloculadorWindow.mainloop()
 
 
-	def salidaCamara(listaEntry,diametroInternoOrificio):
+	def salidaCamara(listaEntry,diametroInternoOrificio, numCamaras, valorParImpar):
 		
 		listaE2=list()
-		for elemento in listaEntry:
+
+		labels=["caudal de diseño","diametro interno 20\'\'",
+		"longitud", "gravedad", "coeficiente de descarga orificios"]
+		labelsComboBox= ["tiempo de floculación", "temperatura"]
+		
+		listaSinComboBox=[listaEntry[0],listaEntry[2],
+		listaEntry[5],
+		listaEntry[7],listaEntry[10]]
+		
+		listaComboBox=[listaEntry[1],listaEntry[8]]
+
+		# listaEntry= [0= caudalDiseño,1=tiempoFloculacion,2=diametroInterno,
+		# 3=diametroExterno,
+		# 4=ancho,5=longitud,6=altura,7=gravedad,8=temperatura,
+		# 9=coeficienteDescarga,10=coeficienteDescargaOrificios]
+		
+		for i in range(0, len(listaComboBox)):
+			if listaComboBox[i].get() == "Seleccione":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labelsComboBox[i]} ")	
+				return None
+		for i in range(0, len(listaSinComboBox)):
+			if listaSinComboBox[i].get() == "":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labels[i]} ")	
+				return None
+		j=0
+		for elemento in listaSinComboBox:
 			try:
 				listaE2.append(float(elemento.get()))
+				j=j+1
 			except:	
-				messagebox.showwarning(title="Error", message="Uno o varios de los valores ingresados no son números")
+				messagebox.showwarning(title="Error", message=f"El/la {labels[j]} debe ser un número")
 				return None
-		##########Datos eliminar
-		# listaE2 = [57.26,20.00,0.39,0.45964,0.51,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]	
+		
+		
+		caudalDiseño= listaE2[0]
+		diametroInterno = listaE2[1]
+		longitud = listaE2[2]
+		gravedad = listaE2[3]
+		coeficienteDescargaOrificios = listaE2[4]
+		tiempoFloculacion= float(listaComboBox[0].get())
+		temperatura= float(listaComboBox[1].get())
 
-		# [caudalDiseño,tiempoFloculacion,diametroInterconexion,diametroInterno,diametroExterno,
-# 				ancho,longitud,altura,densidadAgua,viscocidadCinematica,gravedad,temperatura,
-# 				coeficienteDescarga,coeficienteDescargaOrificios]	
-		############
-		listaE=list()
-		numeroCamaras=12
-		#Ingreso datos completos.
-		listaE.append(listaE2[0])
-		listaE.append(listaE2[0]/1000)
-		listaE.append(listaE2[1])
-		listaE.append(listaE2[1]*60)
-		listaE.append((listaE2[1]*60)/numeroCamaras)
-		listaE.append(((listaE2[1]*60)/numeroCamaras)*(listaE2[0]/1000))
-		listaE.append(listaE2[2])
-		listaE.append(listaE2[3])
-		listaE.append((listaE2[3]**2)*pi*(1/4))
-		listaE.append(listaE2[4])
-		listaE.append((listaE2[4]**2)*pi*(1/4))
-		listaE.append(listaE2[5])
-		listaE.append(listaE2[6])
-		listaE.append(listaE2[7])
-		listaE.append(listaE2[8])
-		listaE.append(listaE2[9])
-		listaE.append(listaE2[10])
-		listaE.append(listaE2[11])
-		listaE.append(listaE2[12])
-		listaE.append(listaE2[13])
+		numeroCamaras= float(numCamaras.get())
+
+
+		if caudalDiseño<10 or caudalDiseño>100:
+			messagebox.showwarning(title="Error", message=f"El valor del caudal de Diseño debe estar entre 10 y 100")
+			return None	
+		
 		
 		salidaCamaraWindow = tk.Toplevel()
 		salidaCamaraWindow.iconbitmap(bitmap='icons\\agua.ico')
-		salidaCamaraWindow.geometry("1000x200") 
+		salidaCamaraWindow.geometry("520x450") 
 		salidaCamaraWindow.resizable(0,0)	
 		salidaCamaraWindow.configure(background="#9DC4AA")
 
 		#Frame Treeview
-		arbolSalidaCamara_frame = LabelFrame(salidaCamaraWindow, text="Principales caracterísiticas del filtro", font=("Yu Gothic bold", 11))
+		arbolSalidaCamara_frame = LabelFrame(salidaCamaraWindow, text=f"Datos de salida para cámara {valorParImpar}", font=("Yu Gothic bold", 11))
 		arbolSalidaCamara_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		sedScrollX=Scrollbar(arbolSalidaCamara_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollX=Scrollbar(arbolSalidaCamara_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arbolSalidaCamara_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolSalidaCamara= ttk.Treeview(arbolSalidaCamara_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolSalidaCamara= ttk.Treeview(arbolSalidaCamara_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set
 		arbolSalidaCamara.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		sedScrollX.configure(command=arbolSalidaCamara.xview)
+		#sedScrollX.configure(command=arbolSalidaCamara.xview)
 		sedScrollY.configure(command=arbolSalidaCamara.yview)
 		#Define columnas.
 		arbolSalidaCamara["columns"]= (
-		"Di = Diametro de interno Orificio [m]",
-		"A= Área del orificio [m^2]",
-		"Cd = Coeficiente de descarga",
-		"H\' = Pérdida Pasamuro [m]",
-		"H\'\' = Perdida Codo [m]",
-		"H\'\'\' = Perdidas Orificio [m]",
-		"H = Perdida total floculador [m]",
-		"G = Gradiente de mezcla [s^(-1)]",
-		"Gt = Numero de camp",
-		"P = Pendiente [%]"			)
+		"1","2","Unidades")
+
+	
 
 		#Headings
 		arbolSalidaCamara.heading("#0",text="ID", anchor=CENTER)
@@ -9969,44 +10090,93 @@ def openFloculadorWindow():
 		for col in arbolSalidaCamara["columns"]:
 			arbolSalidaCamara.heading(col, text=col,anchor=CENTER)
 
-		for i in range(0,len(arbolSalidaCamara["columns"])) :
-				arbolSalidaCamara.column(f"#{i}",width=300, stretch=False)	
-
-		
-		arbolSalidaCamara.column("#1",width=600, stretch=False)
-		arbolSalidaCamara.column("#3",width=600, stretch=False)
-		arbolSalidaCamara.column("#7",width=600, stretch=False)
-		arbolSalidaCamara.column("#8",width=600, stretch=False)
 		arbolSalidaCamara.column("#0",width=0, stretch=False)
+		arbolSalidaCamara.column("#1",width=300, stretch=False)
+		arbolSalidaCamara.column("#2",width=100, stretch=False)
+		arbolSalidaCamara.column("#3",width=100, stretch=False)
 
 		#Striped row tags
 		arbolSalidaCamara.tag_configure("oddrow", background= "#1FCCDB")
 		arbolSalidaCamara.tag_configure("evenrow", background= "#9DC4AA")
 		contadorFloculador=0
 		listaEntrada=list()
-		velocidadFlujoCodos=listaE[5-4]/listaE[12-4]
-		arenaOrificio= pi*(diametroInternoOrificio**2)*(1/4)
-		coeficienteDescarga= listaE[23-4]
+		valorTemperaturas=list()
+		viscosidadCinematicaDic=dict()
+		for i in range(0,36):    
+			valorTemperaturas.append(i)
+						
+		valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
+		,1.386e-06, 1.346e-06, 1.308e-06, 1.271e-06, 1.237e-06, 1.204e-06, 
+		1.172e-06, 1.141e-06, 1.112e-06, 1.084e-06, 1.057e-06, 1.032e-06, 1.007e-06, 9.83e-07, 9.6e-07, 9.38e-07, 9.17e-07, 8.96e-07, 8.76e-07, 8.57e-07, 8.39e-07, 8.21e-07, 8.04e-07, 7.88e-07, 7.72e-07, 7.56e-07, 7.41e-07, 7.27e-07]
 
-		perdidaPasamuros= (listaE[5-4]**2)/((2*listaE[20-4])*(coeficienteDescarga**2)*(listaE[12-4]**2))
-		perdidaCodo= (0.4)*((velocidadFlujoCodos**2)/(2*listaE[20-4]))
-		perdidaOrificio= (listaE[5-4]**2)/((2*listaE[20-4])*(listaE[23-4]**2)*(arenaOrificio**2))
-		perdidaFloculador= perdidaPasamuros+perdidaCodo+perdidaOrificio
-		gradienteMezcla= sqrt((listaE[20-4]*perdidaFloculador)/(listaE[19-4]*listaE[8-4]))
-		numeroCamp= gradienteMezcla*listaE[8-4]
-		pendiente= perdidaFloculador/listaE[16-4]
+		for ind in range(0,len(valorTemperaturas)):
+			viscosidadCinematicaDic[valorTemperaturas[ind]]=valorViscocidad[ind]
+		
 
-		listaValores=[diametroInternoOrificio,arenaOrificio,coeficienteDescarga,perdidaPasamuros,perdidaCodo,
-		perdidaOrificio,perdidaFloculador,gradienteMezcla,numeroCamp,pendiente]
+
+		caudalDiseñoEnM = caudalDiseño/1000.0
+		areaTuberia = pi*(diametroInterno**2)*(1/4.0)
+		tiempoFloculacionS= tiempoFloculacion*60.0
+		tiempoDetencionCamara= tiempoFloculacionS/numeroCamaras
+		viscosidadCinematica = viscosidadCinematicaDic[temperatura]
+		velocidadFlujoEntreCodos = caudalDiseñoEnM/areaTuberia
+
+
+
+		diametroInternoOrificioC = diametroInternoOrificio
+		areaOrificio= pi*(diametroInternoOrificioC**2)*(1/4.0)
+		coeficienteDescarga = coeficienteDescargaOrificios
+		perdidaPasamuros= (caudalDiseñoEnM**2)/((2*gravedad)*(coeficienteDescarga**2)*(areaTuberia**2))
+		perdidaCodo = (0.4)*((velocidadFlujoEntreCodos**2)/(2*gravedad))
+		perdidaOrificio= (caudalDiseñoEnM**2)/((2*gravedad)*(coeficienteDescargaOrificios**2)*(areaOrificio**2))
+	
+		perdidaTotalFloculador = perdidaPasamuros + perdidaCodo+ perdidaOrificio
+		gradienteMezcla = sqrt((gravedad*perdidaTotalFloculador)/(viscosidadCinematica*tiempoDetencionCamara))
+		numeroCamp= gradienteMezcla*tiempoDetencionCamara
+		pendiente=perdidaTotalFloculador/longitud
+		
+		#Volver
+		listaValores=[diametroInternoOrificio, areaOrificio, coeficienteDescarga,
+		perdidaPasamuros,perdidaCodo, perdidaOrificio, perdidaTotalFloculador,
+		gradienteMezcla,numeroCamp,pendiente]
+
 		for valores in listaValores:
-			listaEntrada.append(valores)
+			listaEntrada.append(round(valores,3))
 
-		newDataTreeview(arbolSalidaCamara,listaEntrada)
+		listaEncabezados=[
+		"Di = Diametro de interno Orificio",
+		"A= Área del orificio",
+		"Cd = Coeficiente de descarga",
+		"H\' = Pérdida Pasamuro",
+		"H\'\' = Perdida Codo",
+		"H\'\'\' = Perdidas Orificio",
+		"H = Perdida total floculador",
+		"G = Gradiente de mezcla",
+		"Gt = Numero de camp",
+		"P = Pendiente"			
+		]
+		listaUnidades=["m",
+		"m^2",
+		"",
+		"m",
+		"m",
+		"m",
+		"m",
+		"s^(-1)",
+		"",
+		"%"			]
+
+		for i in range(0, len(listaEntrada)):
+			listaTemp=list()
+			listaTemp.append(listaEncabezados[i])
+			listaTemp.append(listaEntrada[i])
+			listaTemp.append(listaUnidades[i])
+			newDataTreeview(arbolSalidaCamara,listaTemp)
 		
 		if gradienteMezcla>=35 and gradienteMezcla<=55:
 			messagebox.showinfo(title="Información", message="El valor del gradiente de mezcla cumple. Se encuentra entre 35 y 55.")
 		else:
-			messagebox.showarning(title="¡Cuidado!", message="El valor del gradiente de mezcla NO cumple. No se encuentra entre 35 y 55.")
+			messagebox.showwarning(title="¡Cuidado!", message="El valor del gradiente de mezcla NO cumple. No se encuentra entre 35 y 55.")
 		
 
 
@@ -10028,70 +10198,79 @@ def openFloculadorWindow():
 
 	imageAtras= PhotoImage(file="images\\atras.png")
 
-	#Botones. 
+	#BotonesFloculador
 
 	botonAtrasFlo= HoverButton(frameFloculador, image=imageAtras , width=100, height=40, bg= None, command=lambda: returnMainWindow(floculadorWindow))
 	botonAtrasFlo.place(x=0,y=10)
 
-	botonNewEntryFiltro = HoverButton(frameFloculador, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: newEntryFiltro(listaEntry))
-	botonVerCalculos = HoverButton(frameFloculador, text="Ver cálculos", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT, command= lambda: calculosFloculador(listaEntry))
-	botonDatosSalidaCamaraPar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (par)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,0.46))
-	botonDatosSalidaCamaraImpar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (impar)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,0.41))
+	botonNewEntryFloculador = HoverButton(frameFloculador, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: newEntryFloculador(listaEntry))
+	botonVerCalculos = HoverButton(frameFloculador, text="Cálculos adicionales para diseño del floculador", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT, command= lambda: calculosFloculador(listaEntry, numeroCamaras))
+	botonDatosSalidaCamaraPar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (par)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,0.46,numeroCamaras,"par"))
+	botonDatosSalidaCamaraImpar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (impar)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,0.41,numeroCamaras, "impar"))
 
 
-	listaBotones=[botonNewEntryFiltro, botonVerCalculos,botonDatosSalidaCamaraPar,botonDatosSalidaCamaraImpar]
+	listaBotones=[botonNewEntryFloculador, botonVerCalculos,botonDatosSalidaCamaraPar,botonDatosSalidaCamaraImpar]
 
 
 	datosEntradaLabel = Label(frameFloculador, text="Datos iniciales: ",font=("Yu Gothic bold",10))
 	caudalDiseñoLabel = Label(frameFloculador, text="QMD = Caudal de diseño [L/s]:",font=("Yu Gothic bold",10))
 	tiempoFloculacionLabel = Label(frameFloculador, text="T = Tiempo de floculación [min]:",font=("Yu Gothic bold",10))
-	diametroInterconexionLabel = Label(frameFloculador, text="D = Diámetro de interconexión [m]:",font=("Yu Gothic bold",10))
 	diametroInternoLabel = Label(frameFloculador, text="Di = Diámetro interno 20\'\' [m]:",font=("Yu Gothic bold",10))
 	diametroExternoLabel = Label(frameFloculador, text="Di = Diámetro externo 20\'\' [m]:",font=("Yu Gothic bold",10))
 	anchoLabel = Label(frameFloculador, text="W = Ancho [m]:",font=("Yu Gothic bold",10))
 	longitudLabel = Label(frameFloculador, text="L = Longitud [m]:",font=("Yu Gothic bold",10))
 	alturaLabel = Label(frameFloculador, text="a = Altura [m]:",font=("Yu Gothic bold",10))
-	densidadAguaLabel = Label(frameFloculador, text=u"\u03C1 = Densidad del agua [Kg/(m^3)]:",font=("Yu Gothic bold",10))
-	viscocidadCinematicaLabel = Label(frameFloculador, text=u"\u03BC = Viscosidad Cinemática del agua [(m^2)/s]:",font=("Yu Gothic bold",10))
 	gravedadLabel = Label(frameFloculador, text="g = Gravedad [m/(s^2)]",font=("Yu Gothic bold",10))
 	temperaturaLabel = Label(frameFloculador, text="°C = Temperatura [°C]:",font=("Yu Gothic bold",10))
 	coeficienteDescargaLabel = Label(frameFloculador, text="Cd = Coeficiente de descarga [K]",font=("Yu Gothic bold",10))
 	coeficienteDescargaOrificiosLabel = Label(frameFloculador, text="Cd = Coeficiente de descarga Orificios [K]",font=("Yu Gothic bold",10))
 	
 	
-	listaLabel = [datosEntradaLabel,caudalDiseñoLabel,tiempoFloculacionLabel,diametroInterconexionLabel,diametroInternoLabel,diametroExternoLabel,
-				anchoLabel , longitudLabel,alturaLabel,densidadAguaLabel,viscocidadCinematicaLabel,gravedadLabel,temperaturaLabel,
+	listaLabel = [datosEntradaLabel,caudalDiseñoLabel,tiempoFloculacionLabel,diametroInternoLabel,diametroExternoLabel,
+				anchoLabel , longitudLabel,alturaLabel,gravedadLabel,temperaturaLabel,
 				coeficienteDescargaLabel,coeficienteDescargaOrificiosLabel]
 
 	caudalDiseño = Entry(frameFloculador)
 	caudalDiseño.focus()
-	tiempoFloculacion = Entry(frameFloculador)
-	diametroInterconexion = Entry(frameFloculador)
+	
+	listaValoresTemperaturaFloculacion=list()
+	for i in range(20,41):
+		listaValoresTemperaturaFloculacion.append(f"{i}")
+	tiempoFloculacion = ttk.Combobox(frameFloculador, width="18", state="readonly",values=listaValoresTemperaturaFloculacion)
+	tiempoFloculacion.set("Seleccione")
+
 	diametroInterno = Entry(frameFloculador)
 	diametroExterno = Entry(frameFloculador)
 	ancho = Entry(frameFloculador)
 	longitud = Entry(frameFloculador)
 	altura = Entry(frameFloculador)
-	densidadAgua = Entry(frameFloculador)
-	viscocidadCinematica = Entry(frameFloculador)
 	gravedad = Entry(frameFloculador)
 	gravedad.insert(0,9.81)
-	temperatura = Entry(frameFloculador)
+
+	listaValoresTemperatura=list()
+	for i in range(0,36):
+		listaValoresTemperatura.append(f"{i}")
+	temperatura = ttk.Combobox(frameFloculador, width="18", state="readonly",values=listaValoresTemperatura)
+	temperatura.set("Seleccione")
+
 	coeficienteDescarga = Entry(frameFloculador)
 	coeficienteDescargaOrificios = Entry(frameFloculador)
 	
 
-	listaEntry= [caudalDiseño,tiempoFloculacion,diametroInterconexion,diametroInterno,diametroExterno,
-				ancho,longitud,altura,densidadAgua,viscocidadCinematica,gravedad,temperatura,
+	listaEntry= [caudalDiseño,tiempoFloculacion,diametroInterno,diametroExterno,
+				ancho,longitud,altura,gravedad,temperatura,
 				coeficienteDescarga,coeficienteDescargaOrificios]
-
-
+	
+	entryDiametroInternoAdicional= Entry(frameFloculador)
+	entryDiametroInternoAdicional.insert(0,"0.46")
+	numeroCamaras= Entry(frameFloculador)
+	numeroCamaras.insert(0,"12")
 	
 	control=0
 	alturaInicial=70
 	alturaInicial2=113
 	for elemento in listaLabel:
-		if control<8:
+		if control<7:
 			elemento.place(x=20,y=alturaInicial)
 			alturaInicial+=43
 		else:
@@ -10102,7 +10281,7 @@ def openFloculadorWindow():
 	alturaInicial=113
 	alturaInicial2=113
 	for elemento in listaEntry:
-		if control<7:
+		if control<6:
 			elemento.place(x=300,y=alturaInicial)
 			alturaInicial+=43
 		else:
@@ -10112,21 +10291,26 @@ def openFloculadorWindow():
 	xInicial=20
 	xInicial2=20
 	control=0
+
 	for elemento in listaBotones:
 		if control<2:
-			elemento.place(x=xInicial ,y=alturaInicial2)
+			elemento.place(x=xInicial ,y=alturaInicial2+43)
 			xInicial+=500
 		else:
-			elemento.place(x=xInicial2 ,y=alturaInicial2+86)
+			elemento.place(x=xInicial2 ,y=alturaInicial2+100)
 			xInicial2+=500
 		control+=1
 
 
 	#Borrar
-	listaValores=[57.26,20.00,0.39,0.45964,0.508,1.30,1.60,2.75,998.30,0.00000101,9.81,20.00,0.76,0.80]
+	listaValores=[50.00,27.00,0.45964,0.508,1.30,1.60,2.75,9.81,20.00,0.76,0.80]
 	for i in range(0, len(listaValores)):
-		if i == 10:
+		if i == 7:
 			pass
+		elif i == 1:
+			listaEntry[i].set(27)
+		elif i==8:
+			listaEntry[i].set(20)
 		else:
 			listaEntry[i].insert(0, listaValores[i])
 
