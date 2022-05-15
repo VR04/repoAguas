@@ -268,7 +268,7 @@ def openSedWindow():
 		
 		parametrosDeDiseñoSedimentadorAltaTasaWindow = tk.Toplevel()
 		parametrosDeDiseñoSedimentadorAltaTasaWindow.iconbitmap(bitmap='icons\\agua.ico')
-		parametrosDeDiseñoSedimentadorAltaTasaWindow.geometry("700x600") 
+		parametrosDeDiseñoSedimentadorAltaTasaWindow.geometry("700x500") 
 		parametrosDeDiseñoSedimentadorAltaTasaWindow.resizable(0,0)	
 		parametrosDeDiseñoSedimentadorAltaTasaWindow.configure(background="#9DC4AA")
 
@@ -280,16 +280,16 @@ def openSedWindow():
 		arbolparametrosDeDiseñoSedimentadorAltaTasa_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		sedScrollX=Scrollbar(arbolparametrosDeDiseñoSedimentadorAltaTasa_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
+		#sedScrollX=Scrollbar(arbolparametrosDeDiseñoSedimentadorAltaTasa_frame,orient=HORIZONTAL)
+		#sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arbolparametrosDeDiseñoSedimentadorAltaTasa_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolparametrosDeDiseñoSedimentadorAltaTasa= ttk.Treeview(arbolparametrosDeDiseñoSedimentadorAltaTasa_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolparametrosDeDiseñoSedimentadorAltaTasa= ttk.Treeview(arbolparametrosDeDiseñoSedimentadorAltaTasa_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set
 		arbolparametrosDeDiseñoSedimentadorAltaTasa.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		sedScrollX.configure(command=arbolparametrosDeDiseñoSedimentadorAltaTasa.xview)
+		#sedScrollX.configure(command=arbolparametrosDeDiseñoSedimentadorAltaTasa.xview)
 		sedScrollY.configure(command=arbolparametrosDeDiseñoSedimentadorAltaTasa.yview)
 		#Define columnas.
 		arbolparametrosDeDiseñoSedimentadorAltaTasa["columns"]= (
@@ -681,7 +681,7 @@ def openSedWindow():
 		'''
 		canaletasRecoleccionAguaWindow = tk.Toplevel()
 		canaletasRecoleccionAguaWindow.iconbitmap(bitmap='icons\\agua.ico')
-		canaletasRecoleccionAguaWindow.geometry("520x200") 
+		canaletasRecoleccionAguaWindow.geometry("500x180") 
 		canaletasRecoleccionAguaWindow.resizable(0,0)	
 		canaletasRecoleccionAguaWindow.configure(background="#9DC4AA")
 
@@ -695,15 +695,15 @@ def openSedWindow():
 		#Scrollbar
 		# sedScrollX=Scrollbar(arbolcanaletasRecoleccionAgua_frame,orient=HORIZONTAL)
 		# sedScrollX.pack(side=BOTTOM, fill=X)
-		sedScrollY=Scrollbar(arbolcanaletasRecoleccionAgua_frame,orient=VERTICAL)
-		sedScrollY.pack(side=LEFT, fill=Y)
+		# sedScrollY=Scrollbar(arbolcanaletasRecoleccionAgua_frame,orient=VERTICAL)
+		# sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolcanaletasRecoleccionAgua= ttk.Treeview(arbolcanaletasRecoleccionAgua_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set
+		arbolcanaletasRecoleccionAgua= ttk.Treeview(arbolcanaletasRecoleccionAgua_frame,selectmode=BROWSE, height=11,show="tree headings") #,yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set
 		arbolcanaletasRecoleccionAgua.pack(side=TOP, fill=BOTH, expand=TRUE)
 
 		#sedScrollX.configure(command=arbolcanaletasRecoleccionAgua.xview)
-		sedScrollY.configure(command=arbolcanaletasRecoleccionAgua.yview)
+		#sedScrollY.configure(command=arbolcanaletasRecoleccionAgua.yview)
 		#Define columnas.
 		arbolcanaletasRecoleccionAgua["columns"]= (
 		"1","2","Unidades")
@@ -872,7 +872,7 @@ def openSedWindow():
 		
 		tiempoRetencionTotalTanqueWindow = tk.Toplevel()
 		tiempoRetencionTotalTanqueWindow.iconbitmap(bitmap='icons\\agua.ico')
-		tiempoRetencionTotalTanqueWindow.geometry("560x200") 
+		tiempoRetencionTotalTanqueWindow.geometry("560x300") 
 		tiempoRetencionTotalTanqueWindow.resizable(0,0)	
 		tiempoRetencionTotalTanqueWindow.configure(background="#9DC4AA")
 
@@ -886,15 +886,15 @@ def openSedWindow():
 		#Scrollbar
 		#sedScrollX=Scrollbar(arboltiempoRetencionTotalTanque_frame,orient=HORIZONTAL)
 		#sedScrollX.pack(side=BOTTOM, fill=X)
-		sedScrollY=Scrollbar(arboltiempoRetencionTotalTanque_frame,orient=VERTICAL)
-		sedScrollY.pack(side=LEFT, fill=Y)
+		# sedScrollY=Scrollbar(arboltiempoRetencionTotalTanque_frame,orient=VERTICAL)
+		# sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arboltiempoRetencionTotalTanque= ttk.Treeview(arboltiempoRetencionTotalTanque_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set,
+		arboltiempoRetencionTotalTanque= ttk.Treeview(arboltiempoRetencionTotalTanque_frame,selectmode=BROWSE, height=11,show="tree headings")#,yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set,
 		arboltiempoRetencionTotalTanque.pack(side=TOP, fill=BOTH, expand=TRUE)
 
 		#sedScrollX.configure(command=arboltiempoRetencionTotalTanque.xview)
-		sedScrollY.configure(command=arboltiempoRetencionTotalTanque.yview)
+		#sedScrollY.configure(command=arboltiempoRetencionTotalTanque.yview)
 		#Define columnas.
 		arboltiempoRetencionTotalTanque["columns"]= (
 		"1","2","Unidades")
@@ -1442,7 +1442,7 @@ def openSedWindow():
 		###
 		disenoSistemaEvacuacionLodosWindow = tk.Toplevel()
 		disenoSistemaEvacuacionLodosWindow.iconbitmap(bitmap='icons\\agua.ico')
-		disenoSistemaEvacuacionLodosWindow.geometry("600x400") 
+		disenoSistemaEvacuacionLodosWindow.geometry("520x400") 
 		disenoSistemaEvacuacionLodosWindow.resizable(0,0)	
 		disenoSistemaEvacuacionLodosWindow.configure(background="#9DC4AA")
 
@@ -1454,16 +1454,16 @@ def openSedWindow():
 		arboldisenoSistemaEvacuacionLodos_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		sedScrollX=Scrollbar(arboldisenoSistemaEvacuacionLodos_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollX=Scrollbar(arboldisenoSistemaEvacuacionLodos_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arboldisenoSistemaEvacuacionLodos_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arboldisenoSistemaEvacuacionLodos= ttk.Treeview(arboldisenoSistemaEvacuacionLodos_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arboldisenoSistemaEvacuacionLodos= ttk.Treeview(arboldisenoSistemaEvacuacionLodos_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set
 		arboldisenoSistemaEvacuacionLodos.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		sedScrollX.configure(command=arboldisenoSistemaEvacuacionLodos.xview)
+		#sedScrollX.configure(command=arboldisenoSistemaEvacuacionLodos.xview)
 		sedScrollY.configure(command=arboldisenoSistemaEvacuacionLodos.yview)
 		#Define columnas.
 		arboldisenoSistemaEvacuacionLodos["columns"]= (
@@ -1490,7 +1490,7 @@ def openSedWindow():
 			arboldisenoSistemaEvacuacionLodos.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
 
 		arboldisenoSistemaEvacuacionLodos.column("#0",width=0, stretch=False)
-		arboldisenoSistemaEvacuacionLodos.column("#1",width=400, stretch=False)
+		arboldisenoSistemaEvacuacionLodos.column("#1",width=300, stretch=False)
 		arboldisenoSistemaEvacuacionLodos.column("#2",width=100, stretch=False)
 		arboldisenoSistemaEvacuacionLodos.column("#3",width=100, stretch=False)
 
@@ -1509,11 +1509,11 @@ def openSedWindow():
 					"Tirante sobre los orificios del múltiple de descarga",
 					"Diámetro nominal del múltiple de descarga",
 					"Diametro interno del múltiple de descarga",
-					"Diámetro nominal de los orificios del múltiple de descarga",
-					"Diámetro interno de los orificios del múltiple de descarga",
+					"Diámetro nominal de los orificios del múltiple\nde descarga",
+					"Diámetro interno de los orificios del múltiple\nde descarga",
 					"Separación entre orificios del múltiple (teórica)",
 					"Número de orificios del múltiple de descarga",
-					"Cuadrado de la relación entre el diámetro de orificios  y el del múltiple por el número de orificios",
+					"Cuadrado de la relación entre el diámetro de orificios\ny el del múltiple por el número de orificios",
 					"Separación entre orificios del múltiple (confirmada)"]
 
 
@@ -1595,8 +1595,10 @@ def openSedWindow():
 			diametroNominalMutipleDescarga = "4(RDE 13.5)"
 		elif 3.5<=longitudMultipleDescarga<6.5:
 			diametroNominalMutipleDescarga = "6(RDE 13.5)"
-		elif 6.5<=longitudMultipleDescarga<12.0:
+		elif 6.5<=longitudMultipleDescarga<=12.0:
 			diametroNominalMutipleDescarga = "8(RDE 13.5)"
+		
+		listadisenoSistemaEvacuacionLodos.append(diametroNominalMutipleDescarga)
 
 		listaDiametroNominal= [
 		"4(RDE 13.5)",
@@ -1612,9 +1614,9 @@ def openSedWindow():
 		for i in range(0, len(listaDiametroNominal)):
 			diamentroInternoDic[listaDiametroNominal[i]]=listaDiametroInterno[i]
 
-		diametroInterno= diamentroInternoDic[diametroNominalMutipleDescarga]:
+		diametroInterno= diamentroInternoDic[diametroNominalMutipleDescarga]
 		listadisenoSistemaEvacuacionLodos.append(round(diametroInterno,3))
-		listadisenoSistemaEvacuacionLodos.append(round(diametroNominalOrificionesMultipleDescarga,3))
+		listadisenoSistemaEvacuacionLodos.append(diametroNominalOrificionesMultipleDescarga)
 		
 		listaDiametroNominalOrificiosMultipleDescarga= [
 		'1/2 (RDE 9)',
@@ -1657,7 +1659,9 @@ def openSedWindow():
 
 		listadisenoSistemaEvacuacionLodos.append(round(cuadradoRelacionDiametroOrificiosYMultiplePorNumeroOrificios,3))
 
-		listadisenoSistemaEvacuacionLodos.append(round(,3))
+		separacionOrificiosMultipleConfirmada = longitudMultipleDescarga/numeroOrificiosMultipleDescarga
+
+		listadisenoSistemaEvacuacionLodos.append(round(separacionOrificiosMultipleConfirmada,3))
 
 
 		#Volver4
