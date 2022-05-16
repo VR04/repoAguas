@@ -489,20 +489,22 @@ def openSedWindow():
 		arboldeterminacionParametrosBasicosDiseno_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		#sedScrollX=Scrollbar(arboldeterminacionParametrosBasicosDiseno_frame,orient=HORIZONTAL)
-		#sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollX=Scrollbar(arboldeterminacionParametrosBasicosDiseno_frame,orient=HORIZONTAL)
+		sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arboldeterminacionParametrosBasicosDiseno_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arboldeterminacionParametrosBasicosDiseno= ttk.Treeview(arboldeterminacionParametrosBasicosDiseno_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set)
+		arboldeterminacionParametrosBasicosDiseno= ttk.Treeview(arboldeterminacionParametrosBasicosDiseno_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set, xscrollcommand=sedScrollX.set)
 		arboldeterminacionParametrosBasicosDiseno.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		# sedScrollX.configure(command=arboldeterminacionParametrosBasicosDiseno.xview)
+		sedScrollX.configure(command=arboldeterminacionParametrosBasicosDiseno.xview)
 		sedScrollY.configure(command=arboldeterminacionParametrosBasicosDiseno.yview)
 		#Define columnas.
 		arboldeterminacionParametrosBasicosDiseno["columns"]= (
-		"1","2","Unidades")
+		"1","2","Unidades","Adicionales")
+
+		
 
 		#Headings
 		arboldeterminacionParametrosBasicosDiseno.heading("#0",text="ID", anchor=CENTER)
@@ -527,7 +529,9 @@ def openSedWindow():
 		arboldeterminacionParametrosBasicosDiseno.column("#1",width=400, stretch=False)
 		arboldeterminacionParametrosBasicosDiseno.column("#2",width=100, stretch=False)
 		arboldeterminacionParametrosBasicosDiseno.column("#3",width=100, stretch=False)
-					
+		arboldeterminacionParametrosBasicosDiseno.column("#4",width=270, stretch=False)
+
+
 		arboldeterminacionParametrosBasicosDiseno.column("#0",width=0, stretch=False)
 		
 		
@@ -580,6 +584,7 @@ def openSedWindow():
 						"",
 						"min"]
 		
+		
 		listaSalidaDatosEntradaPrametrosBasicosCalculos = datosEntradaParametrosBasicosCalculos(tipoFloc, tipoCelda, materialTipoCelda, dimensionesTipoCeldaMaterial, anguloInclinacion, numeroUnidades,distanciaPlacas, caudalMedio,factorMayoracionCaudalMD, temperatura)
 		# listaSalida=[0 = tipoFloc,1 = tipoCelda,
 		# 2= materialCelda, 3= dimensiones,
@@ -622,12 +627,82 @@ def openSedWindow():
 		tiempoRetencionCadaConjunto = (largoPlaca/velocidadPromedioFlujoConductos)/60.0
 		listadeterminacionParametrosBasicosDiseno.append(round(tiempoRetencionCadaConjunto,3))
 
+		if cargaSuperficial<120.0:
+			revisaCargaSuperficial= "¡Carga superficial baja,seleccione otra\nlongitud de tanque y/u otro número de módulos!"
+		elif cargaSuperficial>185.0:
+			revisaCargaSuperficial= "¡Carga superficial alta, seleccione otra\nlongitud de tanque y/u otro número de módulos!"
+		else:
+			revisaCargaSuperficial= "Carga superficial dentro del rango aceptado"
+
+		if velocidadPromedioFlujoConductos<0.002:
+			revisaVelPromedioFlujo= "La velocidad promedio del flujo entre\n conductos es baja, ajuste datos de entrada"
+		elif velocidadPromedioFlujoConductos>0.0025:
+			revisaVelPromedioFlujo= "La velocidad promedio del flujo entre\n conductos es alta, ajuste datos de entrada"
+		else:
+			revisaVelPromedioFlujo= "La velocidad promedio del flujo entre\n conductos es adecuada"
+
+		if longitudRelativaRegionTransicion>longitudRelativaRegionTransicionCorregida:
+			revisaLongitudRelativaRegionTransicion="Aumente el valor de la longitud\n del sedimentador a un valor aproximado de 2·Lc·e"
+		else: 
+			revisaLongitudRelativaRegionTransicion="¡Ok!"
+		
+		if tipoFloc == "Floc de alumbre":
+			if velocidadSedimentacionCritica<12.0:
+				revisaVelocidadSedimentacionCritica="La velocidad de sedimentación crítica es baja,\n¡Ajuste datos de entrada!"
+			elif velocidadSedimentacionCritica>23.0:
+				revisaVelocidadSedimentacionCritica="La velocidad de sedimentación crítica es alta,\n¡Ajuste datos de entrada!"
+			else:
+				revisaVelocidadSedimentacionCritica="La velocidad de sedimentación crítica es\n adecuada."
+		else:
+			if velocidadSedimentacionCritica<16.0:
+				revisaVelocidadSedimentacionCritica="La velocidad de sedimentación crítica es baja,\n ¡Ajuste datos de entrada!"
+			elif velocidadSedimentacionCritica>29.0:
+				revisaVelocidadSedimentacionCritica="La velocidad de sedimentación crítica es alta,\n¡Ajuste datos de entrada!"
+			else:
+				revisaVelocidadSedimentacionCritica="La velocidad de sedimentación crítica es\n adecuada."
+		if numeroReynolds<100.0:
+			revisaNumeroReynolds="El valor del número de Reynolds es bajo,\najuste los datos de entrada."
+		else:
+			revisaNumeroReynolds="El valor del número de Reynolds es\nadecuado."
+		if tipoCelda == "Conductos cuadrados":
+			if tiempoRetencionCadaConjunto<6.0:
+				revisaTiempoRetencion="El tiempo de retención es bajo, ajuste datos\n de entrada!"
+			elif tiempoRetencionCadaConjunto>10.0:
+				revisaTiempoRetencion="El tiempo de retención es alto, ajuste datos\n de entrada!"
+			else:
+				revisaTiempoRetencion="El tiempo de retención es adecuado."
+		else:
+			if tiempoRetencionCadaConjunto<10.0:
+				revisaTiempoRetencion="El tiempo de retención es bajo, ajuste datos de entrada!"
+			elif tiempoRetencionCadaConjunto>15.0:
+				revisaTiempoRetencion="El tiempo de retención es alto, ajuste datos de entrada!"
+			else:
+				revisaTiempoRetencion="El tiempo de retención es adecuado."		
+
+
+		
+
+		listaAdicionales=[
+			"",
+			"",
+			"",	
+			revisaCargaSuperficial,
+			"",
+			revisaVelPromedioFlujo,
+			"",
+			"",
+			revisaLongitudRelativaRegionTransicion, 
+			revisaVelocidadSedimentacionCritica,	
+		revisaNumeroReynolds, revisaTiempoRetencion]
+
+
 
 		for i in range(0, len(encabezadosLista)):
 			listaTemp=list()
 			listaTemp.append(encabezadosLista[i])
 			listaTemp.append(listadeterminacionParametrosBasicosDiseno[i])
 			listaTemp.append(unidadesLista[i])
+			listaTemp.append(listaAdicionales[i])
 			newDataTreeview(arboldeterminacionParametrosBasicosDiseno,listaTemp)
 
 		determinacionParametrosBasicosDisenoWindow.mainloop()
@@ -1231,6 +1306,7 @@ def openSedWindow():
 
 		##Tiempo retención en el tanque
 
+	
 		#CalculosCanaletasRecoleccion
 
 		numeroCanaletasRecoleccionModulo= int(longitudPlacas/distanciaCanaletasRecoleccion)
@@ -1243,8 +1319,7 @@ def openSedWindow():
 		
 		alturaSedimentacion = distanciaVerticalDistribucionPlacas+alturaPlacas+nivelAguaSobrePlacas
 		
-		
-		
+		volumenSedimentacionTanque = alturaSedimentacion*(longitudPlacas)*(anchoModulos) - ((numeroConductosLargoUnidad -1.0)*(largoPlaca)*(anchoModulos)*(listaSalidaDatosEntradaPrametrosBasicosCalculos[4]/1000.0))
 		
 		
 
@@ -1278,6 +1353,13 @@ def openSedWindow():
 			listaTemp.append(listadimensionesDelSedimentador[i])
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arboldimensionesDelSedimentador,listaTemp)
+		
+		if volumenTolvaLodos < (0.1*(volumenTolvaLodos+volumenSedimentacionTanque)):
+			messagebox.showinfo(title="Información", message="El volumen de la tolva de lodos es bajo en relación al volumen total del tanque, ¡Revise datos!")
+		elif volumenTolvaLodos > (0.2*(volumenTolvaLodos+volumenSedimentacionTanque)):
+			messagebox.showinfo(title="Información", message="El volumen de la tolva de lodos es alto en relación al volumen total del tanque, ¡Revise datos!")
+			
+
 
 		dimensionesDelSedimentadorWindow.mainloop()
 
@@ -1659,7 +1741,10 @@ def openSedWindow():
 			listaTemp.append(listadisenoSistemaEvacuacionLodos[i])
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arboldisenoSistemaEvacuacionLodos,listaTemp)
-
+		if cuadradoRelacionDiametroOrificiosYMultiplePorNumeroOrificios<0.4:
+			messagebox.showinfo(title="Información", message="¡El Valor resultante del cuadrado de la relación entre el diámetro de orificios y el del múltiple por el número de orificios es bajo, revise datos de diámetros de orificios!")
+		elif cuadradoRelacionDiametroOrificiosYMultiplePorNumeroOrificios>0.45:
+			messagebox.showinfo(title="Información", message="¡El Valor resultante del cuadrado de la relación entre el diámetro de orificios y el del múltiple por el número de orificios es alto, revise datos de diámetros de orificios!")
 		disenoSistemaEvacuacionLodosWindow.mainloop()
 		
 		
@@ -10173,7 +10258,7 @@ def openFloculadorWindow():
 		numeroCamp= gradienteMezcla*tiempoDetencionCamara
 		pendiente=perdidaTotalFloculador/longitud
 		
-		#Volver
+		
 		listaValores=[diametroInternoOrificio, areaOrificio, coeficienteDescarga,
 		perdidaPasamuros,perdidaCodo, perdidaOrificio, perdidaTotalFloculador,
 		gradienteMezcla,numeroCamp,pendiente]
