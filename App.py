@@ -129,10 +129,10 @@ def openSedWindow():
 			else:
 				lista[i].delete(0, END)
 		
-		listaReiLabels= ["Ángulo de inclinación:", "Distancia del tipo de celda:","Longitud del tipo de celda:"]
-		
+		listaReiLabels= ["Ángulo de inclinación [°]:", "Distancia del tipo de celda [cm]:","Longitud del tipo de celda [m]:",
+		"Seleccione el material del tipo de celda:","Seleccione las dimensiones del tipo de celda [mm x mm]:"]		
 		for m in range(0, len(lista2)):
-			lista2[m].config(text = listaReiLabels[m])
+			lista2[m].config(text = listaReiLabels[m], font=("Yu Gothic",8))
 	
 
 
@@ -422,10 +422,7 @@ def openSedWindow():
 
 			labels=["ángulo de inclinación", "distancia entre placas","caudal medio diario",
 			"factor de mayoración del caudal máximo diario", "longitud ocupada por las placas"]
-
-		#RevisarXDPendiente
-		labels=["ángulo de inclinación", "distancia entre placas ó lado interno de los conductos","caudal medio diario",
-		"factor de mayoración del caudal máximo diario", "longitud ocupada por los módulos"]
+		
 		
 		for i in range(0, len(listaSinComboBox)):
 			if listaSinComboBox[i].get() == "":
@@ -1722,16 +1719,23 @@ def openSedWindow():
 		if tipoCelda.get() == "Conductos cuadrados":	
 			materialTipoCelda.set(f"Seleccione el material de los {tipoCelda.get().lower()}")
 			materialTipoCelda.config(values=oP2[tipoCelda.get()])
-			anguloInclinacionLabel.config(text=f"Ángulo de inclinación de {tipoCelda.get().lower()}:")
-			distanciaPlacasLabel.config(text=f"Lado interno de {tipoCelda.get().lower()}:")
-			longitudPlacasLabel.config(text="Longitud ocupada por los módulos:")
+			anguloInclinacionLabel.config(text=f"Ángulo de inclinación de {tipoCelda.get().lower()} [°]:")
+			distanciaPlacasLabel.config(text=f"Lado interno de {tipoCelda.get().lower()} [cm]:")
+			longitudPlacasLabel.config(text="Longitud ocupada por los módulos [m]:")
+			materialTipoCeldaLabel.config(text=f"Seleccione el material los {tipoCelda.get().lower()}:")	
+			dimensionesCeldaLabel.config(text=f"Seleccione las dimensiones de la sección tranversal inclinada [mm x mm]:", font=("Yu Gothic",7))	
 			dimensionesTipoCeldaMaterial.set(f"Seleccione las dimensiones del {tipoCelda.get().lower()}")
+
+
+
 		else:
 			materialTipoCelda.set(f"Seleccione el material de las {tipoCelda.get().lower()}")
 			materialTipoCelda.config(values=oP2[tipoCelda.get()])
-			anguloInclinacionLabel.config(text=f"Ángulo de inclinación de {tipoCelda.get().lower()}:")
-			distanciaPlacasLabel.config(text="Distancia entre placas:")
-			longitudPlacasLabel.config(text="Longitud ocupada por las placas:")
+			anguloInclinacionLabel.config(text=f"Ángulo de inclinación {tipoCelda.get().lower()} [°]:")
+			distanciaPlacasLabel.config(text="Distancia entre placas [cm]:")
+			longitudPlacasLabel.config(text="Longitud ocupada por las placas [m]:")
+			materialTipoCeldaLabel.config(text=f"Seleccione el material de las {tipoCelda.get().lower()}:")	
+			dimensionesCeldaLabel.config(text=f"Seleccione las dimensiones de las {tipoCelda.get().lower()}:",font=("Yu Gothic",8)) 
 			dimensionesTipoCeldaMaterial.set(f"Seleccione las dimensiones del {tipoCelda.get().lower()}")
 			
 		
@@ -1875,6 +1879,16 @@ def openSedWindow():
 	velocidadMinimaArrastreLabel = Label(frameSed, text="Velocidad mínima de arrastre asignada [m/s]", font =("Yu Gothic",9))	
 
 	
+	tipoFlocLabel = Label(frameSed, text="Seleccione el tipo de floc:", font =("Yu Gothic",8))	
+	tipoCeldaLabel = Label(frameSed, text="Seleccione el tipo de celda:", font =("Yu Gothic",8))	
+	materialTipoCeldaLabel= Label(frameSed, text="Seleccione el material del tipo de celda:", font =("Yu Gothic",8))	
+	dimensionesCeldaLabel= Label(frameSed, text="Seleccione las dimensiones del tipo de celda [mm x mm]:", font =("Yu Gothic",8))	
+	numeroUnidadesLabel= Label(frameSed, text="Seleccione el número de unidades [und]:", font =("Yu Gothic",8))	
+	diametroNominalOrificionesMultipleDescargaLabel = Label(frameSed, text="Seleccione el diámetro nominal de los orificios del múltiple de descarga [pulg]:", font =("Yu Gothic",8))	
+
+	listaLabelAdicionales=[tipoFlocLabel, tipoCeldaLabel, materialTipoCeldaLabel,
+	dimensionesCeldaLabel,numeroUnidadesLabel, diametroNominalOrificionesMultipleDescargaLabel]
+	
 	listaLabels=[labelIntroduccion,
 	caudalDiseñoLabel,
 	factorMayoracionCaudalMDLabel,
@@ -1900,7 +1914,9 @@ def openSedWindow():
 	velocidadMinimaArrastreLabel,
 	diametroNominalOrificionesMultipleDescarga
 	]
-	listaLabelReiniciar =[anguloInclinacionLabel, distanciaPlacasLabel, longitudPlacasLabel]
+	
+	#voler
+	listaLabelReiniciar =[anguloInclinacionLabel, distanciaPlacasLabel, longitudPlacasLabel, materialTipoCeldaLabel,dimensionesCeldaLabel]
 	
 	
 	#ListasEntradasBotonesSed
@@ -1944,6 +1960,7 @@ def openSedWindow():
 	yInicial3=50
 	#0,1,5,7
 	j=0
+	m=0
 	for i in range(0, len(listaLabels)):
 		if i<7:
 
@@ -1958,18 +1975,39 @@ def openSedWindow():
 		
 		elif 7<=i<16 :
 			if i==7:
+				yInicial2= yInicial2 - 50 
 				listaLabels[i].place(x=450, y=yInicial2)
-				yInicial2=yInicial2 + 30
+				yInicial2=yInicial2 + 40
 			else:
-				lista_entradas[j].place(x=730, y=yInicial2)
-				listaLabels[i].place(x=450, y=yInicial2)
-				yInicial2=yInicial2 + 30
-				j=j+1
+				if i==11 or i==13 or i==14:
+					if m<=4:
+						listaLabelAdicionales[m].place(x=450, y=yInicial2-20)
+						m=m+1
+					lista_entradas[j].place(x=730, y=yInicial2)
+					listaLabels[i].place(x=450, y=yInicial2)
+					yInicial2=yInicial2 + 25
+					j=j+1
+				else:
+					if m<=4:
+						if m==4:
+							pass
+						else:
+							listaLabelAdicionales[m].place(x=450, y=yInicial2-20)
+							m=m+1
+					lista_entradas[j].place(x=730, y=yInicial2)
+					listaLabels[i].place(x=450, y=yInicial2)
+					yInicial2=yInicial2 + 45
+					j=j+1
+					
 		else:
-
-				lista_entradas[j].place(x=1100, y=yInicial3)
-				listaLabels[i].place(x=800, y=yInicial3)
-				yInicial3=yInicial3 + 30
+				if i == (len(listaLabels)-1):
+					listaLabelAdicionales[m].place(x=800, y= yInicial3)
+					listaLabels[i].place(x=800, y=yInicial3+30)
+					yInicial3=yInicial3 + 30
+				else:
+					lista_entradas[j].place(x=1100, y=yInicial3)
+					listaLabels[i].place(x=800, y=yInicial3)
+					yInicial3=yInicial3 + 30
 				
 				j=j+1
 		i=i+1
