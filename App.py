@@ -2157,7 +2157,7 @@ def openFiltroWindow():
 		
 		caracFiltroWindow = tk.Toplevel()
 		caracFiltroWindow.iconbitmap(bitmap='icons\\agua.ico')
-		caracFiltroWindow.geometry("1000x500") 
+		caracFiltroWindow.geometry("400x500") 
 		caracFiltroWindow.resizable(0,0)	
 		caracFiltroWindow.configure(background="#9DC4AA")
 		
@@ -2166,16 +2166,16 @@ def openFiltroWindow():
 		arbolCaracFiltro_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		sedScrollX=Scrollbar(arbolCaracFiltro_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollX=Scrollbar(arbolCaracFiltro_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arbolCaracFiltro_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolCaracFiltro= ttk.Treeview(arbolCaracFiltro_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolCaracFiltro= ttk.Treeview(arbolCaracFiltro_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set)#,xscrollcommand=sedScrollX.set
 		arbolCaracFiltro.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		sedScrollX.configure(command=arbolCaracFiltro.xview)
+		#sedScrollX.configure(command=arbolCaracFiltro.xview)
 		sedScrollY.configure(command=arbolCaracFiltro.yview)
 		#Define columnas.
 		arbolCaracFiltro["columns"]= (
@@ -2188,10 +2188,10 @@ def openFiltroWindow():
 		for col in arbolCaracFiltro["columns"]:
 			arbolCaracFiltro.heading(col, text=col,anchor=CENTER)
 
-		for i in range(0,len(arbolCaracFiltro["columns"])) :
-				arbolCaracFiltro.column(f"#{i}",width=300, stretch=False)	
+		
 	
-		arbolCaracFiltro.column("#2",width=300, stretch=True)
+		arbolCaracFiltro.column("#2",width=200, stretch=False)
+		arbolCaracFiltro.column("#1",width=200, stretch=False)
 		arbolCaracFiltro.column("#0",width=0, stretch=False)
 
 		#Striped row tags
@@ -2321,31 +2321,35 @@ def openFiltroWindow():
 		#Treeview
 		arbolGranulometria= ttk.Treeview(arbolgranulometria_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
 		arbolGranulometria.pack(side=TOP, fill=BOTH, expand=TRUE)
-
+		
+		#Volver
 		sedScrollX.configure(command=arbolGranulometria.xview)
 		sedScrollY.configure(command=arbolGranulometria.yview)
 		#Define columnas.
 		arbolGranulometria["columns"]= (
 		"Número de tamiz",
 		"Arena retenida [%]", 
-		"Número de tamiz que retiene", 
+		"Tamiz que retiene", 
 		"Tamaño de abertura del tamiz [mm] (OD)", 
 		"Acumulado de arena que pasa [%] (OD)", 
 		"Tamaño de abertura del tamiz [mm] (OA)", 
 		"Acumulado de arena que pasa [%](OA)" 
 		)
-
+		
+		
 		#Headings
 		arbolGranulometria.heading("#0",text="ID", anchor=CENTER)
 		
 		for col in arbolGranulometria["columns"]:
+			#Volver
 			arbolGranulometria.heading(col, text=col,anchor=CENTER)
 
-		for i in range(0,4) :
-				arbolGranulometria.column(f"#{i}",width=300, stretch=False)	
+		listaLargoFila=[0,200,200,200,400,400,400,400,200]
+		for i in range(1,len(arbolGranulometria["columns"])):
+				arbolGranulometria.column(f"#{i}",width=listaLargoFila[i], stretch=False)	
 		
-		for i in range(4,len(arbolGranulometria["columns"])+1) :
-				arbolGranulometria.column(f"#{i}",width=500, stretch=False)	
+
+		
 		
 	
 		arbolGranulometria.column("#0",width=0, stretch=False)
@@ -2412,9 +2416,9 @@ def openFiltroWindow():
 			listaEntradaTemp.append(listaARetenida[ind])
 			listaEntradaTemp.append(extremoDerecho)
 			listaEntradaTemp.append(tablaTamañoAberturaTamiz[extremoDerecho])
-			listaEntradaTemp.append(listaAcumuladoArenaDescendente[ind])
-			listaEntradaTemp.append(tablaTamañoAberturaTamiz[listaNTamizExtremo[longListaARetenida-ind]])
-			listaEntradaTemp.append(listaAcumuladoArenaAscendente[ind])
+			listaEntradaTemp.append(round(listaAcumuladoArenaDescendente[ind],3))
+			listaEntradaTemp.append(round(tablaTamañoAberturaTamiz[listaNTamizExtremo[longListaARetenida-ind]],3))
+			listaEntradaTemp.append(round(listaAcumuladoArenaAscendente[ind],3))
 			listaIntermedia = listaEntradaTemp.copy()
 			datosSalida.append(listaIntermedia)
 			newDataTreeview(arbolGranulometria, listaEntradaTemp)
@@ -2673,6 +2677,7 @@ def openFiltroWindow():
 		d60= calculo2CU(60,X1,Y1,X2,Y2)
 		CU=d60/d10
 		listaIngreso=[d10,d60,CU]
+		#Volver
 		newDataTreeview(arbolCoeficienteDU,listaIngreso)
 
 		def tamañod(x1,y1,x2,y2,numero):
