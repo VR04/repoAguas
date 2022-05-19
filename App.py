@@ -2322,7 +2322,7 @@ def openFiltroWindow():
 		arbolGranulometria= ttk.Treeview(arbolgranulometria_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
 		arbolGranulometria.pack(side=TOP, fill=BOTH, expand=TRUE)
 		
-		#Volver
+		
 		sedScrollX.configure(command=arbolGranulometria.xview)
 		sedScrollY.configure(command=arbolGranulometria.yview)
 		#Define columnas.
@@ -2341,11 +2341,10 @@ def openFiltroWindow():
 		arbolGranulometria.heading("#0",text="ID", anchor=CENTER)
 		
 		for col in arbolGranulometria["columns"]:
-			#Volver
 			arbolGranulometria.heading(col, text=col,anchor=CENTER)
 
-		listaLargoFila=[0,200,200,200,400,400,400,400,200]
-		for i in range(1,len(arbolGranulometria["columns"])):
+		listaLargoFila=[0,200,200,200,400,400,400,400]
+		for i in range(1,len(arbolGranulometria["columns"])+1):
 				arbolGranulometria.column(f"#{i}",width=listaLargoFila[i], stretch=False)	
 		
 
@@ -2509,7 +2508,7 @@ def openFiltroWindow():
 
 		coeficienteDUWindow = tk.Toplevel()
 		coeficienteDUWindow.iconbitmap(bitmap='icons\\agua.ico')
-		coeficienteDUWindow.geometry("1200x150") 
+		coeficienteDUWindow.geometry("600x120") 
 		coeficienteDUWindow.resizable(0,0)	
 		coeficienteDUWindow.configure(background="#9DC4AA")
 		
@@ -2524,15 +2523,15 @@ def openFiltroWindow():
 		#Scrollbar
 		sedScrollX=Scrollbar(arbolCoeficienteDU_frame,orient=HORIZONTAL)
 		sedScrollX.pack(side=BOTTOM, fill=X)
-		sedScrollY=Scrollbar(arbolCoeficienteDU_frame,orient=VERTICAL)
-		sedScrollY.pack(side=LEFT, fill=Y)
+		# sedScrollY=Scrollbar(arbolCoeficienteDU_frame,orient=VERTICAL)
+		# sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolCoeficienteDU= ttk.Treeview(arbolCoeficienteDU_frame,selectmode=BROWSE, height=2,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolCoeficienteDU= ttk.Treeview(arbolCoeficienteDU_frame,selectmode=BROWSE, height=2,show="tree headings",xscrollcommand=sedScrollX.set)#,yscrollcommand=sedScrollY.set)
 		arbolCoeficienteDU.pack(side=TOP, fill=BOTH, expand=TRUE)
 
 		sedScrollX.configure(command=arbolCoeficienteDU.xview)
-		sedScrollY.configure(command=arbolCoeficienteDU.yview)
+		#sedScrollY.configure(command=arbolCoeficienteDU.yview)
 		#Define columnas.
 		arbolCoeficienteDU["columns"]= (
 		"Tamaño Efectivo d{} [mm]".format(getSub("10")),
@@ -2548,7 +2547,7 @@ def openFiltroWindow():
 		
 		arbolCoeficienteDU.heading("#1", text="Tamaño Efectivo d{} [mm]".format(getSub("10")), anchor=CENTER, command= lambda: tamañod(x1,y1,x2,y2,10))
 		arbolCoeficienteDU.heading("#2", text="Tamaño Efectivo d{} [mm]".format(getSub("60")), anchor=CENTER, command= lambda: tamañod(X1,Y1,X2,Y2,60))
-		arbolCoeficienteDU.heading("#3", text="Coeficiente de uniformidad. CU= d{}/d{}".format(getSub("60"),getSub("10")), anchor=CENTER)
+		arbolCoeficienteDU.heading("#3", text="Coeficiente de uniformidad. CU = d{}/d{}".format(getSub("60"),getSub("10")), anchor=CENTER)
 
 		"""for col in arbolCoeficienteDU["columns"]:
 			arbolCoeficienteDU.heading(col, text=col,anchor=CENTER)"""
@@ -2556,14 +2555,16 @@ def openFiltroWindow():
 
 
 		
-		for i in range(0,len(arbolCoeficienteDU["columns"])) :
+		for i in range(0,len(arbolCoeficienteDU["columns"])+1) :
 				arbolCoeficienteDU.column(f"#{i}",width=300, stretch=False)	
-		arbolCoeficienteDU.column("#3",width=600, stretch=True)	
+	
 		arbolCoeficienteDU.column("#0",width=0, stretch=False)
+		arbolCoeficienteDU.column("#3",width=400, stretch=False)
 
 		#Striped row tags
 		arbolCoeficienteDU.tag_configure("oddrow", background= "#1FCCDB")
-		arbolCoeficienteDU.tag_configure("evenrow", background= "#9DC4AA")
+		arbolCoeficienteDU.tag_configure("evenrow", background= "#1FCCDB")
+		# arbolCoeficienteDU.tag_configure("evenrow", background= "#9DC4AA")
 
 
 		#Insersión datos.
@@ -2676,8 +2677,8 @@ def openFiltroWindow():
 		X2=	abAcDic[Y2]
 		d60= calculo2CU(60,X1,Y1,X2,Y2)
 		CU=d60/d10
-		listaIngreso=[d10,d60,CU]
-		#Volver
+		listaIngreso=[round(d10,3),round(d60,3),round(CU,3)]
+		
 		newDataTreeview(arbolCoeficienteDU,listaIngreso)
 
 		def tamañod(x1,y1,x2,y2,numero):
@@ -2707,7 +2708,10 @@ def openFiltroWindow():
 			sedScrollY.configure(command=arbolCoeficienteDU10.yview)
 			#Define columnas.
 			arbolCoeficienteDU10["columns"]= (
-			"1","2","3"
+			"Valores para referencia",
+			"Tamaño de abertura del tamiz [mm]",
+			"Acumulado de arena que pasa [%]",
+			"Tamaño d{} [mm]".format(getSub(f"{numero}"))
 			)
 
 			#Headings
@@ -2726,27 +2730,24 @@ def openFiltroWindow():
 
 			lista1=list()
 			lista2=list()
-			lista1.append("(x1,\ny1)")
-			lista1.append(x1)
-			lista1.append(y1)
+			lista1.append("(x1,y1)")
+			lista1.append(round(x1,3))
+			lista1.append(round(y1,3))
 			lista1.append(calculo2CU(numero,x1,y1,x2,y2))
-			lista2.append("(x2,\ny2)")
-			lista2.append(x2)
-			lista2.append(y2)
+			lista2.append("(x2,y2)")
+			lista2.append(round(x2,3))
+			lista2.append(round(y2,3))
 			lista2.append(calculo2CU(numero,x1,y1,x2,y2))
 			listaInsertar=[lista1,lista2]
 			
-			listaEncabezados=["Valores para referencia",
-			"Tamaño de abertura del tamiz [mm]",
-			"Acumulado de arena que pasa [%]",
-			"Tamaño d{} [mm]".format(getSub(f"{numero}"))]
 			
-			for i in range(len(listaEncabezados)):
-				listaTemp=list()
-				listaTemp.append(listaEncabezados[i])
-				listaTemp.append(lista1[i])
-				listaTemp.append(lista2[i])
-				newDataTreeview(arbolCoeficienteDU10,listaTemp)
+			# for i in range(len(listaEncabezados)):
+			# 	listaTemp=list()
+			# 	listaTemp.append(listaEncabezados[i])
+			# 	listaTemp.append(lista1[i])
+			# 	listaTemp.append(lista2[i])
+			for i in range(0, len(listaInsertar)):
+				newDataTreeview(arbolCoeficienteDU10,listaInsertar[i])
 
 
 
@@ -2825,7 +2826,7 @@ def openFiltroWindow():
 			"Tamaño de abertura del tamiz superior [mm]", 
 			"Tamaño de abertura del tamiz inferior [mm]",
 			"Tamaño promedio geométrico [mm]",
-			"arena retenida/tamaño promedio geométrico [1/(m^2)]",
+			"arena retenida/tamaño promedio geométrico[1/(m^2)]",
 			"Fair-Hatch"
 			)
 
@@ -2835,9 +2836,11 @@ def openFiltroWindow():
 			for col in arbolEstimacionPerdidaArenaFH["columns"]:
 				arbolEstimacionPerdidaArenaFH.heading(col, text=col,anchor=CENTER)	
 
-			for i in range(0,len(arbolEstimacionPerdidaArenaFH["columns"])+1) :
-					arbolEstimacionPerdidaArenaFH.column(f"#{i}",width=500, stretch=False)	
-			arbolEstimacionPerdidaArenaFH.column("#6",width=600, stretch=False)
+			listaLargoFila=[0,200,200,430,430,350,500,200]
+			for i in range(1,len(arbolEstimacionPerdidaArenaFH["columns"])+1):
+					arbolEstimacionPerdidaArenaFH.column(f"#{i}",width=listaLargoFila[i], stretch=False)	
+
+			
 			arbolEstimacionPerdidaArenaFH.column("#0",width=0, stretch=False)
 
 			#Striped row tags
@@ -2873,10 +2876,9 @@ def openFiltroWindow():
 			"Tamaño promedio geométrico [mm]",
 			"Número de Reynolds", 
 			"Factor de fricción",
-			#Pendiente
-			"NOMBREPREG",
+			"[p/(d{})^2]".format(getSub("g")),
 			"Pérdida de cabeza hidráulica total",
-			"NombrePREG",
+			"p/d{}".format(getSub("g")),
 			"Coeficiente de permeabilidad",
 			)
 
@@ -2886,9 +2888,12 @@ def openFiltroWindow():
 			for col in arbolEstimacionPerdidaArenaCK["columns"]:
 				arbolEstimacionPerdidaArenaCK.heading(col, text=col,anchor=CENTER)	
 
-			for i in range(0,len(arbolEstimacionPerdidaArenaCK["columns"])+1) :
-					arbolEstimacionPerdidaArenaCK.column(f"#{i}",width=500, stretch=False)	
+			listaLargoFila=[0,200,200,430,430,350,200,200,100,300,100,300]
+			for i in range(1,len(arbolEstimacionPerdidaArenaCK["columns"])+1):
+					arbolEstimacionPerdidaArenaCK.column(f"#{i}",width=listaLargoFila[i], stretch=False)		
+
 			arbolEstimacionPerdidaArenaCK.column("#0",width=0, stretch=False)
+
 
 			#Striped row tags
 			arbolEstimacionPerdidaArenaCK.tag_configure("oddrow", background= "#1FCCDB")
@@ -2922,9 +2927,9 @@ def openFiltroWindow():
 			"Tamaño de abertura del tamiz inferior [mm]",
 			"Tamaño promedio geométrico [mm]",
 			"Número de Reynolds",
-			"PREGUNTAR",
-			"PREGUNTAR",
-			"PREGUNTAR"
+			"C{}".format(getSub("d")),
+			"(C{}*p)/d{}".format(getSub("d"),getSub("g")),
+			"h{}".format(getSub("L")),
 			)
 
 			#Headings
@@ -2933,8 +2938,12 @@ def openFiltroWindow():
 			for col in arbolEstimacionPerdidaArenaR["columns"]:
 				arbolEstimacionPerdidaArenaR.heading(col, text=col,anchor=CENTER)	
 
-			for i in range(0,len(arbolEstimacionPerdidaArenaR["columns"])+1) :
-					arbolEstimacionPerdidaArenaR.column(f"#{i}",width=500, stretch=False)	
+			
+			listaLargoFila=[0,200,200,430,430,350,200,100,100,100]
+			for i in range(1,len(arbolEstimacionPerdidaArenaR["columns"])+1):
+					arbolEstimacionPerdidaArenaR.column(f"#{i}",width=listaLargoFila[i], stretch=False)		
+
+
 			arbolEstimacionPerdidaArenaR.column("#0",width=0, stretch=False)
 
 			#Striped row tags
@@ -3111,11 +3120,11 @@ def openFiltroWindow():
 				listaEntradaTemp1.append(tamañoSuperior)
 				listaEntradaTemp1.append(tamañoInferior)
 				tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
-				listaEntradaTemp1.append(tamañoPromedioGeo)
+				listaEntradaTemp1.append(round(tamañoPromedioGeo,3))
 				valorEnSuma= (arenaRenetinda/100)/((tamañoPromedioGeo/1000)**2)
-				listaEntradaTemp1.append(valorEnSuma)
+				listaEntradaTemp1.append(round(valorEnSuma,3))
 				
-				listaEntradaTemp1.append(valorFH)
+				listaEntradaTemp1.append(round(valorFH,3))
 				newDataTreeview(arbolEstimacionPerdidaArenaFH, listaEntradaTemp1)
 		
 				
@@ -3190,17 +3199,17 @@ def openFiltroWindow():
 				listaEntradaTemp2.append(tamañoSuperior)
 				listaEntradaTemp2.append(tamañoInferior)
 				tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
-				listaEntradaTemp2.append(tamañoPromedioGeo)
+				listaEntradaTemp2.append(round(tamañoPromedioGeo,3))
 				Reynolds2=listaEU[6]*(tamañoPromedioGeo/1000)*(listaEU[10]/86400)*(1/listaEU[5])
-				listaEntradaTemp2.append(Reynolds2)
+				listaEntradaTemp2.append(round(Reynolds2,3))
 				friccion2=150*((1-listaEU[3])/Reynolds2)+1.75
-				listaEntradaTemp2.append(friccion2)
+				listaEntradaTemp2.append(round(friccion2,6))
 				valorSuma2= friccion2*(arenaRenetinda/100)*(1/(tamañoPromedioGeo/1000))
-				listaEntradaTemp2.append(valorSuma2)
-				listaEntradaTemp2.append(valorCK)
+				listaEntradaTemp2.append(round(valorSuma2,3))
+				listaEntradaTemp2.append(round(valorCK,3))
 				valorSuma2_2= (arenaRenetinda/100)*(1/(tamañoPromedioGeo/1000))
-				listaEntradaTemp2.append(valorSuma2_2)
-				listaEntradaTemp2.append(valorCoefPermeabilidad)
+				listaEntradaTemp2.append(round(valorSuma2_2,3))
+				listaEntradaTemp2.append(round(valorCoefPermeabilidad,3))
 
 
 				newDataTreeview(arbolEstimacionPerdidaArenaCK, listaEntradaTemp2)
@@ -3259,14 +3268,14 @@ def openFiltroWindow():
 				listaEntradaTemp3.append(tamañoSuperior)
 				listaEntradaTemp3.append(tamañoInferior)
 				tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
-				listaEntradaTemp3.append(tamañoPromedioGeo)
+				listaEntradaTemp3.append(round(tamañoPromedioGeo,3))
 				Reynolds3= (tamañoPromedioGeo/1000)*(listaEU[10]/86400.0)/listaEU[5]
-				listaEntradaTemp3.append(Reynolds3)
+				listaEntradaTemp3.append(round(Reynolds3,3))
 				Cd=24/Reynolds3 + 3/sqrt(Reynolds3)+0.34
-				listaEntradaTemp3.append(Cd)
+				listaEntradaTemp3.append(round(Cd,3))
 				Suma3=Cd*(arenaRenetinda/100)*(1000/tamañoPromedioGeo)
-				listaEntradaTemp3.append(Suma3)
-				listaEntradaTemp3.append(valorR)
+				listaEntradaTemp3.append(round(Suma3,3))
+				listaEntradaTemp3.append(round(valorR,3))
 				newDataTreeview(arbolEstimacionPerdidaArenaR, listaEntradaTemp3)
 
 			estimacionPerdidaArenaCalculoWindow.mainloop()
@@ -3308,9 +3317,9 @@ def openFiltroWindow():
 			"Tamaño de abertura del tamiz inferior [mm]",
 			"Tamaño promedio geométrico [mm]",
 			"Número de Reynolds",
-			"PREGUNTAR",
-			"PREGUNTAR",
-			"PREGUNTAR"
+			"C{}".format(getSub("d")),
+			"(C{}*p)/d{}".format(getSub("d"),getSub("g")),
+			"h{}".format(getSub("L")),
 			)
 
 			#Headings
@@ -3319,8 +3328,9 @@ def openFiltroWindow():
 			for col in arbolEstimacionPerdidaArenaR["columns"]:
 				arbolEstimacionPerdidaArenaR.heading(col, text=col,anchor=CENTER)	
 
-			for i in range(0,len(arbolEstimacionPerdidaArenaR["columns"])+1) :
-					arbolEstimacionPerdidaArenaR.column(f"#{i}",width=500, stretch=False)	
+			listaLargoFila=[0,200,200,430,430,350,200,100,100,100]
+			for i in range(1,len(arbolEstimacionPerdidaArenaR["columns"])+1):
+					arbolEstimacionPerdidaArenaR.column(f"#{i}",width=listaLargoFila[i], stretch=False)		
 			arbolEstimacionPerdidaArenaR.column("#0",width=0, stretch=False)
 
 			#Striped row tags
@@ -3473,14 +3483,14 @@ def openFiltroWindow():
 				listaEntradaTemp3.append(tamañoSuperior)
 				listaEntradaTemp3.append(tamañoInferior)
 				tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
-				listaEntradaTemp3.append(tamañoPromedioGeo)
+				listaEntradaTemp3.append(round(tamañoPromedioGeo,3))
 				Reynolds3= (tamañoPromedioGeo/1000)*(listaEU[10]/86400.0)/listaEU[5]
-				listaEntradaTemp3.append(Reynolds3)
+				listaEntradaTemp3.append(round(Reynolds3,3))
 				Cd=24/Reynolds3 + 3/sqrt(Reynolds3)+0.34
-				listaEntradaTemp3.append(Cd)
+				listaEntradaTemp3.append(round(Cd,3))
 				Suma3=Cd*(arenaRenetinda/100)*(1000/tamañoPromedioGeo)
-				listaEntradaTemp3.append(Suma3)
-				listaEntradaTemp3.append(valorR)
+				listaEntradaTemp3.append(round(Suma3,3))
+				listaEntradaTemp3.append(round(valorR,3))
 				newDataTreeview(arbolEstimacionPerdidaArenaR, listaEntradaTemp3)
 
 			estimacionPerdidaArenaCalculoWindow.mainloop()
@@ -4276,7 +4286,7 @@ def openFiltroWindow():
 		
 		predimensionamientoFiltrosWindow = tk.Toplevel()
 		predimensionamientoFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
-		predimensionamientoFiltrosWindow.geometry("1000x500") 
+		predimensionamientoFiltrosWindow.geometry("620x500") 
 		predimensionamientoFiltrosWindow.resizable(0,0)	
 		predimensionamientoFiltrosWindow.configure(background="#9DC4AA")
 
@@ -4288,23 +4298,23 @@ def openFiltroWindow():
 		arbolPredimensionamientoFiltros_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		sedScrollX=Scrollbar(arbolPredimensionamientoFiltros_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollX=Scrollbar(arbolPredimensionamientoFiltros_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arbolPredimensionamientoFiltros_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolPredimensionamientoFiltros= ttk.Treeview(arbolPredimensionamientoFiltros_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolPredimensionamientoFiltros= ttk.Treeview(arbolPredimensionamientoFiltros_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set
 		arbolPredimensionamientoFiltros.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		sedScrollX.configure(command=arbolPredimensionamientoFiltros.xview)
+		# sedScrollX.configure(command=arbolPredimensionamientoFiltros.xview)
 		sedScrollY.configure(command=arbolPredimensionamientoFiltros.yview)
 		#Define columnas.
 		arbolPredimensionamientoFiltros["columns"]= (
-		"1","2")
+		"1","2", "Unidades")
 		
 		'''
-		"Q = Caudal de diseño (QMD)  [(m^3)/s]",
+		"Q = Caudal de diseño (QMD)  ",
 		"V{} = Tasa de filtración en operación normal [m/día]".format(getSub("f")),
 		"V{} = Tasa de filtración con un filtro fuera de servicio por lavado".format(getSub("max")),
 		"A{} = Área de filtración en operación normal".format(getSub("T")),
@@ -4336,10 +4346,11 @@ def openFiltroWindow():
 		for col in arbolPredimensionamientoFiltros["columns"]:
 			arbolPredimensionamientoFiltros.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
 
-		for i in range(0,len(arbolPredimensionamientoFiltros["columns"])+1) :
-				arbolPredimensionamientoFiltros.column(f"#{i}",width=500, stretch=False)	
+		
 		arbolPredimensionamientoFiltros.column("#0",width=0, stretch=False)
-
+		arbolPredimensionamientoFiltros.column("#1",width=400, stretch=False)
+		arbolPredimensionamientoFiltros.column("#2",width=100, stretch=False)
+		arbolPredimensionamientoFiltros.column("#3",width=100, stretch=False)
 		#Striped row tags
 		arbolPredimensionamientoFiltros.tag_configure("evenrow", background= "#1FCCDB")
 		arbolPredimensionamientoFiltros.tag_configure("oddrow", background= "#9DC4AA")
@@ -4349,17 +4360,17 @@ def openFiltroWindow():
 
 		listaArbolCaudal=list()
 		caudal=caudalMedio*(1.30)
-		listaArbolCaudal.append(caudal)
+		listaArbolCaudal.append(round(caudal,3))
 		Vf=120
 		Vmax=150
-		listaArbolCaudal.append(Vf)
-		listaArbolCaudal.append(Vmax)
+		listaArbolCaudal.append(round(Vf,3))
+		listaArbolCaudal.append(round(Vmax,3))
 		arenaFilOpNormal=caudal*86400*(1/Vf)
-		listaArbolCaudal.append(arenaFilOpNormal)
+		listaArbolCaudal.append(round(arenaFilOpNormal,3))
 		arenaFilFueraServ=caudal*86400*(1/Vmax)
-		listaArbolCaudal.append(arenaFilFueraServ)
+		listaArbolCaudal.append(round(arenaFilFueraServ,3))
 		arenaFilFueraServ2 = arenaFilOpNormal - arenaFilFueraServ
-		listaArbolCaudal.append(arenaFilFueraServ2)
+		listaArbolCaudal.append(round(arenaFilFueraServ2,3))
 
 		if arenaFilOpNormal/arenaFilFueraServ2 < 3.0:
 			numMinFiltros=3
@@ -4376,10 +4387,10 @@ def openFiltroWindow():
 		listaArbolCaudal.append(numFiltros)
 
 		areaFiltro = arenaFilOpNormal/numFiltros
-		listaArbolCaudal.append(areaFiltro)
+		listaArbolCaudal.append(round(areaFiltro,3))
 
-		ladoFiltro= sqrt(areaFiltro)
-		listaArbolCaudal.append(ladoFiltro)
+		ladoFiltro= sqrt(round(areaFiltro,3))
+		listaArbolCaudal.append(round(ladoFiltro,3))
 		
 		encabezadosLista=["Q = Caudal de diseño (QMD)  [(m^3)/s]",
 		"V{} = Tasa de filtración en operación normal [m/día]".format(getSub("f")),
@@ -4391,11 +4402,25 @@ def openFiltroWindow():
 		"N{} = Número de filtros [und]".format(getSub("f")),
 		"A{} = Área de cada filtro".format(getSub("f")),
 		"L{} = Lado de cada filtro".format(getSub("f"))]
+		
+		listaUnidades=[
+		"(m^3)/s",
+		"m/día",
+		"m/día",
+		"m^2",
+		"m^2",
+		"m^2",
+		"",
+		"",
+		"m^2",
+		"m"
+		]
 
 		for i in range(0, len(encabezadosLista)):
 			listaTemp=list()
 			listaTemp.append(encabezadosLista[i])
 			listaTemp.append(listaArbolCaudal[i])
+			listaTemp.append(listaUnidades[i])
 			newDataTreeview(arbolPredimensionamientoFiltros,listaTemp)
 		#newDataTreeview(arbolPredimensionamientoFiltros,listaArbolCaudal)
 		
@@ -4528,7 +4553,7 @@ def openFiltroWindow():
 		arbolDrenajeFiltros["columns"]= (
 		"1","2"
 		)
-
+		#Volver
 		#Headings
 		arbolDrenajeFiltros.heading("#0",text="ID", anchor=CENTER)
 
@@ -4646,11 +4671,11 @@ def openFiltroWindow():
 		listaArbolDreanejFiltros=list()
 		
 		anchoMultiple= anchoSeccion[seccionTransvMultiple]
-		listaArbolDreanejFiltros.append(anchoMultiple)
+		listaArbolDreanejFiltros.append(round(anchoMultiple,3))
 
 
 		longitudLaterales= (ladoFiltro/2) - (anchoMultiple/2) -0.05
-		listaArbolDreanejFiltros.append(longitudLaterales)
+		listaArbolDreanejFiltros.append(round(longitudLaterales,3))
 		
 		
 		numLatPUDF= 2*round((ladoFiltro/distanciaLaterales),0)
@@ -4668,16 +4693,16 @@ def openFiltroWindow():
 
 
 		areaTotalOrificios= float(numOrifPUDF)*areaOrificiosDic[diametroOrificios]*(1.0/areaFiltro)
-		listaArbolDreanejFiltros.append(areaTotalOrificios)
+		listaArbolDreanejFiltros.append(round(areaTotalOrificios,3))
 
 
 
 		areaTransversalDelLateral= areaLateralesDic[diametroLaterales]/(areaOrificiosDic[diametroOrificios]*numOrif)
-		listaArbolDreanejFiltros.append(areaTransversalDelLateral)
+		listaArbolDreanejFiltros.append(round(areaTransversalDelLateral,3))
 
 
 		areaTransversalDelMultiple=	anchoSeccion2[seccionTransvMultiple]/(numLatPUDF*areaLateralesDic[diametroLaterales])
-		listaArbolDreanejFiltros.append(areaTransversalDelMultiple)
+		listaArbolDreanejFiltros.append(round(areaTransversalDelMultiple,3))
 			
 
 		#diametroLateralesA número:
@@ -4690,7 +4715,7 @@ def openFiltroWindow():
 			diametroLaterales=float(diametroLaterales)
 
 		longitudLateral= longitudLaterales/(diametroLaterales*0.0254)
-		listaArbolDreanejFiltros.append(longitudLateral)
+		listaArbolDreanejFiltros.append(round(longitudLateral,3))
 
 
 		listaEncabezados = ["B{} = Ancho del múltiple".format(getSub("mul")),
@@ -4702,7 +4727,24 @@ def openFiltroWindow():
 		"Área transversal del lateral / área de orificios del lateral",
 		"Área transversal del múltiple / área transversal de laterales",
 		"Longitud de lateral / diámetro de lateral",]
+
+		Unidades = ["pulgadas",
+		"m",
+		"pulgadas2",
+		"m",
+		"m",
+		"m",
+		"pulgadas",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		""]
 		
+
+		#Volver
 		for i in range(0, len(listaEncabezados)):
 			listaTemp= list()
 			listaTemp.append(listaEncabezados[i])
