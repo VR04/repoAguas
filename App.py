@@ -4526,7 +4526,7 @@ def openFiltroWindow():
 			
 		drenajeFiltrosWindow = tk.Toplevel()
 		drenajeFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
-		drenajeFiltrosWindow.geometry("1000x450") 
+		drenajeFiltrosWindow.geometry("720x350") 
 		drenajeFiltrosWindow.resizable(0,0)	
 		drenajeFiltrosWindow.configure(background="#9DC4AA")
 
@@ -4538,30 +4538,32 @@ def openFiltroWindow():
 		arbolDrenajeFiltros_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		sedScrollX=Scrollbar(arbolDrenajeFiltros_frame,orient=HORIZONTAL)
-		sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollX=Scrollbar(arbolDrenajeFiltros_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
 		sedScrollY=Scrollbar(arbolDrenajeFiltros_frame,orient=VERTICAL)
 		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolDrenajeFiltros= ttk.Treeview(arbolDrenajeFiltros_frame,selectmode=BROWSE, height=11,show="tree headings",xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolDrenajeFiltros= ttk.Treeview(arbolDrenajeFiltros_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set) #xscrollcommand=sedScrollX.set
 		arbolDrenajeFiltros.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		sedScrollX.configure(command=arbolDrenajeFiltros.xview)
+		#sedScrollX.configure(command=arbolDrenajeFiltros.xview)
 		sedScrollY.configure(command=arbolDrenajeFiltros.yview)
 		#Define columnas.
 		arbolDrenajeFiltros["columns"]= (
-		"1","2"
+		"1","2","Unidades","Adicional"
 		)
-		#Volver
+
 		#Headings
 		arbolDrenajeFiltros.heading("#0",text="ID", anchor=CENTER)
 
 		for col in arbolDrenajeFiltros["columns"]:
 			arbolDrenajeFiltros.heading(col, text=col,anchor=CENTER)	
 
-		for i in range(0,len(arbolDrenajeFiltros["columns"])+1) :
-				arbolDrenajeFiltros.column(f"#{i}",width=500, stretch=False)	
+		#Volver
+		listaLargoFila=[0,200,100,100,300]
+		for i in range(1,len(arbolDrenajeFiltros["columns"])+1):
+			arbolDrenajeFiltros.column(f"#{i}",width=listaLargoFila[i], stretch=False)		
 		arbolDrenajeFiltros.column("#0",width=0, stretch=False)
 
 		#Striped row tags
@@ -4720,15 +4722,15 @@ def openFiltroWindow():
 
 		listaEncabezados = ["B{} = Ancho del múltiple".format(getSub("mul")),
 		"L{} = Longitud de los laterales".format(getSub("lat")),
-		"N{} = Número de laterales por unidad de filtración".format(getSub("lat")),
+		"N{} = Número de laterales por\nunidad de filtración".format(getSub("lat")),
 		" = Número de orificios por lateral",
-		"N{} = Número de orificios por unidad de filtración".format(getSub("ori")),
-		"Área total de orificios/ área filtrante",
-		"Área transversal del lateral / área de orificios del lateral",
-		"Área transversal del múltiple / área transversal de laterales",
-		"Longitud de lateral / diámetro de lateral",]
+		"N{} = Número de orificios por\nunidad de filtración".format(getSub("ori")),
+		"Área total de orificios/\nárea filtrante",
+		"Área transversal del lateral/\nárea de orificios del lateral",
+		"Área transversal del múltiple/\nárea transversal de laterales",
+		"Longitud de lateral/\ndiámetro de lateral",]
 
-		Unidades = ["pulgadas",
+		listaUnidades = ["pulgadas",
 		"m",
 		"pulgadas2",
 		"m",
@@ -4744,11 +4746,46 @@ def openFiltroWindow():
 		""]
 		
 
+		if areaTotalOrificios>0.0015 and areaTotalOrificios<0.005:
+			areaTotalOrificiosInfo = "El area total de orificios es adecuada"
+		else:
+			areaTotalOrificiosInfo = "¡Error, revise cantidades, diámetros y distancias\nen orificios!"
+		
+		if areaTransversalDelLateral>2.0 and areaTransversalDelLateral<4.0:
+			areaTransversalDelLateralInfo = "El área transversal del lateral es adecuada"
+		else:
+			areaTransversalDelLateralInfo = "¡Error, revise los diámetros y distancias en los laterales\ny orificios, además, las velocidad asociadas!"
+
+		if areaTransversalDelMultiple>1.5 and areaTransversalDelMultiple<3.0:
+			areaTransversalDelMultipleInfo= "El área transversal del múltiple es adecuada"
+		else:
+			areaTransversalDelMultipleInfo = " ¡Error, revise dimensiones de múltiple y laterales, tenga\nen cuenta velocidad de flujo en el múltiple y laterales!"
+		
+		if longitudLateral<60.0:
+			longitudLateralInfo="La longitud lateral es adecuada"
+		else:
+			longitudLateralInfo="¡Error, revise diámetros de laterales!"
+
+		listaAdicional=[
+		"",
+		"",
+		"",
+		"",
+		"",
+		areaTotalOrificiosInfo,
+		areaTransversalDelLateralInfo,
+		areaTransversalDelMultipleInfo,
+		longitudLateralInfo
+		]
+		
+
 		#Volver
 		for i in range(0, len(listaEncabezados)):
 			listaTemp= list()
 			listaTemp.append(listaEncabezados[i])
 			listaTemp.append(listaArbolDreanejFiltros[i])
+			listaTemp.append(listaUnidades[i])
+			listaTemp.append(listaAdicional[i])
 			newDataTreeview(arbolDrenajeFiltros,listaTemp)
 		
 		drenajeFiltrosWindow.mainloop()
