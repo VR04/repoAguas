@@ -34,6 +34,21 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
+def proyectarImg(archivo,dim1,dim2):
+		forWindow= tk.Toplevel()
+		path=resource_path('icons\\agua.ico')
+		forWindow.iconbitmap(bitmap=path)
+		forWindow.geometry(f"{dim1}x{dim2}") 
+		forWindow.resizable(0,0)
+		forWindow.configure(background="#9DC4AA")
+		framefor=Frame(forWindow)
+		framefor.pack(side=TOP, fill=BOTH, expand=True)
+		path2=resource_path(archivo)
+		ima= PhotoImage(file=path2)
+		l=Label(framefor, image=ima)
+		l.pack()
+		forWindow.mainloop()
+
 
 def getSuper(x): 
     normal = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-=()"
@@ -105,20 +120,7 @@ def openSedWindow():
 			return None
 
 			
-	def formulaN(archivo):
-		forWindow= tk.Toplevel()
-		path=resource_path('icons\\agua.ico')
-		forWindow.iconbitmap(bitmap=path)
-		forWindow.geometry("800x600") 
-		forWindow.resizable(0,0)
-		forWindow.configure(background="#9DC4AA")
-		framefor=Frame(forWindow)
-		framefor.pack(side=TOP, fill=BOTH, expand=True)
-		path2=resource_path(archivo)
-		ima= PhotoImage(file=path2)
-		l=Label(framefor, image=ima)
-		l.pack()
-		forWindow.mainloop()
+	
 
 
 	def newDataTreeview(tree,listaS):
@@ -515,23 +517,9 @@ def openSedWindow():
 		arboldeterminacionParametrosBasicosDiseno.heading("#0",text="ID", anchor=CENTER)
 
 
-		def formulaN(archivo):
-			forWindow= tk.Toplevel()
-			path=resource_path('icons\\agua.ico')
-			forWindow.iconbitmap(bitmap=path)
-			forWindow.geometry("1000x350") 
-			forWindow.resizable(0,0)
-			forWindow.configure(background="#9DC4AA")
-			framefor=Frame(forWindow)
-			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			path2=resource_path(archivo)
-			ima= PhotoImage(file=path2)
-			l=Label(framefor, image=ima)
-			l.pack()
-			forWindow.mainloop()
 
 		for col in arboldeterminacionParametrosBasicosDiseno["columns"]:
-			arboldeterminacionParametrosBasicosDiseno.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Sed_DeterminacionParametrosBasicosDiseno.png") )	
+			arboldeterminacionParametrosBasicosDiseno.heading(col, text=col,anchor=CENTER, command=lambda: print("Img") )	
 
 		arboldeterminacionParametrosBasicosDiseno.column("#1",width=400, stretch=False)
 		arboldeterminacionParametrosBasicosDiseno.column("#2",width=100, stretch=False)
@@ -2034,8 +2022,8 @@ def openSedWindow():
 	listaDimensionesDelSedimentador = listaTiempoRetencionTotalTanque + [bordeLibre,espesorMuros,pendienteTransversalTolva,anchoBasePlanaTolva] 
 	listaDisenoSistemaEvacuacionLodos = listaDimensionesDelSedimentador + [velocidadMinimaArrastre, diametroNominalOrificionesMultipleDescarga]  
 
-
-	imageAtras= PhotoImage(file="images\\atras.png")
+	pathAtras= resource_path('images\\atras.png')
+	imageAtras= PhotoImage(file=pathAtras)
 	#BotonesSed.
 	botonAtras= HoverButton(frameSed, image=imageAtras, width=100, height=40, bg= None, command=lambda: returnMainWindow(sedWindow))
 	botonAtras.place(x=0,y=10)
@@ -2046,9 +2034,19 @@ def openSedWindow():
 	botonTiempoRetencionTotalTanque = HoverButton(frameSed, text="Tiempo de retención total en el tanque", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: tiempoRetencionTotalTanque(listaTiempoRetencionTotalTanque,tipoCelda.get()))
 	botonDimensionesDelSedimentador = HoverButton(frameSed, text="Dimensiones del sedimentador", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: dimensionesDelSedimentador(listaDimensionesDelSedimentador, tipoCelda.get()))
 	botonDisenoSistemaEvacuacionLodos = HoverButton(frameSed, text="Diseño del sistema de evacuación de lodos", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: disenoSistemaEvacuacionLodos(listaDisenoSistemaEvacuacionLodos,tipoCelda.get()))
+	
+	botonAyudaVisualSed = HoverButton(frameSed, text="Ayuda visual - Geometría del sedimentador", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(""))
+	botonCaudalesDeDiseño = HoverButton(frameSed, text="Caudales de diseño", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(""))
+	botonPropiedadesFisicasAgua = HoverButton(frameSed, text="Propiedades física del agua a tratar", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(""))
+	botonVerDatosEntradaParametrosBasicos = HoverButton(frameSed, text="Ver datos de entrada para parámetros básicos", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(""))
+
 	botonLimpiarEntradas = HoverButton(frameSed, text="Limpiar entradas", activebackground="#9DC4AA", width=40, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntrySed(lista_entradas,listaLabelReiniciar))
 
-	listaBotones=[botonParametrosDeDiseñoSedimentadorAltaTasa,
+
+
+	listaBotones=[
+	
+	botonParametrosDeDiseñoSedimentadorAltaTasa,
 	botonDeterminacionParametrosBasicosDiseno,
 	botonCanaletasRecoleccionAgua,
 	botonTiempoRetencionTotalTanque, 
@@ -10057,9 +10055,10 @@ def openFiltroWindow():
 	frameFiltro= LabelFrame(filtroWindow, text="Filtro rápido", font=("Yu Gothic bold", 11))
 	frameFiltro.pack(side=LEFT,fill=BOTH,expand=TRUE)
 	#panelF.add(frameFiltro, text="Filtro rápido")
-	
-	imageAtras= PhotoImage(file="images\\atras.png")
-	imageRestringido=PhotoImage(file="images\\restringido.png")
+	pathAtras= resource_path('images\\atras.png')
+	imageAtras= PhotoImage(file=pathAtras)
+	pathRestringido = resource_path("images\\restringido.png")
+	imageRestringido=PhotoImage(file=pathRestringido)
 	#BotonesFiltro 
 
 
@@ -10407,21 +10406,21 @@ def openFloculadorWindow():
 			diametroInterconexion=0.45
 		elif caudalDiseño<101:
 			diametroInterconexion=0.50
-
+		
 		diametroInteriorLista=[
-		0.0546,
-		0.0661,
-		0.0804,
-		0.1034,
-		0.1522,
-		0.1982,
-		0.2471,
-		0.2931,
-		0.3218,
-		0.3677,
-		0.4137,
-		0.4596,
-		0.5515,
+		0.05458,
+		0.06607,
+		0.08042,
+		0.10342,
+		0.15222,
+		0.19821,
+		0.24709,
+		0.29307,
+		0.32176,
+		0.36770,
+		0.41366,
+		0.45964,
+		0.55154,
 		]
 		diametroPulgadaLista=[
 		2.0,
@@ -10439,19 +10438,20 @@ def openFloculadorWindow():
 		24.0,
 		]
 		diametroExteriorLista=[
-		0.0603,
-		0.0730,
-		0.0889,
-		0.1143,
-		0.1683,
-		0.2191,
-		0.2731,
-		0.3231,
-		0.3556,
-		0.4064,
-		0.4572,
-		0.5080,
-		0.6096,
+		0.06032,
+		0.07303,
+		0.08890,
+		0.11430,
+		0.16828,
+		0.21908,
+		0.27305,
+		0.32305,
+		0.35560,
+		0.40640,
+		0.45720,
+		0.50800,
+		0.60960,
+
 		]
 		ListaTuplasDiametroExteriorDiametroPulgada=list()
 
@@ -10472,6 +10472,183 @@ def openFloculadorWindow():
 
 		diametroInterno = mayor
 		diametroExterno = diametroInteriorListaExteriorPulgadaDic[mayor][0]
+		
+		datosInicialesWindow = tk.Toplevel()
+		path=resource_path('icons\\agua.ico')
+		datosInicialesWindow.iconbitmap(bitmap=path)
+		datosInicialesWindow.geometry("470x590") 
+		datosInicialesWindow.resizable(0,0)	
+		datosInicialesWindow.configure(background="#9DC4AA")
+
+		#Frame Treeview
+		arboldatosIniciales_frame = LabelFrame(datosInicialesWindow, text="Visualización de los cálculos para floculador alabama", font=("Yu Gothic bold", 11))
+		arboldatosIniciales_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		# sedScrollX=Scrollbar(arboldatosIniciales_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arboldatosIniciales_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arboldatosIniciales= ttk.Treeview(arboldatosIniciales_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set)#,xscrollcommand=sedScrollX.set
+		arboldatosIniciales.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		# sedScrollX.configure(command=arboldatosIniciales.xview)
+		sedScrollY.configure(command=arboldatosIniciales.yview)
+		#Define columnas.
+		arboldatosIniciales["columns"]= (
+		"1","2","Unidades"
+		)
+
+		#Headings
+		arboldatosIniciales.heading("#0",text="ID", anchor=CENTER)
+
+		for col in arboldatosIniciales["columns"]:
+			arboldatosIniciales.heading(col, text=col,anchor=CENTER)
+
+
+
+		arboldatosIniciales.column("#0",width=0, stretch=False)
+		arboldatosIniciales.column("#1",width=250, stretch=False)
+		arboldatosIniciales.column("#2",width=100, stretch=False)
+		arboldatosIniciales.column("#3",width=100, stretch=False)
+		#Striped row tags
+		arboldatosIniciales.tag_configure("evenrow", background= "#1FCCDB")
+		arboldatosIniciales.tag_configure("oddrow", background= "#9DC4AA")
+		contadorFloculador=0
+
+		listaEntrada= list()
+
+
+
+		valorTemperaturas=list()
+		viscosidadCinematicaDic=dict()
+		for i in range(0,36):    
+			valorTemperaturas.append(i)
+						
+		valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
+		,1.386e-06, 1.346e-06, 1.308e-06, 1.271e-06, 1.237e-06, 1.204e-06, 
+		1.172e-06, 1.141e-06, 1.112e-06, 1.084e-06, 1.057e-06, 1.032e-06, 1.007e-06, 9.83e-07, 9.6e-07, 9.38e-07, 9.17e-07, 8.96e-07, 8.76e-07, 8.57e-07, 8.39e-07, 8.21e-07, 8.04e-07, 7.88e-07, 7.72e-07, 7.56e-07, 7.41e-07, 7.27e-07]
+
+		for ind in range(0,len(valorTemperaturas)):
+			viscosidadCinematicaDic[valorTemperaturas[ind]]=valorViscocidad[ind]
+		densidadDic=dict()
+
+		valorDensidad=[999.82, 999.89, 999.94, 999.98, 1000.0, 1000.0, 999.99, 
+		999.96, 999.91, 999.85, 999.77, 999.68, 999.58, 999.46, 
+		999.33, 999.19, 999.03, 998.86, 998.68, 998.49, 998.29, 
+		998.08, 997.86, 997.62, 997.38, 997.13, 996.86, 996.59,
+		996.31, 996.02, 995.71, 995.41, 995.09, 994.76, 994.43, 
+		994.08]
+
+		for ind in range(0,len(valorTemperaturas)):
+			densidadDic[valorTemperaturas[ind]]=valorDensidad[ind]
+
+		viscosidadDinamicaDic=dict()
+		viscosidadDinamicaValor = [0.001792, 0.001731, 
+		0.001673, 0.001619, 0.001567, 0.001519, 0.001473, 
+		0.001428, 0.001386, 0.001346, 0.001308, 0.001271, 
+		0.001236, 0.001203, 0.001171, 0.00114, 0.001111, 
+		0.001083, 0.001056, 0.00103, 0.001005, 0.000981, 
+		0.000958, 0.000936, 0.000914, 0.000894, 0.000874,
+		0.000855, 0.000836, 0.000818, 0.000801, 0.000784,
+		0.000768, 0.000752, 0.000737, 0.000723]
+
+		for ind in range(0,len(valorTemperaturas)):
+			viscosidadDinamicaDic[valorTemperaturas[ind]]=viscosidadDinamicaValor[ind]
+
+
+		caudalDiseñoEnM = caudalDiseño/1000.0
+		areaTuberia = pi*(diametroInterno**2)*(1/4.0)
+		areaOrificio = pi*(diametroExterno**2)*(1/4.0)
+		tiempoFloculacionS= tiempoFloculacion*60.0
+		tiempoDetencionCamara= tiempoFloculacionS/numeroCamaras
+		viscosidadCinematica = viscosidadCinematicaDic[temperatura]
+		densidad=densidadDic[temperatura]
+		viscosidadDinamica = viscosidadDinamicaDic[temperatura]
+
+		#Volver
+
+		volumenCamara= tiempoDetencionCamara*caudalDiseñoEnM
+
+
+		listaValores=[caudalDiseño,caudalDiseñoEnM,tiempoFloculacion,tiempoFloculacionS,
+		tiempoDetencionCamara,volumenCamara,diametroInterconexion,
+		diametroInterno,areaTuberia,diametroExterno,areaOrificio,
+		ancho,longitud,altura,densidad,viscosidadDinamica,viscosidadCinematica,
+		gravedad,temperatura, coeficienteDescarga, coeficienteDescargaOrificios]
+		for valor in listaValores:
+			if valor== viscosidadDinamica or valor == viscosidadCinematica:
+				listaEntrada.append(round(valor,9))
+			else:
+				listaEntrada.append(round(valor,3))
+
+		listaEncabezados = ["Caudal de Diseño (QMD)",
+		"Caudal de Diseño (QMD)",
+		"Tiempo de floculación (T)",
+		"Tiempo de floculación (T)",
+		"Tiempo de detencion de la camara (Tr)",
+		"Volumen de cada camara (Ɐc)",
+		"Diametro interconexión (D)",
+		f"Diametro de interno {diametroInteriorListaExteriorPulgadaDic[mayor][1]}\" (Di)",
+		f"Area de la tuberia {diametroInteriorListaExteriorPulgadaDic[mayor][1]}\" (N)",
+		f"Diametro de externo {diametroInteriorListaExteriorPulgadaDic[mayor][1]}\" (De)",
+		f"Area del orificio {diametroInteriorListaExteriorPulgadaDic[mayor][1]}\" (A)",
+		"Ancho (W)",
+		"Longitud (L)",
+		"Altura (a)",
+		"Densidad del agua (p)",
+		"Viscocidad Dinamica del agua (µ)",
+		"Viscocidad Cinematica del agua (v)",
+		"Gravedad (g)",
+		"Temperatura (°c) ",
+		"Coeficiente de descarga (Cd)",
+		"Coeficiente de descarga Orificios (Cd)",
+				]
+		listaUnidades = [
+			"L/s",
+			"m³/s",
+			"min",
+			"s",
+			"s",
+			"m³",
+			"m",
+			"m",
+			"m²",
+			"m",
+			"m²",
+			"m",
+			"m",
+			"m",
+			"Kg/m³",
+			"N.s/m2",
+			"m²/s",
+			"m/s2",
+			"°C",
+			"K",
+			"K",
+
+		]
+
+
+
+		for i in range(0, len(listaEncabezados)):
+			listaTemp=list()
+			listaTemp.append(listaEncabezados[i])
+			listaTemp.append(listaEntrada[i])
+			listaTemp.append(listaUnidades[i])
+			newDataTreeview(arboldatosIniciales,listaTemp)
+
+
+
+
+		datosInicialesWindow.mainloop()
+
+
+
+
+
 	def calculosFloculador(listaEntry,numCamaras):
 		listaE2=list()
 
@@ -10546,19 +10723,19 @@ def openFloculadorWindow():
 			diametroInterconexion=0.50
 
 		diametroInteriorLista=[
-		0.0546,
-		0.0661,
-		0.0804,
-		0.1034,
-		0.1522,
-		0.1982,
-		0.2471,
-		0.2931,
-		0.3218,
-		0.3677,
-		0.4137,
-		0.4596,
-		0.5515,
+		0.05458,
+		0.06607,
+		0.08042,
+		0.10342,
+		0.15222,
+		0.19821,
+		0.24709,
+		0.29307,
+		0.32176,
+		0.36770,
+		0.41366,
+		0.45964,
+		0.55154,
 		]
 		diametroPulgadaLista=[
 		2.0,
@@ -10576,19 +10753,20 @@ def openFloculadorWindow():
 		24.0,
 		]
 		diametroExteriorLista=[
-		0.0603,
-		0.0730,
-		0.0889,
-		0.1143,
-		0.1683,
-		0.2191,
-		0.2731,
-		0.3231,
-		0.3556,
-		0.4064,
-		0.4572,
-		0.5080,
-		0.6096,
+		0.06032,
+		0.07303,
+		0.08890,
+		0.11430,
+		0.16828,
+		0.21908,
+		0.27305,
+		0.32305,
+		0.35560,
+		0.40640,
+		0.45720,
+		0.50800,
+		0.60960,
+
 		]
 		ListaTuplasDiametroExteriorDiametroPulgada=list()
 
@@ -10878,19 +11056,19 @@ def openFloculadorWindow():
 			diametroInterconexion=0.50
 
 		diametroInteriorLista=[
-		0.0546,
-		0.0661,
-		0.0804,
-		0.1034,
-		0.1522,
-		0.1982,
-		0.2471,
-		0.2931,
-		0.3218,
-		0.3677,
-		0.4137,
-		0.4596,
-		0.5515,
+		0.05458,
+		0.06607,
+		0.08042,
+		0.10342,
+		0.15222,
+		0.19821,
+		0.24709,
+		0.29307,
+		0.32176,
+		0.36770,
+		0.41366,
+		0.45964,
+		0.55154,
 		]
 		diametroPulgadaLista=[
 		2.0,
@@ -10908,19 +11086,20 @@ def openFloculadorWindow():
 		24.0,
 		]
 		diametroExteriorLista=[
-		0.0603,
-		0.0730,
-		0.0889,
-		0.1143,
-		0.1683,
-		0.2191,
-		0.2731,
-		0.3231,
-		0.3556,
-		0.4064,
-		0.4572,
-		0.5080,
-		0.6096,
+		0.06032,
+		0.07303,
+		0.08890,
+		0.11430,
+		0.16828,
+		0.21908,
+		0.27305,
+		0.32305,
+		0.35560,
+		0.40640,
+		0.45720,
+		0.50800,
+		0.60960,
+
 		]
 		ListaTuplasDiametroExteriorDiametroPulgada=list()
 
@@ -11006,7 +11185,15 @@ def openFloculadorWindow():
 			viscosidadCinematicaDic[valorTemperaturas[ind]]=valorViscocidad[ind]
 		
 
-		print(diametroInternoOrificio)
+		
+		
+
+
+		diametroInternoOrificioC = diametroInternoOrificio
+
+		if valorParImpar=="impar":
+			diametroInternoOrificio = mayor
+
 		caudalDiseñoEnM = caudalDiseño/1000.0
 		areaTuberia = pi*(diametroInternoOrificio**2)*(1/4.0)
 		tiempoFloculacionS= tiempoFloculacion*60.0
@@ -11015,12 +11202,9 @@ def openFloculadorWindow():
 		velocidadFlujoEntreCodos = caudalDiseñoEnM/areaTuberia
 
 
-
-		diametroInternoOrificioC = diametroInternoOrificio
 		areaOrificio= pi*(diametroInternoOrificioC**2)*(1/4.0)
 		coeficienteDescarga = coeficienteDescargaOrificios
-		#VolverPENDIENTE
-		print(caudalDiseñoEnM, areaTuberia, velocidadFlujoEntreCodos, areaOrificio)
+		
 		perdidaPasamuros= (caudalDiseñoEnM**2)/((2*gravedad)*(coeficienteDescarga**2)*(areaTuberia**2))
 		perdidaCodo = (0.4)*((velocidadFlujoEntreCodos**2)/(2*gravedad))
 		perdidaOrificio= (caudalDiseñoEnM**2)/((2*gravedad)*(coeficienteDescargaOrificios**2)*(areaOrificio**2))
@@ -11035,7 +11219,7 @@ def openFloculadorWindow():
 		pendiente=perdidaTotalFloculador/longitud
 		
 		
-		listaValores=[diametroInternoOrificio, areaOrificio, coeficienteDescarga,
+		listaValores=[diametroInternoOrificioC, areaOrificio, coeficienteDescarga,
 		perdidaPasamuros,perdidaCodo, perdidaOrificio, perdidaTotalFloculador,
 		gradienteMezcla,numeroCamp,pendiente]
 
@@ -11095,8 +11279,13 @@ def openFloculadorWindow():
 	frameFloculador= LabelFrame(floculadorWindow, text="Diseño Floculador Alabama", font=("Yu Gothic bold", 11))
 	frameFloculador.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
+	
+	pathAtras= resource_path('images\\atras.png')
+	imageAtras= PhotoImage(file=pathAtras)
+	#Volver
+	
 
-	imageAtras= PhotoImage(file="images\\atras.png")
+
 
 	#BotonesFloculador
 
@@ -11107,9 +11296,17 @@ def openFloculadorWindow():
 	botonVerCalculos = HoverButton(frameFloculador, text="Cálculos adicionales para diseño del floculador", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT, command= lambda: calculosFloculador(listaEntry, numeroCamaras))
 	botonDatosSalidaCamaraPar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (par)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,numeroCamaras,"par"))
 	botonDatosSalidaCamaraImpar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (impar)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,numeroCamaras, "impar"))
-	botonDatosIniciales= HoverButton(frameFloculador, text="Ver datos iniciales", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: datosIniciales(listaEntry))
-
-	listaBotones=[botonNewEntryFloculador, botonVerCalculos,botonDatosSalidaCamaraPar,botonDatosSalidaCamaraImpar]
+	botonDatosIniciales= HoverButton(frameFloculador, text="Ver datos iniciales", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: datosIniciales(listaEntry, numeroCamaras))
+	botonAyudaVisual= HoverButton(frameFloculador, text="Ayuda visual - geometría Floculador Alabama", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: proyectarImg('images\\VistaFloculador.png',708,622))
+	
+	botonGuiaDiseñoCaudalDiametroInterconexion = HoverButton(frameFloculador, text="Guía de diseño para\nfloculadores tipo Alabama", activebackground="#9DC4AA", anchor=CENTER , width=35, height=4, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: proyectarImg('images\\Floc_GuiaDiseno.png',455,332))
+	botonEspecificacionesTecnicasTuberiasPVC= HoverButton(frameFloculador, text="Especificaciones técnicas\ntuberías PVC tipo 1 RDE21", activebackground="#9DC4AA", anchor=CENTER , width=35, height=4, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: proyectarImg('images\\Floc_GuiaPVC.png',546,315))
+	botonCriteriosFloculadorTipoAlabama= HoverButton(frameFloculador, text="Criterios de diseño de\nfloculador tipo Alabama", activebackground="#9DC4AA", anchor=CENTER , width=35, height=4, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: proyectarImg('images\\Floc_Criterios.png',559,307))
+	
+	listaBotones2 = [botonGuiaDiseñoCaudalDiametroInterconexion,
+	botonEspecificacionesTecnicasTuberiasPVC,
+	botonCriteriosFloculadorTipoAlabama]
+	listaBotones=[botonNewEntryFloculador, botonVerCalculos,botonDatosSalidaCamaraPar,botonDatosSalidaCamaraImpar,botonDatosIniciales, botonAyudaVisual]
 
 
 	datosEntradaLabel = Label(frameFloculador, text="Datos iniciales: ",font=("Yu Gothic bold",10))
@@ -11189,15 +11386,22 @@ def openFloculadorWindow():
 	xInicial=20
 	xInicial2=20
 	control=0
+	alturaInicial2+=43
+	alturaInicial3=alturaInicial2
 
 	for elemento in listaBotones:
-		if control<2:
+		if control<3:
 			elemento.place(x=xInicial ,y=alturaInicial2+43)
-			xInicial+=500
+			alturaInicial2+=43
 		else:
-			elemento.place(x=xInicial2 ,y=alturaInicial2+100)
-			xInicial2+=500
+			elemento.place(x=xInicial2+500 ,y=alturaInicial3+43)
+			alturaInicial3+=43
 		control+=1
+	alturaInicial3+=55
+	for elemento in listaBotones2:
+		elemento.place(x=xInicial,y=alturaInicial3)
+		xInicial+=350
+		
 
 
 	#Borrar
@@ -11233,7 +11437,8 @@ mainWindow.resizable(0,0)
 frame = LabelFrame(mainWindow, text="Página principal")
 frame.grid(row=0, column=0)
 
-bg= PhotoImage(file="images\\fondo31.png")
+pathFondo= resource_path("images\\fondo31.png")
+bg= PhotoImage(file=pathFondo)
 
 
 my_canvas = Canvas(frame, width=370, height=350)
