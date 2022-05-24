@@ -509,17 +509,18 @@ def openSedWindow():
 		sedScrollY.configure(command=arboldeterminacionParametrosBasicosDiseno.yview)
 		#Define columnas.
 		arboldeterminacionParametrosBasicosDiseno["columns"]= (
-		"1","2","Unidades","Adicionales")
-
+		"Presione para ver Excel","2","Unidades","Adicionales")
+		
 		
 
 		#Headings
 		arboldeterminacionParametrosBasicosDiseno.heading("#0",text="ID", anchor=CENTER)
 
 
-
+		
+		
 		for col in arboldeterminacionParametrosBasicosDiseno["columns"]:
-			arboldeterminacionParametrosBasicosDiseno.heading(col, text=col,anchor=CENTER, command=lambda: print("Img") )	
+			arboldeterminacionParametrosBasicosDiseno.heading(col, text=col,anchor=CENTER, command=lambda: proyectarImg('images\\Sed_DeterminacionParametrosBasicosDiseno.png',781,439) )	
 
 		arboldeterminacionParametrosBasicosDiseno.column("#1",width=400, stretch=False)
 		arboldeterminacionParametrosBasicosDiseno.column("#2",width=100, stretch=False)
@@ -774,29 +775,16 @@ def openSedWindow():
 		#sedScrollY.configure(command=arbolcanaletasRecoleccionAgua.yview)
 		#Define columnas.
 		arbolcanaletasRecoleccionAgua["columns"]= (
-		"1","2","Unidades")
+		"Presione para ver excel","2","Unidades")
 
 		#Headings
 		arbolcanaletasRecoleccionAgua.heading("#0",text="ID", anchor=CENTER)
 
 
-		def formulaN(archivo):
-			forWindow= tk.Toplevel()
-			path=resource_path('icons\\agua.ico')
-			forWindow.iconbitmap(bitmap=path)
-			forWindow.geometry("1000x350") 
-			forWindow.resizable(0,0)
-			forWindow.configure(background="#9DC4AA")
-			framefor=Frame(forWindow)
-			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			path2=resource_path(archivo)
-			ima= PhotoImage(file=path2)
-			l=Label(framefor, image=ima)
-			l.pack()
-			forWindow.mainloop()
+		
 
 		for col in arbolcanaletasRecoleccionAgua["columns"]:
-			arbolcanaletasRecoleccionAgua.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+			arbolcanaletasRecoleccionAgua.heading(col, text=col,anchor=CENTER, command=lambda: proyectarImg("images\\Sed_CanaletasDeRecoleccion.png",780,125) )	
 		
 		
 		arbolcanaletasRecoleccionAgua.column("#0",width=0, stretch=False)
@@ -968,29 +956,15 @@ def openSedWindow():
 		#sedScrollY.configure(command=arboltiempoRetencionTotalTanque.yview)
 		#Define columnas.
 		arboltiempoRetencionTotalTanque["columns"]= (
-		"1","2","Unidades")
+		"Presione para ver la excel","2","Unidades")
 
 		#Headings
 		arboltiempoRetencionTotalTanque.heading("#0",text="ID", anchor=CENTER)
 
 
-		def formulaN(archivo):
-			forWindow= tk.Toplevel()
-			path=resource_path('icons\\agua.ico')
-			forWindow.iconbitmap(bitmap=path)
-			forWindow.geometry("540x80") 
-			forWindow.resizable(0,0)
-			forWindow.configure(background="#9DC4AA")
-			framefor=Frame(forWindow)
-			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			path2=resource_path(archivo)
-			ima= PhotoImage(file=path2)
-			l=Label(framefor, image=ima)
-			l.pack()
-			forWindow.mainloop()
-
+		
 		for col in arboltiempoRetencionTotalTanque["columns"]:
-			arboltiempoRetencionTotalTanque.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+			arboltiempoRetencionTotalTanque.heading(col, text=col,anchor=CENTER, command=lambda: proyectarImg("images\\Sed_tiempoRetencionTotalTanque.png",782,193) )	
 
 			
 		arboltiempoRetencionTotalTanque.column("#0",width=0, stretch=False)
@@ -1232,29 +1206,16 @@ def openSedWindow():
 		sedScrollY.configure(command=arboldimensionesDelSedimentador.yview)
 		#Define columnas.
 		arboldimensionesDelSedimentador["columns"]= (
-		"1","2","Unidades")
+		"Presione para ver excel","2","Unidades")
 
 		#Headings
 		arboldimensionesDelSedimentador.heading("#0",text="ID", anchor=CENTER)
 
 
-		def formulaN(archivo):
-			forWindow= tk.Toplevel()
-			path=resource_path('icons\\agua.ico')
-			forWindow.iconbitmap(bitmap=path)
-			forWindow.geometry("1000x350") 
-			forWindow.resizable(0,0)
-			forWindow.configure(background="#9DC4AA")
-			framefor=Frame(forWindow)
-			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			path2=resource_path(archivo)
-			ima= PhotoImage(file=path2)
-			l=Label(framefor, image=ima)
-			l.pack()
-			forWindow.mainloop()
+
 
 		for col in arboldimensionesDelSedimentador["columns"]:
-			arboldimensionesDelSedimentador.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+			arboldimensionesDelSedimentador.heading(col, text=col,anchor=CENTER, command=lambda: proyectarImg("images\\Sed_DimensionesDelSedimentador.png",781,291) )	
 
 		arboldimensionesDelSedimentador.column("#0",width=0, stretch=False)
 		arboldimensionesDelSedimentador.column("#1",width=300, stretch=False)
@@ -1544,29 +1505,14 @@ def openSedWindow():
 		sedScrollY.configure(command=arboldisenoSistemaEvacuacionLodos.yview)
 		#Define columnas.
 		arboldisenoSistemaEvacuacionLodos["columns"]= (
-		"1","2","Unidades")
+		"Presione para ver excel","2","Unidades")
 
 		#Headings
 		arboldisenoSistemaEvacuacionLodos.heading("#0",text="ID", anchor=CENTER)
 
 
-		def formulaN(archivo):
-			forWindow= tk.Toplevel()
-			path=resource_path('icons\\agua.ico')
-			forWindow.iconbitmap(bitmap=path)
-			forWindow.geometry("1000x350") 
-			forWindow.resizable(0,0)
-			forWindow.configure(background="#9DC4AA")
-			framefor=Frame(forWindow)
-			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			path2=resource_path(archivo)
-			ima= PhotoImage(file=path2)
-			l=Label(framefor, image=ima)
-			l.pack()
-			forWindow.mainloop()
-
 		for col in arboldisenoSistemaEvacuacionLodos["columns"]:
-			arboldisenoSistemaEvacuacionLodos.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+			arboldisenoSistemaEvacuacionLodos.heading(col, text=col,anchor=CENTER, command=lambda: proyectarImg("images\\Sed_disenoSistemaEvacuacionLodos.png",781,404) )	
 
 		arboldisenoSistemaEvacuacionLodos.column("#0",width=0, stretch=False)
 		arboldisenoSistemaEvacuacionLodos.column("#1",width=300, stretch=False)
@@ -1754,10 +1700,364 @@ def openSedWindow():
 			messagebox.showinfo(title="Información", message="¡El Valor resultante del cuadrado de la relación entre el diámetro de orificios y el del múltiple por el número de orificios es alto, revise datos de diámetros de orificios!")
 		disenoSistemaEvacuacionLodosWindow.mainloop()
 		
+	
+
+	def caudalesDeDiseño(listaCaudalesDiseño):
+		
+		# listaCaudalesDiseño = [factorMayoracionCaudalMD, factorMayoracionCaudalMH,caudalMedioEntry]
+		
+		
+		# listaEntradaParametrosBasicos=[tipoFloc = 0 ,tipoCelda = 1, materialTipoCelda =2 , dimensionesTipoCeldaMaterial =3 
+		# ,anguloInclinacion =4
+		# ,numeroUnidades =5,
+		# distanciaPlacas = 6, 
+		# caudalMedioEntry = 7, 
+		# factorMayoracionCaudalMD = 8,temperaturaEntry=  9]
+
+		
+		
+		listaSinComboBox=[listaCaudalesDiseño[0],listaCaudalesDiseño[1],
+		listaCaudalesDiseño[2]]	
+		labels=["factoración de mayoración del caudal máximo diario","factor de mayoración del caudal máximo horario", "caudal medio horario"]
+		for i in range(0, len(listaSinComboBox)):
+			if listaSinComboBox[i].get() == "":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labels[i]} ")	
+				return None
+
+		try:
+			if float(listaCaudalesDiseño[2].get())<0.01 or float(listaCaudalesDiseño[2].get())>0.2:
+				messagebox.showwarning(title="Error", message="El valor del caudal medio diario debe estar entre 0.01 y 0.2")	
+				return None
+			elif float(listaCaudalesDiseño[0].get())>1.3 or float(listaCaudalesDiseño[0].get())<1:
+				messagebox.showwarning(title="Error", message="El valor de factoración de mayoración del caudal máximo diario debe estar entre 1 y 1.3")	
+				return None
+			elif float(listaCaudalesDiseño[1].get())>1.6 or float(listaCaudalesDiseño[1].get())<1:
+				messagebox.showwarning(title="Error", message="El valor de factoración de mayoración del caudal máximo horario debe estar entre 1 y 1.6")	
+				return None
+		except:
+			messagebox.showwarning(title="Error", message="Alguno de los datos ingresados no es un número.")
+			return None	
+		
+		caudalMedioDiario= float(listaCaudalesDiseño[2].get())
+		factorMayoracionCaudalMD = float(listaCaudalesDiseño[0].get())
+		factorMayoracionCaudalMH = float(listaCaudalesDiseño[1].get())
+		
+		
+		
+		CaudalesDiseñoWindow = tk.Toplevel()
+		path=resource_path('icons\\agua.ico')
+		CaudalesDiseñoWindow.iconbitmap(bitmap=path)
+		CaudalesDiseñoWindow.geometry("500x300") 
+		CaudalesDiseñoWindow.resizable(0,0)	
+		CaudalesDiseñoWindow.configure(background="#9DC4AA")
+
+		CaudalesDiseñoFrame=LabelFrame(CaudalesDiseñoWindow, text="Caudales de diseño", font=("Yu Gothic bold", 11))
+		CaudalesDiseñoFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolCaudalesDiseño_frame = Frame(CaudalesDiseñoFrame)
+		arbolCaudalesDiseño_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		# sedScrollX=Scrollbar(arbolCaudalesDiseño_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollY=Scrollbar(arbolCaudalesDiseño_frame,orient=VERTICAL)
+		# sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolCaudalesDiseño= ttk.Treeview(arbolCaudalesDiseño_frame,selectmode=BROWSE, height=11,show="tree headings")#,yscrollcommand=sedScrollY.set, xscrollcommand=sedScrollX.set)
+		arbolCaudalesDiseño.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		# sedScrollX.configure(command=arbolCaudalesDiseño.xview)
+		# sedScrollY.configure(command=arbolCaudalesDiseño.yview)
+		#Define columnas.
+		arbolCaudalesDiseño["columns"]= (
+		"1","2","Unidades")
+
+		
+
+		#Headings
+		arbolCaudalesDiseño.heading("#0",text="ID", anchor=CENTER)
+
+
+
+		for col in arbolCaudalesDiseño["columns"]:
+			arbolCaudalesDiseño.heading(col, text=col,anchor=CENTER, command=lambda: print("Img") )	
+
+		arbolCaudalesDiseño.column("#1",width=300, stretch=False)
+		arbolCaudalesDiseño.column("#2",width=100, stretch=False)
+		arbolCaudalesDiseño.column("#3",width=100, stretch=False)
 		
 
 
+		arbolCaudalesDiseño.column("#0",width=0, stretch=False)
+		
+		
 
+		#Striped row tags
+		arbolCaudalesDiseño.tag_configure("evenrow", background= "#1FCCDB")
+		arbolCaudalesDiseño.tag_configure("oddrow", background= "#9DC4AA")
+
+
+		listaCaudalesDiseño=list()
+
+
+		encabezadosLista=[
+		"Factor de mayoración del caudal máximo diario",
+		"Factor de mayoración del caudal máximo horario",
+		"Caudal medio diario",			
+		"Caudal máximo diario",			
+		"Caudal máximo horario",			
+		]
+		unidadesLista=["",
+		"",
+		"(m^3)/s",
+		"(m^3)/s",
+		"(m^3)/s",
+						]
+		
+		listaCaudalesDiseño.append(round(factorMayoracionCaudalMD,3))
+		listaCaudalesDiseño.append(round(factorMayoracionCaudalMH,3))
+		listaCaudalesDiseño.append(round(caudalMedioDiario,3))
+		caudalMaximoDiario=caudalMedioDiario*factorMayoracionCaudalMD
+		listaCaudalesDiseño.append(round(caudalMaximoDiario,3))
+		caudalMaximoHorario=caudalMedioDiario*factorMayoracionCaudalMH
+		listaCaudalesDiseño.append(round(caudalMaximoHorario,3))
+		
+		for i in range(0, len(encabezadosLista)):
+			listaTemp=list()
+			listaTemp.append(encabezadosLista[i])
+			listaTemp.append(listaCaudalesDiseño[i])
+			listaTemp.append(unidadesLista[i])
+			newDataTreeview(arbolCaudalesDiseño,listaTemp)
+
+		CaudalesDiseñoWindow.mainloop()
+
+	def propiedadesFisicasAgua():
+		return 0
+
+	def verDatosParametrosEntrada(listaVerDatosParametrosEntrada,tipoCelda):
+		
+		'''
+		listaEntradaParametrosBasicos=[tipoFloc = 0 ,tipoCelda = 1, materialTipoCelda =2 , dimensionesTipoCeldaMaterial =3 
+		,anguloInclinacion =4
+		,numeroUnidades =5,
+		distanciaPlacas = 6, 
+		caudalMedioEntry = 7, 
+		factorMayoracionCaudalMD = 8,temperaturaEntry=  9]
+
+		listaVerDatosParametrosEntrada = listaEntradaParametrosBasicos + [longitudPlacas = 10]
+
+		listaCanaletasRecoleccionAgua = [distanciaCanaletasRecoleccion,longitudPlacas]
+		listaTiempoRetencionTotalTanque = listaVerDatosParametrosEntrada + [distanciaVerticalDistribucionPlacas] + listaCanaletasRecoleccionAgua
+		listaDimensionesDelSedimentador = listaTiempoRetencionTotalTanque + [bordeLibre,espesorMuros,pendienteTransversalTolva,anchoBasePlanaTolva] 
+		listaDisenoSistemaEvacuacionLodos = listaDimensionesDelSedimentador + [velocidadMinimaArrastre,longitudPlacas, diametroNominalOrificionesMultipleDescarga]
+		'''
+
+		inicialesComboBox=["Seleccione el tipo de floc","Seleccione el tipo de celda",
+		f"Seleccione el material de {tipoCelda}", f"Seleccione las dimensiones de {tipoCelda}", "Seleccione el número de unidades","Seleccione la temperatura"]
+
+		listaComboBox=[listaVerDatosParametrosEntrada[0],listaVerDatosParametrosEntrada[1],listaVerDatosParametrosEntrada[2],
+		listaVerDatosParametrosEntrada[3],listaVerDatosParametrosEntrada[5], listaVerDatosParametrosEntrada[9]]
+		listaSinComboBox=[listaVerDatosParametrosEntrada[4],listaVerDatosParametrosEntrada[6],
+		listaVerDatosParametrosEntrada[7],listaVerDatosParametrosEntrada[8], listaVerDatosParametrosEntrada[10]]
+
+		parametrosCombobox=list()
+
+		for i in range(0,len(listaComboBox)):
+			if listaComboBox[i].get()[0:10] == "Seleccione":
+				messagebox.showwarning(title="Error", message=f"Hace falta seleccionar {inicialesComboBox[i][10:].lower()}")
+				return None	
+			else:
+				parametrosCombobox.append(listaComboBox[i].get())
+		#Verifica que no sean nulos.
+		if tipoCelda == "Conductos cuadrados":
+			labels=["ángulo de inclinación", "lado interno de los conductos","caudal medio diario",
+			"factor de mayoración del caudal máximo diario", "longitud ocupada por los módulos"]
+		else: 
+
+			labels=["ángulo de inclinación", "distancia entre placas","caudal medio diario",
+			"factor de mayoración del caudal máximo diario", "longitud ocupada por las placas"]
+
+
+		for i in range(0, len(listaSinComboBox)):
+			if listaSinComboBox[i].get() == "":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labels[i]} ")	
+				return None
+
+		try:
+			if float(listaVerDatosParametrosEntrada[4].get()) != 60.0  :
+				messagebox.showwarning(title="Error", message="El valor del ángulo de inclinación solo puede ser 60°")	
+				return None
+			elif float(listaVerDatosParametrosEntrada[6].get())>6.0 or float(listaVerDatosParametrosEntrada[6].get())<5.0:
+				if tipoCelda == "Conductos cuadrados":
+					messagebox.showwarning(title="Error", message=f"El valor del lado interno de los conductos cuadrados no puede ser menor que 5 ni mayor que 6.")	
+					return None
+				else: 
+					messagebox.showwarning(title="Error", message=f"El valor de la distancia entre placas no puede ser menor que 5 ni mayor que 6.")	
+					return None
+			elif float(listaVerDatosParametrosEntrada[7].get())<0.01 or float(listaVerDatosParametrosEntrada[7].get())>0.2:
+				messagebox.showwarning(title="Error", message="El valor del caudal medio diario debe estar entre 0.01 y 0.2")	
+				return None
+			elif float(listaVerDatosParametrosEntrada[8].get())>1.3 or float(listaVerDatosParametrosEntrada[8].get())<1:
+				messagebox.showwarning(title="Error", message="El valor de factoración de mayoración del caudal máximo diario debe estar entre 1 y 1.3")	
+				return None
+			elif float(listaVerDatosParametrosEntrada[10].get())<2 or float(listaVerDatosParametrosEntrada[10].get())>12:
+				if tipoCelda == "Conductos cuadrados":
+					messagebox.showwarning(title="Error", message="La longitud ocupada por los módulos no puede ser menor que 2 ni mayor a 12")	
+					return None
+				else:
+					messagebox.showwarning(title="Error", message="La longitud ocupada por las placas no puede ser menor que 2 ni mayor a 12")	
+					return None
+		except:
+			messagebox.showwarning(title="Error", message="Alguno de los datos ingresados no es un número.")
+			return None	
+
+		anguloInclinacion = float(listaVerDatosParametrosEntrada[4].get())
+		distanciaPlacas = float(listaVerDatosParametrosEntrada[6].get())
+		caudalMedio = float(listaVerDatosParametrosEntrada[7].get())
+		factorMayoracionCaudalMD = float(listaVerDatosParametrosEntrada[8].get())
+		longitudPlacas = float(listaVerDatosParametrosEntrada[10].get())
+
+		tipoFloc = parametrosCombobox[0]
+		tipoCelda = parametrosCombobox[1]
+		materialTipoCelda = parametrosCombobox[2]
+		dimensionesTipoCeldaMaterial = parametrosCombobox[3]
+		numeroUnidades = parametrosCombobox[4]
+		temperatura=  parametrosCombobox[5]
+
+
+
+
+
+
+		VerDatosParametrosEntradaWindow = tk.Toplevel()
+		path=resource_path('icons\\agua.ico')
+		VerDatosParametrosEntradaWindow.iconbitmap(bitmap=path)
+		VerDatosParametrosEntradaWindow.geometry("725x420") 
+		VerDatosParametrosEntradaWindow.resizable(0,0)	
+		VerDatosParametrosEntradaWindow.configure(background="#9DC4AA")
+
+		VerDatosParametrosEntradaFrame=LabelFrame(VerDatosParametrosEntradaWindow, text="Datos de entrada para parámetros básicos", font=("Yu Gothic bold", 11))
+		VerDatosParametrosEntradaFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolVerDatosParametrosEntrada_frame = Frame(VerDatosParametrosEntradaFrame)
+		arbolVerDatosParametrosEntrada_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		# sedScrollX=Scrollbar(arbolVerDatosParametrosEntrada_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
+		sedScrollY=Scrollbar(arbolVerDatosParametrosEntrada_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolVerDatosParametrosEntrada= ttk.Treeview(arbolVerDatosParametrosEntrada_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set) #,xscrollcommand=sedScrollX.set)
+		arbolVerDatosParametrosEntrada.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		#sedScrollX.configure(command=arbolVerDatosParametrosEntrada.xview)
+		sedScrollY.configure(command=arbolVerDatosParametrosEntrada.yview)
+		#Define columnas.
+		arbolVerDatosParametrosEntrada["columns"]= (
+		"1","2","Unidades")
+
+
+
+		#Headings
+		arbolVerDatosParametrosEntrada.heading("#0",text="ID", anchor=CENTER)
+
+
+
+		for col in arbolVerDatosParametrosEntrada["columns"]:
+			arbolVerDatosParametrosEntrada.heading(col, text=col,anchor=CENTER, command=lambda: print("Img") )	
+
+		arbolVerDatosParametrosEntrada.column("#1",width=400, stretch=False)
+		arbolVerDatosParametrosEntrada.column("#2",width=200, stretch=False)
+		arbolVerDatosParametrosEntrada.column("#3",width=100, stretch=False)
+		
+
+
+		arbolVerDatosParametrosEntrada.column("#0",width=0, stretch=False)
+
+
+
+		#Striped row tags
+		arbolVerDatosParametrosEntrada.tag_configure("evenrow", background= "#1FCCDB")
+		arbolVerDatosParametrosEntrada.tag_configure("oddrow", background= "#9DC4AA")
+
+
+		listaVerDatosParametrosEntrada=list()
+
+
+		if tipoCelda == "Conductos cuadrados":
+			encabezadosLista=["Tipo de floc",
+				"Tipo de celda",
+				"Material de módulos de Conductos cuadrados",
+				"Sección tranversal inclinada de módulos de Conductos cuadrados",
+				"Espesor de pared de Conductos cuadrados",
+				"Ángulo de inclinación de Conductos cuadrados",
+				"Eficiencia crítica para Conductos cuadrados",
+				"Caudal de diseño (QMD)",
+				"Número de unidades",
+				"Caudal por unidad",
+				"Viscosidad cinemática",
+				"Lado interno de Conductos cuadrados",
+					]
+
+		else:
+			encabezadosLista=[
+				"Tipo de floc",
+				"Tipo de celda",
+				"Material de Placas",
+				"Dimensiones de Placas",
+				"Espesor de Placas",
+				"Ángulo de inclinación de Placas",
+				"Eficiencia crítica para Placas",
+				"Caudal de diseño (QMD)",
+				"Número de unidades",
+				"Caudal por unidad",
+				"Viscosidad cinemática",
+				"Distancia entre placas",
+			]
+		unidadesLista=[
+			"",
+			"",
+			"",
+			"mm x mm",
+			"mm",
+			"°",
+			"",
+			"m3/s",
+			"und",
+			"m3/s",
+			"m2/s",
+			"cm",
+		]
+
+
+		listaSalidaDatosEntradaPrametrosBasicosCalculos = datosEntradaParametrosBasicosCalculos(tipoFloc, tipoCelda, materialTipoCelda, dimensionesTipoCeldaMaterial, anguloInclinacion, numeroUnidades,distanciaPlacas, caudalMedio,factorMayoracionCaudalMD, temperatura)
+		# listaSalida=[0 = tipoFloc,1 = tipoCelda,
+		# 2= materialCelda, 3= dimensiones,
+		# 4= espesor,5= anguloInclinacion,6= eficienciaCritica, 
+		# 7=caudalDiseño, 8=numeroUnidades,
+		# 9= caudalUnidad,10=viscosidadCinematica,11=distanciaPlacas]
+
+
+	
+		for i in range(0, len(encabezadosLista)):
+			listaTemp=list()
+			listaTemp.append(encabezadosLista[i])
+			if i==10:
+				listaTemp.append(round(listaSalidaDatosEntradaPrametrosBasicosCalculos[i],7))
+			else:
+				try:
+					listaTemp.append(round(listaSalidaDatosEntradaPrametrosBasicosCalculos[i],3))
+				except:
+					listaTemp.append(listaSalidaDatosEntradaPrametrosBasicosCalculos[i])
+			listaTemp.append(unidadesLista[i])
+			newDataTreeview(arbolVerDatosParametrosEntrada,listaTemp)
+
+		VerDatosParametrosEntradaWindow.mainloop()
 
 	mainWindow.withdraw()
 	sedWindow= tk.Toplevel()
@@ -2021,6 +2321,8 @@ def openSedWindow():
 	listaTiempoRetencionTotalTanque = listaDeterminacionParametrosBasicosDiseno + [distanciaVerticalDistribucionPlacas] + [distanciaCanaletasRecoleccion]
 	listaDimensionesDelSedimentador = listaTiempoRetencionTotalTanque + [bordeLibre,espesorMuros,pendienteTransversalTolva,anchoBasePlanaTolva] 
 	listaDisenoSistemaEvacuacionLodos = listaDimensionesDelSedimentador + [velocidadMinimaArrastre, diametroNominalOrificionesMultipleDescarga]  
+	listaCaudalesDiseño = [factorMayoracionCaudalMD, factorMayoracionCaudalMH,caudalMedioEntry]
+	
 
 	pathAtras= resource_path('images\\atras.png')
 	imageAtras= PhotoImage(file=pathAtras)
@@ -2035,24 +2337,28 @@ def openSedWindow():
 	botonDimensionesDelSedimentador = HoverButton(frameSed, text="Dimensiones del sedimentador", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: dimensionesDelSedimentador(listaDimensionesDelSedimentador, tipoCelda.get()))
 	botonDisenoSistemaEvacuacionLodos = HoverButton(frameSed, text="Diseño del sistema de evacuación de lodos", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: disenoSistemaEvacuacionLodos(listaDisenoSistemaEvacuacionLodos,tipoCelda.get()))
 	
-	botonAyudaVisualSed = HoverButton(frameSed, text="Ayuda visual - Geometría del sedimentador", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(""))
-	botonCaudalesDeDiseño = HoverButton(frameSed, text="Caudales de diseño", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(""))
-	botonPropiedadesFisicasAgua = HoverButton(frameSed, text="Propiedades física del agua a tratar", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(""))
-	botonVerDatosEntradaParametrosBasicos = HoverButton(frameSed, text="Ver datos de entrada para parámetros básicos", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: print(""))
+	botonAyudaVisualSed = HoverButton(frameSed, text="Ayuda visual-\nGeometría del sedimentador", activebackground="#9DC4AA", width=40, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: proyectarImg("images\\VistaSedimentador.png",802,625))
+	
+	botonCaudalesDeDiseño = HoverButton(frameSed, text="Caudales de diseño", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: caudalesDeDiseño(listaCaudalesDiseño))
+	botonPropiedadesFisicasAgua = HoverButton(frameSed, text="Propiedades física del agua a tratar", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: propiedadesFisicasAgua())
+	botonVerDatosEntradaParametrosBasicos = HoverButton(frameSed, text="Ver datos de entrada\npara parámetros básicos", activebackground="#9DC4AA", width=40, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: verDatosParametrosEntrada(listaDeterminacionParametrosBasicosDiseno,tipoCelda.get()))
 
 	botonLimpiarEntradas = HoverButton(frameSed, text="Limpiar entradas", activebackground="#9DC4AA", width=40, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntrySed(lista_entradas,listaLabelReiniciar))
 
 
 
 	listaBotones=[
-	
+	botonCaudalesDeDiseño,
 	botonParametrosDeDiseñoSedimentadorAltaTasa,
+	botonPropiedadesFisicasAgua,
+	botonVerDatosEntradaParametrosBasicos,
 	botonDeterminacionParametrosBasicosDiseno,
 	botonCanaletasRecoleccionAgua,
 	botonTiempoRetencionTotalTanque, 
 	botonDimensionesDelSedimentador,
 	botonDisenoSistemaEvacuacionLodos, 
-	botonLimpiarEntradas]
+	botonLimpiarEntradas,
+	botonAyudaVisualSed]
 
 	
 	#UbicacionElementos
@@ -2118,14 +2424,42 @@ def openSedWindow():
 
 		varX= [0, 450, 800]
 		yBotones=yInicial
+		yBotones1=yInicial
 
-		for i in range(0,3):
-			
-			listaBotones[i].place(x=varX[0],y=yBotones)
-			listaBotones[i+3].place(x=varX[2], y=yBotones)
-			listaBotones[6].place(x=470,y=yBotones-50)
-			
-			yBotones=yBotones+50
+		# listaBotones=[
+		# 	botonCaudalesDeDiseño,
+		# 	botonParametrosDeDiseñoSedimentadorAltaTasa,
+		# 	botonPropiedadesFisicasAgua,
+		# 	botonVerDatosEntradaParametrosBasicos,
+		# 	botonDeterminacionParametrosBasicosDiseno,
+		# 	botonCanaletasRecoleccionAgua,
+		# 	botonTiempoRetencionTotalTanque, 
+		# 	botonDimensionesDelSedimentador,
+		# 	botonDisenoSistemaEvacuacionLodos, 
+		# 	botonLimpiarEntradas]
+		listaBotones=[
+		botonCaudalesDeDiseño,
+		botonParametrosDeDiseñoSedimentadorAltaTasa,
+		botonPropiedadesFisicasAgua,
+		botonDeterminacionParametrosBasicosDiseno,
+		botonCanaletasRecoleccionAgua,
+		botonTiempoRetencionTotalTanque, 
+		botonDimensionesDelSedimentador,
+		botonDisenoSistemaEvacuacionLodos, 
+		botonAyudaVisualSed,
+		botonLimpiarEntradas,
+		botonVerDatosEntradaParametrosBasicos,]
+		listaBotones[8].place(x=470,y=yBotones)
+		listaBotones[9].place(x=470,y=yBotones+50)
+		listaBotones[10].place(x=470,y=yBotones+100)
+		for i in range(0,8):
+			if i<4:
+				listaBotones[i].place(x=varX[0],y=yBotones)
+				yBotones=yBotones+50
+			else:
+				listaBotones[i].place(x=varX[2],y=yBotones1)
+				yBotones1=yBotones1+50
+
 	
 	##CalculosAdicionalesDatosEntradaBásicos
 
@@ -9723,7 +10057,7 @@ def openFiltroWindow():
 
 	
 
-		#BotonesCanaletasDimensiones #Volver
+		#BotonesCanaletasDimensiones 
 		botonCalcularCanaletas = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Cálculos canaletas de lavado", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: canaletasDeLavado2(TemperatureValue,d60, caudalLista,listaE, listaEntradas[6]))
 		botonCalcularDimensionesYCotasFiltros = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Cálculos dimensiones y cotas en los filtros", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: dimensionesYCotasFiltros(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE,tasa))
 		botonNewEntry = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
@@ -10568,7 +10902,7 @@ def openFloculadorWindow():
 		densidad=densidadDic[temperatura]
 		viscosidadDinamica = viscosidadDinamicaDic[temperatura]
 
-		#Volver
+		
 
 		volumenCamara= tiempoDetencionCamara*caudalDiseñoEnM
 
@@ -11282,7 +11616,7 @@ def openFloculadorWindow():
 	
 	pathAtras= resource_path('images\\atras.png')
 	imageAtras= PhotoImage(file=pathAtras)
-	#Volver
+	
 	
 
 
