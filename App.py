@@ -7,7 +7,8 @@ from numpy import mat
 import pandas as pd
 from math import pi,sin,cos,tan,sqrt,log10
 from functools import partial
-
+import os,errno,sys,re
+from os import path
 
 class HoverButton(Button):
 		def __init__(self, master, **kw):
@@ -21,6 +22,19 @@ class HoverButton(Button):
 
 		def on_leave(self, e):
 			self["background"] = self.defaultBackground  
+
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 def getSuper(x): 
     normal = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-=()"
     super_s = "ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾQᴿˢᵀᵁⱽᵂˣʸᶻᵃᵇᶜᵈᵉᶠᵍʰᶦʲᵏˡᵐⁿᵒᵖ۹ʳˢᵗᵘᵛʷˣʸᶻ⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾"
@@ -93,13 +107,15 @@ def openSedWindow():
 			
 	def formulaN(archivo):
 		forWindow= tk.Toplevel()
-		forWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		forWindow.iconbitmap(bitmap=path)
 		forWindow.geometry("800x600") 
 		forWindow.resizable(0,0)
 		forWindow.configure(background="#9DC4AA")
 		framefor=Frame(forWindow)
 		framefor.pack(side=TOP, fill=BOTH, expand=True)
-		ima= PhotoImage(file=archivo)
+		path2=resource_path(archivo)
+		ima= PhotoImage(file=path2)
 		l=Label(framefor, image=ima)
 		l.pack()
 		forWindow.mainloop()
@@ -266,7 +282,8 @@ def openSedWindow():
 	def parametrosDeDiseñoSedimentadorAltaTasa():
 		
 		parametrosDeDiseñoSedimentadorAltaTasaWindow = tk.Toplevel()
-		parametrosDeDiseñoSedimentadorAltaTasaWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		parametrosDeDiseñoSedimentadorAltaTasaWindow.iconbitmap(bitmap=path)
 		parametrosDeDiseñoSedimentadorAltaTasaWindow.geometry("700x500") 
 		parametrosDeDiseñoSedimentadorAltaTasaWindow.resizable(0,0)	
 		parametrosDeDiseñoSedimentadorAltaTasaWindow.configure(background="#9DC4AA")
@@ -298,21 +315,8 @@ def openSedWindow():
 		arbolparametrosDeDiseñoSedimentadorAltaTasa.heading("#0",text="ID", anchor=CENTER)
 
 
-		def formulaN(archivo):
-			forWindow= tk.Toplevel()
-			forWindow.iconbitmap(bitmap='icons\\agua.ico')
-			forWindow.geometry("1000x350") 
-			forWindow.resizable(0,0)
-			forWindow.configure(background="#9DC4AA")
-			framefor=Frame(forWindow)
-			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			ima= PhotoImage(file=archivo)
-			l=Label(framefor, image=ima)
-			l.pack()
-			forWindow.mainloop()
-
 		for col in arbolparametrosDeDiseñoSedimentadorAltaTasa["columns"]:
-			arbolparametrosDeDiseñoSedimentadorAltaTasa.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+			arbolparametrosDeDiseñoSedimentadorAltaTasa.heading(col, text=col,anchor=CENTER)	
 
 		
 		arbolparametrosDeDiseñoSedimentadorAltaTasa.column("#0",width=0, stretch=False)
@@ -476,7 +480,8 @@ def openSedWindow():
 
 		
 		determinacionParametrosBasicosDisenoWindow = tk.Toplevel()
-		determinacionParametrosBasicosDisenoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		determinacionParametrosBasicosDisenoWindow.iconbitmap(bitmap=path)
 		determinacionParametrosBasicosDisenoWindow.geometry("620x420") 
 		determinacionParametrosBasicosDisenoWindow.resizable(0,0)	
 		determinacionParametrosBasicosDisenoWindow.configure(background="#9DC4AA")
@@ -512,19 +517,21 @@ def openSedWindow():
 
 		def formulaN(archivo):
 			forWindow= tk.Toplevel()
-			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			path=resource_path('icons\\agua.ico')
+			forWindow.iconbitmap(bitmap=path)
 			forWindow.geometry("1000x350") 
 			forWindow.resizable(0,0)
 			forWindow.configure(background="#9DC4AA")
 			framefor=Frame(forWindow)
 			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			ima= PhotoImage(file=archivo)
+			path2=resource_path(archivo)
+			ima= PhotoImage(file=path2)
 			l=Label(framefor, image=ima)
 			l.pack()
 			forWindow.mainloop()
 
 		for col in arboldeterminacionParametrosBasicosDiseno["columns"]:
-			arboldeterminacionParametrosBasicosDiseno.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+			arboldeterminacionParametrosBasicosDiseno.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Sed_DeterminacionParametrosBasicosDiseno.png") )	
 
 		arboldeterminacionParametrosBasicosDiseno.column("#1",width=400, stretch=False)
 		arboldeterminacionParametrosBasicosDiseno.column("#2",width=100, stretch=False)
@@ -752,7 +759,8 @@ def openSedWindow():
 
 		'''
 		canaletasRecoleccionAguaWindow = tk.Toplevel()
-		canaletasRecoleccionAguaWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		canaletasRecoleccionAguaWindow.iconbitmap(bitmap=path)
 		canaletasRecoleccionAguaWindow.geometry("500x180") 
 		canaletasRecoleccionAguaWindow.resizable(0,0)	
 		canaletasRecoleccionAguaWindow.configure(background="#9DC4AA")
@@ -786,13 +794,15 @@ def openSedWindow():
 
 		def formulaN(archivo):
 			forWindow= tk.Toplevel()
-			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			path=resource_path('icons\\agua.ico')
+			forWindow.iconbitmap(bitmap=path)
 			forWindow.geometry("1000x350") 
 			forWindow.resizable(0,0)
 			forWindow.configure(background="#9DC4AA")
 			framefor=Frame(forWindow)
 			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			ima= PhotoImage(file=archivo)
+			path2=resource_path(archivo)
+			ima= PhotoImage(file=path2)
 			l=Label(framefor, image=ima)
 			l.pack()
 			forWindow.mainloop()
@@ -943,7 +953,8 @@ def openSedWindow():
 
 		
 		tiempoRetencionTotalTanqueWindow = tk.Toplevel()
-		tiempoRetencionTotalTanqueWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		tiempoRetencionTotalTanqueWindow.iconbitmap(bitmap=path)
 		tiempoRetencionTotalTanqueWindow.geometry("540x300") 
 		tiempoRetencionTotalTanqueWindow.resizable(0,0)	
 		tiempoRetencionTotalTanqueWindow.configure(background="#9DC4AA")
@@ -977,13 +988,15 @@ def openSedWindow():
 
 		def formulaN(archivo):
 			forWindow= tk.Toplevel()
-			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			path=resource_path('icons\\agua.ico')
+			forWindow.iconbitmap(bitmap=path)
 			forWindow.geometry("540x80") 
 			forWindow.resizable(0,0)
 			forWindow.configure(background="#9DC4AA")
 			framefor=Frame(forWindow)
 			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			ima= PhotoImage(file=archivo)
+			path2=resource_path(archivo)
+			ima= PhotoImage(file=path2)
 			l=Label(framefor, image=ima)
 			l.pack()
 			forWindow.mainloop()
@@ -1204,7 +1217,8 @@ def openSedWindow():
 
 		#####
 		dimensionesDelSedimentadorWindow = tk.Toplevel()
-		dimensionesDelSedimentadorWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		dimensionesDelSedimentadorWindow.iconbitmap(bitmap=path)
 		dimensionesDelSedimentadorWindow.geometry("520x400") 
 		dimensionesDelSedimentadorWindow.resizable(0,0)	
 		dimensionesDelSedimentadorWindow.configure(background="#9DC4AA")
@@ -1238,13 +1252,15 @@ def openSedWindow():
 
 		def formulaN(archivo):
 			forWindow= tk.Toplevel()
-			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			path=resource_path('icons\\agua.ico')
+			forWindow.iconbitmap(bitmap=path)
 			forWindow.geometry("1000x350") 
 			forWindow.resizable(0,0)
 			forWindow.configure(background="#9DC4AA")
 			framefor=Frame(forWindow)
 			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			ima= PhotoImage(file=archivo)
+			path2=resource_path(archivo)
+			ima= PhotoImage(file=path2)
 			l=Label(framefor, image=ima)
 			l.pack()
 			forWindow.mainloop()
@@ -1513,7 +1529,8 @@ def openSedWindow():
 
 		###
 		disenoSistemaEvacuacionLodosWindow = tk.Toplevel()
-		disenoSistemaEvacuacionLodosWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		disenoSistemaEvacuacionLodosWindow.iconbitmap(bitmap=path)
 		disenoSistemaEvacuacionLodosWindow.geometry("520x400") 
 		disenoSistemaEvacuacionLodosWindow.resizable(0,0)	
 		disenoSistemaEvacuacionLodosWindow.configure(background="#9DC4AA")
@@ -1547,13 +1564,15 @@ def openSedWindow():
 
 		def formulaN(archivo):
 			forWindow= tk.Toplevel()
-			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			path=resource_path('icons\\agua.ico')
+			forWindow.iconbitmap(bitmap=path)
 			forWindow.geometry("1000x350") 
 			forWindow.resizable(0,0)
 			forWindow.configure(background="#9DC4AA")
 			framefor=Frame(forWindow)
 			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			ima= PhotoImage(file=archivo)
+			path2=resource_path(archivo)
+			ima= PhotoImage(file=path2)
 			l=Label(framefor, image=ima)
 			l.pack()
 			forWindow.mainloop()
@@ -1755,7 +1774,8 @@ def openSedWindow():
 	mainWindow.withdraw()
 	sedWindow= tk.Toplevel()
 	sedWindow.protocol("WM_DELETE_WINDOW", on_closing)
-	sedWindow.iconbitmap(bitmap='icons\\agua.ico')
+	path=resource_path('icons\\agua.ico')
+	sedWindow.iconbitmap(bitmap=path)
 	sedWindow.geometry("1240x600") 
 	#sedWindow.geometry("1366x680") 
 	#sedWindow.resizable(1366,763)
@@ -2156,7 +2176,8 @@ def openFiltroWindow():
 	def principalesCaracFiltro():
 		
 		caracFiltroWindow = tk.Toplevel()
-		caracFiltroWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		caracFiltroWindow.iconbitmap(bitmap=path)
 		caracFiltroWindow.geometry("400x500") 
 		caracFiltroWindow.resizable(0,0)	
 		caracFiltroWindow.configure(background="#9DC4AA")
@@ -2299,7 +2320,8 @@ def openFiltroWindow():
 	
 
 		granulometriaWindow = tk.Toplevel()
-		granulometriaWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		granulometriaWindow.iconbitmap(bitmap=path)
 		granulometriaWindow.geometry("1000x500") 
 		granulometriaWindow.resizable(0,0)	
 		granulometriaWindow.configure(background="#9DC4AA")
@@ -2507,7 +2529,8 @@ def openFiltroWindow():
 	
 
 		coeficienteDUWindow = tk.Toplevel()
-		coeficienteDUWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		coeficienteDUWindow.iconbitmap(bitmap=path)
 		coeficienteDUWindow.geometry("600x120") 
 		coeficienteDUWindow.resizable(0,0)	
 		coeficienteDUWindow.configure(background="#9DC4AA")
@@ -2683,7 +2706,8 @@ def openFiltroWindow():
 
 		def tamañod(x1,y1,x2,y2,numero):
 			tamañoD10Window = tk.Toplevel()
-			tamañoD10Window.iconbitmap(bitmap='icons\\agua.ico')
+			path=resource_path('icons\\agua.ico')
+			tamañoD10Window.iconbitmap(bitmap=path)
 			tamañoD10Window.geometry("1200x300") 
 			tamañoD10Window.resizable(0,0)	
 			tamañoD10Window.configure(background="#9DC4AA")
@@ -2788,7 +2812,8 @@ def openFiltroWindow():
 		
 
 		estimacionPerdidaArenaCalculoWindow = tk.Toplevel()
-		estimacionPerdidaArenaCalculoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		estimacionPerdidaArenaCalculoWindow.iconbitmap(bitmap=path)
 		estimacionPerdidaArenaCalculoWindow.geometry("1000x500") 
 		estimacionPerdidaArenaCalculoWindow.resizable(0,0)	
 		estimacionPerdidaArenaCalculoWindow.configure(background="#9DC4AA")
@@ -3582,7 +3607,8 @@ def openFiltroWindow():
 			return None
 
 		estimacionPerdidaArenaWindow = tk.Toplevel()
-		estimacionPerdidaArenaWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		estimacionPerdidaArenaWindow.iconbitmap(bitmap=path)
 		estimacionPerdidaArenaWindow.geometry("800x600") 
 		estimacionPerdidaArenaWindow.resizable(0,0)	
 		estimacionPerdidaArenaWindow.configure(background="#9DC4AA")
@@ -3875,7 +3901,8 @@ def openFiltroWindow():
 				return None
 	
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow = tk.Toplevel()
-		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.iconbitmap(bitmap=path)
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.geometry("1000x200") 
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.resizable(0,0)	
 		estimacionPerdidaGravaYPredimensionamientoCalculoWindow.configure(background="#9DC4AA")
@@ -4037,7 +4064,8 @@ def openFiltroWindow():
 			temp = int(optnValue.get())
 
 		estimacionPerdidaGravaYPredimensionamientoWindow = tk.Toplevel()
-		estimacionPerdidaGravaYPredimensionamientoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		estimacionPerdidaGravaYPredimensionamientoWindow.iconbitmap(bitmap=path)
 		estimacionPerdidaGravaYPredimensionamientoWindow.geometry("800x600") 
 		estimacionPerdidaGravaYPredimensionamientoWindow.resizable(0,0)	
 		estimacionPerdidaGravaYPredimensionamientoWindow.configure(background="#9DC4AA")
@@ -4150,7 +4178,8 @@ def openFiltroWindow():
 				messagebox.showwarning(title="Error",message="Uno o varios de los valores ingresados no son números.")
 				return None
 		perdidaLechoExpandidoCWindow = tk.Toplevel()
-		perdidaLechoExpandidoCWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaLechoExpandidoCWindow.iconbitmap(bitmap=path)
 		perdidaLechoExpandidoCWindow.geometry("1000x500") 
 		perdidaLechoExpandidoCWindow.resizable(0,0)	
 		perdidaLechoExpandidoCWindow.configure(background="#9DC4AA")
@@ -4216,7 +4245,8 @@ def openFiltroWindow():
 		'''
 		def perdidaCargaLechoExpandido():
 		perdidaCargaLechoExpandidoWindow = tk.Toplevel()
-		perdidaCargaLechoExpandidoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaLechoExpandidoWindow.iconbitmap(bitmap=path)
 		perdidaCargaLechoExpandidoWindow.geometry("600x400") 
 		perdidaCargaLechoExpandidoWindow.resizable(0,0)	
 		perdidaCargaLechoExpandidoWindow.configure(background="#9DC4AA")
@@ -4285,7 +4315,8 @@ def openFiltroWindow():
 			return None
 		
 		predimensionamientoFiltrosWindow = tk.Toplevel()
-		predimensionamientoFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		predimensionamientoFiltrosWindow.iconbitmap(bitmap=path)
 		predimensionamientoFiltrosWindow.geometry("620x500") 
 		predimensionamientoFiltrosWindow.resizable(0,0)	
 		predimensionamientoFiltrosWindow.configure(background="#9DC4AA")
@@ -4332,13 +4363,15 @@ def openFiltroWindow():
 
 		def formulaN(archivo):
 			forWindow= tk.Toplevel()
-			forWindow.iconbitmap(bitmap='icons\\agua.ico')
+			path=resource_path('icons\\agua.ico')
+			forWindow.iconbitmap(bitmap=path)
 			forWindow.geometry("1000x350") 
 			forWindow.resizable(0,0)
 			forWindow.configure(background="#9DC4AA")
 			framefor=Frame(forWindow)
 			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			ima= PhotoImage(file=archivo)
+			path2=resource_path(archivo)
+			ima= PhotoImage(file=path2)
 			l=Label(framefor, image=ima)
 			l.pack()
 			forWindow.mainloop()
@@ -4525,7 +4558,8 @@ def openFiltroWindow():
 	
 			
 		drenajeFiltrosWindow = tk.Toplevel()
-		drenajeFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		drenajeFiltrosWindow.iconbitmap(bitmap=path)
 		drenajeFiltrosWindow.geometry("720x350") 
 		drenajeFiltrosWindow.resizable(0,0)	
 		drenajeFiltrosWindow.configure(background="#9DC4AA")
@@ -4978,7 +5012,8 @@ def openFiltroWindow():
 
 		
 		drenajeFiltrosMainWindow = tk.Toplevel()
-		drenajeFiltrosMainWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		drenajeFiltrosMainWindow.iconbitmap(bitmap=path)
 		drenajeFiltrosMainWindow.geometry("600x600") 
 		drenajeFiltrosMainWindow.resizable(0,0)	
 		drenajeFiltrosMainWindow.configure(background="#9DC4AA")
@@ -5100,7 +5135,8 @@ def openFiltroWindow():
 	
 
 		velocidadLavadoExpansionLechoFiltranteWindow = tk.Toplevel()
-		velocidadLavadoExpansionLechoFiltranteWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		velocidadLavadoExpansionLechoFiltranteWindow.iconbitmap(bitmap=path)
 		velocidadLavadoExpansionLechoFiltranteWindow.geometry("520x400") 
 		velocidadLavadoExpansionLechoFiltranteWindow.resizable(0,0)	
 		velocidadLavadoExpansionLechoFiltranteWindow.configure(background="#9DC4AA")
@@ -5400,7 +5436,8 @@ def openFiltroWindow():
 
 
 		consumoAguaLavado2Window = tk.Toplevel()
-		consumoAguaLavado2Window.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		consumoAguaLavado2Window.iconbitmap(bitmap=path)
 		consumoAguaLavado2Window.geometry("450x420") 
 		consumoAguaLavado2Window.resizable(0,0)	
 		consumoAguaLavado2Window.configure(background="#9DC4AA")
@@ -5545,7 +5582,8 @@ def openFiltroWindow():
 
 	def perdidaCargaLechoExpandido():
 		perdidaCargaLechoExpandidoWindow = tk.Toplevel()
-		perdidaCargaLechoExpandidoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaLechoExpandidoWindow.iconbitmap(bitmap=path)
 		perdidaCargaLechoExpandidoWindow.geometry("360x250") 
 		perdidaCargaLechoExpandidoWindow.resizable(0,0)	
 		perdidaCargaLechoExpandidoWindow.configure(background="#9DC4AA")
@@ -5650,7 +5688,8 @@ def openFiltroWindow():
 
 	def perdidacargaLechoGravaLavado(tempValue,d60):
 		perdidacargaLechoGravaLavadoWindow = tk.Toplevel()
-		perdidacargaLechoGravaLavadoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidacargaLechoGravaLavadoWindow.iconbitmap(bitmap=path)
 		perdidacargaLechoGravaLavadoWindow.geometry("400x200") 
 		perdidacargaLechoGravaLavadoWindow.resizable(0,0)	
 		perdidacargaLechoGravaLavadoWindow.configure(background="#9DC4AA")
@@ -5761,7 +5800,8 @@ def openFiltroWindow():
 			tasa = tasaE.get()
 
 		perdidacargaLechoGravaLavadoWindow = tk.Toplevel()
-		perdidacargaLechoGravaLavadoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidacargaLechoGravaLavadoWindow.iconbitmap(bitmap=path)
 		perdidacargaLechoGravaLavadoWindow.geometry("400x200") 
 		perdidacargaLechoGravaLavadoWindow.resizable(0,0)	
 		perdidacargaLechoGravaLavadoWindow.configure(background="#9DC4AA")
@@ -5903,7 +5943,8 @@ def openFiltroWindow():
 		
 		
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow = tk.Toplevel()
-		perdidaCargaSistemaDrenajeLavadoLavadoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaSistemaDrenajeLavadoLavadoWindow.iconbitmap(bitmap=path)
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow.geometry("400x240") 
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow.resizable(0,0)	
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow.configure(background="#9DC4AA")
@@ -6051,7 +6092,8 @@ def openFiltroWindow():
 			diametroLaterales=listaEntradaDrenaje[4].get()
 
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow = tk.Toplevel()
-		perdidaCargaSistemaDrenajeLavadoLavadoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaSistemaDrenajeLavadoLavadoWindow.iconbitmap(bitmap=path)
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow.geometry("400x240") 
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow.resizable(0,0)	
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow.configure(background="#9DC4AA")
@@ -6470,7 +6512,8 @@ def openFiltroWindow():
 
 
 		perdidaCargaTuberiaLavado_DW_HW2Window = tk.Toplevel()
-		perdidaCargaTuberiaLavado_DW_HW2Window.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaTuberiaLavado_DW_HW2Window.iconbitmap(bitmap=path)
 		perdidaCargaTuberiaLavado_DW_HW2Window.geometry("455x470") 
 		perdidaCargaTuberiaLavado_DW_HW2Window.resizable(0,0)	
 		perdidaCargaTuberiaLavado_DW_HW2Window.configure(background="#9DC4AA")
@@ -6505,7 +6548,7 @@ def openFiltroWindow():
 		arbolPerdidaCargaTuberiaLavado_DW["columns"]= (
 		"1","2","Unidades"
 		)
-		#VolverDW
+		
 		#Headings
 		
 		
@@ -6540,7 +6583,7 @@ def openFiltroWindow():
 		#Treeview
 		arbolPerdidaCargaTuberiaLavado_HW= ttk.Treeview(arbolPerdidaCargaTuberiaLavado_HW_frame,selectmode=BROWSE, height=11,show="tree headings")#,xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
 		arbolPerdidaCargaTuberiaLavado_HW.pack(side=TOP, fill=BOTH, expand=TRUE)
-		#VolverHZ
+		
 		# sedScrollX.configure(command=arbolPerdidaCargaTuberiaLavado_HW.xview)
 		# sedScrollY.configure(command=arbolPerdidaCargaTuberiaLavado_HW.yview)
 		#Define columnas.
@@ -7195,7 +7238,8 @@ def openFiltroWindow():
 
 
 		perdidaCargaTuberiaLavado_DW_HW2Window = tk.Toplevel()
-		perdidaCargaTuberiaLavado_DW_HW2Window.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaTuberiaLavado_DW_HW2Window.iconbitmap(bitmap=path)
 		perdidaCargaTuberiaLavado_DW_HW2Window.geometry("455x470") 
 		perdidaCargaTuberiaLavado_DW_HW2Window.resizable(0,0)	
 		perdidaCargaTuberiaLavado_DW_HW2Window.configure(background="#9DC4AA")
@@ -7532,7 +7576,8 @@ def openFiltroWindow():
 		
 
 		perdidaCargaTuberiaLavado_DW_HWWindow = tk.Toplevel()
-		perdidaCargaTuberiaLavado_DW_HWWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaTuberiaLavado_DW_HWWindow.iconbitmap(bitmap=path)
 		perdidaCargaTuberiaLavado_DW_HWWindow.geometry("800x600") 
 		perdidaCargaTuberiaLavado_DW_HWWindow.resizable(0,0)	
 		perdidaCargaTuberiaLavado_DW_HWWindow.configure(background="#9DC4AA")
@@ -7692,7 +7737,8 @@ def openFiltroWindow():
 
 
 		perdidaCargaTuberiaLavado_DW_HWWindow = tk.Toplevel()
-		perdidaCargaTuberiaLavado_DW_HWWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaTuberiaLavado_DW_HWWindow.iconbitmap(bitmap=path)
 		perdidaCargaTuberiaLavado_DW_HWWindow.geometry("800x600") 
 		perdidaCargaTuberiaLavado_DW_HWWindow.resizable(0,0)	
 		perdidaCargaTuberiaLavado_DW_HWWindow.configure(background="#9DC4AA")
@@ -7882,7 +7928,8 @@ def openFiltroWindow():
 
 	
 		perdidaCargaTotalLavadoWindow = tk.Toplevel()
-		perdidaCargaTotalLavadoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaTotalLavadoWindow.iconbitmap(bitmap=path)
 		perdidaCargaTotalLavadoWindow.geometry("650x400") 
 		perdidaCargaTotalLavadoWindow.resizable(0,0)	
 		perdidaCargaTotalLavadoWindow.configure(background="#9DC4AA")
@@ -8002,7 +8049,8 @@ def openFiltroWindow():
 	def perdidaCargaTotalLavado2_2(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1,tasa):
 		
 		perdidaCargaTotalLavadoWindow = tk.Toplevel()
-		perdidaCargaTotalLavadoWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaTotalLavadoWindow.iconbitmap(bitmap=path)
 		perdidaCargaTotalLavadoWindow.geometry("650x400") 
 		perdidaCargaTotalLavadoWindow.resizable(0,0)	
 		perdidaCargaTotalLavadoWindow.configure(background="#9DC4AA")
@@ -8128,7 +8176,8 @@ def openFiltroWindow():
 	
 	
 		perdidaCargaTotalLavadoMainWindow = tk.Toplevel()
-		perdidaCargaTotalLavadoMainWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaTotalLavadoMainWindow.iconbitmap(bitmap=path)
 		perdidaCargaTotalLavadoMainWindow.geometry("800x600") 
 		perdidaCargaTotalLavadoMainWindow.resizable(0,0)	
 		perdidaCargaTotalLavadoMainWindow.configure(background="#9DC4AA")
@@ -8318,7 +8367,8 @@ def openFiltroWindow():
 			diametroLaterales=listaEntradaDrenaje[4].get()
 	
 		perdidaCargaTotalLavadoMainWindow = tk.Toplevel()
-		perdidaCargaTotalLavadoMainWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaCargaTotalLavadoMainWindow.iconbitmap(bitmap=path)
 		perdidaCargaTotalLavadoMainWindow.geometry("800x600") 
 		perdidaCargaTotalLavadoMainWindow.resizable(0,0)	
 		perdidaCargaTotalLavadoMainWindow.configure(background="#9DC4AA")
@@ -8494,7 +8544,8 @@ def openFiltroWindow():
 		
 
 		verificacionVelocidadesDiseñoTuberiaMainWindow = tk.Toplevel()
-		verificacionVelocidadesDiseñoTuberiaMainWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		verificacionVelocidadesDiseñoTuberiaMainWindow.iconbitmap(bitmap=path)
 		verificacionVelocidadesDiseñoTuberiaMainWindow.geometry("800x600") 
 		verificacionVelocidadesDiseñoTuberiaMainWindow.resizable(0,0)	
 		verificacionVelocidadesDiseñoTuberiaMainWindow.configure(background="#9DC4AA")
@@ -8695,7 +8746,8 @@ def openFiltroWindow():
 		
 
 		verificacionVelocidadesDiseñoTuberiasWindow = tk.Toplevel()
-		verificacionVelocidadesDiseñoTuberiasWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		verificacionVelocidadesDiseñoTuberiasWindow.iconbitmap(bitmap=path)
 		verificacionVelocidadesDiseñoTuberiasWindow.geometry("970x200") 
 		verificacionVelocidadesDiseñoTuberiasWindow.resizable(0,0)	
 		verificacionVelocidadesDiseñoTuberiasWindow.configure(background="#9DC4AA")
@@ -8927,7 +8979,8 @@ def openFiltroWindow():
 	
 		
 		hidraulicaSistemaLavadoMainWindow = tk.Toplevel()
-		hidraulicaSistemaLavadoMainWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		hidraulicaSistemaLavadoMainWindow.iconbitmap(bitmap=path)
 		hidraulicaSistemaLavadoMainWindow.geometry("800x600") 
 		hidraulicaSistemaLavadoMainWindow.resizable(0,0)	
 		hidraulicaSistemaLavadoMainWindow.configure(background="#9DC4AA")
@@ -9115,7 +9168,8 @@ def openFiltroWindow():
 
 
 		canaletasDeLavado2Window = tk.Toplevel()
-		canaletasDeLavado2Window.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		canaletasDeLavado2Window.iconbitmap(bitmap=path)
 		canaletasDeLavado2Window.geometry("600x400") 
 		canaletasDeLavado2Window.resizable(0,0)	
 		canaletasDeLavado2Window.configure(background="#9DC4AA")
@@ -9352,7 +9406,8 @@ def openFiltroWindow():
 
 
 		dimensionesYCotasFiltrosWindow = tk.Toplevel()
-		dimensionesYCotasFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		dimensionesYCotasFiltrosWindow.iconbitmap(bitmap=path)
 		dimensionesYCotasFiltrosWindow.geometry("450x350") 
 		dimensionesYCotasFiltrosWindow.resizable(0,0)	
 		dimensionesYCotasFiltrosWindow.configure(background="#9DC4AA")
@@ -9512,7 +9567,8 @@ def openFiltroWindow():
 		
 
 		canaletasDeLavadoYDimensionesFiltrosWindow = tk.Toplevel()
-		canaletasDeLavadoYDimensionesFiltrosWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		canaletasDeLavadoYDimensionesFiltrosWindow.iconbitmap(bitmap=path)
 		canaletasDeLavadoYDimensionesFiltrosWindow.geometry("800x650") 
 		canaletasDeLavadoYDimensionesFiltrosWindow.resizable(0,0)	
 		canaletasDeLavadoYDimensionesFiltrosWindow.configure(background="#9DC4AA")
@@ -9796,7 +9852,8 @@ def openFiltroWindow():
 
 		
 		perdidaEnergiaLechoLimpioMainWindow = tk.Toplevel()
-		perdidaEnergiaLechoLimpioMainWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		perdidaEnergiaLechoLimpioMainWindow.iconbitmap(bitmap=path)
 		perdidaEnergiaLechoLimpioMainWindow.geometry("800x600") 
 		perdidaEnergiaLechoLimpioMainWindow.resizable(0,0)	
 		perdidaEnergiaLechoLimpioMainWindow.configure(background="#9DC4AA")
@@ -9989,7 +10046,8 @@ def openFiltroWindow():
 	mainWindow.withdraw()
 	filtroWindow = tk.Toplevel()
 	filtroWindow.protocol("WM_DELETE_WINDOW", on_closing)
-	filtroWindow.iconbitmap(bitmap='icons\\agua.ico')
+	path=resource_path('icons\\agua.ico')
+	filtroWindow.iconbitmap(bitmap=path)
 	filtroWindow.geometry("1000x650") 
 	filtroWindow.resizable(0,0)	
 	filtroWindow.configure(background="#9DC4AA")
@@ -10264,7 +10322,7 @@ def openFloculadorWindow():
 			except:
 				elemento.delete(0, END)
 
-		lista[7].insert(0,9.81)
+		lista[5].insert(0,9.81)
 		
 
 	def newDataTreeview(tree,listaS):
@@ -10277,20 +10335,21 @@ def openFloculadorWindow():
 			tree.insert("",END,text= f"{contadorFloculador+1}", values=tuple(listaS),
 				iid=contadorFloculador, tags=("oddrow",))
 		contadorFloculador=contadorFloculador+1
-	
-	def calculosFloculador(listaEntry,numCamaras):
+	def datosIniciales(listaEntry, numCamaras):
 		listaE2=list()
 
-		labels=["caudal de diseño","diametro interno 20\'\'","diametro externo 20\'\'", "ancho",
-		"longitud", "altura", "gravedad", "coeficiente de descarga", "coeficiente de descarga orificios"]
+		labels=["caudal de diseño", "ancho",
+		"longitud", "altura", "gravedad"]
 		labelsComboBox= ["tiempo de floculación", "temperatura"]
 		
 		listaSinComboBox=[listaEntry[0],listaEntry[2],listaEntry[3],
-		listaEntry[4],listaEntry[5],listaEntry[6],
-		listaEntry[7],listaEntry[9],listaEntry[10]]
+		listaEntry[4],listaEntry[5]]
 		
-		listaComboBox=[listaEntry[1],listaEntry[8]]
+		listaComboBox=[listaEntry[1],listaEntry[6]]
 
+		# listaEntryNueva= [0= caudalDiseño,1=tiempoFloculacion,
+		# 		2=ancho,3=longitud,4=altura,5=gravedad,6=temperatura,]
+		
 		# listaEntry= [0= caudalDiseño,1=tiempoFloculacion,2=diametroInterno,
 		# 3=diametroExterno,
 		# 4=ancho,5=longitud,6=altura,7=gravedad,8=temperatura,
@@ -10313,16 +10372,18 @@ def openFloculadorWindow():
 				messagebox.showwarning(title="Error", message=f"El/la {labels[j]} debe ser un número")
 				return None
 		
+			# listaEntryNueva= [0= caudalDiseño,1=tiempoFloculacion,
+		# 		2=ancho,3=longitud,4=altura,5=gravedad,6=temperatura,]
 		
+		#[caudal, ancho,longitud, altura, gravedad]
 		caudalDiseño= listaE2[0]
-		diametroInterno = listaE2[1]
-		diametroExterno = listaE2[2]
-		ancho = listaE2[3]
-		longitud = listaE2[4]
-		altura = listaE2[5]
-		gravedad = listaE2[6]
-		coeficienteDescarga = listaE2[7]
-		coeficienteDescargaOrificios = listaE2[8]
+	
+		ancho = listaE2[1]
+		longitud = listaE2[2]
+		altura = listaE2[3]
+		gravedad = listaE2[4]
+		coeficienteDescarga = 0.76
+		coeficienteDescargaOrificios = 0.80
 		tiempoFloculacion= float(listaComboBox[0].get())
 		temperatura= float(listaComboBox[1].get())
 
@@ -10330,13 +10391,229 @@ def openFloculadorWindow():
 		if caudalDiseño<10 or caudalDiseño>100:
 			messagebox.showwarning(title="Error", message=f"El valor del caudal de Diseño debe estar entre 10 y 100")
 			return None	
+		numeroCamaras= float(numCamaras.get())
+
+		if caudalDiseño<15:
+			diametroInterconexion=0.15
+		elif caudalDiseño<25:
+			diametroInterconexion=0.25
+		elif caudalDiseño<35:
+			diametroInterconexion=0.30
+		elif caudalDiseño<55:
+			diametroInterconexion=0.35
+		elif caudalDiseño<65:
+			diametroInterconexion=0.40
+		elif caudalDiseño<85:
+			diametroInterconexion=0.45
+		elif caudalDiseño<101:
+			diametroInterconexion=0.50
+
+		diametroInteriorLista=[
+		0.0546,
+		0.0661,
+		0.0804,
+		0.1034,
+		0.1522,
+		0.1982,
+		0.2471,
+		0.2931,
+		0.3218,
+		0.3677,
+		0.4137,
+		0.4596,
+		0.5515,
+		]
+		diametroPulgadaLista=[
+		2.0,
+		2.5,
+		3.0,
+		4.0,
+		6.0,
+		8.0,
+		10.0,
+		12.0,
+		14.0,
+		16.0,
+		18.0,
+		20.0,
+		24.0,
+		]
+		diametroExteriorLista=[
+		0.0603,
+		0.0730,
+		0.0889,
+		0.1143,
+		0.1683,
+		0.2191,
+		0.2731,
+		0.3231,
+		0.3556,
+		0.4064,
+		0.4572,
+		0.5080,
+		0.6096,
+		]
+		ListaTuplasDiametroExteriorDiametroPulgada=list()
+
+		for i in range(0,len(diametroExteriorLista)):
+			ListaTuplasDiametroExteriorDiametroPulgada.append((diametroExteriorLista[i],diametroPulgadaLista[i]))
+
+		diametroInteriorListaExteriorPulgadaDic=dict()
+		for i in range(0, len(diametroInteriorLista)):
+			diametroInteriorListaExteriorPulgadaDic[diametroInteriorLista[i]]=ListaTuplasDiametroExteriorDiametroPulgada[i]
+
 		
 
-		numeroCamaras= float(numCamaras.get())
+		mayor=0.5515
+		for elemento in diametroInteriorLista:
+			if elemento>diametroInterconexion and elemento<mayor:
+				mayor=elemento
+
+
+		diametroInterno = mayor
+		diametroExterno = diametroInteriorListaExteriorPulgadaDic[mayor][0]
+	def calculosFloculador(listaEntry,numCamaras):
+		listaE2=list()
+
+		labels=["caudal de diseño", "ancho",
+		"longitud", "altura", "gravedad"]
+		labelsComboBox= ["tiempo de floculación", "temperatura"]
 		
+		listaSinComboBox=[listaEntry[0],listaEntry[2],listaEntry[3],
+		listaEntry[4],listaEntry[5]]
+		
+		listaComboBox=[listaEntry[1],listaEntry[6]]
+
+		# listaEntryNueva= [0= caudalDiseño,1=tiempoFloculacion,
+		# 		2=ancho,3=longitud,4=altura,5=gravedad,6=temperatura,]
+		
+		# listaEntry= [0= caudalDiseño,1=tiempoFloculacion,2=diametroInterno,
+		# 3=diametroExterno,
+		# 4=ancho,5=longitud,6=altura,7=gravedad,8=temperatura,
+		# 9=coeficienteDescarga,10=coeficienteDescargaOrificios]
+		
+		for i in range(0, len(listaComboBox)):
+			if listaComboBox[i].get() == "Seleccione":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labelsComboBox[i]} ")	
+				return None
+		for i in range(0, len(listaSinComboBox)):
+			if listaSinComboBox[i].get() == "":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labels[i]} ")	
+				return None
+		j=0
+		for elemento in listaSinComboBox:
+			try:
+				listaE2.append(float(elemento.get()))
+				j=j+1
+			except:	
+				messagebox.showwarning(title="Error", message=f"El/la {labels[j]} debe ser un número")
+				return None
+		
+			# listaEntryNueva= [0= caudalDiseño,1=tiempoFloculacion,
+		# 		2=ancho,3=longitud,4=altura,5=gravedad,6=temperatura,]
+		
+		#[caudal, ancho,longitud, altura, gravedad]
+		caudalDiseño= listaE2[0]
+	
+		ancho = listaE2[1]
+		longitud = listaE2[2]
+		altura = listaE2[3]
+		gravedad = listaE2[4]
+		coeficienteDescarga = 0.76
+		coeficienteDescargaOrificios = 0.80
+		tiempoFloculacion= float(listaComboBox[0].get())
+		temperatura= float(listaComboBox[1].get())
+
+
+		if caudalDiseño<10 or caudalDiseño>100:
+			messagebox.showwarning(title="Error", message=f"El valor del caudal de Diseño debe estar entre 10 y 100")
+			return None	
+		numeroCamaras= float(numCamaras.get())
+
+		if caudalDiseño<15:
+			diametroInterconexion=0.15
+		elif caudalDiseño<25:
+			diametroInterconexion=0.25
+		elif caudalDiseño<35:
+			diametroInterconexion=0.30
+		elif caudalDiseño<55:
+			diametroInterconexion=0.35
+		elif caudalDiseño<65:
+			diametroInterconexion=0.40
+		elif caudalDiseño<85:
+			diametroInterconexion=0.45
+		elif caudalDiseño<101:
+			diametroInterconexion=0.50
+
+		diametroInteriorLista=[
+		0.0546,
+		0.0661,
+		0.0804,
+		0.1034,
+		0.1522,
+		0.1982,
+		0.2471,
+		0.2931,
+		0.3218,
+		0.3677,
+		0.4137,
+		0.4596,
+		0.5515,
+		]
+		diametroPulgadaLista=[
+		2.0,
+		2.5,
+		3.0,
+		4.0,
+		6.0,
+		8.0,
+		10.0,
+		12.0,
+		14.0,
+		16.0,
+		18.0,
+		20.0,
+		24.0,
+		]
+		diametroExteriorLista=[
+		0.0603,
+		0.0730,
+		0.0889,
+		0.1143,
+		0.1683,
+		0.2191,
+		0.2731,
+		0.3231,
+		0.3556,
+		0.4064,
+		0.4572,
+		0.5080,
+		0.6096,
+		]
+		ListaTuplasDiametroExteriorDiametroPulgada=list()
+
+		for i in range(0,len(diametroExteriorLista)):
+			ListaTuplasDiametroExteriorDiametroPulgada.append((diametroExteriorLista[i],diametroPulgadaLista[i]))
+
+		diametroInteriorListaExteriorPulgadaDic=dict()
+		for i in range(0, len(diametroInteriorLista)):
+			diametroInteriorListaExteriorPulgadaDic[diametroInteriorLista[i]]=ListaTuplasDiametroExteriorDiametroPulgada[i]
+
+		
+
+		mayor=0.5515
+		for elemento in diametroInteriorLista:
+			if elemento>diametroInterconexion and elemento<mayor:
+				mayor=elemento
+
+
+		diametroInterno = mayor
+		diametroExterno = diametroInteriorListaExteriorPulgadaDic[mayor][0]
+
 	
 		CFloculadorWindow = tk.Toplevel()
-		CFloculadorWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		CFloculadorWindow.iconbitmap(bitmap=path)
 		CFloculadorWindow.geometry("600x590") 
 		CFloculadorWindow.resizable(0,0)	
 		CFloculadorWindow.configure(background="#9DC4AA")
@@ -10526,20 +10803,22 @@ def openFloculadorWindow():
 		CFloculadorWindow.mainloop()
 
 
-	def salidaCamara(listaEntry,diametroInternoOrificio, numCamaras, valorParImpar):
+	def salidaCamara(listaEntry, numCamaras, valorParImpar):
 		
 		listaE2=list()
 
-		labels=["caudal de diseño","diametro interno 20\'\'",
-		"longitud", "gravedad", "coeficiente de descarga orificios"]
+		labels=["caudal de diseño", "ancho",
+		"longitud", "altura", "gravedad"]
 		labelsComboBox= ["tiempo de floculación", "temperatura"]
 		
-		listaSinComboBox=[listaEntry[0],listaEntry[2],
-		listaEntry[5],
-		listaEntry[7],listaEntry[10]]
+		listaSinComboBox=[listaEntry[0],listaEntry[2],listaEntry[3],
+		listaEntry[4],listaEntry[5]]
 		
-		listaComboBox=[listaEntry[1],listaEntry[8]]
+		listaComboBox=[listaEntry[1],listaEntry[6]]
 
+		# listaEntryNueva= [0= caudalDiseño,1=tiempoFloculacion,
+		# 		2=ancho,3=longitud,4=altura,5=gravedad,6=temperatura,]
+		
 		# listaEntry= [0= caudalDiseño,1=tiempoFloculacion,2=diametroInterno,
 		# 3=diametroExterno,
 		# 4=ancho,5=longitud,6=altura,7=gravedad,8=temperatura,
@@ -10562,25 +10841,116 @@ def openFloculadorWindow():
 				messagebox.showwarning(title="Error", message=f"El/la {labels[j]} debe ser un número")
 				return None
 		
+			# listaEntryNueva= [0= caudalDiseño,1=tiempoFloculacion,
+		# 		2=ancho,3=longitud,4=altura,5=gravedad,6=temperatura,]
 		
+		#[caudal, ancho,longitud, altura, gravedad]
 		caudalDiseño= listaE2[0]
-		diametroInterno = listaE2[1]
+	
+		ancho = listaE2[1]
 		longitud = listaE2[2]
-		gravedad = listaE2[3]
-		coeficienteDescargaOrificios = listaE2[4]
+		altura = listaE2[3]
+		gravedad = listaE2[4]
+		coeficienteDescarga = 0.76
+		coeficienteDescargaOrificios = 0.80
 		tiempoFloculacion= float(listaComboBox[0].get())
 		temperatura= float(listaComboBox[1].get())
-
-		numeroCamaras= float(numCamaras.get())
 
 
 		if caudalDiseño<10 or caudalDiseño>100:
 			messagebox.showwarning(title="Error", message=f"El valor del caudal de Diseño debe estar entre 10 y 100")
 			return None	
+		numeroCamaras= float(numCamaras.get())
+
+		if caudalDiseño<15:
+			diametroInterconexion=0.15
+		elif caudalDiseño<25:
+			diametroInterconexion=0.25
+		elif caudalDiseño<35:
+			diametroInterconexion=0.30
+		elif caudalDiseño<55:
+			diametroInterconexion=0.35
+		elif caudalDiseño<65:
+			diametroInterconexion=0.40
+		elif caudalDiseño<85:
+			diametroInterconexion=0.45
+		elif caudalDiseño<101:
+			diametroInterconexion=0.50
+
+		diametroInteriorLista=[
+		0.0546,
+		0.0661,
+		0.0804,
+		0.1034,
+		0.1522,
+		0.1982,
+		0.2471,
+		0.2931,
+		0.3218,
+		0.3677,
+		0.4137,
+		0.4596,
+		0.5515,
+		]
+		diametroPulgadaLista=[
+		2.0,
+		2.5,
+		3.0,
+		4.0,
+		6.0,
+		8.0,
+		10.0,
+		12.0,
+		14.0,
+		16.0,
+		18.0,
+		20.0,
+		24.0,
+		]
+		diametroExteriorLista=[
+		0.0603,
+		0.0730,
+		0.0889,
+		0.1143,
+		0.1683,
+		0.2191,
+		0.2731,
+		0.3231,
+		0.3556,
+		0.4064,
+		0.4572,
+		0.5080,
+		0.6096,
+		]
+		ListaTuplasDiametroExteriorDiametroPulgada=list()
+
+		for i in range(0,len(diametroExteriorLista)):
+			ListaTuplasDiametroExteriorDiametroPulgada.append((diametroExteriorLista[i],diametroPulgadaLista[i]))
+
+		diametroInteriorListaExteriorPulgadaDic=dict()
+		for i in range(0, len(diametroInteriorLista)):
+			diametroInteriorListaExteriorPulgadaDic[diametroInteriorLista[i]]=ListaTuplasDiametroExteriorDiametroPulgada[i]
+
 		
+
+		mayor=0.5515
+		for elemento in diametroInteriorLista:
+			if elemento>diametroInterconexion and elemento<mayor:
+				mayor=elemento
+
+		if valorParImpar=="par":
+			diametroInternoOrificio = mayor
+		else:
+			diametroInternoOrificio = diametroInteriorLista[(diametroInteriorLista.index(mayor))+1]
+
+		
+
+
+
 		
 		salidaCamaraWindow = tk.Toplevel()
-		salidaCamaraWindow.iconbitmap(bitmap='icons\\agua.ico')
+		path=resource_path('icons\\agua.ico')
+		salidaCamaraWindow.iconbitmap(bitmap=path)
 		salidaCamaraWindow.geometry("520x450") 
 		salidaCamaraWindow.resizable(0,0)	
 		salidaCamaraWindow.configure(background="#9DC4AA")
@@ -10636,9 +11006,9 @@ def openFloculadorWindow():
 			viscosidadCinematicaDic[valorTemperaturas[ind]]=valorViscocidad[ind]
 		
 
-
+		print(diametroInternoOrificio)
 		caudalDiseñoEnM = caudalDiseño/1000.0
-		areaTuberia = pi*(diametroInterno**2)*(1/4.0)
+		areaTuberia = pi*(diametroInternoOrificio**2)*(1/4.0)
 		tiempoFloculacionS= tiempoFloculacion*60.0
 		tiempoDetencionCamara= tiempoFloculacionS/numeroCamaras
 		viscosidadCinematica = viscosidadCinematicaDic[temperatura]
@@ -10649,12 +11019,18 @@ def openFloculadorWindow():
 		diametroInternoOrificioC = diametroInternoOrificio
 		areaOrificio= pi*(diametroInternoOrificioC**2)*(1/4.0)
 		coeficienteDescarga = coeficienteDescargaOrificios
+		#VolverPENDIENTE
+		print(caudalDiseñoEnM, areaTuberia, velocidadFlujoEntreCodos, areaOrificio)
 		perdidaPasamuros= (caudalDiseñoEnM**2)/((2*gravedad)*(coeficienteDescarga**2)*(areaTuberia**2))
 		perdidaCodo = (0.4)*((velocidadFlujoEntreCodos**2)/(2*gravedad))
 		perdidaOrificio= (caudalDiseñoEnM**2)/((2*gravedad)*(coeficienteDescargaOrificios**2)*(areaOrificio**2))
 	
+		
 		perdidaTotalFloculador = perdidaPasamuros + perdidaCodo+ perdidaOrificio
+		
+		
 		gradienteMezcla = sqrt((gravedad*perdidaTotalFloculador)/(viscosidadCinematica*tiempoDetencionCamara))
+		
 		numeroCamp= gradienteMezcla*tiempoDetencionCamara
 		pendiente=perdidaTotalFloculador/longitud
 		
@@ -10709,7 +11085,8 @@ def openFloculadorWindow():
 	mainWindow.withdraw()
 	floculadorWindow = tk.Toplevel()
 	floculadorWindow.protocol("WM_DELETE_WINDOW", on_closing)
-	floculadorWindow.iconbitmap(bitmap='icons\\agua.ico')
+	path=resource_path('icons\\agua.ico')
+	floculadorWindow.iconbitmap(bitmap=path)
 	floculadorWindow.geometry("1000x600") 
 	floculadorWindow.resizable(0,0)	
 	floculadorWindow.configure(background="#9DC4AA")
@@ -10728,9 +11105,9 @@ def openFloculadorWindow():
 
 	botonNewEntryFloculador = HoverButton(frameFloculador, text="Limpiar entradas", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: newEntryFloculador(listaEntry))
 	botonVerCalculos = HoverButton(frameFloculador, text="Cálculos adicionales para diseño del floculador", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT, command= lambda: calculosFloculador(listaEntry, numeroCamaras))
-	botonDatosSalidaCamaraPar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (par)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,0.46,numeroCamaras,"par"))
-	botonDatosSalidaCamaraImpar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (impar)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,0.41,numeroCamaras, "impar"))
-
+	botonDatosSalidaCamaraPar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (par)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,numeroCamaras,"par"))
+	botonDatosSalidaCamaraImpar = HoverButton(frameFloculador, text="Datos de salida Cámara No. (impar)", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: salidaCamara(listaEntry,numeroCamaras, "impar"))
+	botonDatosIniciales= HoverButton(frameFloculador, text="Ver datos iniciales", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9),justify=LEFT,command= lambda: datosIniciales(listaEntry))
 
 	listaBotones=[botonNewEntryFloculador, botonVerCalculos,botonDatosSalidaCamaraPar,botonDatosSalidaCamaraImpar]
 
@@ -10738,20 +11115,16 @@ def openFloculadorWindow():
 	datosEntradaLabel = Label(frameFloculador, text="Datos iniciales: ",font=("Yu Gothic bold",10))
 	caudalDiseñoLabel = Label(frameFloculador, text="QMD = Caudal de diseño [L/s]:",font=("Yu Gothic bold",10))
 	tiempoFloculacionLabel = Label(frameFloculador, text="T = Tiempo de floculación [min]:",font=("Yu Gothic bold",10))
-	diametroInternoLabel = Label(frameFloculador, text="Di = Diámetro interno 20\'\' [m]:",font=("Yu Gothic bold",10))
-	diametroExternoLabel = Label(frameFloculador, text="Di = Diámetro externo 20\'\' [m]:",font=("Yu Gothic bold",10))
 	anchoLabel = Label(frameFloculador, text="W = Ancho [m]:",font=("Yu Gothic bold",10))
 	longitudLabel = Label(frameFloculador, text="L = Longitud [m]:",font=("Yu Gothic bold",10))
 	alturaLabel = Label(frameFloculador, text="a = Altura [m]:",font=("Yu Gothic bold",10))
 	gravedadLabel = Label(frameFloculador, text="g = Gravedad [m/(s^2)]",font=("Yu Gothic bold",10))
 	temperaturaLabel = Label(frameFloculador, text="°C = Temperatura [°C]:",font=("Yu Gothic bold",10))
-	coeficienteDescargaLabel = Label(frameFloculador, text="Cd = Coeficiente de descarga [K]",font=("Yu Gothic bold",10))
-	coeficienteDescargaOrificiosLabel = Label(frameFloculador, text="Cd = Coeficiente de descarga Orificios [K]",font=("Yu Gothic bold",10))
 	
 	
-	listaLabel = [datosEntradaLabel,caudalDiseñoLabel,tiempoFloculacionLabel,diametroInternoLabel,diametroExternoLabel,
-				anchoLabel , longitudLabel,alturaLabel,gravedadLabel,temperaturaLabel,
-				coeficienteDescargaLabel,coeficienteDescargaOrificiosLabel]
+	
+	listaLabel = [datosEntradaLabel,caudalDiseñoLabel,tiempoFloculacionLabel,
+				anchoLabel , longitudLabel,alturaLabel,gravedadLabel,temperaturaLabel,]
 
 	caudalDiseño = Entry(frameFloculador)
 	caudalDiseño.focus()
@@ -10762,8 +11135,6 @@ def openFloculadorWindow():
 	tiempoFloculacion = ttk.Combobox(frameFloculador, width="18", state="readonly",values=listaValoresTemperaturaFloculacion)
 	tiempoFloculacion.set("Seleccione")
 
-	diametroInterno = Entry(frameFloculador)
-	diametroExterno = Entry(frameFloculador)
 	ancho = Entry(frameFloculador)
 	longitud = Entry(frameFloculador)
 	altura = Entry(frameFloculador)
@@ -10776,24 +11147,28 @@ def openFloculadorWindow():
 	temperatura = ttk.Combobox(frameFloculador, width="18", state="readonly",values=listaValoresTemperatura)
 	temperatura.set("Seleccione")
 
-	coeficienteDescarga = Entry(frameFloculador)
-	coeficienteDescargaOrificios = Entry(frameFloculador)
+
 	
 
-	listaEntry= [caudalDiseño,tiempoFloculacion,diametroInterno,diametroExterno,
-				ancho,longitud,altura,gravedad,temperatura,
-				coeficienteDescarga,coeficienteDescargaOrificios]
+	listaEntry= [caudalDiseño,tiempoFloculacion,
+				ancho,longitud,altura,gravedad,temperatura,]
 	
 	entryDiametroInternoAdicional= Entry(frameFloculador)
 	entryDiametroInternoAdicional.insert(0,"0.46")
 	numeroCamaras= Entry(frameFloculador)
 	numeroCamaras.insert(0,"12")
+
+	
+	# listaLabel = [datosEntradaLabel,caudalDiseñoLabel,tiempoFloculacionLabel,
+	# 			anchoLabel , longitudLabel,alturaLabel,gravedadLabel,temperaturaLabel,]
+	# listaEntry= [caudalDiseño,tiempoFloculacion,
+	# 			ancho,longitud,altura,gravedad,temperatura,]
 	
 	control=0
 	alturaInicial=70
 	alturaInicial2=113
 	for elemento in listaLabel:
-		if control<7:
+		if control<5:
 			elemento.place(x=20,y=alturaInicial)
 			alturaInicial+=43
 		else:
@@ -10804,7 +11179,7 @@ def openFloculadorWindow():
 	alturaInicial=113
 	alturaInicial2=113
 	for elemento in listaEntry:
-		if control<6:
+		if control<4:
 			elemento.place(x=300,y=alturaInicial)
 			alturaInicial+=43
 		else:
@@ -10826,13 +11201,16 @@ def openFloculadorWindow():
 
 
 	#Borrar
-	listaValores=[50.00,27.00,0.45964,0.508,1.30,1.60,2.75,9.81,20.00,0.76,0.80]
-	for i in range(0, len(listaValores)):
-		if i == 7:
+
+	# listaEntry= [caudalDiseño,tiempoFloculacion,
+	# 			ancho,longitud,altura,gravedad,temperatura,]
+	listaValores=[30.00,27.00,1.30,1.60,2.75,9.81,20.00]
+	for i in range(0, len(listaValores)):	
+		if i == 5:
 			pass
 		elif i == 1:
 			listaEntry[i].set(27)
-		elif i==8:
+		elif i==6:
 			listaEntry[i].set(20)
 		else:
 			listaEntry[i].insert(0, listaValores[i])
@@ -10843,7 +11221,10 @@ def openFloculadorWindow():
 
 mainWindow = Tk()
 mainWindow.title("FlocSedFil")
-mainWindow.iconbitmap(bitmap='icons\\agua.ico')
+path=resource_path('icons\\agua.ico')
+mainWindow.iconbitmap(bitmap= path)
+path=resource_path('icons\\agua.ico')
+#mainWindow.iconbitmap(bitmap=path)
 mainWindow.geometry("370x350")
 #Anchoxalto
 mainWindow.resizable(0,0)
