@@ -1835,8 +1835,6 @@ def openSedWindow():
 
 	def propiedadesFisicasAgua(temperaturaEntry):
 		
-
-		
 		if temperaturaEntry.get()[0:10] == "Seleccione":
 			messagebox.showwarning(title="Error", message=f"Hace falta seleccionar la temperatura del agua a tratar")
 			return None	
@@ -1915,7 +1913,7 @@ def openSedWindow():
 		"(N.s)/(m^2)",
 		"(m^2)/s",
 						]
-		#Volver
+		
 		valorTemperaturas=list()
 
 		tablaTemperaturaViscocidadCinematica=dict()
@@ -10502,7 +10500,228 @@ def openFiltroWindow():
 		
 		perdidaEnergiaLechoLimpioMainWindow.mainloop()
 
+	def caudalDiseño(caudalMedioEntry):
+		
+		
+		if caudalMedioEntry[0].get()== "": 
+			messagebox.showwarning(title="Error", message="Hace falta introducir el valor del caudal medio")
+			return None
+		try: 
+			caudalMedio=float(caudalMedioEntry[0].get())
+		except:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
+			return None
 
+
+		CaudalesDiseñoWindow = tk.Toplevel()
+		path=resource_path('icons\\agua.ico')
+		CaudalesDiseñoWindow.iconbitmap(bitmap=path)
+		CaudalesDiseñoWindow.geometry("500x280") 
+		CaudalesDiseñoWindow.resizable(0,0)	
+		CaudalesDiseñoWindow.configure(background="#9DC4AA")
+
+		CaudalesDiseñoFrame=LabelFrame(CaudalesDiseñoWindow, text="Caudales de diseño", font=("Yu Gothic bold", 11))
+		CaudalesDiseñoFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolCaudalesDiseño_frame = Frame(CaudalesDiseñoFrame)
+		arbolCaudalesDiseño_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		# sedScrollX=Scrollbar(arbolCaudalesDiseño_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollY=Scrollbar(arbolCaudalesDiseño_frame,orient=VERTICAL)
+		# sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolCaudalesDiseño= ttk.Treeview(arbolCaudalesDiseño_frame,selectmode=BROWSE, height=11,show="tree headings")#,yscrollcommand=sedScrollY.set, xscrollcommand=sedScrollX.set)
+		arbolCaudalesDiseño.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		# sedScrollX.configure(command=arbolCaudalesDiseño.xview)
+		# sedScrollY.configure(command=arbolCaudalesDiseño.yview)
+		#Define columnas.
+		arbolCaudalesDiseño["columns"]= (
+		"1","2","Unidades")
+
+		
+
+		#Headings
+		arbolCaudalesDiseño.heading("#0",text="ID", anchor=CENTER)
+
+
+
+		for col in arbolCaudalesDiseño["columns"]:
+			arbolCaudalesDiseño.heading(col, text=col,anchor=CENTER, command=lambda: print("Img") )	
+
+		arbolCaudalesDiseño.column("#1",width=300, stretch=False)
+		arbolCaudalesDiseño.column("#2",width=100, stretch=False)
+		arbolCaudalesDiseño.column("#3",width=100, stretch=False)
+		
+
+
+		arbolCaudalesDiseño.column("#0",width=0, stretch=False)
+		
+		
+
+		#Striped row tags
+		arbolCaudalesDiseño.tag_configure("evenrow", background= "#1FCCDB")
+		arbolCaudalesDiseño.tag_configure("oddrow", background= "#9DC4AA")
+
+
+		listaCaudalesDiseño=list()
+
+
+		encabezadosLista=[
+		"Factor de mayoración del caudal máximo diario",
+		"Factor de mayoración del caudal máximo horario",
+		"Caudal medio diario",			
+		"Caudal máximo diario",			
+		"Caudal máximo horario",			
+		]
+		unidadesLista=["",
+		"",
+		"(m^3)/s",
+		"(m^3)/s",
+		"(m^3)/s",
+						]
+		
+		factorMayoracionMD = 1.3
+		factorMayoracionMH = 1.6
+		listaCaudalesDiseño.append(round(factorMayoracionMD,3))
+		listaCaudalesDiseño.append(round(factorMayoracionMH,3))
+		listaCaudalesDiseño.append(round(caudalMedio,5))
+		caudalMaximoDiario=caudalMedio*factorMayoracionMD
+		listaCaudalesDiseño.append(round(caudalMaximoDiario,5))
+		caudalMaximoHorario=caudalMedio*factorMayoracionMH
+		listaCaudalesDiseño.append(round(caudalMaximoHorario,5))
+		
+		for i in range(0, len(encabezadosLista)):
+			listaTemp=list()
+			listaTemp.append(encabezadosLista[i])
+			listaTemp.append(listaCaudalesDiseño[i])
+			listaTemp.append(unidadesLista[i])
+			newDataTreeview(arbolCaudalesDiseño,listaTemp)
+
+		CaudalesDiseñoWindow.mainloop()
+
+
+	def propiedadesFisicasAgua():
+		listaSinComboBox=[listaCaudalesDiseño[0],listaCaudalesDiseño[1],
+		listaCaudalesDiseño[2]]	
+		labels=["factoración de mayoración del caudal máximo diario","factor de mayoración del caudal máximo horario", "caudal medio horario"]
+		for i in range(0, len(listaSinComboBox)):
+			if listaSinComboBox[i].get() == "":
+				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labels[i]} ")	
+				return None
+
+		try:
+			if float(listaCaudalesDiseño[2].get())<0.01 or float(listaCaudalesDiseño[2].get())>0.2:
+				messagebox.showwarning(title="Error", message="El valor del caudal medio diario debe estar entre 0.01 y 0.2")	
+				return None
+			elif float(listaCaudalesDiseño[0].get())>1.3 or float(listaCaudalesDiseño[0].get())<1:
+				messagebox.showwarning(title="Error", message="El valor de factoración de mayoración del caudal máximo diario debe estar entre 1 y 1.3")	
+				return None
+			elif float(listaCaudalesDiseño[1].get())>1.6 or float(listaCaudalesDiseño[1].get())<1:
+				messagebox.showwarning(title="Error", message="El valor de factoración de mayoración del caudal máximo horario debe estar entre 1 y 1.6")	
+				return None
+		except:
+			messagebox.showwarning(title="Error", message="Alguno de los datos ingresados no es un número.")
+			return None	
+		
+		caudalMedioDiario= float(listaCaudalesDiseño[2].get())
+		factorMayoracionCaudalMD = float(listaCaudalesDiseño[0].get())
+		factorMayoracionCaudalMH = float(listaCaudalesDiseño[1].get())
+		
+		
+		
+		CaudalesDiseñoWindow = tk.Toplevel()
+		path=resource_path('icons\\agua.ico')
+		CaudalesDiseñoWindow.iconbitmap(bitmap=path)
+		CaudalesDiseñoWindow.geometry("500x300") 
+		CaudalesDiseñoWindow.resizable(0,0)	
+		CaudalesDiseñoWindow.configure(background="#9DC4AA")
+
+		CaudalesDiseñoFrame=LabelFrame(CaudalesDiseñoWindow, text="Caudales de diseño", font=("Yu Gothic bold", 11))
+		CaudalesDiseñoFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolCaudalesDiseño_frame = Frame(CaudalesDiseñoFrame)
+		arbolCaudalesDiseño_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		# sedScrollX=Scrollbar(arbolCaudalesDiseño_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollY=Scrollbar(arbolCaudalesDiseño_frame,orient=VERTICAL)
+		# sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolCaudalesDiseño= ttk.Treeview(arbolCaudalesDiseño_frame,selectmode=BROWSE, height=11,show="tree headings")#,yscrollcommand=sedScrollY.set, xscrollcommand=sedScrollX.set)
+		arbolCaudalesDiseño.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		# sedScrollX.configure(command=arbolCaudalesDiseño.xview)
+		# sedScrollY.configure(command=arbolCaudalesDiseño.yview)
+		#Define columnas.
+		arbolCaudalesDiseño["columns"]= (
+		"1","2","Unidades")
+
+		
+
+		#Headings
+		arbolCaudalesDiseño.heading("#0",text="ID", anchor=CENTER)
+
+
+
+		for col in arbolCaudalesDiseño["columns"]:
+			arbolCaudalesDiseño.heading(col, text=col,anchor=CENTER, command=lambda: print("Img") )	
+
+		arbolCaudalesDiseño.column("#1",width=300, stretch=False)
+		arbolCaudalesDiseño.column("#2",width=100, stretch=False)
+		arbolCaudalesDiseño.column("#3",width=100, stretch=False)
+		
+
+
+		arbolCaudalesDiseño.column("#0",width=0, stretch=False)
+		
+		
+
+		#Striped row tags
+		arbolCaudalesDiseño.tag_configure("evenrow", background= "#1FCCDB")
+		arbolCaudalesDiseño.tag_configure("oddrow", background= "#9DC4AA")
+
+
+		listaCaudalesDiseño=list()
+
+
+		encabezadosLista=[
+		"Factor de mayoración del caudal máximo diario",
+		"Factor de mayoración del caudal máximo horario",
+		"Caudal medio diario",			
+		"Caudal máximo diario",			
+		"Caudal máximo horario",			
+		]
+		unidadesLista=["",
+		"",
+		"(m^3)/s",
+		"(m^3)/s",
+		"(m^3)/s",
+						]
+		
+		listaCaudalesDiseño.append(round(factorMayoracionCaudalMD,3))
+		listaCaudalesDiseño.append(round(factorMayoracionCaudalMH,3))
+		listaCaudalesDiseño.append(round(caudalMedioDiario,3))
+		caudalMaximoDiario=caudalMedioDiario*factorMayoracionCaudalMD
+		listaCaudalesDiseño.append(round(caudalMaximoDiario,3))
+		caudalMaximoHorario=caudalMedioDiario*factorMayoracionCaudalMH
+		listaCaudalesDiseño.append(round(caudalMaximoHorario,3))
+		
+		for i in range(0, len(encabezadosLista)):
+			listaTemp=list()
+			listaTemp.append(encabezadosLista[i])
+			listaTemp.append(listaCaudalesDiseño[i])
+			listaTemp.append(unidadesLista[i])
+			newDataTreeview(arbolCaudalesDiseño,listaTemp)
+
+		CaudalesDiseñoWindow.mainloop()
 
         
 
@@ -10587,17 +10806,24 @@ def openFiltroWindow():
 
 	botonPerdidaEnergiaLechoLimpio = HoverButton(frameFiltro, text="Pérdidas de energía durante el filtrado con lecho limpio", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: perdidaEnergiaLechoLimpio(listaNumTamiz,listaAR,tempAgua, entradasCaudal))
  
-			
+	botonCaudalDiseño = HoverButton(frameFiltro, text="Caudales de diseño", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: caudalDiseño(entradasCaudal))
 
+	botonPropiedadesFisicasAguaTratar = HoverButton(frameFiltro, text="Propiedades físicas del agua a tratar", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: propiedadesFisicasAgua(tempAgua))
+	#Volver
+	botonAyudaVisual = HoverButton(frameFiltro, text="Ayuda visual-\nGeometría del filtro rápido", activebackground="#9DC4AA", anchor=CENTER , width=40, height=4, bg= "#09C5CE", font =("Courier",9), command=lambda: proyectarImg('images\\VistaFiltro.png',712,561
+	))
 
-
-	listaBotonesOrg=[botonNewEntryFiltro,botonPrincipalesCaracteristicasDelFiltro, botonGranulometria,botonCoefUniformidad,botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio,botonPredimensionamientoFiltros,botonDrenajeFiltro,botonHidraulicaSistemaLavado,botonPerdidaEnergiaLechoLimpio]#,botonEstimacionPerdidaLechoGrava,botonPerdidaCargaLechoExpandido]
+	listaBotonesOrg=[botonNewEntryFiltro,botonCaudalDiseño,botonPrincipalesCaracteristicasDelFiltro, 
+	botonPropiedadesFisicasAguaTratar,botonGranulometria,botonCoefUniformidad,botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio,botonPredimensionamientoFiltros
+	,botonDrenajeFiltro,botonHidraulicaSistemaLavado,botonPerdidaEnergiaLechoLimpio,
+	]#,botonEstimacionPerdidaLechoGrava,botonPerdidaCargaLechoExpandido]
 
 	alturaInicialBotones=70
 	for boton in listaBotonesOrg:
 		boton.place(x=560, y=alturaInicialBotones)
-		alturaInicialBotones=alturaInicialBotones+60
+		alturaInicialBotones=alturaInicialBotones+50
 	
+	botonAyudaVisual.place(x=100,y=alturaInicialBotones-100)
 
 	Label(frameFiltro, text="Diseño de filtro",font=("Yu Gothic bold",10)).place(x=170, y=30)
 
