@@ -1833,8 +1833,140 @@ def openSedWindow():
 
 		CaudalesDiseñoWindow.mainloop()
 
-	def propiedadesFisicasAgua():
-		return 0
+	def propiedadesFisicasAgua(temperaturaEntry):
+		
+
+		
+		if temperaturaEntry.get()[0:10] == "Seleccione":
+			messagebox.showwarning(title="Error", message=f"Hace falta seleccionar la temperatura del agua a tratar")
+			return None	
+		else:
+			temperatura=float(temperaturaEntry.get())
+		
+		propiedadesFisicasAguaWindow = tk.Toplevel()
+		path=resource_path('icons\\agua.ico')
+		propiedadesFisicasAguaWindow.iconbitmap(bitmap=path)
+		propiedadesFisicasAguaWindow.geometry("500x250") 
+		propiedadesFisicasAguaWindow.resizable(0,0)	
+		propiedadesFisicasAguaWindow.configure(background="#9DC4AA")
+
+		propiedadesFisicasAguaFrame=LabelFrame(propiedadesFisicasAguaWindow, text="Propiedades físicas de agua a tratar", font=("Yu Gothic bold", 11))
+		propiedadesFisicasAguaFrame.pack(side=TOP, fill=BOTH,expand=True)
+
+		#Frame Treeview
+		arbolpropiedadesFisicasAgua_frame = Frame(propiedadesFisicasAguaFrame)
+		arbolpropiedadesFisicasAgua_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+
+		#Scrollbar
+		# sedScrollX=Scrollbar(arbolpropiedadesFisicasAgua_frame,orient=HORIZONTAL)
+		# sedScrollX.pack(side=BOTTOM, fill=X)
+		# sedScrollY=Scrollbar(arbolpropiedadesFisicasAgua_frame,orient=VERTICAL)
+		# sedScrollY.pack(side=LEFT, fill=Y)
+
+		#Treeview
+		arbolpropiedadesFisicasAgua= ttk.Treeview(arbolpropiedadesFisicasAgua_frame,selectmode=BROWSE, height=11,show="tree headings")#,yscrollcommand=sedScrollY.set, xscrollcommand=sedScrollX.set)
+		arbolpropiedadesFisicasAgua.pack(side=TOP, fill=BOTH, expand=TRUE)
+
+		# sedScrollX.configure(command=arbolpropiedadesFisicasAgua.xview)
+		# sedScrollY.configure(command=arbolpropiedadesFisicasAgua.yview)
+		#Define columnas.
+		arbolpropiedadesFisicasAgua["columns"]= (
+		"1","2","Unidades")
+
+
+
+		#Headings
+		arbolpropiedadesFisicasAgua.heading("#0",text="ID", anchor=CENTER)
+
+
+
+
+		for col in arbolpropiedadesFisicasAgua["columns"]:
+			arbolpropiedadesFisicasAgua.heading(col, text=col,anchor=CENTER)	
+
+		arbolpropiedadesFisicasAgua.column("#1",width=300, stretch=False)
+		arbolpropiedadesFisicasAgua.column("#2",width=100, stretch=False)
+		arbolpropiedadesFisicasAgua.column("#3",width=100, stretch=False)
+
+
+
+		arbolpropiedadesFisicasAgua.column("#0",width=0, stretch=False)
+
+
+
+		#Striped row tags
+		arbolpropiedadesFisicasAgua.tag_configure("evenrow", background= "#1FCCDB")
+		arbolpropiedadesFisicasAgua.tag_configure("oddrow", background= "#9DC4AA")
+
+
+		listapropiedadesFisicasAgua=list()
+
+
+		encabezadosLista=[
+		"Temperatura del agua a tratar",
+		f"Densidad del agua a {temperatura} °C",
+		f"Viscocidad dinámica del agua a {temperatura} °C",
+		f"Viscocidad cinemática del agua a {temperatura} °C",
+
+		]
+		unidadesLista=[
+		"°C",
+		"kg/(m^3)",
+		"(N.s)/(m^2)",
+		"(m^2)/s",
+						]
+		#Volver
+		valorTemperaturas=list()
+
+		tablaTemperaturaViscocidadCinematica=dict()
+		viscosidadDinamicaDic=dict()
+		tablaTemperaturaDensidad=dict()
+
+		for i in range(0,36):    
+			valorTemperaturas.append(i)
+					
+		valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
+		,1.386e-06, 1.346e-06, 1.308e-06, 1.271e-06, 1.237e-06, 1.204e-06, 
+		1.172e-06, 1.141e-06, 1.112e-06, 1.084e-06, 1.057e-06, 1.032e-06, 1.007e-06, 9.83e-07, 9.6e-07, 9.38e-07, 9.17e-07, 8.96e-07, 8.76e-07, 8.57e-07, 8.39e-07, 8.21e-07, 8.04e-07, 7.88e-07, 7.72e-07, 7.56e-07, 7.41e-07, 7.27e-07]
+
+		viscosidadDinamicaValor = [0.001792, 0.001731, 
+		0.001673, 0.001619, 0.001567, 0.001519, 0.001473, 
+		0.001428, 0.001386, 0.001346, 0.001308, 0.001271, 
+		0.001236, 0.001203, 0.001171, 0.00114, 0.001111, 
+		0.001083, 0.001056, 0.00103, 0.001005, 0.000981, 
+		0.000958, 0.000936, 0.000914, 0.000894, 0.000874,
+		0.000855, 0.000836, 0.000818, 0.000801, 0.000784,
+		0.000768, 0.000752, 0.000737, 0.000723]
+
+	
+		valorDensidad= [999.82, 999.89, 999.94, 999.98, 1000.0, 1000.0, 999.99, 999.96, 999.91, 999.85, 999.77, 999.68, 999.58, 999.46, 999.33, 999.19, 999.03, 998.86, 998.68, 998.49, 998.29, 998.08, 997.86, 997.62, 997.38, 997.13, 
+			996.86, 996.59, 996.31, 996.02, 995.71, 995.41, 995.09, 994.76, 994.43, 994.08]
+	
+		for ind in range(0,len(valorTemperaturas)):
+			tablaTemperaturaDensidad[valorTemperaturas[ind]]= valorDensidad[ind]
+			tablaTemperaturaViscocidadCinematica[valorTemperaturas[ind]]=valorViscocidad[ind]
+			viscosidadDinamicaDic[valorTemperaturas[ind]]=viscosidadDinamicaValor[ind]
+
+		valorDensidadAgua = tablaTemperaturaDensidad[temperatura]
+		viscosidadDinamica = viscosidadDinamicaDic[temperatura]
+		viscosidadCinematica = tablaTemperaturaViscocidadCinematica[temperatura]
+
+
+		listapropiedadesFisicasAgua.append(round(temperatura))
+		listapropiedadesFisicasAgua.append(round(valorDensidadAgua,2))
+		listapropiedadesFisicasAgua.append(round(viscosidadDinamica,9))
+		listapropiedadesFisicasAgua.append(round(viscosidadCinematica,9))
+
+
+		for i in range(0, len(encabezadosLista)):
+			listaTemp=list()
+			listaTemp.append(encabezadosLista[i])
+			listaTemp.append(listapropiedadesFisicasAgua[i])
+			listaTemp.append(unidadesLista[i])
+			newDataTreeview(arbolpropiedadesFisicasAgua,listaTemp)
+
+		propiedadesFisicasAguaWindow.mainloop()
+
 
 	def verDatosParametrosEntrada(listaVerDatosParametrosEntrada,tipoCelda):
 		
@@ -2340,7 +2472,7 @@ def openSedWindow():
 	botonAyudaVisualSed = HoverButton(frameSed, text="Ayuda visual-\nGeometría del sedimentador", activebackground="#9DC4AA", width=40, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: proyectarImg("images\\VistaSedimentador.png",802,625))
 	
 	botonCaudalesDeDiseño = HoverButton(frameSed, text="Caudales de diseño", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: caudalesDeDiseño(listaCaudalesDiseño))
-	botonPropiedadesFisicasAgua = HoverButton(frameSed, text="Propiedades física del agua a tratar", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: propiedadesFisicasAgua())
+	botonPropiedadesFisicasAgua = HoverButton(frameSed, text="Propiedades física del agua a tratar", activebackground="#9DC4AA", width=60, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: propiedadesFisicasAgua(temperaturaEntry))
 	botonVerDatosEntradaParametrosBasicos = HoverButton(frameSed, text="Ver datos de entrada\npara parámetros básicos", activebackground="#9DC4AA", width=40, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: verDatosParametrosEntrada(listaDeterminacionParametrosBasicosDiseno,tipoCelda.get()))
 
 	botonLimpiarEntradas = HoverButton(frameSed, text="Limpiar entradas", activebackground="#9DC4AA", width=40, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntrySed(lista_entradas,listaLabelReiniciar))
@@ -11208,7 +11340,7 @@ def openFloculadorWindow():
 
 		for ind in range(0,len(valorTemperaturas)):
 			viscosidadDinamicaDic[valorTemperaturas[ind]]=viscosidadDinamicaValor[ind]
-
+		
 
 		caudalDiseñoEnM = caudalDiseño/1000.0
 		areaTuberia = pi*(diametroInterno**2)*(1/4.0)
