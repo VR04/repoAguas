@@ -5946,7 +5946,7 @@ def openFiltroWindow():
 			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número entre 0.01 y 0.2")
 			return None
 
-		#Volver
+		
 
 		consumoAguaLavado2Window = tk.Toplevel()
 		path=resource_path('icons\\agua.ico')
@@ -5981,7 +5981,7 @@ def openFiltroWindow():
 
 		#Headings
 		arbolconsumoAguaLavado2.heading("#0",text="ID", anchor=CENTER)
-		#volver
+		
 		for col in arbolconsumoAguaLavado2["columns"]:
 			arbolconsumoAguaLavado2.heading(col, text=col,anchor=CENTER, command= lambda: proyectarImg('images\\Hidraulica_ConsumoAguaLavado.png',1005,259))	
 
@@ -6228,14 +6228,15 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolperdidacargaLechoGravaLavado.yview)
 		#Define columnas.
 		arbolperdidacargaLechoGravaLavado["columns"]= (
-		"Ver fórmula","2", "Unidades"
+		"Ver fórmulas","2", "Unidades"
 		)
 
 		#Headings
 		arbolperdidacargaLechoGravaLavado.heading("#0",text="ID", anchor=CENTER)
-
+		
+		
 		for col in arbolperdidacargaLechoGravaLavado["columns"]:
-			arbolperdidacargaLechoGravaLavado.heading(col, text=col,anchor=CENTER, commmand= labmda: proyectarImg('images\\Hidraulica_PerdidaCargaATravesLechoGravaDixon.png',1006,126))	
+			arbolperdidacargaLechoGravaLavado.heading(col, text=col,anchor=CENTER, command= lambda: proyectarImg('images\\Hidraulica_PerdidaCargaATravesLechoGravaDixon.png',1006,126)) 
 
 		listaLargoFila=[0,200,100,100]
 		for i in range(1,len(arbolperdidacargaLechoGravaLavado["columns"])+1):
@@ -6421,7 +6422,7 @@ def openFiltroWindow():
 
 
 	def perdidaCargaSistemaDrenajeLavado(tempValue,d60, caudal,listaEntradaDrenaje):
-
+		
 		
 		if listaEntradaDrenaje[0].get() == "Diametro de los orificios":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los orificios.")
@@ -6447,11 +6448,6 @@ def openFiltroWindow():
 			return None
 		
 
-		
-
-
-
-		
 		
 		
 		
@@ -6483,14 +6479,14 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolperdidaCargaSistemaDrenajeLavadoLavado.yview)
 		#Define columnas.
 		arbolperdidaCargaSistemaDrenajeLavadoLavado["columns"]= (
-		"1","2","Unidades"
+		"Ver las fórmulas","2","Unidades"
 		)
 
 		#Headings
 		arbolperdidaCargaSistemaDrenajeLavadoLavado.heading("#0",text="ID", anchor=CENTER)
 
 		for col in arbolperdidaCargaSistemaDrenajeLavadoLavado["columns"]:
-			arbolperdidaCargaSistemaDrenajeLavadoLavado.heading(col, text=col,anchor=CENTER)	
+			arbolperdidaCargaSistemaDrenajeLavadoLavado.heading(col, text=col,anchor=CENTER, command=lambda: proyectarImg('images\\Hidraulica_PeridaCargaATravezDrenajeLavado.png',1003,155))	
 
 		listaLargoFila=[0,200,100,100]
 		for i in range(1,len(arbolperdidaCargaSistemaDrenajeLavadoLavado["columns"])+1):
@@ -6973,7 +6969,7 @@ def openFiltroWindow():
 
 	def perdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista):
 		
-	
+		#Volver
 
 		
 		listaEU=list()
@@ -7027,7 +7023,7 @@ def openFiltroWindow():
 		perdidaCargaTuberiaLavado_DW_HW2Window = tk.Toplevel()
 		path=resource_path('icons\\agua.ico')
 		perdidaCargaTuberiaLavado_DW_HW2Window.iconbitmap(bitmap=path)
-		perdidaCargaTuberiaLavado_DW_HW2Window.geometry("455x470") 
+		perdidaCargaTuberiaLavado_DW_HW2Window.geometry("650x470") 
 		perdidaCargaTuberiaLavado_DW_HW2Window.resizable(0,0)	
 		perdidaCargaTuberiaLavado_DW_HW2Window.configure(background="#9DC4AA")
 
@@ -7048,15 +7044,15 @@ def openFiltroWindow():
 		#Scrollbar
 		# sedScrollX=Scrollbar(arbolPerdidaCargaTuberiaLavado_DW_frame,orient=HORIZONTAL)
 		# sedScrollX.pack(side=BOTTOM, fill=X)
-		# sedScrollY=Scrollbar(arbolPerdidaCargaTuberiaLavado_DW_frame,orient=VERTICAL)
-		# sedScrollY.pack(side=LEFT, fill=Y)
+		sedScrollY=Scrollbar(arbolPerdidaCargaTuberiaLavado_DW_frame,orient=VERTICAL)
+		sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolPerdidaCargaTuberiaLavado_DW= ttk.Treeview(arbolPerdidaCargaTuberiaLavado_DW_frame,selectmode=BROWSE, height=11,show="tree headings")#,xscrollcommand=sedScrollX.set,yscrollcommand=sedScrollY.set)
+		arbolPerdidaCargaTuberiaLavado_DW= ttk.Treeview(arbolPerdidaCargaTuberiaLavado_DW_frame,selectmode=BROWSE, height=11,show="tree headings",yscrollcommand=sedScrollY.set)#xscrollcommand=sedScrollX.set,
 		arbolPerdidaCargaTuberiaLavado_DW.pack(side=TOP, fill=BOTH, expand=TRUE)
 
 		# sedScrollX.configure(command=arbolPerdidaCargaTuberiaLavado_DW.xview)
-		# sedScrollY.configure(command=arbolPerdidaCargaTuberiaLavado_DW.yview)
+		sedScrollY.configure(command=arbolPerdidaCargaTuberiaLavado_DW.yview)
 		#Define columnas.
 		arbolPerdidaCargaTuberiaLavado_DW["columns"]= (
 		"1","2","Unidades"
@@ -7070,7 +7066,7 @@ def openFiltroWindow():
 		for col in arbolPerdidaCargaTuberiaLavado_DW["columns"]:
 			arbolPerdidaCargaTuberiaLavado_DW.heading(col, text=col,anchor=CENTER)	
 
-		listaLargoFila1=[0,250,100,100]
+		listaLargoFila1=[0,250,300,100]
 		for i in range(1,len(arbolPerdidaCargaTuberiaLavado_DW["columns"])+1):
 			arbolPerdidaCargaTuberiaLavado_DW.column(f"#{i}",width=listaLargoFila1[i], stretch=False)		
 		arbolPerdidaCargaTuberiaLavado_DW.column("#0",width=0, stretch=False)
@@ -7110,7 +7106,7 @@ def openFiltroWindow():
 		for col in arbolPerdidaCargaTuberiaLavado_HW["columns"]:
 			arbolPerdidaCargaTuberiaLavado_HW.heading(col, text=col,anchor=CENTER)	
 
-		listaLargoFila2=[0,250,100,100]
+		listaLargoFila2=[0,250,300,100]
 		for i in range(1,len(arbolPerdidaCargaTuberiaLavado_HW["columns"])+1):
 			arbolPerdidaCargaTuberiaLavado_HW.column(f"#{i}",width=listaLargoFila2[i], stretch=False)		
 		arbolPerdidaCargaTuberiaLavado_HW.column("#0",width=0, stretch=False)
@@ -7195,9 +7191,14 @@ def openFiltroWindow():
 		
 		rugosidadAbsoluta= rugosidadDic[listaEU[0]]
 		
+		listaEntradaTemp1.append(listaE[0].get())
+
 		listaEntradaTemp1.append(round(rugosidadAbsoluta,3))
 
-		
+		#Volver
+
+		listaEntradaTemp1.append(listaE[2].get())
+		listaEntradaTemp1.append(listaE[1].get())
 
 		'listaEU[1]'
 		diametroNominal = [(6, 8, 10, 12, 14, 16, 18, 20, 24), 
@@ -7269,6 +7270,10 @@ def openFiltroWindow():
 		numeroReynolds= velocidadFlujoTuberiaLavado*diametroInternoTuberiaLavado*(1/viscocidadCinematica)
 		listaEntradaTemp1.append(round(numeroReynolds,2))
 
+		factorFriccionInicial = listaEU[3]
+		
+		listaEntradaTemp1.append(round(factorFriccionInicial,7))
+		
 		factorFriccion=listaEU[3]
 
 		for i in range(0,5):
@@ -7280,21 +7285,30 @@ def openFiltroWindow():
 
 		listaEntradaTemp1.append(round(perdidaCargaTuberiaLavadoDW,3))
 		
-		listaEncabezados1=["Rugosidad absoluta de la tubería",
+		listaEncabezados1=[
+		"Material de la tubería de lavado",
+		"Rugosidad absoluta de la tubería",
+		"Longitud de la tubería de lavado",
+		"Diámetro nominal de la tubería de lavado",
 		"Diámetro interno de la tubería de lavado",
 		"Velocidad de flujo en la tubería de lavado",
 		"Cabeza de velocidad",
 		f"Viscosidad cinemática del agua a {temperatureValue} °C ",
 		"Número de Reynolds",
+		"Factor de fricción (Asumido)",
 		"Factor de fricción (Iteración 4)",
 		"Pérdida de carga en la tubería de lavado\n(Sin accesorios)", ]
 		
 		listaUnidades1=[
+			"",
 			"mm",
+			"m",
+			"Pulgadas",
 			"m",
 			"m/s",
 			"m",
 			"(m^2)/s",
+			"",
 			"",
 			"",
 			"m"]
@@ -7321,6 +7335,7 @@ def openFiltroWindow():
 			rugosidadHazenDic[MaterialTuberiaLista[i]] = coeficienteRugosidadHazenLista[i]
 
 		coeficienteRugosidadHazen= rugosidadHazenDic[listaEU[0]]
+		listaEntradaTemp2.append(listaE[0].get())
 		listaEntradaTemp2.append(coeficienteRugosidadHazen)
 
 		longitudTuberiaLavado = listaEU[2]
@@ -7341,7 +7356,9 @@ def openFiltroWindow():
 
 		listaEntradaTemp2.append(round(perdidaCargaTuberiaLavadoSinAccesorios,3))
 
-		listaEncabezados2=["Coeficiente de rugosidad de Hazen-Williams",
+		listaEncabezados2=[
+		"Material de la tubería de lavado",
+		"Coeficiente de rugosidad de Hazen-Williams",
 		"Longitud de la tubería de lavado",
 		"Diámetro nominal de la tubería de lavado",
 		"Diámetro interno de la tubería de lavado",
@@ -7349,6 +7366,7 @@ def openFiltroWindow():
 		"Pérdida de carga unitaria en la tubería\nde lavado",
 		"Pérdida de carga en la tubería de lavado\n(Sin accersorios)",]
 		listaUnidades2=[
+		"",
 		"-",
 		"m",
 		"Pulgadas",
@@ -8154,7 +8172,7 @@ def openFiltroWindow():
 
 		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
-		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el diametro nominal de la tubería de lavado [pulgadas]:",font=("Yu Gothic bold",10))
 		
 
 
@@ -9610,7 +9628,7 @@ def openFiltroWindow():
 		#BotonesHidraulica
 		#botonCalculoDrenaje = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Cálculos para el drenaje del filtro", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: calculoDrenaje())
 
-		botonVelocidadLavadoExpansionLechoFiltrante = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Velocidad de lavado\n y expansión del lecho filtrante", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: velocidadLavadoExpansionLechoFiltrante(valorTemperatura,d60) )
+		botonVelocidadLavadoExpansionLechoFiltrante = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Velocidad de lavado\n y expansión del lecho filtrante", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: velocidadLavadoExpansionLechoFiltrante(valorTemperatura,d60))
 
 		botonConsumoAguaLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Consumo de agua de\n lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: consumoAguaLavado(listaEntradaExtra,valorTemperatura,d60,listaCaudal))
 
@@ -10883,8 +10901,7 @@ def openFiltroWindow():
 
 	botonPropiedadesFisicasAguaTratar = HoverButton(frameFiltro, text="Propiedades físicas del agua a tratar", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: propiedadesFisicasAgua(tempAgua))
 	
-	botonAyudaVisual = HoverButton(frameFiltro, text="Ayuda visual-\nGeometría del filtro rápido", activebackground="#9DC4AA", anchor=CENTER , width=40, height=4, bg= "#09C5CE", font =("Courier",9), command=lambda: proyectarImg('images\\VistaFiltro.png',712,561
-	))
+	botonAyudaVisual = HoverButton(frameFiltro, text="Ayuda visual-\nGeometría del filtro rápido", activebackground="#9DC4AA", anchor=CENTER , width=40, height=4, bg= "#09C5CE", font =("Courier",9), command=lambda: proyectarImg('images\\VistaFiltro.png',712,561))
 
 	listaBotonesOrg=[botonNewEntryFiltro,botonCaudalDiseño,botonPrincipalesCaracteristicasDelFiltro, 
 	botonPropiedadesFisicasAguaTratar,botonGranulometria,botonCoefUniformidad,botonEstimacionPerdidaEnergiaLechoFiltranteArenaLimpio,botonPredimensionamientoFiltros
