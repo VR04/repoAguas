@@ -2662,7 +2662,7 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolCaracFiltro.yview)
 		#Define columnas.
 		arbolCaracFiltro["columns"]= (
-		"Característica",""
+		"Denominación","Valor"
 		)
 
 		#Headings
@@ -3205,9 +3205,9 @@ def openFiltroWindow():
 			for col in arbolCoeficienteDU10["columns"]:
 				arbolCoeficienteDU10.heading(col, text=col,anchor=CENTER)
 		
-			
-			for i in range(0,len(arbolCoeficienteDU10["columns"])) :
-					arbolCoeficienteDU10.column(f"#{i}",width=500, stretch=False)		
+			listaAnchos=[0,250,300,350,150]
+			for i in range(0,len(arbolCoeficienteDU10["columns"])):
+					arbolCoeficienteDU10.column(f"#{i}",width=listaAnchos[i], stretch=False)		
 			arbolCoeficienteDU10.column("#0",width=0, stretch=False)
 
 			#Striped row tags
@@ -3241,9 +3241,12 @@ def openFiltroWindow():
 
 	def calcularPEArena(listaNTamiz,listaARetenida,listaE,valorTemperatura):
 		listaEU=list()
+		
 
 		
 		i=0
+		listaLabels=["Error con el tipo de grano","profundidad del lecho fijo de arena","densidad relativa de la arena",
+		"porosidad del lecho fijo","constante de filtración","Error en tasa filtración"]
 		for elemento in listaE:
 			try:
 				if i==0 or i==5:
@@ -3254,7 +3257,7 @@ def openFiltroWindow():
 						messagebox.showwarning(title="Error", message="Hace falta seleccionar la tasa")
 						return None
 					else:
-						
+			
 						if i==0:
 							listaEU.append(elemento.get())
 						else:
@@ -3269,6 +3272,32 @@ def openFiltroWindow():
 				return None
 			
 		listaEU.append(float(valorTemperatura))
+
+		# listaEntradas=[TipoGranoArena, profundidadLechoFijoArena, densidadRelativaArena,
+		# porosidadLechoFijo,constanteFiltracionFH,Tasa]
+		
+
+		profundidadLechoFijo = listaEU[1]
+		densidadRelativaArena= listaEU[2]
+		porosidadLechoFijo= listaEU[3]
+		constanteFiltracionFH = listaEU[4]
+
+		listaRestricciones= [profundidadLechoFijo, densidadRelativaArena, porosidadLechoFijo,constanteFiltracionFH]
+		listaLabelsRestricciones=["profundidad del lecho fijo de arena",
+		"densidad relativa de la arena","porosidad del lecho fijo",]
+		restriccionesCarac=["0.60 y 0.75","2.50 y 2.70","0.40 y 0.48"]
+
+		for i in range(0, len(listaLabelsRestricciones)):
+			inf= float(restriccionesCarac[i][0:4])
+			sup= float(restriccionesCarac[i][7:])
+			if listaRestricciones[i]< inf or  listaRestricciones[i]> sup:
+				messagebox.showwarning(title="Error", message=f"El valor de la {listaLabelsRestricciones[i]} debe estar entre {inf} y {sup}")
+				return None
+				
+		if constanteFiltracionFH != 5:
+			messagebox.showwarning(title="Error", message=f"El valor de la constante de filtración (Fair - Hatch) debe ser 5")
+			return None
+		
 		
 
 		
@@ -4118,9 +4147,9 @@ def openFiltroWindow():
 
 		profundidadLechoFijoArenaLabel = Label(frameEstimacionPerdidaArena, text="L = Profundidad del lecho fijo de arena [m]:", font =("Yu Gothic",9))
 		
-		densidadRelativaArenaLabel = Label(frameEstimacionPerdidaArena, text="S{} = Densidad relativa de la arena:".format(getSub("s")), font =("Yu Gothic",9))
-		porosidadLechoFijoLabel = Label(frameEstimacionPerdidaArena, text=u"\u03B5 ,e = Porosidad del lecho fijo:", font =("Yu Gothic",9))
-		constanteFiltracionFHLabel = Label(frameEstimacionPerdidaArena, text=u"\u03BA = Constante de Filtración (Fair-Hatch):", font =("Yu Gothic",9))
+		densidadRelativaArenaLabel = Label(frameEstimacionPerdidaArena, text="S{} = Densidad relativa de la arena []:".format(getSub("s")), font =("Yu Gothic",9))
+		porosidadLechoFijoLabel = Label(frameEstimacionPerdidaArena, text=u"\u03B5 ,e = Porosidad del lecho fijo []:", font =("Yu Gothic",9))
+		constanteFiltracionFHLabel = Label(frameEstimacionPerdidaArena, text=u"\u03BA = Constante de Filtración (Fair-Hatch) []:", font =("Yu Gothic",9))
 		
 		
 		
@@ -4775,6 +4804,10 @@ def openFiltroWindow():
 		except:
 			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
 			return None
+
+		if caudalMedio<0.01 or caudalMedio>0.2:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número entre 0.01 y 0.2")
+			return None
 		
 		predimensionamientoFiltrosWindow = tk.Toplevel()
 		path=resource_path('icons\\agua.ico')
@@ -4804,7 +4837,7 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolPredimensionamientoFiltros.yview)
 		#Define columnas.
 		arbolPredimensionamientoFiltros["columns"]= (
-		"1","2", "Unidades")
+		"Presione para ver hoja de Excel","2", "Unidades")
 		
 		'''
 		"Q = Caudal de diseño (QMD)  ",
@@ -4823,23 +4856,10 @@ def openFiltroWindow():
 		arbolPredimensionamientoFiltros.heading("#0",text="ID", anchor=CENTER)
 
 
-		def formulaN(archivo):
-			forWindow= tk.Toplevel()
-			path=resource_path('icons\\agua.ico')
-			forWindow.iconbitmap(bitmap=path)
-			forWindow.geometry("1000x350") 
-			forWindow.resizable(0,0)
-			forWindow.configure(background="#9DC4AA")
-			framefor=Frame(forWindow)
-			framefor.pack(side=TOP, fill=BOTH, expand=True)
-			path2=resource_path(archivo)
-			ima= PhotoImage(file=path2)
-			l=Label(framefor, image=ima)
-			l.pack()
-			forWindow.mainloop()
+		
 
-		for col in arbolPredimensionamientoFiltros["columns"]:
-			arbolPredimensionamientoFiltros.heading(col, text=col,anchor=CENTER, command=lambda: formulaN("images\\Predimensionamiento.png") )	
+		for col in arbolPredimensionamientoFiltros["columns"]:																				
+			arbolPredimensionamientoFiltros.heading(col, text=col,anchor=CENTER, command=lambda: proyectarImg('images\\Filtro_predimensionamientoFiltros.png',1004,383))	
 
 		
 		arbolPredimensionamientoFiltros.column("#0",width=0, stretch=False)
@@ -4977,7 +4997,7 @@ def openFiltroWindow():
 
 	def drenajeFiltro2(caudal,listaEntradaDrenaje):
 			
-		
+		#Volver
 		'''
 		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
 
@@ -4989,7 +5009,7 @@ def openFiltroWindow():
 			return None
 		else:
 			diametroOrificios=float(listaEntradaDrenaje[0].get()[0])/float(listaEntradaDrenaje[0].get()[2])
-
+			diametroOrificios2= f"{listaEntradaDrenaje[0].get()[0]}/{listaEntradaDrenaje[0].get()[2]}"
 		if listaEntradaDrenaje[1].get() == "Distancia entre los orificios":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar la distancia entre los orificios")
 			return None
@@ -5022,7 +5042,7 @@ def openFiltroWindow():
 		drenajeFiltrosWindow = tk.Toplevel()
 		path=resource_path('icons\\agua.ico')
 		drenajeFiltrosWindow.iconbitmap(bitmap=path)
-		drenajeFiltrosWindow.geometry("720x350") 
+		drenajeFiltrosWindow.geometry("770x350") 
 		drenajeFiltrosWindow.resizable(0,0)	
 		drenajeFiltrosWindow.configure(background="#9DC4AA")
 
@@ -5047,17 +5067,17 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolDrenajeFiltros.yview)
 		#Define columnas.
 		arbolDrenajeFiltros["columns"]= (
-		"1","2","Unidades","Adicional"
+		"Presione para ver Excel","2","Unidades","Adicional"
 		)
 
 		#Headings
 		arbolDrenajeFiltros.heading("#0",text="ID", anchor=CENTER)
 
 		for col in arbolDrenajeFiltros["columns"]:
-			arbolDrenajeFiltros.heading(col, text=col,anchor=CENTER)	
+			arbolDrenajeFiltros.heading(col, text=col,anchor=CENTER, command= lambda: proyectarImg('images\\Filtro_drenajeFiltroTuberiasPerforadas.png',901,412))	
 
 		
-		listaLargoFila=[0,200,100,100,300]
+		listaLargoFila=[0,250,100,100,300]
 		for i in range(1,len(arbolDrenajeFiltros["columns"])+1):
 			arbolDrenajeFiltros.column(f"#{i}",width=listaLargoFila[i], stretch=False)		
 		arbolDrenajeFiltros.column("#0",width=0, stretch=False)
@@ -5167,7 +5187,14 @@ def openFiltroWindow():
 
 
 		listaArbolDreanejFiltros=list()
-		
+
+		listaArbolDreanejFiltros.append(diametroOrificios2)
+		listaArbolDreanejFiltros.append(distanciaOrificios)
+		listaArbolDreanejFiltros.append(seccionTransvMultiple)
+
+
+		#Volver
+
 		anchoMultiple= anchoSeccion[seccionTransvMultiple]
 		listaArbolDreanejFiltros.append(round(anchoMultiple,3))
 
@@ -5175,6 +5202,8 @@ def openFiltroWindow():
 		longitudLaterales= (ladoFiltro/2) - (anchoMultiple/2) -0.05
 		listaArbolDreanejFiltros.append(round(longitudLaterales,3))
 		
+		listaArbolDreanejFiltros.append(distanciaLaterales)
+		listaArbolDreanejFiltros.append(diametroLaterales)
 		
 		numLatPUDF= 2*round((ladoFiltro/distanciaLaterales),0)
 		listaArbolDreanejFiltros.append(numLatPUDF)
@@ -5215,9 +5244,15 @@ def openFiltroWindow():
 		longitudLateral= longitudLaterales/(diametroLaterales*0.0254)
 		listaArbolDreanejFiltros.append(round(longitudLateral,3))
 
-
-		listaEncabezados = ["B{} = Ancho del múltiple".format(getSub("mul")),
+		#Volver
+		listaEncabezados = [
+		u"\u03D5{} = Diámetro de los orificios".format(getSub('ori')),
+		"X{} = Distancia entre los orificios".format(getSub('ori')),
+		"S{} = Sección transversal comercial del\nmúltiple".format(getSub('mul')),
+		"B{} = Ancho del múltiple".format(getSub("mul")),
 		"L{} = Longitud de los laterales".format(getSub("lat")),
+		"X{} = Distancia entre los laterales".format(getSub('Lat')),
+		u"\u03D5{} = Diámetro de los laterales".format(getSub('Lat')),
 		"N{} = Número de laterales por\nunidad de filtración".format(getSub("lat")),
 		" = Número de orificios por lateral",
 		"N{} = Número de orificios por\nunidad de filtración".format(getSub("ori")),
@@ -5228,7 +5263,7 @@ def openFiltroWindow():
 
 		listaUnidades = ["pulgadas",
 		"m",
-		"pulgadas2",
+		"pulgadas^2",
 		"m",
 		"m",
 		"m",
@@ -5263,6 +5298,11 @@ def openFiltroWindow():
 			longitudLateralInfo="¡Error, revise diámetros de laterales!"
 
 		listaAdicional=[
+		"",
+		"",
+		"",
+		"",
+		"",
 		"",
 		"",
 		"",
@@ -5472,7 +5512,10 @@ def openFiltroWindow():
 			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
 			return None
 
-		
+		if caudalMedio<0.01 or caudalMedio>0.2:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número entre 0.01 y 0.2")
+			return None
+
 		drenajeFiltrosMainWindow = tk.Toplevel()
 		path=resource_path('icons\\agua.ico')
 		drenajeFiltrosMainWindow.iconbitmap(bitmap=path)
@@ -5493,7 +5536,7 @@ def openFiltroWindow():
 		listaValoresTempDiametroOrificios.append("1/2")
 		listaValoresTempDiametroOrificios.append("5/8")
 		diametroOrificiosName = OptionMenu(drenajeFiltrosMainFrame, diametroOrificios, *listaValoresTempDiametroOrificios)
-		diametroOrificiosLabel= Label(drenajeFiltrosMainWindow, text="Seleccione el diámetro de los orificios:", font=("Yu Gothic bold", 11))
+		diametroOrificiosLabel= Label(drenajeFiltrosMainWindow, text="Seleccione el diámetro de los orificios [pulgadas]:", font=("Yu Gothic bold", 11))
 		
 
 		
@@ -5505,7 +5548,7 @@ def openFiltroWindow():
 		listaValoresTempDistanciaOrificios.append("0.125")
 		listaValoresTempDistanciaOrificios.append("0.150")
 		distanciaOrificiosName = OptionMenu(drenajeFiltrosMainFrame, distanciaOrificios, *listaValoresTempDistanciaOrificios)
-		distanciaOrificiosLabel= Label(drenajeFiltrosMainWindow, text="Seleccione la distancia entre orificios", font=("Yu Gothic bold", 11))
+		distanciaOrificiosLabel= Label(drenajeFiltrosMainWindow, text="Seleccione la distancia entre orificios [m]:", font=("Yu Gothic bold", 11))
 
 
 		seccionTransversal = StringVar()
@@ -5520,7 +5563,7 @@ def openFiltroWindow():
 		listaValoresTempSeccionTransversal.append("18 X 18")
 		listaValoresTempSeccionTransversal.append("20 X 20")
 		seccionTransversalName = OptionMenu(drenajeFiltrosMainFrame, seccionTransversal, *listaValoresTempSeccionTransversal)
-		seccionTransversalLabel= Label(drenajeFiltrosMainWindow, text="Seleccione la sección transversal comercial del múltiple", font=("Yu Gothic bold", 11))
+		seccionTransversalLabel= Label(drenajeFiltrosMainWindow, text="Seleccione la sección transversal comercial del múltiple [pulgadas^2]:", font=("Yu Gothic bold", 11))
 
 
 		distanciaLaterales = StringVar()
@@ -5530,7 +5573,7 @@ def openFiltroWindow():
 		listaValoresTempDistanciaLaterales.append("0.25")
 		listaValoresTempDistanciaLaterales.append("0.30")
 		distanciaLateralesName = OptionMenu(drenajeFiltrosMainFrame, distanciaLaterales, *listaValoresTempDistanciaLaterales)
-		distanciaLateralesLabel= Label(drenajeFiltrosMainWindow, text="Seleccione la distancia entre laterales", font=("Yu Gothic bold", 11))
+		distanciaLateralesLabel= Label(drenajeFiltrosMainWindow, text="Seleccione la distancia entre laterales [m]:", font=("Yu Gothic bold", 11))
 		
 
 		
@@ -5542,7 +5585,7 @@ def openFiltroWindow():
 		listaValoresTempDiametroEntreLaterales.append("2 1/2")
 		listaValoresTempDiametroEntreLaterales.append("3")
 		diametroEntreLateralesName = OptionMenu(drenajeFiltrosMainFrame, diametroEntreLaterales, *listaValoresTempDiametroEntreLaterales)
-		diametroEntreLateralesLabel= Label(drenajeFiltrosMainWindow, text="Seleccione el diámetro de los laterales", font=("Yu Gothic bold", 11))
+		diametroEntreLateralesLabel= Label(drenajeFiltrosMainWindow, text="Seleccione el diámetro de los laterales [pulgadas]:", font=("Yu Gothic bold", 11))
 
 
 		
@@ -10511,6 +10554,11 @@ def openFiltroWindow():
 		except:
 			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
 			return None
+		
+		if caudalMedio<0.01 or caudalMedio>0.2:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número entre 0.01 y 0.2")
+			return None
+
 
 
 		CaudalesDiseñoWindow = tk.Toplevel()
@@ -10605,123 +10653,136 @@ def openFiltroWindow():
 		CaudalesDiseñoWindow.mainloop()
 
 
-	def propiedadesFisicasAgua():
-		listaSinComboBox=[listaCaudalesDiseño[0],listaCaudalesDiseño[1],
-		listaCaudalesDiseño[2]]	
-		labels=["factoración de mayoración del caudal máximo diario","factor de mayoración del caudal máximo horario", "caudal medio horario"]
-		for i in range(0, len(listaSinComboBox)):
-			if listaSinComboBox[i].get() == "":
-				messagebox.showwarning(title="Error", message=f"Hace falta ingresar el valor del/de la {labels[i]} ")	
-				return None
-
-		try:
-			if float(listaCaudalesDiseño[2].get())<0.01 or float(listaCaudalesDiseño[2].get())>0.2:
-				messagebox.showwarning(title="Error", message="El valor del caudal medio diario debe estar entre 0.01 y 0.2")	
-				return None
-			elif float(listaCaudalesDiseño[0].get())>1.3 or float(listaCaudalesDiseño[0].get())<1:
-				messagebox.showwarning(title="Error", message="El valor de factoración de mayoración del caudal máximo diario debe estar entre 1 y 1.3")	
-				return None
-			elif float(listaCaudalesDiseño[1].get())>1.6 or float(listaCaudalesDiseño[1].get())<1:
-				messagebox.showwarning(title="Error", message="El valor de factoración de mayoración del caudal máximo horario debe estar entre 1 y 1.6")	
-				return None
-		except:
-			messagebox.showwarning(title="Error", message="Alguno de los datos ingresados no es un número.")
+	def propiedadesFisicasAgua(temperaturaEntry):
+		if temperaturaEntry.get()[0:10] == "Seleccione":
+			messagebox.showwarning(title="Error", message=f"Hace falta seleccionar la temperatura del agua a tratar")
 			return None	
-		
-		caudalMedioDiario= float(listaCaudalesDiseño[2].get())
-		factorMayoracionCaudalMD = float(listaCaudalesDiseño[0].get())
-		factorMayoracionCaudalMH = float(listaCaudalesDiseño[1].get())
-		
-		
-		
-		CaudalesDiseñoWindow = tk.Toplevel()
-		path=resource_path('icons\\agua.ico')
-		CaudalesDiseñoWindow.iconbitmap(bitmap=path)
-		CaudalesDiseñoWindow.geometry("500x300") 
-		CaudalesDiseñoWindow.resizable(0,0)	
-		CaudalesDiseñoWindow.configure(background="#9DC4AA")
+		else:
+			temperatura=float(temperaturaEntry.get())
 
-		CaudalesDiseñoFrame=LabelFrame(CaudalesDiseñoWindow, text="Caudales de diseño", font=("Yu Gothic bold", 11))
-		CaudalesDiseñoFrame.pack(side=TOP, fill=BOTH,expand=True)
+		propiedadesFisicasAguaFWindow = tk.Toplevel()
+		path=resource_path('icons\\agua.ico')
+		propiedadesFisicasAguaFWindow.iconbitmap(bitmap=path)
+		propiedadesFisicasAguaFWindow.geometry("500x250") 
+		propiedadesFisicasAguaFWindow.resizable(0,0)	
+		propiedadesFisicasAguaFWindow.configure(background="#9DC4AA")
+
+		propiedadesFisicasAguaFFrame=LabelFrame(propiedadesFisicasAguaFWindow, text="Propiedades físicas de agua a tratar", font=("Yu Gothic bold", 11))
+		propiedadesFisicasAguaFFrame.pack(side=TOP, fill=BOTH,expand=True)
 
 		#Frame Treeview
-		arbolCaudalesDiseño_frame = Frame(CaudalesDiseñoFrame)
-		arbolCaudalesDiseño_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
+		arbolpropiedadesFisicasAguaF_frame = Frame(propiedadesFisicasAguaFFrame)
+		arbolpropiedadesFisicasAguaF_frame.pack(side=LEFT,fill=BOTH,expand=TRUE)
 
 		#Scrollbar
-		# sedScrollX=Scrollbar(arbolCaudalesDiseño_frame,orient=HORIZONTAL)
+		# sedScrollX=Scrollbar(arbolpropiedadesFisicasAguaF_frame,orient=HORIZONTAL)
 		# sedScrollX.pack(side=BOTTOM, fill=X)
-		# sedScrollY=Scrollbar(arbolCaudalesDiseño_frame,orient=VERTICAL)
+		# sedScrollY=Scrollbar(arbolpropiedadesFisicasAguaF_frame,orient=VERTICAL)
 		# sedScrollY.pack(side=LEFT, fill=Y)
 
 		#Treeview
-		arbolCaudalesDiseño= ttk.Treeview(arbolCaudalesDiseño_frame,selectmode=BROWSE, height=11,show="tree headings")#,yscrollcommand=sedScrollY.set, xscrollcommand=sedScrollX.set)
-		arbolCaudalesDiseño.pack(side=TOP, fill=BOTH, expand=TRUE)
+		arbolpropiedadesFisicasAguaF= ttk.Treeview(arbolpropiedadesFisicasAguaF_frame,selectmode=BROWSE, height=11,show="tree headings")#,yscrollcommand=sedScrollY.set, xscrollcommand=sedScrollX.set)
+		arbolpropiedadesFisicasAguaF.pack(side=TOP, fill=BOTH, expand=TRUE)
 
-		# sedScrollX.configure(command=arbolCaudalesDiseño.xview)
-		# sedScrollY.configure(command=arbolCaudalesDiseño.yview)
+		# sedScrollX.configure(command=arbolpropiedadesFisicasAguaF.xview)
+		# sedScrollY.configure(command=arbolpropiedadesFisicasAguaF.yview)
 		#Define columnas.
-		arbolCaudalesDiseño["columns"]= (
+		arbolpropiedadesFisicasAguaF["columns"]= (
 		"1","2","Unidades")
 
-		
+
 
 		#Headings
-		arbolCaudalesDiseño.heading("#0",text="ID", anchor=CENTER)
+		arbolpropiedadesFisicasAguaF.heading("#0",text="ID", anchor=CENTER)
 
 
 
-		for col in arbolCaudalesDiseño["columns"]:
-			arbolCaudalesDiseño.heading(col, text=col,anchor=CENTER, command=lambda: print("Img") )	
 
-		arbolCaudalesDiseño.column("#1",width=300, stretch=False)
-		arbolCaudalesDiseño.column("#2",width=100, stretch=False)
-		arbolCaudalesDiseño.column("#3",width=100, stretch=False)
-		
+		for col in arbolpropiedadesFisicasAguaF["columns"]:
+			arbolpropiedadesFisicasAguaF.heading(col, text=col,anchor=CENTER)	
+
+		arbolpropiedadesFisicasAguaF.column("#1",width=300, stretch=False)
+		arbolpropiedadesFisicasAguaF.column("#2",width=100, stretch=False)
+		arbolpropiedadesFisicasAguaF.column("#3",width=100, stretch=False)
 
 
-		arbolCaudalesDiseño.column("#0",width=0, stretch=False)
-		
-		
+
+		arbolpropiedadesFisicasAguaF.column("#0",width=0, stretch=False)
+
+
 
 		#Striped row tags
-		arbolCaudalesDiseño.tag_configure("evenrow", background= "#1FCCDB")
-		arbolCaudalesDiseño.tag_configure("oddrow", background= "#9DC4AA")
+		arbolpropiedadesFisicasAguaF.tag_configure("evenrow", background= "#1FCCDB")
+		arbolpropiedadesFisicasAguaF.tag_configure("oddrow", background= "#9DC4AA")
 
 
-		listaCaudalesDiseño=list()
+		listapropiedadesFisicasAguaF=list()
 
 
 		encabezadosLista=[
-		"Factor de mayoración del caudal máximo diario",
-		"Factor de mayoración del caudal máximo horario",
-		"Caudal medio diario",			
-		"Caudal máximo diario",			
-		"Caudal máximo horario",			
+		"Temperatura del agua a tratar",
+		f"Densidad del agua a {temperatura} °C",
+		f"Viscocidad dinámica del agua a {temperatura} °C",
+		f"Viscocidad cinemática del agua a {temperatura} °C",
+
 		]
-		unidadesLista=["",
-		"",
-		"(m^3)/s",
-		"(m^3)/s",
-		"(m^3)/s",
+		unidadesLista=[
+		"°C",
+		"kg/(m^3)",
+		"(N.s)/(m^2)",
+		"(m^2)/s",
 						]
-		
-		listaCaudalesDiseño.append(round(factorMayoracionCaudalMD,3))
-		listaCaudalesDiseño.append(round(factorMayoracionCaudalMH,3))
-		listaCaudalesDiseño.append(round(caudalMedioDiario,3))
-		caudalMaximoDiario=caudalMedioDiario*factorMayoracionCaudalMD
-		listaCaudalesDiseño.append(round(caudalMaximoDiario,3))
-		caudalMaximoHorario=caudalMedioDiario*factorMayoracionCaudalMH
-		listaCaudalesDiseño.append(round(caudalMaximoHorario,3))
-		
+
+		valorTemperaturas=list()
+
+		tablaTemperaturaViscocidadCinematica=dict()
+		viscosidadDinamicaDic=dict()
+		tablaTemperaturaDensidad=dict()
+
+		for i in range(0,36):    
+			valorTemperaturas.append(i)
+					
+		valorViscocidad=[1.792e-06, 1.731e-06, 1.673e-06, 1.619e-06, 1.567e-06, 1.519e-06, 1.473e-06, 0.000001428
+		,1.386e-06, 1.346e-06, 1.308e-06, 1.271e-06, 1.237e-06, 1.204e-06, 
+		1.172e-06, 1.141e-06, 1.112e-06, 1.084e-06, 1.057e-06, 1.032e-06, 1.007e-06, 9.83e-07, 9.6e-07, 9.38e-07, 9.17e-07, 8.96e-07, 8.76e-07, 8.57e-07, 8.39e-07, 8.21e-07, 8.04e-07, 7.88e-07, 7.72e-07, 7.56e-07, 7.41e-07, 7.27e-07]
+
+		viscosidadDinamicaValor = [0.001792, 0.001731, 
+		0.001673, 0.001619, 0.001567, 0.001519, 0.001473, 
+		0.001428, 0.001386, 0.001346, 0.001308, 0.001271, 
+		0.001236, 0.001203, 0.001171, 0.00114, 0.001111, 
+		0.001083, 0.001056, 0.00103, 0.001005, 0.000981, 
+		0.000958, 0.000936, 0.000914, 0.000894, 0.000874,
+		0.000855, 0.000836, 0.000818, 0.000801, 0.000784,
+		0.000768, 0.000752, 0.000737, 0.000723]
+
+
+		valorDensidad= [999.82, 999.89, 999.94, 999.98, 1000.0, 1000.0, 999.99, 999.96, 999.91, 999.85, 999.77, 999.68, 999.58, 999.46, 999.33, 999.19, 999.03, 998.86, 998.68, 998.49, 998.29, 998.08, 997.86, 997.62, 997.38, 997.13, 
+			996.86, 996.59, 996.31, 996.02, 995.71, 995.41, 995.09, 994.76, 994.43, 994.08]
+
+		for ind in range(0,len(valorTemperaturas)):
+			tablaTemperaturaDensidad[valorTemperaturas[ind]]= valorDensidad[ind]
+			tablaTemperaturaViscocidadCinematica[valorTemperaturas[ind]]=valorViscocidad[ind]
+			viscosidadDinamicaDic[valorTemperaturas[ind]]=viscosidadDinamicaValor[ind]
+
+		valorDensidadAgua = tablaTemperaturaDensidad[temperatura]
+		viscosidadDinamica = viscosidadDinamicaDic[temperatura]
+		viscosidadCinematica = tablaTemperaturaViscocidadCinematica[temperatura]
+
+
+		listapropiedadesFisicasAguaF.append(round(temperatura))
+		listapropiedadesFisicasAguaF.append(round(valorDensidadAgua,2))
+		listapropiedadesFisicasAguaF.append(round(viscosidadDinamica,9))
+		listapropiedadesFisicasAguaF.append(round(viscosidadCinematica,9))
+
+
 		for i in range(0, len(encabezadosLista)):
 			listaTemp=list()
 			listaTemp.append(encabezadosLista[i])
-			listaTemp.append(listaCaudalesDiseño[i])
+			listaTemp.append(listapropiedadesFisicasAguaF[i])
 			listaTemp.append(unidadesLista[i])
-			newDataTreeview(arbolCaudalesDiseño,listaTemp)
+			newDataTreeview(arbolpropiedadesFisicasAguaF,listaTemp)
 
-		CaudalesDiseñoWindow.mainloop()
+		propiedadesFisicasAguaFWindow.mainloop()
 
         
 
@@ -10776,13 +10837,13 @@ def openFiltroWindow():
 	#tipoCaudalName.place(x=350, y=186)
 	tipoCaudalLabel = Label(frameFiltro, text="Caudal de diseño:",font=("Yu Gothic bold",10))
 	#tipoCaudalLabel.place(x=250, y=157)
-	caudalMedioLabel= Label(frameFiltro, text="Caudal medio diario: ",font=("Yu Gothic bold",10))	
-	caudalMedio = Entry(frameFiltro, width=6)
+	caudalMedioLabel= Label(frameFiltro, text="Caudal medio diario [(m^3)/s]: ",font=("Yu Gothic bold",8))	
+	caudalMedio = Entry(frameFiltro, width=7)
 
 	altIninicial=157
 	listaTipoCaudal = [tipoCaudalLabel, caudalMedioLabel]
 	for elem in listaTipoCaudal:
-		elem.place(x=350, y=altIninicial)
+		elem.place(x=330, y=altIninicial)
 		altIninicial=altIninicial+35
 	caudalMedio.place(x=500, y=altIninicial-35)
 	entradasCaudal= [caudalMedio]
@@ -10809,7 +10870,7 @@ def openFiltroWindow():
 	botonCaudalDiseño = HoverButton(frameFiltro, text="Caudales de diseño", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: caudalDiseño(entradasCaudal))
 
 	botonPropiedadesFisicasAguaTratar = HoverButton(frameFiltro, text="Propiedades físicas del agua a tratar", activebackground="#9DC4AA", anchor=CENTER , width=60, height=2, bg= "#09C5CE", font =("Courier",9), command=lambda: propiedadesFisicasAgua(tempAgua))
-	#Volver
+	
 	botonAyudaVisual = HoverButton(frameFiltro, text="Ayuda visual-\nGeometría del filtro rápido", activebackground="#9DC4AA", anchor=CENTER , width=40, height=4, bg= "#09C5CE", font =("Courier",9), command=lambda: proyectarImg('images\\VistaFiltro.png',712,561
 	))
 
@@ -11156,7 +11217,7 @@ def openFloculadorWindow():
 
 		
 
-		mayor=0.5515
+		mayor=0.55154
 		for elemento in diametroInteriorLista:
 			if elemento>diametroInterconexion and elemento<mayor:
 				mayor=elemento
@@ -11471,7 +11532,7 @@ def openFloculadorWindow():
 
 		
 
-		mayor=0.5515
+		mayor=0.55154
 		for elemento in diametroInteriorLista:
 			if elemento>diametroInterconexion and elemento<mayor:
 				mayor=elemento
@@ -11804,7 +11865,7 @@ def openFloculadorWindow():
 
 		
 
-		mayor=0.5515
+		mayor=0.55154
 		for elemento in diametroInteriorLista:
 			if elemento>diametroInterconexion and elemento<mayor:
 				mayor=elemento
@@ -11812,8 +11873,10 @@ def openFloculadorWindow():
 		if valorParImpar=="par":
 			diametroInternoOrificio = mayor
 		else:
-			diametroInternoOrificio = diametroInteriorLista[(diametroInteriorLista.index(mayor))+1]
-
+			if mayor != 0.55154: 
+				diametroInternoOrificio = diametroInteriorLista[(diametroInteriorLista.index(mayor))+1]
+			else:
+				diametroInternoOrificio = mayor
 		
 
 
