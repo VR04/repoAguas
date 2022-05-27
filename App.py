@@ -4997,7 +4997,7 @@ def openFiltroWindow():
 
 	def drenajeFiltro2(caudal,listaEntradaDrenaje):
 			
-		#Volver
+		
 		'''
 		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
 
@@ -5193,7 +5193,7 @@ def openFiltroWindow():
 		listaArbolDreanejFiltros.append(seccionTransvMultiple)
 
 
-		#Volver
+		
 
 		anchoMultiple= anchoSeccion[seccionTransvMultiple]
 		listaArbolDreanejFiltros.append(round(anchoMultiple,3))
@@ -5244,7 +5244,7 @@ def openFiltroWindow():
 		longitudLateral= longitudLaterales/(diametroLaterales*0.0254)
 		listaArbolDreanejFiltros.append(round(longitudLateral,3))
 
-		#Volver
+		
 		listaEncabezados = [
 		u"\u03D5{} = Diámetro de los orificios".format(getSub('ori')),
 		"X{} = Distancia entre los orificios".format(getSub('ori')),
@@ -5667,14 +5667,14 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolvelocidadLavadoExpansionLechoFiltrante.yview)
 		#Define columnas.
 		arbolvelocidadLavadoExpansionLechoFiltrante["columns"]= (
-		"1","2","Unidades","Adicional"
+		"Pulse para ver fórmulas","2","Unidades","Adicional"
 		)
 
 		#Headings
 		arbolvelocidadLavadoExpansionLechoFiltrante.heading("#0",text="ID", anchor=CENTER)
 
 		for col in arbolvelocidadLavadoExpansionLechoFiltrante["columns"]:
-			arbolvelocidadLavadoExpansionLechoFiltrante.heading(col, text=col,anchor=CENTER)	
+			arbolvelocidadLavadoExpansionLechoFiltrante.heading(col, text=col,anchor=CENTER, command= lambda: proyectarImg('images\Hidraulica_VelocidadLavadoYExpansionLechoFiltrante.png',1007,387))	
 
 		listaLargoFila=[0,300,100,100,181]
 		for i in range(1,len(arbolvelocidadLavadoExpansionLechoFiltrante["columns"])+1):
@@ -5936,9 +5936,17 @@ def openFiltroWindow():
 		else:
 			tiempoRetrolavado = float(listaE[0].get())
 
+		try: 
+			caudalMedio=float(caudalLista[0].get())
+		except:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
+			return None
 
+		if caudalMedio<0.01 or caudalMedio>0.2:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número entre 0.01 y 0.2")
+			return None
 
-
+		#Volver
 
 		consumoAguaLavado2Window = tk.Toplevel()
 		path=resource_path('icons\\agua.ico')
@@ -5968,14 +5976,14 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolconsumoAguaLavado2.yview)
 		#Define columnas.
 		arbolconsumoAguaLavado2["columns"]= (
-		"1","2","Unidades"
+		"Pulse para ver fórmulas","2","Unidades"
 		)
 
 		#Headings
 		arbolconsumoAguaLavado2.heading("#0",text="ID", anchor=CENTER)
-
+		#volver
 		for col in arbolconsumoAguaLavado2["columns"]:
-			arbolconsumoAguaLavado2.heading(col, text=col,anchor=CENTER)	
+			arbolconsumoAguaLavado2.heading(col, text=col,anchor=CENTER, command= lambda: proyectarImg('images\\Hidraulica_ConsumoAguaLavado.png',1005,259))	
 
 		listaLargoFila=[0,250,100,100]
 		for i in range(1,len(arbolconsumoAguaLavado2["columns"])+1):
@@ -6114,14 +6122,14 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolperdidaCargaLechoExpandido.yview)
 		#Define columnas.
 		arbolperdidaCargaLechoExpandido["columns"]= (
-		"1","2","Unidades"
+		"Pulse para ver fórmulas","2","Unidades"
 		)
 
 		#Headings
 		arbolperdidaCargaLechoExpandido.heading("#0",text="ID", anchor=CENTER)
 
 		for col in arbolperdidaCargaLechoExpandido["columns"]:
-			arbolperdidaCargaLechoExpandido.heading(col, text=col,anchor=CENTER)	
+			arbolperdidaCargaLechoExpandido.heading(col, text=col,anchor=CENTER, command= lambda: proyectarImg('images\\Hidraulica_PerdidaCargaLechoExpandido.png',1004,123))	
 
 		listaLargoFila=[0,200,60,100]
 		for i in range(1,len(arbolperdidaCargaLechoExpandido["columns"])+1):
@@ -6220,14 +6228,14 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolperdidacargaLechoGravaLavado.yview)
 		#Define columnas.
 		arbolperdidacargaLechoGravaLavado["columns"]= (
-		"1","2", "Unidades"
+		"Ver fórmula","2", "Unidades"
 		)
 
 		#Headings
 		arbolperdidacargaLechoGravaLavado.heading("#0",text="ID", anchor=CENTER)
 
 		for col in arbolperdidacargaLechoGravaLavado["columns"]:
-			arbolperdidacargaLechoGravaLavado.heading(col, text=col,anchor=CENTER)	
+			arbolperdidacargaLechoGravaLavado.heading(col, text=col,anchor=CENTER, commmand= labmda: proyectarImg('images\\Hidraulica_PerdidaCargaATravesLechoGravaDixon.png',1006,126))	
 
 		listaLargoFila=[0,200,100,100]
 		for i in range(1,len(arbolperdidacargaLechoGravaLavado["columns"])+1):
@@ -9396,6 +9404,10 @@ def openFiltroWindow():
 			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número.")
 			return None
 
+		if caudalMedio<0.01 or caudalMedio>0.2:
+			messagebox.showwarning(title="Error", message="El caudal medio diario debe ser un número entre 0.01 y 0.2")
+			return None
+
 		listaNTamizTemp=listaTamiz.copy()
 		listaARetenidaTemp=listaAR.copy()
 		listaNTamiz=list()
@@ -9503,7 +9515,7 @@ def openFiltroWindow():
 		listaValoresTempDiametroOrificios.append("1/2")
 		listaValoresTempDiametroOrificios.append("5/8")
 		diametroOrificiosName = OptionMenu(hidraulicaSistemaLavadoMainFrame, diametroOrificios, *listaValoresTempDiametroOrificios)
-		diametroOrificiosLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione el diámetro de los orificios:", font=("Yu Gothic bold", 11))
+		diametroOrificiosLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione el diámetro de los orificios [pulgadas]:", font=("Yu Gothic bold", 10))
 		
 
 		
@@ -9515,7 +9527,7 @@ def openFiltroWindow():
 		listaValoresTempDistanciaOrificios.append("0.125")
 		listaValoresTempDistanciaOrificios.append("0.150")
 		distanciaOrificiosName = OptionMenu(hidraulicaSistemaLavadoMainFrame, distanciaOrificios, *listaValoresTempDistanciaOrificios)
-		distanciaOrificiosLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione la distancia entre orificios:", font=("Yu Gothic bold", 11))
+		distanciaOrificiosLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione la distancia entre orificios [m]:", font=("Yu Gothic bold", 10))
 
 
 		seccionTransversal = StringVar()
@@ -9530,7 +9542,7 @@ def openFiltroWindow():
 		listaValoresTempSeccionTransversal.append("18 X 18")
 		listaValoresTempSeccionTransversal.append("20 X 20")
 		seccionTransversalName = OptionMenu(hidraulicaSistemaLavadoMainFrame, seccionTransversal, *listaValoresTempSeccionTransversal)
-		seccionTransversalLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione la sección transversal comercial del múltiple:", font=("Yu Gothic bold", 11))
+		seccionTransversalLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione la sección transversal comercial del múltiple [pulgadas^2]:", font=("Yu Gothic bold", 9))
 
 
 		distanciaLaterales = StringVar()
@@ -9540,7 +9552,7 @@ def openFiltroWindow():
 		listaValoresTempDistanciaLaterales.append("0.25")
 		listaValoresTempDistanciaLaterales.append("0.30")
 		distanciaLateralesName = OptionMenu(hidraulicaSistemaLavadoMainFrame, distanciaLaterales, *listaValoresTempDistanciaLaterales)
-		distanciaLateralesLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione la distancia entre laterales:", font=("Yu Gothic bold", 11))
+		distanciaLateralesLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione la distancia entre laterales [m]:", font=("Yu Gothic bold", 10))
 		
 
 		
@@ -9552,7 +9564,7 @@ def openFiltroWindow():
 		listaValoresTempDiametroEntreLaterales.append("2 1/2")
 		listaValoresTempDiametroEntreLaterales.append("3")
 		diametroEntreLateralesName = OptionMenu(hidraulicaSistemaLavadoMainFrame, diametroEntreLaterales, *listaValoresTempDiametroEntreLaterales)
-		diametroEntreLateralesLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione el diámetro de los laterales:", font=("Yu Gothic bold", 11))
+		diametroEntreLateralesLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione el diámetro de los laterales [pulgadas]:", font=("Yu Gothic bold", 10))
 
 		tiempoRetrolavado = StringVar()
 		tiempoRetrolavado.set("Tiempo de retrolavado")
@@ -9563,7 +9575,7 @@ def openFiltroWindow():
 		listaValoresTemptiempoRetrolavado.append("13")
 		listaValoresTemptiempoRetrolavado.append("14")
 		tiempoRetrolavadoName = OptionMenu(hidraulicaSistemaLavadoMainFrame, tiempoRetrolavado, *listaValoresTemptiempoRetrolavado)
-		tiempoRetrolavadoLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione el tiempo de retrolavado.", font=("Yu Gothic bold", 11))
+		tiempoRetrolavadoLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione el tiempo de retrolavado [s]:", font=("Yu Gothic bold", 10))
 
 		
 		listaEntradaDrenaje2=[diametroOrificiosName,distanciaOrificiosName,seccionTransversalName,distanciaLateralesName, diametroEntreLateralesName,tiempoRetrolavadoName]
