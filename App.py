@@ -6967,7 +6967,7 @@ def openFiltroWindow():
 
 
 
-	def perdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista):
+	def perdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista,unidadesDiametro):
 		
 		#Volver
 
@@ -7303,7 +7303,7 @@ def openFiltroWindow():
 			"",
 			"mm",
 			"m",
-			"Pulgadas",
+			unidadesDiametro,
 			"m",
 			"m/s",
 			"m",
@@ -7369,7 +7369,7 @@ def openFiltroWindow():
 		"",
 		"-",
 		"m",
-		"Pulgadas",
+		unidadesDiametro,
 		"m",
 		"m/s",
 		"m/m",
@@ -7715,7 +7715,7 @@ def openFiltroWindow():
 		listaEntradaTemp1.append(peridaCargaTuberiaLavadoAccesorios)
 		return listaEntradaTemp1
 
-	def perdidaCargaTuberiaLavado_DW_HW2_2(listaE,temperatureValue,listaE1, d60,caudalLista,tasa):
+	def perdidaCargaTuberiaLavado_DW_HW2_2(listaE,temperatureValue,listaE1, d60,caudalLista,tasa,unidadesDiametroNominal):
 		
 	
 
@@ -8016,7 +8016,7 @@ def openFiltroWindow():
 			"",
 			"mm",
 			"m",
-			"mm",
+			unidadesDiametroNominal,
 			"m",
 			"(m^3)/s",
 			"m/s",
@@ -8129,7 +8129,7 @@ def openFiltroWindow():
 		frameperdidaCargaTuberiaLavado_DW_HW= LabelFrame(perdidaCargaTuberiaLavado_DW_HWWindow, text="Estimación de la pérdida de carga en la tubería de lavado",font=("Yu Gothic bold", 11))
 		frameperdidaCargaTuberiaLavado_DW_HW.pack(side=TOP,fill=BOTH,expand=True)
 
-		def newEntryFiltroP(lista):
+		def newEntryFiltroP(lista, labelExtra):
 			for elemento in lista:
 				if elemento == materialTuberiaLavado:
 					materialTuberiaLavado.set("Material de la tubería de lavado")
@@ -8141,6 +8141,7 @@ def openFiltroWindow():
 					tipoEntrada.set("Tipo de entrada")
 				else:
 					elemento.delete(0, END)
+			labelExtra.config(text="Seleccione el diametro nominal de la tubería de lavado []:")
 
 
 
@@ -8171,11 +8172,20 @@ def openFiltroWindow():
 
 
 		#Pendiente: ValoresDeAccesoriofinalconPolietileno21YDiametro200
-
+		 
+		
 		def on_combobox_select(event):
+			global indicador
 			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
-
+			if materialTuberiaLavado.get() == "Acero al carbono API 5L SCH-40" or materialTuberiaLavado.get()== "Acero al carbono API 5L SCH-80" or materialTuberiaLavado.get() == "Policluro de vinilo (PVC) RDE 26" or materialTuberiaLavado.get()=="Policluro de vinilo (PVC) RDE 21":
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [Pulgadas]:")
+		
+				indicador="Pulgadas"
+			else:
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [mm]:")
+				indicador="mm"
+		
 		materialTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="50", state="readonly", values=tuple(opcionesDic.keys()))
 		materialTuberiaLavado.bind("<<ComboboxSelected>>", on_combobox_select)
 		materialTuberiaLavado.set("Material de la tubería de lavado")
@@ -8185,7 +8195,7 @@ def openFiltroWindow():
 
 		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
-		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el diametro nominal de la tubería de lavado [pulgadas]:",font=("Yu Gothic bold",10))
+		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el diametro nominal de la tubería de lavado []:",font=("Yu Gothic bold",10))
 		
 
 
@@ -8243,8 +8253,8 @@ def openFiltroWindow():
 					alturaInicialEntradas+=40
 
 		#Botones.
-		botonCalcular = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Calcular la estimación de carga en la tubería de lavado.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTuberiaLavado_DW_HW2(listaEntradas,TemperatureValue,listaE, d60,caudalLista))
-		botonNewEntry = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botonCalcular = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Calcular la estimación de carga en la tubería de lavado.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTuberiaLavado_DW_HW2(listaEntradas,TemperatureValue,listaE, d60,caudalLista,indicador))
+		botonNewEntry = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas,diametroNominalTuberiaLavadoLabel))
 		botones=[botonCalcular,botonNewEntry]
 		alturaBotones=450
 		for elemento in botones:
@@ -8290,7 +8300,7 @@ def openFiltroWindow():
 		frameperdidaCargaTuberiaLavado_DW_HW= LabelFrame(perdidaCargaTuberiaLavado_DW_HWWindow, text=f"Estimación de la pérdida de carga en la tubería de lavado a {tasa.lower()}",font=("Yu Gothic bold", 11))
 		frameperdidaCargaTuberiaLavado_DW_HW.pack(side=TOP,fill=BOTH,expand=True)
 
-		def newEntryFiltroP(lista):
+		def newEntryFiltroP(lista, extraLabel):
 			for elemento in lista:
 				if elemento == materialTuberiaLavado:
 					materialTuberiaLavado.set("Material de la tubería de lavado")
@@ -8300,7 +8310,7 @@ def openFiltroWindow():
 					tipoEntrada.set("Tipo de entrada")
 				else:
 					elemento.delete(0, END)
-
+			extraLabel.config(text="Seleccione el diametro nominal de la tubería de lavado []:")
 
 
 
@@ -8328,10 +8338,17 @@ def openFiltroWindow():
 		for i in range(0, len(listaValoresTemp)):
 			opcionesDic[listaValoresTemp[i]]=Valores[i] 
 
-
+		global indicador
 		def on_combobox_select(event):
 			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
+			if materialTuberiaLavado.get() == "Acero al carbono API 5L SCH-40" or materialTuberiaLavado.get()== "Acero al carbono API 5L SCH-80" or materialTuberiaLavado.get() == "Policluro de vinilo (PVC) RDE 26" or materialTuberiaLavado.get()=="Policluro de vinilo (PVC) RDE 21":
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [Pulgadas]:")
+				indicador="Pulgadas"
+			else:
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [mm]:")
+				indicador="mm"
+
 
 		materialTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="50", state="readonly", values=tuple(opcionesDic.keys()))
 		materialTuberiaLavado.bind("<<ComboboxSelected>>", on_combobox_select)
@@ -8342,7 +8359,7 @@ def openFiltroWindow():
 
 		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTuberiaLavado_DW_HW, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
-		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el diametro nominal de la tubería de lavado []:",font=("Yu Gothic bold",10))
 
 
 		#NombrePendiente
@@ -8400,8 +8417,8 @@ def openFiltroWindow():
 
 		#Botones.#
 		
-		botonCalcular = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Calcular la estimación de carga en la tubería de lavado.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTuberiaLavado_DW_HW2_2(listaEntradas,TemperatureValue,listaE, d60,caudalLista,tasa))
-		botonNewEntry = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botonCalcular = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Calcular la estimación de carga en la tubería de lavado.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTuberiaLavado_DW_HW2_2(listaEntradas,TemperatureValue,listaE, d60,caudalLista,tasa, indicador))
+		botonNewEntry = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas,diametroNominalTuberiaLavadoLabel))
 		botones=[botonCalcular,botonNewEntry]
 		alturaBotones=450
 		for elemento in botones:
@@ -8775,7 +8792,7 @@ def openFiltroWindow():
 		frameperdidaCargaTotalLavadoMain= LabelFrame(perdidaCargaTotalLavadoMainWindow, text="Datos adicionales para el cálculo de la pérdida total durante el lavado.",font=("Yu Gothic bold", 11))
 		frameperdidaCargaTotalLavadoMain.pack(side=TOP,fill=BOTH,expand=True)
 
-		def newEntryFiltroP(lista):
+		def newEntryFiltroP(lista, labelExtra):
 			for elemento in lista:
 				if elemento == materialTuberiaLavado:
 					materialTuberiaLavado.set("Material de la tubería de lavado")
@@ -8787,7 +8804,7 @@ def openFiltroWindow():
 					tipoEntrada.set("Tipo de entrada")
 				else:
 					elemento.delete(0, END)
-
+			labelExtra.config(text="Seleccione el diametro nominal de la tubería de lavado []:")
 
 
 
@@ -8813,10 +8830,18 @@ def openFiltroWindow():
 		for i in range(0, len(listaValoresTemp)):
 			opcionesDic[listaValoresTemp[i]]=Valores[i] 
 
-
+		#VOlver
 		def on_combobox_select(event):
 			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
+			if materialTuberiaLavado.get() == "Acero al carbono API 5L SCH-40" or materialTuberiaLavado.get()== "Acero al carbono API 5L SCH-80" or materialTuberiaLavado.get() == "Policluro de vinilo (PVC) RDE 26" or materialTuberiaLavado.get()=="Policluro de vinilo (PVC) RDE 21":
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [Pulgadas]:")
+			else:
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [mm]:")
+				
+
+
+
 
 		materialTuberiaLavado = ttk.Combobox(frameperdidaCargaTotalLavadoMain, width="50", state="readonly", values=tuple(opcionesDic.keys()))
 		materialTuberiaLavado.bind("<<ComboboxSelected>>", on_combobox_select)
@@ -8827,7 +8852,7 @@ def openFiltroWindow():
 
 		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTotalLavadoMain, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
-		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el diametro nominal de la tubería de lavado []:",font=("Yu Gothic bold",10))
 
 
 		
@@ -8887,7 +8912,7 @@ def openFiltroWindow():
 
 		#Botones.
 		botonCalcular = HoverButton(frameperdidaCargaTotalLavadoMain, text="Calcular la pérdida de carga total durante el lavado", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTotalLavado2(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE))
-		botonNewEntry = HoverButton(frameperdidaCargaTotalLavadoMain, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botonNewEntry = HoverButton(frameperdidaCargaTotalLavadoMain, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas,diametroNominalTuberiaLavadoLabel))
 		botones=[botonCalcular,botonNewEntry]
 		alturaBotones=450
 		for elemento in botones:
@@ -8966,7 +8991,7 @@ def openFiltroWindow():
 		frameperdidaCargaTotalLavadoMain= LabelFrame(perdidaCargaTotalLavadoMainWindow, text= f"Datos adicionales para el cálculo de la pérdida total a {tasa.lower()} de filtración con lecho limpio",font=("Yu Gothic bold", 11))
 		frameperdidaCargaTotalLavadoMain.pack(side=TOP,fill=BOTH,expand=True)
 
-		def newEntryFiltroP(lista):
+		def newEntryFiltroP(lista,extraLab):
 			for elemento in lista:
 				if elemento == materialTuberiaLavado:
 					materialTuberiaLavado.set("Material de la tubería de lavado")
@@ -8978,7 +9003,7 @@ def openFiltroWindow():
 					pass
 				else:
 					elemento.delete(0, END)
-
+			extraLab.config(text="Seleccione el diametro nominal de la tubería de lavado []:")
 
 
 
@@ -9010,6 +9035,12 @@ def openFiltroWindow():
 		def on_combobox_select(event):
 			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
+			if materialTuberiaLavado.get() == "Acero al carbono API 5L SCH-40" or materialTuberiaLavado.get()== "Acero al carbono API 5L SCH-80" or materialTuberiaLavado.get() == "Policluro de vinilo (PVC) RDE 26" or materialTuberiaLavado.get()=="Policluro de vinilo (PVC) RDE 21":
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [Pulgadas]:")
+				indicador="Pulgadas"
+			else:
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [mm]:")
+				indicador="mm"
 
 		materialTuberiaLavado = ttk.Combobox(frameperdidaCargaTotalLavadoMain, width="50", state="readonly", values=tuple(opcionesDic.keys()))
 		materialTuberiaLavado.bind("<<ComboboxSelected>>", on_combobox_select)
@@ -9020,7 +9051,7 @@ def openFiltroWindow():
 
 		diametroNominalTuberiaLavado = ttk.Combobox(frameperdidaCargaTotalLavadoMain, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
-		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el diametro nominal de la tubería de lavado []:",font=("Yu Gothic bold",10))
 
 		#NombrePendiente
 		codoRadio = StringVar()
@@ -9077,7 +9108,7 @@ def openFiltroWindow():
 
 		#Botones.
 		botonCalcular = HoverButton(frameperdidaCargaTotalLavadoMain, text="Calcular la pérdida de carga total durante el lavado", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTotalLavado2_2(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE,tasa))
-		botonNewEntry = HoverButton(frameperdidaCargaTotalLavadoMain, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botonNewEntry = HoverButton(frameperdidaCargaTotalLavadoMain, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas,diametroNominalTuberiaLavadoLabel))
 		botones=[botonCalcular,botonNewEntry]
 		alturaBotones=450
 		for elemento in botones:
@@ -9147,7 +9178,7 @@ def openFiltroWindow():
 		frameverificacionVelocidadesDiseñoTuberiaMain= LabelFrame(verificacionVelocidadesDiseñoTuberiaMainWindow, text="Datos adicionales para el cálculo de las velocidades de diseño en las tuberías del filtro durante el lavado ",font=("Yu Gothic bold", 11))
 		frameverificacionVelocidadesDiseñoTuberiaMain.pack(side=TOP,fill=BOTH,expand=True)
 
-		def newEntryFiltroP(lista):
+		def newEntryFiltroP(lista,labelExtra):
 			for elemento in lista:
 				if elemento == materialTuberiaLavado:
 					materialTuberiaLavado.set("Material de la tubería de lavado")
@@ -9157,11 +9188,9 @@ def openFiltroWindow():
 					codoRadio.set("Codo 90° radio")
 				elif elemento == tipoEntrada:
 					tipoEntrada.set("Tipo de entrada")
-
-
-
 				else:
 					elemento.delete(0, END)
+			labelExtra.config(text="Seleccione el diametro nominal de la tubería de lavado []:")
 
 
 
@@ -9193,7 +9222,12 @@ def openFiltroWindow():
 		def on_combobox_select(event):
 			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
-
+			if materialTuberiaLavado.get() == "Acero al carbono API 5L SCH-40" or materialTuberiaLavado.get()== "Acero al carbono API 5L SCH-80" or materialTuberiaLavado.get() == "Policluro de vinilo (PVC) RDE 26" or materialTuberiaLavado.get()=="Policluro de vinilo (PVC) RDE 21":
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [Pulgadas]:")
+				indicador="Pulgadas"
+			else:
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [mm]:")
+				indicador="mm"
 		materialTuberiaLavado = ttk.Combobox(frameverificacionVelocidadesDiseñoTuberiaMain, width="50", state="readonly", values=tuple(opcionesDic.keys()))
 		materialTuberiaLavado.bind("<<ComboboxSelected>>", on_combobox_select)
 		materialTuberiaLavado.set("Material de la tubería de lavado")
@@ -9203,7 +9237,7 @@ def openFiltroWindow():
 
 		diametroNominalTuberiaLavado = ttk.Combobox(frameverificacionVelocidadesDiseñoTuberiaMain, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
-		diametroNominalTuberiaLavadoLabel= Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+		diametroNominalTuberiaLavadoLabel= Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccione el diametro nominal de la tubería de lavado []:",font=("Yu Gothic bold",10))
 
 		#NombrePendiente
 		codoRadio = StringVar()
@@ -9256,7 +9290,7 @@ def openFiltroWindow():
 		
 		#Botones.
 		botonCalcular = HoverButton(frameverificacionVelocidadesDiseñoTuberiaMain, text="Calcular las velocidades de diseño en las tuberías del filtro", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: verificacionVelocidadesDiseñoTuberias(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE))
-		botonNewEntry = HoverButton(frameverificacionVelocidadesDiseñoTuberiaMain, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botonNewEntry = HoverButton(frameverificacionVelocidadesDiseñoTuberiaMain, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas,diametroNominalTuberiaLavadoLabel))
 		botones=[botonCalcular,botonNewEntry]
 		alturaBotones=450
 		for elemento in botones:
@@ -9701,7 +9735,7 @@ def openFiltroWindow():
 
 		botonPerdidaCargaTuberiaLavado_DW = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga en la tubería\n de lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW_HW(valorTemperatura,listaEntradaExtra,d60,listaCaudal)) 
 
-		botonPerdidaCargaTotalLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga total durante\n el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavadoMain(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal) )
+		botonPerdidaCargaTotalLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga total durante\n el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavadoMain(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal))
 
 		botonVerificacionVelocidadesDiseñoTuberias = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Verificación de velocidad de diseño\n en tuberías de filtro durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: verificacionVelocidadesDiseñoTuberiaMain(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal) )
 
@@ -9753,14 +9787,28 @@ def openFiltroWindow():
 		
 		hidraulicaSistemaLavadoMainWindow.mainloop()
 
-	def canaletasDeLavado2(tempValue,d60, listaCaudal, listaExtra, ValorNuevo):
+	def canaletasDeLavado2(tempValue,d60, listaCaudal, listaExtra, ValorNuevo,valorNuevo2):
 		
-		if ValorNuevo.get() == "Ancho de la canaleta":
+		if ValorNuevo.get() == "Ancho":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el ancho de la canaleta")
 			return None
 		else:
 			anchoCanaleta = float(ValorNuevo.get())
-	
+		
+		if valorNuevo2.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta introducir el espaciamiento entre ejes de canaletas.")
+			return None
+		else:
+			try:
+				espaciamientoEntreEjesCanaletas = float(valorNuevo2.get())
+			except:
+				messagebox.showwarning(title="Error", message="El valor introducido en espaciamiento entre ejes de canaletas no es un número.")
+				return None
+		
+		if espaciamientoEntreEjesCanaletas<1.2 or espaciamientoEntreEjesCanaletas>2.0:
+				messagebox.showwarning(title="Error", message="El valor introducido en espaciamiento entre ejes debe estar entre 1.2 y 2")
+				return None
+
 
 
 		canaletasDeLavado2Window = tk.Toplevel()
@@ -9812,7 +9860,7 @@ def openFiltroWindow():
 
 		listacanaletasDeLavado2=list()
 		
-		espaciamientoEntreEjesCanaletas=1.5
+		
 
 		listacanaletasDeLavado2.append(round(espaciamientoEntreEjesCanaletas,3))
 		
@@ -9959,7 +10007,7 @@ def openFiltroWindow():
 						messagebox.showwarning(title="Error", message="Hace falta seleccionar el tipo de entrada del accesorio")
 						return None
 					
-					elif elemento.get() == "Ancho de la canaleta":
+					elif elemento.get() == "Ancho":
 						messagebox.showwarning(title="Error", message="Hace falta seleccionar el ancho de la canaleta")
 						return None
 					else:  
@@ -10188,7 +10236,7 @@ def openFiltroWindow():
 		framecanaletasDeLavadoYDimensionesFiltros= LabelFrame(canaletasDeLavadoYDimensionesFiltrosWindow, text= f"Datos adicionales para el cálculo de la pérdida total a {tasa.lower()} de filtración con lecho limpio",font=("Yu Gothic bold", 11))
 		framecanaletasDeLavadoYDimensionesFiltros.pack(side=TOP,fill=BOTH,expand=True)
 
-		def newEntryFiltroP(lista):
+		def newEntryFiltroP(lista,extraLb):
 			for elemento in lista:
 				if elemento == materialTuberiaLavado:
 					materialTuberiaLavado.set("Material de la tubería de lavado")
@@ -10197,13 +10245,12 @@ def openFiltroWindow():
 				elif elemento==tipoEntrada:
 					elemento.set("Tipo de entrada")
 				elif elemento == AnchoCanaleta:
-					elemento.set("Ancho de la canaleta")
+					elemento.set("Ancho")
 				elif elemento == codoRadio:
 					pass
 				else:
 					elemento.delete(0, END)
-
-		
+			extraLb.config(text="Seleccione el diametro nominal de la tubería de lavado []:")
 
 
 
@@ -10233,6 +10280,12 @@ def openFiltroWindow():
 		def on_combobox_select(event):
 			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
+			if materialTuberiaLavado.get() == "Acero al carbono API 5L SCH-40" or materialTuberiaLavado.get()== "Acero al carbono API 5L SCH-80" or materialTuberiaLavado.get() == "Policluro de vinilo (PVC) RDE 26" or materialTuberiaLavado.get()=="Policluro de vinilo (PVC) RDE 21":
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [Pulgadas]:")
+				indicador="Pulgadas"
+			else:
+				diametroNominalTuberiaLavadoLabel.config(text="Seleccione el diametro nominal de la tubería de lavado [mm]:")
+				indicador="mm"
 
 		materialTuberiaLavado = ttk.Combobox(framecanaletasDeLavadoYDimensionesFiltros, width="50", state="readonly", values=tuple(opcionesDic.keys()))
 		materialTuberiaLavado.bind("<<ComboboxSelected>>", on_combobox_select)
@@ -10243,7 +10296,7 @@ def openFiltroWindow():
 
 		diametroNominalTuberiaLavado = ttk.Combobox(framecanaletasDeLavadoYDimensionesFiltros, width="40", state="readonly")
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
-		diametroNominalTuberiaLavadoLabel= Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione el diametro nominal de la tubería de lavado:",font=("Yu Gothic bold",10))
+		diametroNominalTuberiaLavadoLabel= Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione el diametro nominal de la tubería de lavado []:",font=("Yu Gothic bold",10))
 
 
 
@@ -10262,7 +10315,7 @@ def openFiltroWindow():
 		tipoEntradaName = OptionMenu(framecanaletasDeLavadoYDimensionesFiltros, tipoEntrada, *listaValoresTemp3)
 
 		AnchoCanaleta = StringVar()
-		AnchoCanaleta.set("Ancho de la canaleta")
+		AnchoCanaleta.set("Ancho")
 		listaValoresTemp3=['0.10','0.15','0.20','0.25','0.30','0.35']
 		AnchoCanaletaName = OptionMenu(framecanaletasDeLavadoYDimensionesFiltros, AnchoCanaleta, *listaValoresTemp3)
 
@@ -10274,17 +10327,17 @@ def openFiltroWindow():
 
 		factorFriccionLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione el factor de fricción [0.0001 - 0.1]:", font =("Yu Gothic",9))
 		
-		divisorAccesoriosLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione los tipos de accesorios", font=("Yu Gothic bold",10))
+		divisorAccesoriosLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione los tipos de accesorios:", font=("Yu Gothic bold",10))
 		
 		divisorCanaletasLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione los valores para las canaletas de lavado:", font=("Yu Gothic bold",10))
 		
 		divisorDimensionesYCotasFiltrosLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Seleccione los valores para las dimensiones y cotas en los filtros:", font=("Yu Gothic bold",10))
 
-		alturaVertederoControlLechoFijoLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Introduzca el nivel de vertedero sobre el lecho fijo de arena [0.15m - 0.20m]:", font=("Yu Gothic bold",10))
+		alturaVertederoControlLechoFijoLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Introduzca el nivel de vertedero sobre el lecho fijo de arena [0.15m - 0.20m]:", font=("Yu Gothic",10))
 
-		energiaDisponibleFiltracionLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Introduzca la energía disponible de filtración [1.8m - 2.0m]", font=("Yu Gothic bold",10))
+		energiaDisponibleFiltracionLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Introduzca la energía disponible de filtración [1.8m - 2.0m]", font=("Yu Gothic",10))
 
-		bordeLibreLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Introduzca el valor del borde libre [0.40m - 0.50m]", font=("Yu Gothic bold",10))
+		bordeLibreLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Introduzca el valor del borde libre [0.40m - 0.50m]", font=("Yu Gothic",10))
 
 
 		longitudTuberiaLavado = Entry(framecanaletasDeLavadoYDimensionesFiltros)
@@ -10296,12 +10349,15 @@ def openFiltroWindow():
 		bordeLibre = Entry(framecanaletasDeLavadoYDimensionesFiltros)	
 
 		
-
+		espaciamientoEntreEjesAsumidoLabel = Label(framecanaletasDeLavadoYDimensionesFiltros, text="Espaciamiento entre ejes de canaletas(asumido)[1.2m - 2m]:", font=("Yu Gothic",10))
+		espaciamientoEntreEjes= Entry(framecanaletasDeLavadoYDimensionesFiltros,width=7)	
+		anchoCanaletaLabel= Label(framecanaletasDeLavadoYDimensionesFiltros, text="Ancho de la canaleta [m]:", font=("Yu Gothic",10))
+		
 
 
 
 		listaEntradas=[materialTuberiaLavado, diametroNominalTuberiaLavado, longitudTuberiaLavado, factorFriccion,codoRadio,tipoEntrada,AnchoCanaleta,
-		alturaVertederoControlLechoFijo, energiaDisponibleFiltracion, bordeLibre]
+		alturaVertederoControlLechoFijo, energiaDisponibleFiltracion, bordeLibre,espaciamientoEntreEjes]
 
 		listaLabel=[inicialLabel, materialTuberiaLabel , materialTuberiaLavado, diametroNominalTuberiaLavadoLabel, 
 		diametroNominalTuberiaLavado,longitudTuberiaLavadoLabel, factorFriccionLabel,divisorAccesoriosLabel,tipoEntradaName,
@@ -10312,6 +10368,8 @@ def openFiltroWindow():
 		alturaInicialLabel=20
 		m=0
 		for elemento in listaLabel:
+			if elemento==AnchoCanaletaName:
+				alturaInicialExtra=alturaInicialLabel
 			elemento.place(x=50,y=alturaInicialLabel)
 			alturaInicialLabel+=35
 			m=m+1
@@ -10334,15 +10392,18 @@ def openFiltroWindow():
 						elemento.place(x=400,y=alturaInicialEntradas)
 						alturaInicialEntradas+=35
 
-
+		UbicarFinal=[anchoCanaletaLabel, AnchoCanaletaName,espaciamientoEntreEjesAsumidoLabel, espaciamientoEntreEjes]
+		xUbicacionFinal=[50,220,320,700]
+		for i in range(0,len(UbicarFinal)):
+			UbicarFinal[i].place(x=xUbicacionFinal[i],y=alturaInicialExtra)
 	
 
 		#BotonesCanaletasDimensiones 
-		botonCalcularCanaletas = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Cálculos canaletas de lavado", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: canaletasDeLavado2(TemperatureValue,d60, caudalLista,listaE, listaEntradas[6]))
+		botonCalcularCanaletas = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Cálculos canaletas de lavado", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: canaletasDeLavado2(TemperatureValue,d60, caudalLista,listaE, listaEntradas[6],listaEntradas[10]))
 		botonCalcularDimensionesYCotasFiltros = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Cálculos dimensiones y cotas en los filtros", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: dimensionesYCotasFiltros(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE,tasa))
-		botonNewEntry = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas))
+		botonNewEntry = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas, diametroNominalTuberiaLavadoLabel))
 		botones=[botonCalcularCanaletas, botonCalcularDimensionesYCotasFiltros, botonNewEntry]
-		alturaBotones= alturaInicialEntradas2-10
+		alturaBotones= alturaInicialEntradas2-45
 		for elemento in botones:
 			elemento.place(x=40, y=alturaBotones)
 			alturaBotones= alturaBotones+30
@@ -10358,6 +10419,7 @@ def openFiltroWindow():
 		energiaDisponibleFiltracion.insert(0,"1.8")
 		bordeLibre.insert(0,"0.4")
 		AnchoCanaleta.set("0.15")
+		espaciamientoEntreEjes.insert(0,"1.2")
 		#NOBorrar
 		codoRadio.set('Codo 90° radio mediano (r/d 3)')
 		
