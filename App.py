@@ -4145,10 +4145,10 @@ def openFiltroWindow():
 		
 
 
-		profundidadLechoFijoArenaLabel = Label(frameEstimacionPerdidaArena, text="L = Profundidad del lecho fijo de arena [m]:", font =("Yu Gothic",9))
+		profundidadLechoFijoArenaLabel = Label(frameEstimacionPerdidaArena, text="L = Profundidad del lecho fijo de arena [0.6m - 0.75m]:", font =("Yu Gothic",9))
 		
-		densidadRelativaArenaLabel = Label(frameEstimacionPerdidaArena, text="S{} = Densidad relativa de la arena []:".format(getSub("s")), font =("Yu Gothic",9))
-		porosidadLechoFijoLabel = Label(frameEstimacionPerdidaArena, text=u"\u03B5 ,e = Porosidad del lecho fijo []:", font =("Yu Gothic",9))
+		densidadRelativaArenaLabel = Label(frameEstimacionPerdidaArena, text="S{} = Densidad relativa de la arena [2.5 - 2.7]:".format(getSub("s")), font =("Yu Gothic",9))
+		porosidadLechoFijoLabel = Label(frameEstimacionPerdidaArena, text=u"\u03B5 ,e = Porosidad del lecho fijo [0.4 - 0.48]:", font =("Yu Gothic",9))
 		constanteFiltracionFHLabel = Label(frameEstimacionPerdidaArena, text=u"\u03BA = Constante de Filtración (Fair-Hatch) []:", font =("Yu Gothic",9))
 		
 		
@@ -12238,7 +12238,7 @@ def openFloculadorWindow():
 
 
 	datosEntradaLabel = Label(frameFloculador, text="Datos iniciales: ",font=("Yu Gothic bold",10))
-	caudalDiseñoLabel = Label(frameFloculador, text="QMD = Caudal de diseño [L/s]:",font=("Yu Gothic bold",10))
+	caudalDiseñoLabel = Label(frameFloculador, text="QMD = Caudal de diseño [10 (L/s) - 100(L/s)]:",font=("Yu Gothic bold",10))
 	tiempoFloculacionLabel = Label(frameFloculador, text="T = Tiempo de floculación [min]:",font=("Yu Gothic bold",10))
 	anchoLabel = Label(frameFloculador, text="W = Ancho [m]:",font=("Yu Gothic bold",10))
 	longitudLabel = Label(frameFloculador, text="L = Longitud [m]:",font=("Yu Gothic bold",10))
@@ -12297,7 +12297,7 @@ def openFloculadorWindow():
 			elemento.place(x=20,y=alturaInicial)
 			alturaInicial+=43
 		else:
-			elemento.place(x=450,y=alturaInicial2)
+			elemento.place(x=550,y=alturaInicial2)
 			alturaInicial2+=43
 		control=control+1
 	control=0
@@ -12305,7 +12305,7 @@ def openFloculadorWindow():
 	alturaInicial2=113
 	for elemento in listaEntry:
 		if control<4:
-			elemento.place(x=300,y=alturaInicial)
+			elemento.place(x=330,y=alturaInicial)
 			alturaInicial+=43
 		else:
 			elemento.place(x=770,y=alturaInicial2)
