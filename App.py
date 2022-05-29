@@ -2258,7 +2258,7 @@ def openSedWindow():
 			distanciaPlacasLabel.config(text="Distancia entre placas [cm]:")
 			longitudPlacasLabel.config(text="Longitud ocupada por las placas [m]:")
 			materialTipoCeldaLabel.config(text=f"Seleccione el material de las {tipoCelda.get().lower()}:")	
-			dimensionesCeldaLabel.config(text=f"Seleccione las dimensiones de las {tipoCelda.get().lower()}:",font=("Yu Gothic",8)) 
+			dimensionesCeldaLabel.config(text=f"Seleccione las dimensiones de las {tipoCelda.get().lower()} [mm x mm]:",font=("Yu Gothic",7)) 
 			dimensionesTipoCeldaMaterial.set(f"Seleccione las dimensiones del {tipoCelda.get().lower()}")
 			
 		
@@ -3170,7 +3170,7 @@ def openFiltroWindow():
 			tamañoD10Window = tk.Toplevel()
 			path=resource_path('icons\\agua.ico')
 			tamañoD10Window.iconbitmap(bitmap=path)
-			tamañoD10Window.geometry("1200x300") 
+			tamañoD10Window.geometry("1200x220") 
 			tamañoD10Window.resizable(0,0)	
 			tamañoD10Window.configure(background="#9DC4AA")
 			coeficienteDUFrame10=LabelFrame(tamañoD10Window, text="Tamaño Efectio d{} del medio filtrante".format(getSub(f"{numero}")), font=("Yu Gothic bold", 11))
@@ -3219,11 +3219,11 @@ def openFiltroWindow():
 			lista1.append("(x1,y1)")
 			lista1.append(round(x1,3))
 			lista1.append(round(y1,3))
-			lista1.append(calculo2CU(numero,x1,y1,x2,y2))
+			lista1.append(round((calculo2CU(numero,x1,y1,x2,y2)),3))
 			lista2.append("(x2,y2)")
 			lista2.append(round(x2,3))
 			lista2.append(round(y2,3))
-			lista2.append(calculo2CU(numero,x1,y1,x2,y2))
+			lista2.append(round((calculo2CU(numero,x1,y1,x2,y2)),3))
 			listaInsertar=[lista1,lista2]
 			
 			
@@ -4161,12 +4161,12 @@ def openFiltroWindow():
 		
 		#Borrar
 
-		profundidadLechoFijoArena.insert(0,"0.64")
-		densidadRelativaArena.insert(0,"2.65")
-		porosidadLechoFijo.insert(0,"0.45")
-		constanteFiltracionFH.insert(0,"5")
-		TipoGranoArena.set("Erosionada")
-		Tasa.set("Tasa media")
+		# profundidadLechoFijoArena.insert(0,"0.64")
+		# densidadRelativaArena.insert(0,"2.65")
+		# porosidadLechoFijo.insert(0,"0.45")
+		# constanteFiltracionFH.insert(0,"5")
+		# TipoGranoArena.set("Erosionada")
+		# Tasa.set("Tasa media")
 	
 
 		listaEntradas=[TipoGranoArena, profundidadLechoFijoArena, densidadRelativaArena,
@@ -5199,7 +5199,7 @@ def openFiltroWindow():
 		listaArbolDreanejFiltros.append(round(anchoMultiple,3))
 
 
-		longitudLaterales= (ladoFiltro/2) - (anchoMultiple/2) -0.05
+		longitudLaterales= round(((ladoFiltro/2) - (anchoMultiple/2) -0.05),2)
 		listaArbolDreanejFiltros.append(round(longitudLaterales,3))
 		
 		listaArbolDreanejFiltros.append(distanciaLaterales)
@@ -5219,16 +5219,16 @@ def openFiltroWindow():
 		print(numOrifPUDF, areaOrificiosDic[diametroOrificios],areaFiltro)
 
 
-		areaTotalOrificios= float(numOrifPUDF)*areaOrificiosDic[diametroOrificios]*(1.0/areaFiltro)
+		areaTotalOrificios= round((float(numOrifPUDF)*areaOrificiosDic[diametroOrificios]*(1.0/areaFiltro)),4)
 		listaArbolDreanejFiltros.append(round(areaTotalOrificios,3))
 
 
 
-		areaTransversalDelLateral= areaLateralesDic[diametroLaterales]/(areaOrificiosDic[diametroOrificios]*numOrif)
+		areaTransversalDelLateral= round((areaLateralesDic[diametroLaterales]/(areaOrificiosDic[diametroOrificios]*numOrif)),2)
 		listaArbolDreanejFiltros.append(round(areaTransversalDelLateral,3))
 
 
-		areaTransversalDelMultiple=	anchoSeccion2[seccionTransvMultiple]/(numLatPUDF*areaLateralesDic[diametroLaterales])
+		areaTransversalDelMultiple=	round((anchoSeccion2[seccionTransvMultiple]/(numLatPUDF*areaLateralesDic[diametroLaterales])),2)
 		listaArbolDreanejFiltros.append(round(areaTransversalDelMultiple,3))
 			
 
@@ -5595,11 +5595,11 @@ def openFiltroWindow():
 		
 		#Borrar
 
-		diametroOrificios.set("1/4")
-		distanciaOrificios.set("0.100")
-		seccionTransversal.set("14 X 14")
-		distanciaLaterales.set("0.25")
-		diametroEntreLaterales.set("1 1/2")
+		# diametroOrificios.set("1/4")
+		# distanciaOrificios.set("0.100")
+		# seccionTransversal.set("14 X 14")
+		# distanciaLaterales.set("0.25")
+		# diametroEntreLaterales.set("1 1/2")
 
 
 		
@@ -8337,9 +8337,10 @@ def openFiltroWindow():
 
 		for i in range(0, len(listaValoresTemp)):
 			opcionesDic[listaValoresTemp[i]]=Valores[i] 
-
-		global indicador
+		
+		
 		def on_combobox_select(event):
+			global indicador
 			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
 			if materialTuberiaLavado.get() == "Acero al carbono API 5L SCH-40" or materialTuberiaLavado.get()== "Acero al carbono API 5L SCH-80" or materialTuberiaLavado.get() == "Policluro de vinilo (PVC) RDE 26" or materialTuberiaLavado.get()=="Policluro de vinilo (PVC) RDE 21":
@@ -8415,7 +8416,7 @@ def openFiltroWindow():
 					elemento.place(x=400,y=alturaInicialEntradas)
 					alturaInicialEntradas+=40
 
-		#Botones.#
+		#Botones.
 		
 		botonCalcular = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Calcular la estimación de carga en la tubería de lavado.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTuberiaLavado_DW_HW2_2(listaEntradas,TemperatureValue,listaE, d60,caudalLista,tasa, indicador))
 		botonNewEntry = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas,diametroNominalTuberiaLavadoLabel))
@@ -11176,13 +11177,13 @@ def openFiltroWindow():
 	listaSepnT=[labelSepnT1, labelSepnT2, labelSepnT3, labelSepnT4, labelSepnT5, labelSepnT6, labelSepnT7, labelSepnT8, labelSepnT9, labelSepnT10, labelSepnT11, labelSepnT12]	
 	listaAR=[aR1,aR2,aR3,aR4,aR5,aR6,aR7,aR8,aR9,aR10,aR11,aR12]
 	
-	#Borrar
+	#BorrarFiltro
 	
 	
-	tempAgua.set("3")
-	caudalMedio.insert(0,"0.04404")
+	tempAgua.set("8")
+	caudalMedio.insert(0,"0.0432")
 	listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
-	listaARetenida= [16.20 , 33.70, 33.90, 6.20, 3.50, 3.00, 2.00, 1.0, 0.50]
+	listaARetenida= [16 , 33.70, 33.90, 6.20, 3.00, 3.00, 2.25, 1.25, 0.7]
 	for i in range(0, len(listaNTamiz)):
 		listaNumTamiz[i].insert(0, listaNTamiz[i])
 		listaNumTamiz[i+1].delete(0,END)
