@@ -10,6 +10,114 @@ from functools import partial
 import os,errno,sys,re
 from os import path
 
+import pandas as pd
+import os,errno,sys,re
+from os import path
+import xlsxwriter
+from openpyxl import load_workbook
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
+import pandas as pd
+import os,errno,sys,re
+from os import path
+from os import mkdir
+import xlsxwriter
+from openpyxl import load_workbook
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
+# def PasarExcelDatos(ubicacionDoc,nombreHoja,listaEncabezados,anchoListaEncabezados, listaDatos, anchoListaDatos, listaUnidades, anchoListaUnidades,whetherAdicional,listaAdicional, anchoListaAdicional):
+    
+#     if whetherAdicional == False:
+#         entradaExcel=dict()
+
+#         entradaExcel['Encabezado'] = listaEncabezados
+#         entradaExcel['Valor'] = listaDatos
+#         entradaExcel['Unidades'] = listaUnidades
+
+#         entradaExcelDataFrame = pd.DataFrame(data=entradaExcel)
+#         pathExcel=resource_path(f'{ubicacionDoc}')
+            
+#         writer = pd.ExcelWriter(pathExcel, engine='xlsxwriter')  
+            
+#         entradaExcelDataFrame.to_excel(writer,sheet_name=nombreHoja,index=False,startcol=1,startrow=1)
+#         workbook = writer.book
+#         worksheet = writer.sheets[nombreHoja]
+#         worksheet.set_column('B:B',anchoListaEncabezados) 
+#         worksheet.set_column('C:C', anchoListaDatos) 
+#         worksheet.set_column('D:D', anchoListaUnidades) 
+#         writer.save()
+
+#     else:
+#         entradaExcel=dict()
+
+#         entradaExcel['Encabezado'] = listaEncabezados
+#         entradaExcel['Valor'] = listaDatos
+#         entradaExcel['Unidades'] = listaUnidades
+#         entradaExcel['Adicional'] = listaAdicional
+
+#         entradaExcelDataFrame = pd.DataFrame(data=entradaExcel)
+#         pathExcel=resource_path(f'{ubicacionDoc}')
+
+#         writer = pd.ExcelWriter(pathExcel, engine='xlsxwriter')
+#         entradaExcelDataFrame.to_excel(writer,sheet_name=nombreHoja,index=False,startcol=1,startrow=1)
+#         workbook = writer.book
+#         worksheet = writer.sheets[nombreHoja]
+#         worksheet.set_column('B:B',anchoListaEncabezados) 
+#         worksheet.set_column('C:C', anchoListaDatos) 
+#         worksheet.set_column('D:D', anchoListaUnidades) 
+#         worksheet.set_column('E:E', anchoListaAdicional) 
+#         writer.save()
+# varCarpetas1=False
+# varCarpetas2=False
+# for carpeta in os.listdir("."):
+#     if carpeta == "DatosSalida1":
+#        varCarpetas1= True
+#     if carpeta== "DatosSalida2":
+#         varCarpetas2=True
+
+# if varCarpetas1 == False:
+#     mkdir('DatosSalida1')
+# if varCarpetas2 == False:
+#     mkdir('DatosSalida2')
+    
+# listaEncabezados=["Este es el de 1","Este es el de 2","Este es el de 3",
+#     "Este es el de 4","Este es el de 5",
+#     "Este es el de 6"]
+# listaDatos=[90,2,3,4,5,6]
+# listaUnidades=["m","mm","A","B","AJ","78"]
+# 'DatosSalida\\Prueba.xlsx'
+# listaAd=["","","","","","Esta es Ad"]
+
+
+
+# PasarExcelDatos('DatosSalida1\\Prueba.xlsx','HojaSalida1',listaEncabezados,20,listaDatos,10,listaUnidades,10,False,listaAd,10)
+
+# PasarExcelDatos('DatosSalida2\\Prueba.xlsx','HojaSalida2',listaEncabezados,20,listaDatos,10,listaUnidades,10,False,listaAd,10)
+
+
+
+
+
 class HoverButton(Button):
 		def __init__(self, master, **kw):
 			Button.__init__(self,master=master,**kw)
