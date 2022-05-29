@@ -2352,33 +2352,33 @@ def openSedWindow():
 	diametroNominalOrificionesMultipleDescarga
 	]
 
-	#Borrar
-	listaTemporalEntradas= ["1.3",
-			"1.6",
-			"0.04404",
-			"3",
-			"Floc de alumbre",
-			"Conductos cuadrados",
-			"Polipropileno (PP)",
-			"1200 x 3000",
-			"60.00",
-			"7",
-			"5.00",
-			"5.857",
-			"0.900",
-			"0.600",
-			"0.300",
-			"0.300",
-			"55",
-			"0.10",
-			"0.01",
-			"3/4 (RDE 11)"]
+	#BorrarSed
+	# listaTemporalEntradas= ["1.3",
+	# 		"1.6",
+	# 		"0.04404",
+	# 		"3",
+	# 		"Floc de alumbre",
+	# 		"Conductos cuadrados",
+	# 		"Polipropileno (PP)",
+	# 		"1200 x 3000",
+	# 		"60.00",
+	# 		"7",
+	# 		"5.00",
+	# 		"5.857",
+	# 		"0.900",
+	# 		"0.600",
+	# 		"0.300",
+	# 		"0.300",
+	# 		"55",
+	# 		"0.10",
+	# 		"0.01",
+	# 		"3/4 (RDE 11)"]
 		
-	for i in range(0,len(lista_entradas)):
-		try:
-			lista_entradas[i].set(listaTemporalEntradas[i])
-		except:
-			lista_entradas[i].insert(0, listaTemporalEntradas[i])
+	# for i in range(0,len(lista_entradas)):
+	# 	try:
+	# 		lista_entradas[i].set(listaTemporalEntradas[i])
+	# 	except:
+	# 		lista_entradas[i].insert(0, listaTemporalEntradas[i])
 			
 
 	
@@ -6888,7 +6888,7 @@ def openFiltroWindow():
 		
 		
 		
-		accesoriosLista = ["Válvula de compuerta completamente abierta",
+		accesoriosLista = ["Válvula de compuerta\ncompletamente abierta",
 		"Codo 90° radio corto (r/d 1)",
 		"Codo 90° radio mediano (r/d 3)",
 		"Tee en sentido recto",
@@ -6935,7 +6935,7 @@ def openFiltroWindow():
 			CoeficientePerdidaMenorDic[tuplasEntradas2[i]]= listaValoresCoeficientePerdidaMenor[i]
 
 
-		accesoriosListaEntrada= ["Válvula de compuerta completamente abierta",
+		accesoriosListaEntrada= ["Válvula de compuerta\ncompletamente abierta",
 		f"{listaEU[4]}",
 		"Tee en sentido recto",
 		"Tee en sentido lateral",
@@ -7644,7 +7644,7 @@ def openFiltroWindow():
 		
 		tuplasEntradas2=list()
 
-		accesoriosLista = ["Válvula de compuerta completamente abierta",
+		accesoriosLista = ["Válvula de compuerta\ncompletamente abierta",
 		"Codo 90° radio corto (r/d 1)",
 		"Codo 90° radio mediano (r/d 3)",
 		"Tee en sentido recto",
@@ -7690,7 +7690,7 @@ def openFiltroWindow():
 		for i in range(0,len(listaValoresCoeficientePerdidaMenor)):
 			CoeficientePerdidaMenorDic[tuplasEntradas2[i]]= listaValoresCoeficientePerdidaMenor[i]
 
-		accesoriosListaEntrada= ["Válvula de compuerta completamente abierta",
+		accesoriosListaEntrada= ["Válvula de compuerta\ncompletamente abierta",
 		"Tee en sentido recto",
 		f"{listaEU[5]}",
 		"Salida del tubo"]
@@ -12233,7 +12233,7 @@ def openFloculadorWindow():
 	listaBotones2 = [botonGuiaDiseñoCaudalDiametroInterconexion,
 	botonEspecificacionesTecnicasTuberiasPVC,
 	botonCriteriosFloculadorTipoAlabama]
-	listaBotones=[botonNewEntryFloculador, botonVerCalculos,botonDatosSalidaCamaraPar,botonDatosSalidaCamaraImpar,botonDatosIniciales, botonAyudaVisual]
+	listaBotones=[botonNewEntryFloculador, botonDatosIniciales,botonVerCalculos,botonDatosSalidaCamaraPar,botonDatosSalidaCamaraImpar, botonAyudaVisual]
 
 
 	datosEntradaLabel = Label(frameFloculador, text="Datos iniciales: ",font=("Yu Gothic bold",10))
@@ -12331,20 +12331,20 @@ def openFloculadorWindow():
 		
 
 
-	#Borrar
+	#BorrarFLoc
 
 	# listaEntry= [caudalDiseño,tiempoFloculacion,
 	# 			ancho,longitud,altura,gravedad,temperatura,]
-	listaValores=[30.00,27.00,1.30,1.60,2.75,9.81,20.00]
-	for i in range(0, len(listaValores)):	
-		if i == 5:
-			pass
-		elif i == 1:
-			listaEntry[i].set(27)
-		elif i==6:
-			listaEntry[i].set(20)
-		else:
-			listaEntry[i].insert(0, listaValores[i])
+	# listaValores=[30.00,27.00,1.30,1.60,2.75,9.81,20.00]
+	# for i in range(0, len(listaValores)):	
+	# 	if i == 5:
+	# 		pass
+	# 	elif i == 1:
+	# 		listaEntry[i].set(27)
+	# 	elif i==6:
+	# 		listaEntry[i].set(20)
+	# 	else:
+	# 		listaEntry[i].insert(0, listaValores[i])
 
 	floculadorWindow.mainloop()
 
