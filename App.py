@@ -14,6 +14,16 @@ import xlsxwriter
 
 
 def resource_path(relative_path):
+	""" Get absolute path to resource, works for dev and for PyInstaller """
+	try:
+		# PyInstaller creates a temp folder and stores path in _MEIPASS
+		base_path = sys._MEIPASS
+	except Exception:
+		base_path = os.path.abspath(".")
+	return os.path.join(base_path, relative_path)
+
+
+def resource_path2(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     # try:
     #     # PyInstaller creates a temp folder and stores path in _MEIPASS
@@ -22,7 +32,6 @@ def resource_path(relative_path):
     base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
-
 
 
 
@@ -38,7 +47,7 @@ def PasarExcelDatos(ubicacionDoc,nombreHoja,listaEncabezados,anchoListaEncabezad
 			entradaExcel['Unidades'] = listaUnidades
 
 			entradaExcelDataFrame = pd.DataFrame(data=entradaExcel)
-			pathExcel=resource_path(f'{ubicacionDoc}')
+			pathExcel=resource_path2(f'{ubicacionDoc}')
 				
 			writer = pd.ExcelWriter(pathExcel, engine='xlsxwriter')  
 				
@@ -59,7 +68,7 @@ def PasarExcelDatos(ubicacionDoc,nombreHoja,listaEncabezados,anchoListaEncabezad
 			entradaExcel['Adicional'] = listaAdicional
 
 			entradaExcelDataFrame = pd.DataFrame(data=entradaExcel)
-			pathExcel=resource_path(f'{ubicacionDoc}')
+			pathExcel=resource_path2(f'{ubicacionDoc}')
 
 			writer = pd.ExcelWriter(pathExcel, engine='xlsxwriter')
 			entradaExcelDataFrame.to_excel(writer,sheet_name=nombreHoja,index=False,startcol=1,startrow=1)
@@ -82,7 +91,7 @@ def pasarTreeViewExcel(colsDatos,arbol,ruta):
 			entradaExcel[arbol["columns"][i]] = colsDatos[i]
 
 		entradaExcelDataFrame = pd.DataFrame(data=entradaExcel)
-		pathExcel=resource_path(f'{ruta}')
+		pathExcel=resource_path2(f'{ruta}')
 			
 		writer = pd.ExcelWriter(pathExcel, engine='xlsxwriter')  
 			
@@ -202,7 +211,7 @@ def openSedWindow():
 			else:
 				lista[i].delete(0, END)
 		
-		listaReiLabels= ["Ángulo de inclinación [°]:", "Distancia del tipo de celda [cm]:","Longitud del tipo de celda [m]:",
+		listaReiLabels= ["Ángulo de inclinación [°]:", "Distancia del tipo de celda [5cm - 6cm]:","Longitud del tipo de celda [2m - 12m]:",
 		"Seleccione el material del tipo de celda:","Seleccione las dimensiones del tipo de celda [mm x mm]:"]		
 		for m in range(0, len(lista2)):
 			lista2[m].config(text = listaReiLabels[m], font=("Yu Gothic",8))
@@ -2308,8 +2317,8 @@ def openSedWindow():
 			materialTipoCelda.set(f"Seleccione el material de los {tipoCelda.get().lower()}")
 			materialTipoCelda.config(values=oP2[tipoCelda.get()])
 			anguloInclinacionLabel.config(text=f"Ángulo de inclinación de {tipoCelda.get().lower()} [°]:")
-			distanciaPlacasLabel.config(text=f"Lado interno de {tipoCelda.get().lower()} [cm]:")
-			longitudPlacasLabel.config(text="Longitud ocupada por los módulos [m]:")
+			distanciaPlacasLabel.config(text=f"Lado interno de {tipoCelda.get().lower()} [5cm - 6cm]:")
+			longitudPlacasLabel.config(text="Longitud ocupada por los módulos [2m - 12m]:")
 			materialTipoCeldaLabel.config(text=f"Seleccione el material los {tipoCelda.get().lower()}:")	
 			dimensionesCeldaLabel.config(text=f"Seleccione las dimensiones de la sección tranversal inclinada [mm x mm]:", font=("Yu Gothic",7))	
 			dimensionesTipoCeldaMaterial.set(f"Seleccione las dimensiones del {tipoCelda.get().lower()}")
@@ -2320,8 +2329,8 @@ def openSedWindow():
 			materialTipoCelda.set(f"Seleccione el material de las {tipoCelda.get().lower()}")
 			materialTipoCelda.config(values=oP2[tipoCelda.get()])
 			anguloInclinacionLabel.config(text=f"Ángulo de inclinación {tipoCelda.get().lower()} [°]:")
-			distanciaPlacasLabel.config(text="Distancia entre placas [cm]:")
-			longitudPlacasLabel.config(text="Longitud ocupada por las placas [m]:")
+			distanciaPlacasLabel.config(text="Distancia entre placas [5cm - 6cm]:")
+			longitudPlacasLabel.config(text="Longitud ocupada por las placas [2m - 12m]:")
 			materialTipoCeldaLabel.config(text=f"Seleccione el material de las {tipoCelda.get().lower()}:")	
 			dimensionesCeldaLabel.config(text=f"Seleccione las dimensiones de las {tipoCelda.get().lower()} [mm x mm]:",font=("Yu Gothic",7)) 
 			dimensionesTipoCeldaMaterial.set(f"Seleccione las dimensiones del {tipoCelda.get().lower()}")
@@ -2374,13 +2383,13 @@ def openSedWindow():
 	numeroUnidades.set("Seleccione el número de unidades")
 	distanciaPlacas = Entry(frameSed, width=6)
 	longitudPlacas = Entry(frameSed,width=6)
-	distanciaCanaletasRecoleccion = Entry(frameSed)
-	distanciaVerticalDistribucionPlacas = Entry(frameSed)
-	bordeLibre = Entry(frameSed)
-	espesorMuros = Entry(frameSed)
-	pendienteTransversalTolva = Entry(frameSed)
-	anchoBasePlanaTolva = Entry(frameSed)
-	velocidadMinimaArrastre = Entry(frameSed)
+	distanciaCanaletasRecoleccion = Entry(frameSed,width=15)
+	distanciaVerticalDistribucionPlacas = Entry(frameSed,width=15)
+	bordeLibre = Entry(frameSed,width=15)
+	espesorMuros = Entry(frameSed,width=15)
+	pendienteTransversalTolva = Entry(frameSed,width=15)
+	anchoBasePlanaTolva = Entry(frameSed,width=15)
+	velocidadMinimaArrastre = Entry(frameSed, width=15)
 
 	diametroNominalLista= ['1/2 (RDE 9)',
 		'3/4 (RDE 11)',
@@ -2449,22 +2458,22 @@ def openSedWindow():
 	
 	
 	labelIntroduccion = Label(frameSed, text="Datos de entrada para parámetros básicos: ",font=("Yu Gothic bold",10))
-	caudalDiseñoLabel = Label(frameSed, text="Caudales de diseño", font =("Yu Gothic bold",10))
-	factorMayoracionCaudalMDLabel = Label(frameSed, text="Factor de mayoración del caudal máximo diario [m^3/s]:", font =("Yu Gothic",9))
-	factorMayoracionCaudalMHLabel = Label(frameSed, text="Factor de mayoración del caudal máximo horario [m^3/s]:", font =("Yu Gothic",9))
-	caudalEntryLabel = Label(frameSed, text="Caudal de diseño [m^3/s]: ", font =("Yu Gothic",9))
+	caudalDiseñoLabel = Label(frameSed, text="Caudales de diseño:", font =("Yu Gothic bold",8))
+	factorMayoracionCaudalMDLabel = Label(frameSed, text="Factor de mayoración del caudal máximo diario [1 - 1.3] m^3/s:", font =("Yu Gothic",8))
+	factorMayoracionCaudalMHLabel = Label(frameSed, text="Factor mayoración del caudal máximo horario [0.01 - 0.2] m^3/s:", font =("Yu Gothic",8))
+	caudalEntryLabel = Label(frameSed, text="Caudal de diseño [[0.01 - 0.2]m^3/s]: ", font =("Yu Gothic",9))
 	propiedadesFisicasAguaLabel = Label(frameSed, text="Propiedades físicas del agua a tratar.\nSeleccione la temperatura del agua:", font =("Yu Gothic bold",10))
 	datosEntradaParametrosBasicosLabel = Label(frameSed, text="Datos de entrada para parámetros básicos.", font =("Yu Gothic bold",10))
 	anguloInclinacionLabel = Label(frameSed, text="Ángulo de inclinación [°]:", font =("Yu Gothic",8))
-	distanciaPlacasLabel = Label(frameSed, text="Distancia del tipo de celda [cm]:", font =("Yu Gothic",8))
-	longitudPlacasLabel = Label(frameSed, text="Longitud del tipo de celda [m]:", font =("Yu Gothic",8))
-	distanciaCanaletasRecoleccionLabel = Label(frameSed, text="Distancia entre las canaletas de recolección [m]: ", font =("Yu Gothic",9))
-	distanciaVerticalDistribucionPlacasLabel = Label(frameSed, text="Distancia vertical de orificios de distribución [m]:", font =("Yu Gothic",9))	
-	bordeLibreLabel= Label(frameSed, text="Borde libre [m]:", font =("Yu Gothic",9))	
-	espesorMurosLabel = Label(frameSed, text="Espesor de muros de concreto [m]:", font =("Yu Gothic",9))	
-	pendienteTransversalTolvaLabel = Label(frameSed, text="Pendiente transversal de la tolva de lodos [°]:", font =("Yu Gothic",9))	
-	anchoBasePlanaTolvaLabel = Label(frameSed, text="Ancho de la base plana de la tolva de lodos [m]:", font =("Yu Gothic",9))	
-	velocidadMinimaArrastreLabel = Label(frameSed, text="Velocidad mínima de arrastre asignada [m/s]", font =("Yu Gothic",9))	
+	distanciaPlacasLabel = Label(frameSed, text="Distancia del tipo de celda [5cm - 6cm]:", font =("Yu Gothic",8))
+	longitudPlacasLabel = Label(frameSed, text="Longitud del tipo de celda [2m - 12m]:", font =("Yu Gothic",8))
+	distanciaCanaletasRecoleccionLabel = Label(frameSed, text="Distancia entre las canaletas de recolección [0.9m - 1.2m]: ", font =("Yu Gothic",8))
+	distanciaVerticalDistribucionPlacasLabel = Label(frameSed, text="Distancia vertical de orificios de distribución [0.6m y 0.9m]:", font =("Yu Gothic",8))	
+	bordeLibreLabel= Label(frameSed, text="Borde libre [0.3m - 0.5m]:", font =("Yu Gothic",8))	
+	espesorMurosLabel = Label(frameSed, text="Espesor de muros de concreto [0.3m - 0.5m]:", font =("Yu Gothic",8))	
+	pendienteTransversalTolvaLabel = Label(frameSed, text="Pendiente transversal de la tolva de lodos [45° - 60°]:", font =("Yu Gothic",8))	
+	anchoBasePlanaTolvaLabel = Label(frameSed, text="Ancho de la base plana de la tolva de lodos [0.1m - 0.2m]:", font =("Yu Gothic",8))	
+	velocidadMinimaArrastreLabel = Label(frameSed, text="Velocidad mínima de arrastre asignada [0.01 m/s - 0.02 m/s]", font =("Yu Gothic",8))	
 
 	
 	tipoFlocLabel = Label(frameSed, text="Seleccione el tipo de floc:", font =("Yu Gothic",8))	
@@ -2609,7 +2618,7 @@ def openSedWindow():
 					listaLabels[i].place(x=800, y=yInicial3+30)
 					yInicial3=yInicial3 + 30
 				else:
-					lista_entradas[j].place(x=1100, y=yInicial3)
+					lista_entradas[j].place(x=1123, y=yInicial3)
 					listaLabels[i].place(x=800, y=yInicial3)
 					yInicial3=yInicial3 + 30
 				
