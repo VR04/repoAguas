@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 import tkinter as tk
-from numpy import mat
+# from numpy import mat
 import pandas as pd
 from math import pi,sin,cos,tan,sqrt,log10
 from functools import partial
@@ -11,7 +11,7 @@ import os,errno,sys,re
 from os import mkdir
 from os import path
 import xlsxwriter
-from openpyxl import load_workbook
+
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -72,11 +72,32 @@ def PasarExcelDatos(ubicacionDoc,nombreHoja,listaEncabezados,anchoListaEncabezad
 			writer.save()
 	except: 
 		messagebox.showwarning(message=f"No fue posible crear el documento en la ubicación {ubicacionDoc} porque está en uso. Ciérrelo y vuelta a intentarlo", title= "Error")
-		
 
+def pasarTreeViewExcel(colsDatos,arbol,ruta):
+	try:
+		entradaExcel=dict()
+		
+		for i in range(0,len(arbol["columns"])):
+			entradaExcel[arbol["columns"][i]] = colsDatos[i]
+
+		entradaExcelDataFrame = pd.DataFrame(data=entradaExcel)
+		pathExcel=resource_path(f'{ruta}')
+			
+		writer = pd.ExcelWriter(pathExcel, engine='xlsxwriter')  
+			
+		entradaExcelDataFrame.to_excel(writer,sheet_name='Resultados',index=False,startcol=1,startrow=1)
+		workbook = writer.book
+		worksheet = writer.sheets['Resultados']
+		worksheet.set_column('B:L',40) 
+		writer.save()
+	except: 
+		messagebox.showwarning(message=f"No fue posible crear el documento en la ubicación {ruta} porque está en uso. Ciérrelo y vuelta a intentarlo", title= "Error")
+		
 varCarpetas1=False
 varCarpetas2=False
 varCarpetas3=False
+
+print(os.path.abspath("."))
 for carpeta in os.listdir("."):
 	if carpeta == "ResultadosFloculador":
 		varCarpetas1= True
@@ -107,16 +128,6 @@ class HoverButton(Button):
 		def on_leave(self, e):
 			self["background"] = self.defaultBackground  
 
-
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
 
 def proyectarImg(archivo,dim1,dim2):
 		forWindow= tk.Toplevel()
@@ -179,32 +190,6 @@ def openSedWindow():
 	style.configure("Treeview.Heading", foreground="black", font =("Courier",12))
 	#Change selected color
 	style.map("Treeview", background=[("selected", "#09C5CE")])	 
-
-	def calcularSed(lista_ent):
-		lista_entry=[0]*20
-		
-		for entryID in range(0,len(lista_ent)):
-			try:
-				if entryID == 4:				
-					
-					lista_entry[entryID]= lista_ent[entryID].get()
-					
-				else: 
-										
-					lista_entry[entryID]=(float(lista_ent[entryID].get()))
-				
-			except:
-				messagebox.showwarning(message="El ingreso de datos es erróneo, vuelva a intentarlo", title= "¡Cuidado!")
-				return None
-			
-
-
-		if lista_entry[10]>60.0 or lista_entry[10]<45:
-			messagebox.showwarning(message="El valor del ángulo de inclinación de la placa debe estar entre 45° y 60°", title= "¡Cuidado!")
-			return None
-
-			
-	
 
 
 	def newDataTreeview(tree,listaS):
@@ -395,7 +380,7 @@ def openSedWindow():
 		sedScrollY.configure(command=arbolparametrosDeDiseñoSedimentadorAltaTasa.yview)
 		#Define columnas.
 		arbolparametrosDeDiseñoSedimentadorAltaTasa["columns"]= (
-		"1","2","Unidades")
+		"1","Valores","Unidades")
 
 		#Headings
 		arbolparametrosDeDiseñoSedimentadorAltaTasa.heading("#0",text="ID", anchor=CENTER)
@@ -596,7 +581,7 @@ def openSedWindow():
 		sedScrollY.configure(command=arboldeterminacionParametrosBasicosDiseno.yview)
 		#Define columnas.
 		arboldeterminacionParametrosBasicosDiseno["columns"]= (
-		"Presione para ver Excel","2","Unidades","Adicionales")
+		"Presione para ver Excel","Valores","Unidades","Adicionales")
 		
 		
 
@@ -863,7 +848,7 @@ def openSedWindow():
 		#sedScrollY.configure(command=arbolcanaletasRecoleccionAgua.yview)
 		#Define columnas.
 		arbolcanaletasRecoleccionAgua["columns"]= (
-		"Presione para ver excel","2","Unidades")
+		"Presione para ver excel","Valores","Unidades")
 
 		#Headings
 		arbolcanaletasRecoleccionAgua.heading("#0",text="ID", anchor=CENTER)
@@ -1044,7 +1029,7 @@ def openSedWindow():
 		#sedScrollY.configure(command=arboltiempoRetencionTotalTanque.yview)
 		#Define columnas.
 		arboltiempoRetencionTotalTanque["columns"]= (
-		"Presione para ver la excel","2","Unidades")
+		"Presione para ver la excel","Valores","Unidades")
 
 		#Headings
 		arboltiempoRetencionTotalTanque.heading("#0",text="ID", anchor=CENTER)
@@ -1295,7 +1280,7 @@ def openSedWindow():
 		sedScrollY.configure(command=arboldimensionesDelSedimentador.yview)
 		#Define columnas.
 		arboldimensionesDelSedimentador["columns"]= (
-		"Presione para ver excel","2","Unidades")
+		"Presione para ver excel","Valores","Unidades")
 
 		#Headings
 		arboldimensionesDelSedimentador.heading("#0",text="ID", anchor=CENTER)
@@ -1594,7 +1579,7 @@ def openSedWindow():
 		sedScrollY.configure(command=arboldisenoSistemaEvacuacionLodos.yview)
 		#Define columnas.
 		arboldisenoSistemaEvacuacionLodos["columns"]= (
-		"Presione para ver excel","2","Unidades")
+		"Presione para ver excel","Valores","Unidades")
 
 		#Headings
 		arboldisenoSistemaEvacuacionLodos.heading("#0",text="ID", anchor=CENTER)
@@ -1864,7 +1849,7 @@ def openSedWindow():
 		# sedScrollY.configure(command=arbolCaudalesDiseño.yview)
 		#Define columnas.
 		arbolCaudalesDiseño["columns"]= (
-		"1","2","Unidades")
+		"1","Valores","Unidades")
 
 		
 
@@ -1874,7 +1859,7 @@ def openSedWindow():
 
 
 		for col in arbolCaudalesDiseño["columns"]:
-			arbolCaudalesDiseño.heading(col, text=col,anchor=CENTER, command=lambda: print("Img") )	
+			arbolCaudalesDiseño.heading(col, text=col,anchor=CENTER)	
 
 		arbolCaudalesDiseño.column("#1",width=300, stretch=False)
 		arbolCaudalesDiseño.column("#2",width=100, stretch=False)
@@ -1962,7 +1947,7 @@ def openSedWindow():
 		# sedScrollY.configure(command=arbolpropiedadesFisicasAgua.yview)
 		#Define columnas.
 		arbolpropiedadesFisicasAgua["columns"]= (
-		"1","2","Unidades")
+		"1","Valores","Unidades")
 
 
 
@@ -2182,7 +2167,7 @@ def openSedWindow():
 		sedScrollY.configure(command=arbolVerDatosParametrosEntrada.yview)
 		#Define columnas.
 		arbolVerDatosParametrosEntrada["columns"]= (
-		"1","2","Unidades")
+		"1","Valores","Unidades")
 
 
 
@@ -2192,7 +2177,7 @@ def openSedWindow():
 
 
 		for col in arbolVerDatosParametrosEntrada["columns"]:
-			arbolVerDatosParametrosEntrada.heading(col, text=col,anchor=CENTER, command=lambda: print("Img") )	
+			arbolVerDatosParametrosEntrada.heading(col, text=col,anchor=CENTER)	
 
 		arbolVerDatosParametrosEntrada.column("#1",width=400, stretch=False)
 		arbolVerDatosParametrosEntrada.column("#2",width=200, stretch=False)
@@ -2447,32 +2432,32 @@ def openSedWindow():
 	]
 
 	#BorrarSed
-	listaTemporalEntradas= ["1.3",
-			"1.6",
-			"0.04404",
-			"3",
-			"Floc de alumbre",
-			"Conductos cuadrados",
-			"Polipropileno (PP)",
-			"1200 x 3000",
-			"60.00",
-			"7",
-			"5.00",
-			"5.857",
-			"0.900",
-			"0.600",
-			"0.300",
-			"0.300",
-			"55",
-			"0.10",
-			"0.01",
-			"3/4 (RDE 11)"]
+	# listaTemporalEntradas= ["1.3",
+	# 		"1.6",
+	# 		"0.04404",
+	# 		"3",
+	# 		"Floc de alumbre",
+	# 		"Conductos cuadrados",
+	# 		"Polipropileno (PP)",
+	# 		"1200 x 3000",
+	# 		"60.00",
+	# 		"7",
+	# 		"5.00",
+	# 		"5.857",
+	# 		"0.900",
+	# 		"0.600",
+	# 		"0.300",
+	# 		"0.300",
+	# 		"55",
+	# 		"0.10",
+	# 		"0.01",
+	# 		"3/4 (RDE 11)"]
 		
-	for i in range(0,len(lista_entradas)):
-		try:
-			lista_entradas[i].set(listaTemporalEntradas[i])
-		except:
-			lista_entradas[i].insert(0, listaTemporalEntradas[i])
+	# for i in range(0,len(lista_entradas)):
+	# 	try:
+	# 		lista_entradas[i].set(listaTemporalEntradas[i])
+	# 	except:
+	# 		lista_entradas[i].insert(0, listaTemporalEntradas[i])
 			
 
 	
@@ -2789,7 +2774,12 @@ def openFiltroWindow():
 					iid=count, tags=("oddrow",))
 				count=count+1
 		# Pediente
-		# PasarExcelDatos("ResultadosFiltro\\PrincipalesCaracteristicasFiltros.xlsx",'Resultados',col1,50, col2, 50, ['','','','','','','','','','','',''], 15,False,[], 50)
+		colsDatos=[col1,col2]
+
+		pasarTreeViewExcel(colsDatos,arbolCaracFiltro,'ResultadosFiltro\\VerPrincipalesCaracteristicasDelFiltro.xlsx')
+		
+		
+		
 		caracFiltroWindow.mainloop()
 
 	def granulometria(lista1,lista2):
@@ -2983,27 +2973,41 @@ def openFiltroWindow():
 				listaNTamizSinRepeticion.append(elemento)
 				guardado=elemento
 	
-				
+		col1=list()
+		col2=list()
+		col3=list()
+		col4=list()
+		col5=list()
+		col6=list()
+		col7=list()
+
 
 		longListaARetenida=len(listaARetenida)-1
 		for ind in range(0, len(listaARetenida)):
 			listaEntradaTemp.clear()
 			
 			listaEntradaTemp.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+			col1.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
 			extremoDerecho=listaNTamizExtremo[ind]
 			listaEntradaTemp.append(listaARetenida[ind])
+			col2.append(listaARetenida[ind])
 			listaEntradaTemp.append(extremoDerecho)
+			col3.append(extremoDerecho)
 			listaEntradaTemp.append(tablaTamañoAberturaTamiz[extremoDerecho])
+			col4.append(tablaTamañoAberturaTamiz[extremoDerecho])
 			listaEntradaTemp.append(round(listaAcumuladoArenaDescendente[ind],3))
+			col5.append(round(listaAcumuladoArenaDescendente[ind],3))
 			listaEntradaTemp.append(round(tablaTamañoAberturaTamiz[listaNTamizExtremo[longListaARetenida-ind]],3))
+			col6.append(round(tablaTamañoAberturaTamiz[listaNTamizExtremo[longListaARetenida-ind]],3))
 			listaEntradaTemp.append(round(listaAcumuladoArenaAscendente[ind],3))
+			col7.append(round(listaAcumuladoArenaAscendente[ind],3))
 			listaIntermedia = listaEntradaTemp.copy()
 			datosSalida.append(listaIntermedia)
 			newDataTreeview(arbolGranulometria, listaEntradaTemp)
 		
-
-		
-		#Pendiente
+		colsDatos=[col1,col2,col3,col4,col5,col6,col7]
+		#volver
+		pasarTreeViewExcel(colsDatos,arbolGranulometria,'ResultadosFiltro\\GranulometriaMedioFiltranteArena.xlsx')
 
 		
 
@@ -3261,6 +3265,13 @@ def openFiltroWindow():
 		listaIngreso=[round(d10,3),round(d60,3),round(CU,3)]
 		
 		newDataTreeview(arbolCoeficienteDU,listaIngreso)
+
+		
+		col1=[round(d10,3)]
+		col2=[round(d60,3)]
+		col3=[round(CU,3)]
+		DatosCols=[col1,col2,col3]
+		pasarTreeViewExcel(DatosCols,arbolCoeficienteDU,'ResultadosFiltro\\CoeficienteDeUniformidad.xlsx')
 
 		def tamañod(x1,y1,x2,y2,numero):
 			tamañoD10Window = tk.Toplevel()
@@ -3717,28 +3728,41 @@ def openFiltroWindow():
 
 			valorFH= (listaEU[4]*listaEU[5])*((1-listaEU[3])**2)*listaEU[1]*(listaEU[10]/86400.0)*((6/listaEU[6])**2)*(1/9.806)*((1/listaEU[3])**3)*sumaFH
 			
-
+			colFH1=list()
+			colFH2=list()
+			colFH3=list()
+			colFH4=list()
+			colFH5=list()
+			colFH6=list()
+			colFH7=list()
+			
 			for ind in range(0, len(listaARetenida)):
 				listaEntradaTemp1.clear()
 				listaEntradaTemp1.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+				colFH1.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
 				arenaRenetinda=listaARetenida[ind]
 				listaEntradaTemp1.append(arenaRenetinda)
-				
-
+				colFH2.append(arenaRenetinda)
 				extremoDerecho=listaNTamizExtremoD[ind]
 				extremoIzquierdo=listaNTamizExtremoI[ind]
 				tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
 				tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
 				listaEntradaTemp1.append(tamañoSuperior)
+				colFH3.append(tamañoSuperior)
 				listaEntradaTemp1.append(tamañoInferior)
+				colFH4.append(tamañoInferior)
 				tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
 				listaEntradaTemp1.append(round(tamañoPromedioGeo,3))
+				colFH5.append(round(tamañoPromedioGeo,3))
 				valorEnSuma= (arenaRenetinda/100)/((tamañoPromedioGeo/1000)**2)
 				listaEntradaTemp1.append(round(valorEnSuma,3))
-				
+				colFH6.append(round(valorEnSuma,3))
 				listaEntradaTemp1.append(round(valorFH,3))
+				colFH7.append(round(valorFH,3))
 				newDataTreeview(arbolEstimacionPerdidaArenaFH, listaEntradaTemp1)
-		
+			
+			colsDatos=[colFH1,colFH2,colFH3,colFH4,colFH5,colFH6,colFH7]
+			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaFH,'ResultadosFiltro\\FH_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
 				
 			
 			#DatosPara2
@@ -3797,35 +3821,57 @@ def openFiltroWindow():
 			
 			
 			valorCoefPermeabilidad = (tablaTemperaturaDensidad[valorTemperatura]*9.806)*(1/tablaTemperaturaViscosidadDinamica[valorTemperatura])*(1/listaEU[4])*((1/listaEU[8])**2)*(listaEU[3]**3)*(1/(1-listaEU[3]))*(sumaCKsinF**(-2))
-
+			ColCK1 =list()
+			ColCK2 =list()
+			ColCK3 =list()
+			ColCK4 =list()
+			ColCK5 =list()
+			ColCK6 =list()
+			ColCK7 =list()
+			ColCK8 =list()
+			ColCK9 =list()
+			ColCK10 =list()
+			ColCK11 =list()
 
 			for ind in range(0, len(listaARetenida)):
 				listaEntradaTemp2.clear()
 				listaEntradaTemp2.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+				ColCK1.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+
 				arenaRenetinda=listaARetenida[ind]
 				listaEntradaTemp2.append(arenaRenetinda)
+				ColCK2.append(arenaRenetinda)
 				extremoDerecho=listaNTamizExtremoD[ind]
 				extremoIzquierdo=listaNTamizExtremoI[ind]
 				tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
 				tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
 				listaEntradaTemp2.append(tamañoSuperior)
+				ColCK3.append(tamañoSuperior)
 				listaEntradaTemp2.append(tamañoInferior)
+				ColCK4.append(tamañoInferior)
 				tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
 				listaEntradaTemp2.append(round(tamañoPromedioGeo,3))
+				ColCK5.append(round(tamañoPromedioGeo,3))
 				Reynolds2=listaEU[6]*(tamañoPromedioGeo/1000)*(listaEU[10]/86400)*(1/listaEU[5])
 				listaEntradaTemp2.append(round(Reynolds2,3))
+				ColCK6.append(round(Reynolds2,3))
 				friccion2=150*((1-listaEU[3])/Reynolds2)+1.75
 				listaEntradaTemp2.append(round(friccion2,6))
+				ColCK7.append(round(friccion2,6))
 				valorSuma2= friccion2*(arenaRenetinda/100)*(1/(tamañoPromedioGeo/1000))
 				listaEntradaTemp2.append(round(valorSuma2,3))
+				ColCK8.append(round(valorSuma2,3))
 				listaEntradaTemp2.append(round(valorCK,3))
+				ColCK9.append(round(valorCK,3))
 				valorSuma2_2= (arenaRenetinda/100)*(1/(tamañoPromedioGeo/1000))
 				listaEntradaTemp2.append(round(valorSuma2_2,3))
+				ColCK10.append(round(valorSuma2_2,3))
 				listaEntradaTemp2.append(round(valorCoefPermeabilidad,3))
-
-
+				ColCK11.append(round(valorCoefPermeabilidad,3))
 				newDataTreeview(arbolEstimacionPerdidaArenaCK, listaEntradaTemp2)
-				
+			
+			colsDatos= [ColCK1,ColCK2,ColCK3,ColCK4,ColCK5,ColCK6,ColCK7,ColCK8,ColCK9,ColCK10,ColCK11]
+			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaCK,'ResultadosFiltro\\CK_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
 			#DatosPara3
 
 			'''(
@@ -3867,30 +3913,49 @@ def openFiltroWindow():
 
 			valorR= 1.067*((listaEU[10]/86400.0)**2)*listaEU[1]*(1/9.806)*((1/listaEU[3])**4)*(1/listaEU[7])*sumaR
 
-			
+			colR1=list()
+			colR2=list()
+			colR3=list()
+			colR4=list()
+			colR5=list()
+			colR6=list()
+			colR7=list()
+			colR8=list()
+			colR9=list()
 			for ind in range(0, len(listaARetenida)):
 				listaEntradaTemp3.clear()
 				listaEntradaTemp3.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+				colR1.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
 				arenaRenetinda=listaARetenida[ind]
 				listaEntradaTemp3.append(arenaRenetinda)
+				colR2.append(arenaRenetinda)
 				extremoDerecho=listaNTamizExtremoD[ind]
 				extremoIzquierdo=listaNTamizExtremoI[ind]
 				tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
 				tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
 				listaEntradaTemp3.append(tamañoSuperior)
+				colR3.append(tamañoSuperior)
 				listaEntradaTemp3.append(tamañoInferior)
+				colR4.append(tamañoInferior)
 				tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
 				listaEntradaTemp3.append(round(tamañoPromedioGeo,3))
+				colR5.append(round(tamañoPromedioGeo,3))
 				Reynolds3= (tamañoPromedioGeo/1000)*(listaEU[10]/86400.0)/listaEU[5]
 				listaEntradaTemp3.append(round(Reynolds3,3))
+				colR6.append(round(Reynolds3,3))
 				Cd=24/Reynolds3 + 3/sqrt(Reynolds3)+0.34
 				listaEntradaTemp3.append(round(Cd,3))
+				colR7.append(round(Cd,3))
 				Suma3=Cd*(arenaRenetinda/100)*(1000/tamañoPromedioGeo)
 				listaEntradaTemp3.append(round(Suma3,3))
+				colR8.append(round(Suma3,3))
 				listaEntradaTemp3.append(round(valorR,3))
+				colR9.append(round(valorR,3))
 				newDataTreeview(arbolEstimacionPerdidaArenaR, listaEntradaTemp3)
-
+			colsDatos=[colR1,colR2,colR3,colR4,colR5,colR6,colR7,colR8,colR9]
+			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaR,'ResultadosFiltro\\Rose_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
 			estimacionPerdidaArenaCalculoWindow.mainloop()
+
 			
 		else: #Inicio
 			
@@ -4081,30 +4146,49 @@ def openFiltroWindow():
 			
 			
 			valorR= 1.067*((listaEU[10]/86400.0)**2)*listaEU[1]*(1/9.806)*(1/((listaEU[3])**4))*(1/listaEU[7])*sumaR
-
+			colR1=list()
+			colR2=list()
+			colR3=list()
+			colR4=list()
+			colR5=list()
+			colR6=list()
+			colR7=list()
+			colR8=list()
+			colR9=list()
 			
 			for ind in range(0, len(listaARetenida)):
 				listaEntradaTemp3.clear()
 				listaEntradaTemp3.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
+				colR1.append(f"{listaNTamizSinRepeticion[ind]} - {listaNTamizSinRepeticion[ind+1]}")
 				arenaRenetinda=listaARetenida[ind]
 				listaEntradaTemp3.append(arenaRenetinda)
+				colR2.append(arenaRenetinda)
 				extremoDerecho=listaNTamizExtremoD[ind]
 				extremoIzquierdo=listaNTamizExtremoI[ind]
 				tamañoSuperior= tablaTamañoAberturaTamiz[extremoIzquierdo]
 				tamañoInferior= tablaTamañoAberturaTamiz[extremoDerecho]
 				listaEntradaTemp3.append(tamañoSuperior)
+				colR3.append(tamañoSuperior)
 				listaEntradaTemp3.append(tamañoInferior)
+				colR4.append(tamañoInferior)
 				tamañoPromedioGeo = tamañoPromedioGeometrico(tamañoSuperior,tamañoInferior)
 				listaEntradaTemp3.append(round(tamañoPromedioGeo,3))
+				colR5.append(round(tamañoPromedioGeo,3))
 				Reynolds3= (tamañoPromedioGeo/1000)*(listaEU[10]/86400.0)/listaEU[5]
 				listaEntradaTemp3.append(round(Reynolds3,3))
+				colR6.append(round(Reynolds3,3))
 				Cd=24/Reynolds3 + 3/sqrt(Reynolds3)+0.34
 				listaEntradaTemp3.append(round(Cd,3))
+				colR7.append(round(Cd,3))
 				Suma3=Cd*(arenaRenetinda/100)*(1000/tamañoPromedioGeo)
 				listaEntradaTemp3.append(round(Suma3,3))
+				colR8.append(round(Suma3,3))
 				listaEntradaTemp3.append(round(valorR,3))
+				colR9.append(round(valorR,3))
 				newDataTreeview(arbolEstimacionPerdidaArenaR, listaEntradaTemp3)
-
+			
+			colsDatos=[colR1,colR2,colR3,colR4,colR5,colR6,colR7,colR8,colR9]
+			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaR,'ResultadosFiltro\\Rose_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
 			estimacionPerdidaArenaCalculoWindow.mainloop()
 
 				
@@ -4433,19 +4517,23 @@ def openFiltroWindow():
 			listaIntermedia = listaEntradaTemp.copy()
 			datosSalida.append(listaIntermedia)
 		
+		
 		abAcDic= dict()
 		for ind in range(0,len(datosSalida)):
 			abAcDic[datosSalida[ind][6]]=datosSalida[ind][5]
 		
-	
+		
 		def tamañoEfectivod1(numero,dic):
 			elementoAnterior=dic[0]
+			
 			for elemento in dic:
+	
 				if elemento <= numero and elemento>=elementoAnterior:
 					variableGuarda=elemento
 					elementoAnterior=elemento
 			return variableGuarda
-
+			
+			
 		def tamañoEfectivod2(numero,dic):
 			elementoAnterior=100
 			for elemento in dic:
@@ -4453,6 +4541,8 @@ def openFiltroWindow():
 					variableGuarda=elemento
 					elementoAnterior=elemento
 			return variableGuarda
+			
+
 		def tamañoEfectivod(numero,dic):
 			return[tamañoEfectivod1(numero,dic), tamañoEfectivod2(numero,dic)]
 
@@ -5163,7 +5253,7 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolDrenajeFiltros.yview)
 		#Define columnas.
 		arbolDrenajeFiltros["columns"]= (
-		"Presione para ver Excel","2","Unidades","Adicional"
+		"Presione para ver Excel","Valores","Unidades","Adicional"
 		)
 
 		#Headings
@@ -5312,7 +5402,7 @@ def openFiltroWindow():
 		numOrifPUDF=numLatPUDF*numOrif
 		listaArbolDreanejFiltros.append(numOrifPUDF)
 
-		print(numOrifPUDF, areaOrificiosDic[diametroOrificios],areaFiltro)
+	
 
 
 		areaTotalOrificios= round((float(numOrifPUDF)*areaOrificiosDic[diametroOrificios]*(1.0/areaFiltro)),4)
@@ -5790,7 +5880,7 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolvelocidadLavadoExpansionLechoFiltrante.yview)
 		#Define columnas.
 		arbolvelocidadLavadoExpansionLechoFiltrante["columns"]= (
-		"Pulse para ver fórmulas","2","Unidades","Adicional"
+		"Pulse para ver fórmulas","Valores","Unidades","Adicional"
 		)
 
 		#Headings
@@ -6124,7 +6214,7 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolconsumoAguaLavado2.yview)
 		#Define columnas.
 		arbolconsumoAguaLavado2["columns"]= (
-		"Pulse para ver fórmulas","2","Unidades"
+		"Pulse para ver fórmulas","Valores","Unidades"
 		)
 
 		#Headings
@@ -6211,7 +6301,7 @@ def openFiltroWindow():
 			listaTemp.append(listaUnidades[i])
 			newDataTreeview(arbolconsumoAguaLavado2,listaTemp)  
 
-		PasarExcelDatos("ResultadosFiltro\\.xlsx",'Resultados',listaEncabezados,50, listaconsumoAguaLavado2, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos("ResultadosFiltro\\ConsumoAguaDuranteLavado.xlsx",'Resultados',listaEncabezados,50, listaconsumoAguaLavado2, 15, listaUnidades, 15,False,[], 50)
 		consumoAguaLavado2Window.mainloop()
 
 
@@ -6304,7 +6394,7 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolperdidaCargaLechoExpandido.yview)
 		#Define columnas.
 		arbolperdidaCargaLechoExpandido["columns"]= (
-		"Ver fórmulas","2","Unidades"
+		"Ver fórmulas","Valores","Unidades"
 		)
 
 		#Headings
@@ -6548,7 +6638,7 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolperdidacargaLechoGravaLavado.yview)
 		#Define columnas.
 		arbolperdidacargaLechoGravaLavado["columns"]= (
-		"Ver fórmulas","2","Unidades"
+		"Ver fórmulas","Valores","Unidades"
 		)
 
 		#Headings
@@ -6712,7 +6802,7 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolperdidaCargaSistemaDrenajeLavadoLavado.yview)
 		#Define columnas.
 		arbolperdidaCargaSistemaDrenajeLavadoLavado["columns"]= (
-		"Ver las fórmulas","2","Unidades"
+		"Ver las fórmulas","Valores","Unidades"
 		)
 
 		#Headings
@@ -6741,8 +6831,8 @@ def openFiltroWindow():
 		areaTotalOrificios=(ValueDrenajeFiltro2(caudal,listaEntradaDrenaje)[5])
 		listaperdidaCargaSistemaDrenajeLavadoLavado.append(round(areaTotalOrificios,3))
 
-		print(velocidadDeLavado, coeficienteDeOrificio, areaTotalOrificios)
-		#Pendiente. Valor extraño
+	
+	
 		perdidaCargaSistemaDrenaje= (1.0/(2.0*9.806))*((velocidadDeLavado/(coeficienteDeOrificio*areaTotalOrificios))**2)
 		listaperdidaCargaSistemaDrenajeLavadoLavado.append(round(perdidaCargaSistemaDrenaje,3))
 
@@ -6861,7 +6951,7 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolperdidaCargaSistemaDrenajeLavadoLavado.yview)
 		#Define columnas.
 		arbolperdidaCargaSistemaDrenajeLavadoLavado["columns"]= (
-		"Ver fórmulas","2","Unidades"
+		"Ver fórmulas","Valores","Unidades"
 		)
 
 		#Headings
@@ -7289,7 +7379,7 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolPerdidaCargaTuberiaLavado_DW.yview)
 		#Define columnas.
 		arbolPerdidaCargaTuberiaLavado_DW["columns"]= (
-		"Ver las fórmulas","2","Unidades"
+		"Ver las fórmulas","Valores","Unidades"
 		)
 		
 		#Headings
@@ -7331,7 +7421,7 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolPerdidaCargaTuberiaLavado_HW.yview)
 		#Define columnas.
 		arbolPerdidaCargaTuberiaLavado_HW["columns"]= (
-		"Ver las fórmulas","2","Unidades"
+		"Ver las fórmulas","Valores","Unidades"
 		)
 
 		#Headings
@@ -7687,19 +7777,32 @@ def openFiltroWindow():
 		for element in accesoriosListaEntrada:
 			sumaCoeficientesPerdidaMenor=sumaCoeficientesPerdidaMenor+ CoeficientePerdidaMenorDic[(element,listaEU[1])]
 
+		col1=list()
+		col2=list()
+		col3=list()
+		col4=list()
+		col5=list()
+		col6=list()
 		peridaCargaTuberiaLavadoAccesorios= sumaCoeficientesPerdidaMenor*cabezaVelocidad
 		for elemento in accesoriosListaEntrada:
 			listaEntradaTemp3=list()
 			listaEntradaTemp3.append(elemento)
+			col1.append(elemento)
 			listaEntradaTemp3.append(listaEU[1])
+			col2.append(listaEU[1])
 			listaEntradaTemp3.append(1)
+			col3.append(1)
 			listaEntradaTemp3.append(CoeficientePerdidaMenorDic[(elemento,listaEU[1])])
+			col4.append(CoeficientePerdidaMenorDic[(elemento,listaEU[1])])
 			listaEntradaTemp3.append(round(sumaCoeficientesPerdidaMenor,3))
+			col5.append(round(sumaCoeficientesPerdidaMenor,3))
 			listaEntradaTemp3.append(round(peridaCargaTuberiaLavadoAccesorios,3))
+			col6.append(round(peridaCargaTuberiaLavadoAccesorios,3))
 			newDataTreeview(arbolperdidaCargaTuberiaLavado_AC, listaEntradaTemp3)
+		colsDatos=[col1,col2,col3,col4,col5,col6]
+		pasarTreeViewExcel(colsDatos,arbolperdidaCargaTuberiaLavado_AC,'ResultadosFiltro\\PerdidaEnergiaTuberiaEfluenteAccesorios.xlsx')
 
-		#Pendiente
-		# PasarExcelDatos("ResultadosFiltro\\PerdidaCargaEnLaTuberiaDeLavadoDW.xlsx",'Resultados',listaEncabezados1,50, listaEntradaTemp1, 15, listaUnidades1, 15,False,[], 50)
+		
 		perdidaCargaTuberiaLavado_DW_HW2Window.mainloop()
 
 
@@ -8039,7 +8142,7 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolPerdidaCargaTuberiaLavado_DW.yview)
 		#Define columnas.
 		arbolPerdidaCargaTuberiaLavado_DW["columns"]= (
-		"Ver fórmulas","2","Unidades"
+		"Ver fórmulas","Valores","Unidades"
 		)
 
 		#Headings
@@ -8334,19 +8437,31 @@ def openFiltroWindow():
 		for element in accesoriosListaEntrada:
 			sumaCoeficientesPerdidaMenor=sumaCoeficientesPerdidaMenor+ CoeficientePerdidaMenorDic[(element,listaEU[1])]
 
+		
+		col1=list()
+		col2=list()
+		col3=list()
+		col4=list()
+		col5=list()
+		col6=list()
 		peridaCargaTuberiaLavadoAccesorios= sumaCoeficientesPerdidaMenor*cabezaVelocidad
 		for elemento in accesoriosListaEntrada:
 			listaEntradaTemp3=list()
 			listaEntradaTemp3.append(elemento)
+			col1.append(elemento)
 			listaEntradaTemp3.append(listaEU[1])
+			col2.append(listaEU[1])
 			listaEntradaTemp3.append(1)
+			col3.append(1)
 			listaEntradaTemp3.append(CoeficientePerdidaMenorDic[(elemento,listaEU[1])])
+			col4.append(CoeficientePerdidaMenorDic[(elemento,listaEU[1])])
 			listaEntradaTemp3.append(round(sumaCoeficientesPerdidaMenor,3))
+			col5.append(round(sumaCoeficientesPerdidaMenor,3))
 			listaEntradaTemp3.append(round(peridaCargaTuberiaLavadoAccesorios,3))
+			col6.append(round(peridaCargaTuberiaLavadoAccesorios,3))
 			newDataTreeview(arbolperdidaCargaTuberiaLavado_AC, listaEntradaTemp3)
-
-		#Pend
-		# PasarExcelDatos("ResultadosFiltro\\.xlsx",'Resultados',listaEncabezados,50, lista, 15, listaUnidades, 15,False,[], 50)
+		colsDatos=[col1,col2,col3,col4,col5,col6]
+		pasarTreeViewExcel(colsDatos,arbolperdidaCargaTuberiaLavado_AC,'ResultadosFiltro\\PerdidaCargaTuberiaLavadoAccesorios.xlsx')
 		perdidaCargaTuberiaLavado_DW_HW2Window.mainloop()
 				
 
@@ -8434,7 +8549,7 @@ def openFiltroWindow():
 			opcionesDic[listaValoresTemp[i]]=Valores[i] 
 
 
-		#Pendiente: ValoresDeAccesoriofinalconPolietileno21YDiametro200
+		
 		 
 		
 		def on_combobox_select(event):
@@ -8462,7 +8577,7 @@ def openFiltroWindow():
 		
 
 
-		#NombrePendiente
+		
 		codoRadio = StringVar()
 		codoRadio.set("Codo 90° radio")
 		listaValoresTemp3=['Codo 90° radio corto (r/d 1)', 'Codo 90° radio mediano (r/d 3)']
@@ -8627,7 +8742,7 @@ def openFiltroWindow():
 		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTuberiaLavado_DW_HW, text="Seleccione el diametro nominal de la tubería de lavado []:",font=("Yu Gothic bold",10))
 
 
-		#NombrePendiente
+		
 		codoRadio = StringVar()
 		codoRadio.set("Codo 90° radio")
 		listaValoresTemp3=['Codo 90° radio corto (r/d 1)', 'Codo 90° radio mediano (r/d 3)']
@@ -8973,7 +9088,7 @@ def openFiltroWindow():
 		listaperdidaCargaTotalLavado=list()
 
 		
-		#Pendiente Rose
+		
 
 		listaValuePerdidaCargaTuberiaLavado = valuePerdidaCargaTuberiaLavado_DW_HW2_2(listaE,temperatureValue,listaE1, d60,caudalLista,tasa)
 
@@ -9176,7 +9291,7 @@ def openFiltroWindow():
 
 		
 
-		#NombrePendiente
+	
 		codoRadio = StringVar()
 		codoRadio.set("Codo 90° radio")
 		listaValoresTemp3=['Codo 90° radio corto (r/d 1)', 'Codo 90° radio mediano (r/d 3)']
@@ -9372,7 +9487,7 @@ def openFiltroWindow():
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 		diametroNominalTuberiaLavadoLabel= Label(frameperdidaCargaTotalLavadoMain, text="Seleccione el diametro nominal de la tubería de lavado []:",font=("Yu Gothic bold",10))
 
-		#NombrePendiente
+		
 		codoRadio = StringVar()
 		codoRadio.set("Codo 90° radio")
 		listaValoresTemp3=['Codo 90° radio corto (r/d 1)', 'Codo 90° radio mediano (r/d 3)']
@@ -9584,7 +9699,7 @@ def openFiltroWindow():
 		diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 		diametroNominalTuberiaLavadoLabel= Label(frameverificacionVelocidadesDiseñoTuberiaMain, text="Seleccione el diametro nominal de la tubería de lavado []:",font=("Yu Gothic bold",10))
 
-		#NombrePendiente
+	
 		codoRadio = StringVar()
 		codoRadio.set("Codo 90° radio")
 		listaValoresTemp3=['Codo 90° radio corto (r/d 1)', 'Codo 90° radio mediano (r/d 3)']
@@ -10214,7 +10329,7 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arbolcanaletasDeLavado2.yview)
 		#Define columnas.
 		arbolcanaletasDeLavado2["columns"]= (
-		"Ver fórmulas","2","Unidades","Adicional"
+		"Ver fórmulas","Valores","Unidades","Adicional"
 
 		)
 
@@ -10457,7 +10572,7 @@ def openFiltroWindow():
 		sedScrollY.configure(command=arboldimensionesYCotasFiltros.yview)
 		#Define columnas.
 		arboldimensionesYCotasFiltros["columns"]= (
-		"Ver fórmulas","2","Unidades"
+		"Ver fórmulas","Valores","Unidades"
 
 		
 		)
@@ -10700,7 +10815,7 @@ def openFiltroWindow():
 
 
 		
-		#NombrePendiente
+		
 		codoRadio = StringVar()
 		codoRadio.set("Codo 90° radio")
 		listaValoresTemp3=['Codo 90° radio corto (r/d 1)', 'Codo 90° radio mediano (r/d 3)']
@@ -11065,7 +11180,7 @@ def openFiltroWindow():
 		
 
 		
-		#Pendiente: Quitar elementos que no se usan en manejo de errores. 
+	
 		botonPerdidacargaLechoGravaLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de energía en el lecho de grava\ndurante filtrado con lecho limpio", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado_2(TasaElegir) ) 
 		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de energía en el sistema de\ndrenaje durante filtrado con lecho limpio", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado_2(caudalMedio, listaEntradaDrenaje, TasaElegir) )
 		botonPerdidaCargaTuberiaLavado_DW = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de energía en la tubería\n del efluente", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW_HW_2(valorTemperatura,listaEntradaExtra,d60,listaCaudal,TasaElegir)) 
@@ -11169,7 +11284,7 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolCaudalesDiseño.yview)
 		#Define columnas.
 		arbolCaudalesDiseño["columns"]= (
-		"1","2","Unidades")
+		"1","Valores","Unidades")
 
 		
 
@@ -11179,7 +11294,7 @@ def openFiltroWindow():
 
 
 		for col in arbolCaudalesDiseño["columns"]:
-			arbolCaudalesDiseño.heading(col, text=col,anchor=CENTER, command=lambda: print("Img") )	
+			arbolCaudalesDiseño.heading(col, text=col,anchor=CENTER)	
 
 		arbolCaudalesDiseño.column("#1",width=300, stretch=False)
 		arbolCaudalesDiseño.column("#2",width=100, stretch=False)
@@ -11230,6 +11345,7 @@ def openFiltroWindow():
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arbolCaudalesDiseño,listaTemp)
 
+		PasarExcelDatos("ResultadosFiltro\\CaudalesDeDiseño.xlsx",'Resultados',encabezadosLista,50, listaCaudalesDiseño, 15, unidadesLista, 15,False,[], 50)
 		CaudalesDiseñoWindow.mainloop()
 
 
@@ -11268,7 +11384,7 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolpropiedadesFisicasAguaF.yview)
 		#Define columnas.
 		arbolpropiedadesFisicasAguaF["columns"]= (
-		"1","2","Unidades")
+		"1","Valores","Unidades")
 
 
 
@@ -11362,6 +11478,7 @@ def openFiltroWindow():
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arbolpropiedadesFisicasAguaF,listaTemp)
 
+		PasarExcelDatos("ResultadosFiltro\\propiedadesFisicasAgua.xlsx",'Resultados',encabezadosLista,50, listapropiedadesFisicasAguaF, 15, unidadesLista, 15,False,[], 50)
 		propiedadesFisicasAguaFWindow.mainloop()
 
         
@@ -11830,7 +11947,7 @@ def openFloculadorWindow():
 		sedScrollY.configure(command=arboldatosIniciales.yview)
 		#Define columnas.
 		arboldatosIniciales["columns"]= (
-		"1","2","Unidades"
+		"1","Valores","Unidades"
 		)
 
 		#Headings
@@ -12146,7 +12263,7 @@ def openFloculadorWindow():
 		# sedScrollY.configure(command=arbolCFloculador.yview)
 		#Define columnas.
 		arbolCFloculador["columns"]= (
-		"1","2","Unidades","Adicional"
+		"1","Valores","Unidades","Adicional"
 		)
 
 		#Headings
@@ -12485,7 +12602,7 @@ def openFloculadorWindow():
 		sedScrollY.configure(command=arbolSalidaCamara.yview)
 		#Define columnas.
 		arbolSalidaCamara["columns"]= (
-		"1","2","Unidades")
+		"1","Valores","Unidades")
 
 	
 
