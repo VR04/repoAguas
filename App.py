@@ -15,11 +15,11 @@ import xlsxwriter
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
+    # try:
+    #     # PyInstaller creates a temp folder and stores path in _MEIPASS
+    #     base_path = sys._MEIPASS
+    # except Exception:
+    base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
 
@@ -73,6 +73,7 @@ def PasarExcelDatos(ubicacionDoc,nombreHoja,listaEncabezados,anchoListaEncabezad
 	except: 
 		messagebox.showwarning(message=f"No fue posible crear el documento en la ubicación {ubicacionDoc} porque está en uso. Ciérrelo y vuelta a intentarlo", title= "Error")
 
+
 def pasarTreeViewExcel(colsDatos,arbol,ruta):
 	try:
 		entradaExcel=dict()
@@ -93,27 +94,12 @@ def pasarTreeViewExcel(colsDatos,arbol,ruta):
 	except: 
 		messagebox.showwarning(message=f"No fue posible crear el documento en la ubicación {ruta} porque está en uso. Ciérrelo y vuelta a intentarlo", title= "Error")
 		
-varCarpetas1=False
-varCarpetas2=False
-varCarpetas3=False
-
-print(os.path.abspath("."))
-for carpeta in os.listdir("."):
-	if carpeta == "ResultadosFloculador":
-		varCarpetas1= True
-	if carpeta == "ResultadosSedimentador":
-		varCarpetas2=True
-	if carpeta == "ResultadosFiltro":
-		varCarpetas3=True	
 
 
-if varCarpetas1 == False:
-    mkdir(resource_path("ResultadosFloculador"))
-if varCarpetas2 == False:
-    mkdir(resource_path("ResultadosSedimentador"))
-if varCarpetas3 == False:
-	mkdir(resource_path("ResultadosFiltro"))
 
+os.makedirs("ResultadosFloculador", exist_ok=True)
+os.makedirs("ResultadosSedimentador", exist_ok=True)
+os.makedirs("ResultadosFiltro", exist_ok=True)
 
 class HoverButton(Button):
 		def __init__(self, master, **kw):
@@ -452,7 +438,7 @@ def openSedWindow():
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arbolparametrosDeDiseñoSedimentadorAltaTasa,listaTemp)
 
-		PasarExcelDatos("ResultadosSedimentador\\ParametrosDeDisenoSedimentadorAltaTasa.xlsx",'Resultados',encabezadosLista,80,listaparametrosDeDiseñoSedimentadorAltaTasa , 15, unidadesLista, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosSedimentador\\ParametrosDeDisenoSedimentadorAltaTasa.xlsx",'Resultados',encabezadosLista,80,listaparametrosDeDiseñoSedimentadorAltaTasa , 15, unidadesLista, 15,False,[], 50)
 		parametrosDeDiseñoSedimentadorAltaTasaWindow.mainloop()
 
 	def determinacionParametrosBasicosDiseno(listaDeterminacionParametrosBasicosDiseno, tipoCelda):
@@ -773,7 +759,7 @@ def openSedWindow():
 			listaTemp.append(listaAdicionales[i])
 			newDataTreeview(arboldeterminacionParametrosBasicosDiseno,listaTemp)
 		
-		PasarExcelDatos("ResultadosSedimentador\\DeterminacionParametrosBasicosDiseno.xlsx",'Resultados',encabezadosLista,50, listadeterminacionParametrosBasicosDiseno, 15, unidadesLista, 15,False,listaAdicionales, 50)
+		PasarExcelDatos(".\\ResultadosSedimentador\\DeterminacionParametrosBasicosDiseno.xlsx",'Resultados',encabezadosLista,50, listadeterminacionParametrosBasicosDiseno, 15, unidadesLista, 15,False,listaAdicionales, 50)
 		determinacionParametrosBasicosDisenoWindow.mainloop()
 		
 
@@ -897,7 +883,7 @@ def openSedWindow():
 			listaTemp.append(listacanaletasRecoleccionAgua[i])
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arbolcanaletasRecoleccionAgua,listaTemp)
-		PasarExcelDatos("ResultadosSedimentador\\CanaletasRecoleccionAguaClarificada.xlsx",'Resultados',encabezadosLista,50, listacanaletasRecoleccionAgua, 15, unidadesLista, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosSedimentador\\CanaletasRecoleccionAguaClarificada.xlsx",'Resultados',encabezadosLista,50, listacanaletasRecoleccionAgua, 15, unidadesLista, 15,False,[], 50)
 		canaletasRecoleccionAguaWindow.mainloop()
 
 
@@ -1113,7 +1099,7 @@ def openSedWindow():
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arboltiempoRetencionTotalTanque,listaTemp)
 		
-		PasarExcelDatos("ResultadosSedimentador\\TiempoRetencionTotalEnElTanque.xlsx",'Resultados',encabezadosLista,50, listatiempoRetencionTotalTanque, 15, unidadesLista, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosSedimentador\\TiempoRetencionTotalEnElTanque.xlsx",'Resultados',encabezadosLista,50, listatiempoRetencionTotalTanque, 15, unidadesLista, 15,False,[], 50)
 		tiempoRetencionTotalTanqueWindow.mainloop()
 
 	def dimensionesDelSedimentador(listaDimensionesDelSedimentador, tipoCelda):
@@ -1398,7 +1384,7 @@ def openSedWindow():
 		elif volumenTolvaLodos > (0.2*(volumenTolvaLodos+volumenSedimentacionTanque)):
 			messagebox.showinfo(title="Información", message="El volumen de la tolva de lodos es alto en relación al volumen total del tanque, ¡Revise datos!")
 			
-		PasarExcelDatos("ResultadosSedimentador\\DimensionesDelSedimentador.xlsx",'Resultados',encabezadosLista,50, listadimensionesDelSedimentador, 15, unidadesLista, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosSedimentador\\DimensionesDelSedimentador.xlsx",'Resultados',encabezadosLista,50, listadimensionesDelSedimentador, 15, unidadesLista, 15,False,[], 50)
 
 		dimensionesDelSedimentadorWindow.mainloop()
 
@@ -1773,7 +1759,7 @@ def openSedWindow():
 		elif cuadradoRelacionDiametroOrificiosYMultiplePorNumeroOrificios>0.45:
 			messagebox.showinfo(title="Información", message="¡El Valor resultante del cuadrado de la relación entre el diámetro de orificios y el del múltiple por el número de orificios es alto, revise datos de diámetros de orificios!")
 		
-		PasarExcelDatos("ResultadosSedimentador\\DisenoSistemaEvacuacionLodos.xlsx",'Resultados',encabezadosLista,50, listadisenoSistemaEvacuacionLodos, 15, unidadesLista, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosSedimentador\\DisenoSistemaEvacuacionLodos.xlsx",'Resultados',encabezadosLista,50, listadisenoSistemaEvacuacionLodos, 15, unidadesLista, 15,False,[], 50)
 		
 		disenoSistemaEvacuacionLodosWindow.mainloop()
 		
@@ -1908,7 +1894,7 @@ def openSedWindow():
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arbolCaudalesDiseño,listaTemp)
 
-		PasarExcelDatos("ResultadosSedimentador\\CaudalesDiseno.xlsx",'Resultados',encabezadosLista,50, listaCaudalesDiseño, 15, unidadesLista, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosSedimentador\\CaudalesDiseno.xlsx",'Resultados',encabezadosLista,50, listaCaudalesDiseño, 15, unidadesLista, 15,False,[], 50)
 		CaudalesDiseñoWindow.mainloop()
 
 	def propiedadesFisicasAgua(temperaturaEntry):
@@ -2040,7 +2026,7 @@ def openSedWindow():
 			listaTemp.append(listapropiedadesFisicasAgua[i])
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arbolpropiedadesFisicasAgua,listaTemp)
-		PasarExcelDatos("ResultadosSedimentador\\PropiedadesFisicasDelAgua.xlsx",'Resultados',encabezadosLista,50, listapropiedadesFisicasAgua, 15, unidadesLista, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosSedimentador\\PropiedadesFisicasDelAgua.xlsx",'Resultados',encabezadosLista,50, listapropiedadesFisicasAgua, 15, unidadesLista, 15,False,[], 50)
 		propiedadesFisicasAguaWindow.mainloop()
 
 
@@ -2265,7 +2251,7 @@ def openSedWindow():
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arbolVerDatosParametrosEntrada,listaTemp)
 
-		PasarExcelDatos("ResultadosSedimentador\\VerParametrosEntrada.xlsx",'Resultados',encabezadosLista,50, listaSalidaDatosEntradaPrametrosBasicosCalculos, 15, unidadesLista, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosSedimentador\\VerParametrosEntrada.xlsx",'Resultados',encabezadosLista,50, listaSalidaDatosEntradaPrametrosBasicosCalculos, 15, unidadesLista, 15,False,[], 50)
 		VerDatosParametrosEntradaWindow.mainloop()
 
 	mainWindow.withdraw()
@@ -2776,7 +2762,7 @@ def openFiltroWindow():
 		# Pediente
 		colsDatos=[col1,col2]
 
-		pasarTreeViewExcel(colsDatos,arbolCaracFiltro,'ResultadosFiltro\\VerPrincipalesCaracteristicasDelFiltro.xlsx')
+		pasarTreeViewExcel(colsDatos,arbolCaracFiltro,'.\\ResultadosFiltro\\VerPrincipalesCaracteristicasDelFiltro.xlsx')
 		
 		
 		
@@ -3007,7 +2993,7 @@ def openFiltroWindow():
 		
 		colsDatos=[col1,col2,col3,col4,col5,col6,col7]
 		#volver
-		pasarTreeViewExcel(colsDatos,arbolGranulometria,'ResultadosFiltro\\GranulometriaMedioFiltranteArena.xlsx')
+		pasarTreeViewExcel(colsDatos,arbolGranulometria,'.\\ResultadosFiltro\\GranulometriaMedioFiltranteArena.xlsx')
 
 		
 
@@ -3271,7 +3257,7 @@ def openFiltroWindow():
 		col2=[round(d60,3)]
 		col3=[round(CU,3)]
 		DatosCols=[col1,col2,col3]
-		pasarTreeViewExcel(DatosCols,arbolCoeficienteDU,'ResultadosFiltro\\CoeficienteDeUniformidad.xlsx')
+		pasarTreeViewExcel(DatosCols,arbolCoeficienteDU,'.\\ResultadosFiltro\\CoeficienteDeUniformidad.xlsx')
 
 		def tamañod(x1,y1,x2,y2,numero):
 			tamañoD10Window = tk.Toplevel()
@@ -3762,7 +3748,7 @@ def openFiltroWindow():
 				newDataTreeview(arbolEstimacionPerdidaArenaFH, listaEntradaTemp1)
 			
 			colsDatos=[colFH1,colFH2,colFH3,colFH4,colFH5,colFH6,colFH7]
-			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaFH,'ResultadosFiltro\\FH_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
+			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaFH,'.\\ResultadosFiltro\\FH_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
 				
 			
 			#DatosPara2
@@ -3871,7 +3857,7 @@ def openFiltroWindow():
 				newDataTreeview(arbolEstimacionPerdidaArenaCK, listaEntradaTemp2)
 			
 			colsDatos= [ColCK1,ColCK2,ColCK3,ColCK4,ColCK5,ColCK6,ColCK7,ColCK8,ColCK9,ColCK10,ColCK11]
-			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaCK,'ResultadosFiltro\\CK_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
+			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaCK,'.\\ResultadosFiltro\\CK_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
 			#DatosPara3
 
 			'''(
@@ -3953,7 +3939,7 @@ def openFiltroWindow():
 				colR9.append(round(valorR,3))
 				newDataTreeview(arbolEstimacionPerdidaArenaR, listaEntradaTemp3)
 			colsDatos=[colR1,colR2,colR3,colR4,colR5,colR6,colR7,colR8,colR9]
-			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaR,'ResultadosFiltro\\Rose_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
+			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaR,'.\\ResultadosFiltro\\Rose_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
 			estimacionPerdidaArenaCalculoWindow.mainloop()
 
 			
@@ -4188,7 +4174,7 @@ def openFiltroWindow():
 				newDataTreeview(arbolEstimacionPerdidaArenaR, listaEntradaTemp3)
 			
 			colsDatos=[colR1,colR2,colR3,colR4,colR5,colR6,colR7,colR8,colR9]
-			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaR,'ResultadosFiltro\\Rose_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
+			pasarTreeViewExcel(colsDatos,arbolEstimacionPerdidaArenaR,'.\\ResultadosFiltro\\Rose_EstimacionPerdidaDeEnergiaEnLechoFiltranteArena.xlsx')
 			estimacionPerdidaArenaCalculoWindow.mainloop()
 
 				
@@ -5127,7 +5113,7 @@ def openFiltroWindow():
 		
 		
 		
-		PasarExcelDatos("ResultadosFiltro\\PredimensionamientoFiltros.xlsx",'Resultados',encabezadosLista,50, listaArbolCaudal, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\PredimensionamientoFiltros.xlsx",'Resultados',encabezadosLista,50, listaArbolCaudal, 15, listaUnidades, 15,False,[], 50)
 
 		predimensionamientoFiltrosWindow.mainloop()
 	
@@ -5510,7 +5496,7 @@ def openFiltroWindow():
 			listaTemp.append(listaAdicional[i])
 			newDataTreeview(arbolDrenajeFiltros,listaTemp)
 		
-		PasarExcelDatos("ResultadosFiltro\\DrenajeFiltro_TuberiasPerforadas.xlsx",'Resultados',listaEncabezados,50, listaArbolDreanejFiltros, 15, listaUnidades, 15,True,listaAdicional, 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\DrenajeFiltro_TuberiasPerforadas.xlsx",'Resultados',listaEncabezados,50, listaArbolDreanejFiltros, 15, listaUnidades, 15,True,listaAdicional, 50)
 
 		drenajeFiltrosWindow.mainloop()
 	
@@ -6021,7 +6007,7 @@ def openFiltroWindow():
 			listaTemp.append(listaUnidades[i])
 			listaTemp.append(listaAdicional[i])	
 			newDataTreeview(arbolvelocidadLavadoExpansionLechoFiltrante,listaTemp)
-		PasarExcelDatos("ResultadosFiltro\\VelocidadDeLavadoYExpansionDelLechoFiltrante.xlsx",'Resultados',listaEncabezados,50, listavelocidadLavadoExpansionLechoFiltrante, 15, listaUnidades, 15,True,listaAdicional, 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\VelocidadDeLavadoYExpansionDelLechoFiltrante.xlsx",'Resultados',listaEncabezados,50, listavelocidadLavadoExpansionLechoFiltrante, 15, listaUnidades, 15,True,listaAdicional, 50)
 		velocidadLavadoExpansionLechoFiltranteWindow.mainloop()
 	
 	def ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60,porosidad,profundidadLechoFijo):
@@ -6301,7 +6287,7 @@ def openFiltroWindow():
 			listaTemp.append(listaUnidades[i])
 			newDataTreeview(arbolconsumoAguaLavado2,listaTemp)  
 
-		PasarExcelDatos("ResultadosFiltro\\ConsumoAguaDuranteLavado.xlsx",'Resultados',listaEncabezados,50, listaconsumoAguaLavado2, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\ConsumoAguaDuranteLavado.xlsx",'Resultados',listaEncabezados,50, listaconsumoAguaLavado2, 15, listaUnidades, 15,False,[], 50)
 		consumoAguaLavado2Window.mainloop()
 
 
@@ -6442,7 +6428,7 @@ def openFiltroWindow():
 			
 			newDataTreeview(arbolperdidaCargaLechoExpandido,listaTemp)  
 
-		PasarExcelDatos("ResultadosFiltro\\PerdidaCargaATravezLechoExpandido.xlsx",'Resultados',listaEncabezados,50, listaperdidaCargaLechoExpandido, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\PerdidaCargaATravezLechoExpandido.xlsx",'Resultados',listaEncabezados,50, listaperdidaCargaLechoExpandido, 15, listaUnidades, 15,False,[], 50)
 		
 		perdidaCargaLechoExpandidoWindow.mainloop()
 
@@ -6574,7 +6560,7 @@ def openFiltroWindow():
 			listaTemp.append(listaUnidades[i])
 			newDataTreeview(arbolperdidacargaLechoGravaLavado,listaTemp)  
 
-		PasarExcelDatos("ResultadosFiltro\\perdidaCargaAtravesLechoGrava.xlsx",'Resultados',listaEncabezados,50, listaperdidacargaLechoGravaLavado, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\perdidaCargaAtravesLechoGrava.xlsx",'Resultados',listaEncabezados,50, listaperdidacargaLechoGravaLavado, 15, listaUnidades, 15,False,[], 50)
 
 		perdidacargaLechoGravaLavadoWindow.mainloop()
 
@@ -6690,7 +6676,7 @@ def openFiltroWindow():
 			listaTemp.append(listaUnidades[i])
 			newDataTreeview(arbolperdidacargaLechoGravaLavado,listaTemp) 
 
-		PasarExcelDatos("ResultadosFiltro\\PerdidaEnergiaLechoGravaDuranteFiltradoLechoLimpio.xlsx",'Resultados',listaEncabezados,50, listaperdidacargaLechoGravaLavado, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\PerdidaEnergiaLechoGravaDuranteFiltradoLechoLimpio.xlsx",'Resultados',listaEncabezados,50, listaperdidacargaLechoGravaLavado, 15, listaUnidades, 15,False,[], 50)
 		perdidacargaLechoGravaLavadoWindow.mainloop()
 
 	def valuePerdidaCargaSistemaDrenajeLavado(tempValue,d60, caudal,listaEntradaDrenaje,porosidad,profundidad):
@@ -6853,7 +6839,7 @@ def openFiltroWindow():
 			listaTemp.append(listaUnidades[i])
 			newDataTreeview(arbolperdidaCargaSistemaDrenajeLavadoLavado,listaTemp)  
 
-		PasarExcelDatos("ResultadosFiltro\\PerdidaCargaAtravezSistemaDrenajeDuranteLavado.xlsx",'Resultados',listaEncabezados,50, listaperdidaCargaSistemaDrenajeLavadoLavado, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\PerdidaCargaAtravezSistemaDrenajeDuranteLavado.xlsx",'Resultados',listaEncabezados,50, listaperdidaCargaSistemaDrenajeLavadoLavado, 15, listaUnidades, 15,False,[], 50)
 
 
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow.mainloop()
@@ -7007,7 +6993,7 @@ def openFiltroWindow():
 			listaTemp.append(listaUnidades[i])
 			newDataTreeview(arbolperdidaCargaSistemaDrenajeLavadoLavado,listaTemp)  
 
-		PasarExcelDatos("ResultadosFiltro\\PerdidaEnergiaEnSistemaDrenajeFiltradoLechoLimpio.xlsx",'Resultados',listaEncabezados,50, listaperdidaCargaSistemaDrenajeLavadoLavado, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\PerdidaEnergiaEnSistemaDrenajeFiltradoLechoLimpio.xlsx",'Resultados',listaEncabezados,50, listaperdidaCargaSistemaDrenajeLavadoLavado, 15, listaUnidades, 15,False,[], 50)
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow.mainloop()
 
 	
@@ -7644,7 +7630,7 @@ def openFiltroWindow():
 			listaTemp.append(listaUnidades1[i])	
 			newDataTreeview(arbolPerdidaCargaTuberiaLavado_DW,listaTemp) 
 		
-		PasarExcelDatos("ResultadosFiltro\\PerdidaCargaEnLaTuberiaDeLavadoDW.xlsx",'Resultados',listaEncabezados1,50, listaEntradaTemp1, 15, listaUnidades1, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\PerdidaCargaEnLaTuberiaDeLavadoDW.xlsx",'Resultados',listaEncabezados1,50, listaEntradaTemp1, 15, listaUnidades1, 15,False,[], 50)
 			
 
 		#DatosPara2
@@ -7708,7 +7694,7 @@ def openFiltroWindow():
 			newDataTreeview(arbolPerdidaCargaTuberiaLavado_HW,listaTemp)  
 
 
-		PasarExcelDatos("ResultadosFiltro\\PerdidaCargaEnLaTuberiaDeLavadoHZ.xlsx",'Resultados',listaEncabezados2,50, listaEntradaTemp2, 15, listaUnidades2, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\PerdidaCargaEnLaTuberiaDeLavadoHZ.xlsx",'Resultados',listaEncabezados2,50, listaEntradaTemp2, 15, listaUnidades2, 15,False,[], 50)
 			
 		#DatosPara3
 	
@@ -7800,7 +7786,7 @@ def openFiltroWindow():
 			col6.append(round(peridaCargaTuberiaLavadoAccesorios,3))
 			newDataTreeview(arbolperdidaCargaTuberiaLavado_AC, listaEntradaTemp3)
 		colsDatos=[col1,col2,col3,col4,col5,col6]
-		pasarTreeViewExcel(colsDatos,arbolperdidaCargaTuberiaLavado_AC,'ResultadosFiltro\\PerdidaEnergiaTuberiaEfluenteAccesorios.xlsx')
+		pasarTreeViewExcel(colsDatos,arbolperdidaCargaTuberiaLavado_AC,'.\\ResultadosFiltro\\PerdidaEnergiaTuberiaEfluenteAccesorios.xlsx')
 
 		
 		perdidaCargaTuberiaLavado_DW_HW2Window.mainloop()
@@ -8371,7 +8357,7 @@ def openFiltroWindow():
 			listaTemp.append(listaEntradaTemp1[i])
 			listaTemp.append(listaUnidades1[i])	
 			newDataTreeview(arbolPerdidaCargaTuberiaLavado_DW,listaTemp) 
-		PasarExcelDatos("ResultadosFiltro\\PerdidaEnergiaEnTuberiaDelEfluente.xlsx",'Resultados',listaEncabezados1,50, listaEntradaTemp1, 15, listaUnidades1, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\PerdidaEnergiaEnTuberiaDelEfluente.xlsx",'Resultados',listaEncabezados1,50, listaEntradaTemp1, 15, listaUnidades1, 15,False,[], 50)
 			
 		#DatosPara3
 	
@@ -8461,7 +8447,7 @@ def openFiltroWindow():
 			col6.append(round(peridaCargaTuberiaLavadoAccesorios,3))
 			newDataTreeview(arbolperdidaCargaTuberiaLavado_AC, listaEntradaTemp3)
 		colsDatos=[col1,col2,col3,col4,col5,col6]
-		pasarTreeViewExcel(colsDatos,arbolperdidaCargaTuberiaLavado_AC,'ResultadosFiltro\\PerdidaCargaTuberiaLavadoAccesorios.xlsx')
+		pasarTreeViewExcel(colsDatos,arbolperdidaCargaTuberiaLavado_AC,'.\\ResultadosFiltro\\PerdidaCargaTuberiaLavadoAccesorios.xlsx')
 		perdidaCargaTuberiaLavado_DW_HW2Window.mainloop()
 				
 
@@ -8989,7 +8975,7 @@ def openFiltroWindow():
 		for elemento in perdidaTotalFinal:
 			perdidaExcel.append(round(elemento,3))
 
-		PasarExcelDatos("ResultadosFiltro\\PerdidaCargaTotalDuranteLavado.xlsx",'Resultados',listaDebidoA,50, perdidaExcel, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\PerdidaCargaTotalDuranteLavado.xlsx",'Resultados',listaDebidoA,50, perdidaExcel, 15, listaUnidades, 15,False,[], 50)
 
 		perdidaCargaTotalLavadoWindow.mainloop()
 
@@ -9138,7 +9124,7 @@ def openFiltroWindow():
 		for elemento in perdidaTotalLista:
 			perdidaTotalListaExcel.append(round(elemento, 3))
 
-		PasarExcelDatos("ResultadosFiltro\\PerdidaDeEnergiaTotalDuranteFiltradoConLechoLimpio.xlsx",'Resultados',listaDebidoA,50, perdidaTotalListaExcel, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\PerdidaDeEnergiaTotalDuranteFiltradoConLechoLimpio.xlsx",'Resultados',listaDebidoA,50, perdidaTotalListaExcel, 15, listaUnidades, 15,False,[], 50)
 		perdidaCargaTotalLavadoWindow.mainloop()
 
 
@@ -9963,7 +9949,7 @@ def openFiltroWindow():
 		for elemento in listaCalculada:
 			listaCalculadaExcel.append(round(elemento,3))
 
-		PasarExcelDatos("ResultadosFiltro\\VerificacionVelocidadDisenoEnTuberiaFiltroDuranteLavado.xlsx",'Resultados',listaVelocidadDiseño,50, listaRangoDiseño, 15, listaCalculadaExcel, 15,True,listaAdicional, 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\VerificacionVelocidadDisenoEnTuberiaFiltroDuranteLavado.xlsx",'Resultados',listaVelocidadDiseño,50, listaRangoDiseño, 15, listaCalculadaExcel, 15,True,listaAdicional, 50)
 		verificacionVelocidadesDiseñoTuberiasWindow.mainloop()
 
 	
@@ -10466,7 +10452,7 @@ def openFiltroWindow():
 			listaTemp.append(listaAdicional[i])	
 			newDataTreeview(arbolcanaletasDeLavado2,listaTemp)  
 
-		PasarExcelDatos("ResultadosFiltro\\CanaletasDeLavado.xlsx",'Resultados',listaEncabezados,50, listacanaletasDeLavado2, 15, listaUnidades, 15,True,listaAdicional, 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\CanaletasDeLavado.xlsx",'Resultados',listaEncabezados,50, listacanaletasDeLavado2, 15, listaUnidades, 15,True,listaAdicional, 50)
 
 		canaletasDeLavado2Window.mainloop()
 
@@ -10660,7 +10646,7 @@ def openFiltroWindow():
 			listaTemp.append(listaUnidades[i])
 			newDataTreeview(arboldimensionesYCotasFiltros,listaTemp)  
 
-		PasarExcelDatos("ResultadosFiltro\\CotasEnLosFiltros.xlsx",'Resultados',listaEncabezados,50, listadimensionesYCotasFiltros, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\CotasEnLosFiltros.xlsx",'Resultados',listaEncabezados,50, listadimensionesYCotasFiltros, 15, listaUnidades, 15,False,[], 50)
 		
 		dimensionesYCotasFiltrosWindow.mainloop()
 	
@@ -11345,7 +11331,7 @@ def openFiltroWindow():
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arbolCaudalesDiseño,listaTemp)
 
-		PasarExcelDatos("ResultadosFiltro\\CaudalesDeDiseño.xlsx",'Resultados',encabezadosLista,50, listaCaudalesDiseño, 15, unidadesLista, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\CaudalesDeDiseño.xlsx",'Resultados',encabezadosLista,50, listaCaudalesDiseño, 15, unidadesLista, 15,False,[], 50)
 		CaudalesDiseñoWindow.mainloop()
 
 
@@ -11478,7 +11464,7 @@ def openFiltroWindow():
 			listaTemp.append(unidadesLista[i])
 			newDataTreeview(arbolpropiedadesFisicasAguaF,listaTemp)
 
-		PasarExcelDatos("ResultadosFiltro\\propiedadesFisicasAgua.xlsx",'Resultados',encabezadosLista,50, listapropiedadesFisicasAguaF, 15, unidadesLista, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFiltro\\propiedadesFisicasAgua.xlsx",'Resultados',encabezadosLista,50, listapropiedadesFisicasAguaF, 15, unidadesLista, 15,False,[], 50)
 		propiedadesFisicasAguaFWindow.mainloop()
 
         
@@ -11703,8 +11689,8 @@ def openFiltroWindow():
 	#BorrarFiltro
 	
 	
-	tempAgua.set("8")
-	caudalMedio.insert(0,"0.0432")
+	# tempAgua.set("8")
+	# caudalMedio.insert(0,"0.0432")
 	listaNTamiz=[14, 20, 20, 25, 25, 30, 30, 35, 35, 40, 40, 50, 50, 60, 60, 70, 70, 100]
 	listaARetenida= [16 , 33.70, 33.90, 6.20, 3.00, 3.00, 2.25, 1.25, 0.7]
 	for i in range(0, len(listaNTamiz)):
@@ -12089,7 +12075,7 @@ def openFloculadorWindow():
 			listaTemp.append(listaUnidades[i])
 			newDataTreeview(arboldatosIniciales,listaTemp)
 
-		PasarExcelDatos("ResultadosFloculador\\VerDatosIniciales.xlsx",'Resultados',listaEncabezados,50, listaEntrada, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(".\\ResultadosFloculador\\VerDatosIniciales.xlsx",'Resultados',listaEncabezados,50, listaEntrada, 15, listaUnidades, 15,False,[], 50)
 
 
 		datosInicialesWindow.mainloop()
@@ -12424,7 +12410,7 @@ def openFloculadorWindow():
 			listaTemp.append(listaAdicional[i])
 			newDataTreeview(arbolCFloculador,listaTemp)
 
-		PasarExcelDatos("ResultadosFloculador\\CalculosAdicionalesParaDiseñoFloculador.xlsx",'Resultados',listaEncabezados,50, listaEntrada, 15, listaUnidades, 15,True,listaAdicional, 50)
+		PasarExcelDatos(".\\ResultadosFloculador\\CalculosAdicionalesParaDiseñoFloculador.xlsx",'Resultados',listaEncabezados,50, listaEntrada, 15, listaUnidades, 15,True,listaAdicional, 50)
 			
 		CFloculadorWindow.mainloop()
 
@@ -12711,7 +12697,7 @@ def openFloculadorWindow():
 		else:
 			messagebox.showwarning(title="¡Cuidado!", message="El valor del gradiente de mezcla NO cumple. No se encuentra entre 35 y 55.")
 		
-		PasarExcelDatos(f"ResultadosFloculador\\datosSalidaCamara{valorParImpar}.xlsx",'Resultados',listaEncabezados,50, listaEntrada, 15, listaUnidades, 15,False,[], 50)
+		PasarExcelDatos(f".\\ResultadosFloculador\\datosSalidaCamara{valorParImpar}.xlsx",'Resultados',listaEncabezados,50, listaEntrada, 15, listaUnidades, 15,False,[], 50)
 
 		salidaCamaraWindow.mainloop()
 	
