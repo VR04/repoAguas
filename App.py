@@ -9,10 +9,6 @@ from math import pi,sin,cos,tan,sqrt,log10
 from functools import partial
 import os,errno,sys,re
 from os import path
-
-import pandas as pd
-import os,errno,sys,re
-from os import path
 import xlsxwriter
 from openpyxl import load_workbook
 
@@ -27,22 +23,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
-import pandas as pd
-import os,errno,sys,re
-from os import path
-from os import mkdir
-import xlsxwriter
-from openpyxl import load_workbook
 
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
 
 
 # def PasarExcelDatos(ubicacionDoc,nombreHoja,listaEncabezados,anchoListaEncabezados, listaDatos, anchoListaDatos, listaUnidades, anchoListaUnidades,whetherAdicional,listaAdicional, anchoListaAdicional):
@@ -5743,9 +5724,34 @@ def openFiltroWindow():
 		
 		drenajeFiltrosMainWindow.mainloop()
 	
-	def velocidadLavadoExpansionLechoFiltrante(tempValue,d60):
+	def velocidadLavadoExpansionLechoFiltrante(tempValue,d60,porosidadEntry,profundidadEntry):
+		#Volver
+
+		if porosidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la porosidad del lecho fijo.")
+			return None
+		if profundidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la profundidad del lecho fijo.")
+			return None
+		try:
+			porosidad= float(porosidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe ser un número.")
+			return None
+
+		try:
+			profundidadLechoFijo= float(profundidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe ser un número.")
+			return None
+
+		if porosidad<0.4 or porosidad>0.48:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe estar entre 0.4 y 0.48")
+			return None
 		
-	
+		if profundidadLechoFijo <0.6 or profundidadLechoFijo >0.75:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe estar entre 0.6 y 0.75")
+			return None
 
 		velocidadLavadoExpansionLechoFiltranteWindow = tk.Toplevel()
 		path=resource_path('icons\\agua.ico')
@@ -5795,7 +5801,7 @@ def openFiltroWindow():
 
 		listavelocidadLavadoExpansionLechoFiltrante=list()
 	
-		porosidad= 0.45
+		
 		listavelocidadLavadoExpansionLechoFiltrante.append(porosidad)
 
 
@@ -5835,11 +5841,12 @@ def openFiltroWindow():
 
 		listavelocidadLavadoExpansionLechoFiltrante.append(round(velocidadOptimaLavado3,3))
 
+		
 		porosidadLechoExpandido = (velocidadOptimaLavado3/velocidadAsentamientoMedioFiltrante3)**(0.22)
 
-		listavelocidadLavadoExpansionLechoFiltrante.append(round(velocidadOptimaLavado3,3))
+		listavelocidadLavadoExpansionLechoFiltrante.append(round(porosidadLechoExpandido,3))
 
-		profundidadLechoFijo = 0.640
+	
 
 		listavelocidadLavadoExpansionLechoFiltrante.append(round(profundidadLechoFijo,3))
 
@@ -5918,12 +5925,12 @@ def openFiltroWindow():
 		
 		velocidadLavadoExpansionLechoFiltranteWindow.mainloop()
 	
-	def ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60):
+	def ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60,porosidad,profundidadLechoFijo):
 		
 
 		listavelocidadLavadoExpansionLechoFiltrante=list()
 	
-		porosidad= 0.45
+
 		listavelocidadLavadoExpansionLechoFiltrante.append(porosidad)
 
 
@@ -5965,9 +5972,9 @@ def openFiltroWindow():
 
 		porosidadLechoExpandido = (velocidadOptimaLavado3/velocidadAsentamientoMedioFiltrante3)**(0.22)
 
-		listavelocidadLavadoExpansionLechoFiltrante.append(velocidadOptimaLavado3)
+		listavelocidadLavadoExpansionLechoFiltrante.append(porosidadLechoExpandido)
 
-		profundidadLechoFijo = 0.640
+		
 
 		listavelocidadLavadoExpansionLechoFiltrante.append(profundidadLechoFijo)
 
@@ -5983,7 +5990,7 @@ def openFiltroWindow():
 		
 
 
-	def ValueConsumoAguaLavado(listaE,tempValue,d60,caudalLista):
+	def ValueConsumoAguaLavado(listaE,tempValue,d60,caudalLista,porosidad,profundidad):
 		
 
 	
@@ -5995,7 +6002,7 @@ def openFiltroWindow():
 
 		listaconsumoAguaLavado2=list()
 
-		listaVelocidadVelocidadLavadoExpansion = ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60)
+		listaVelocidadVelocidadLavadoExpansion = ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60,porosidad,profundidad)
 
 		listaconsumoAguaLavado2.append(tiempoRetrolavado)
 
@@ -6034,9 +6041,33 @@ def openFiltroWindow():
 		return listaconsumoAguaLavado2
 
 
-	def consumoAguaLavado(listaE,tempValue,d60,caudalLista):
+	def consumoAguaLavado(listaE,tempValue,d60,caudalLista,porosidadEntry,profundidadEntry):
 		
+		if porosidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la porosidad del lecho fijo.")
+			return None
+		if profundidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la profundidad del lecho fijo.")
+			return None
+		try:
+			porosidad= float(porosidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe ser un número.")
+			return None
 
+		try:
+			profundidadLechoFijo= float(profundidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe ser un número.")
+			return None
+
+		if porosidad<0.4 or porosidad>0.48:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe estar entre 0.4 y 0.48")
+			return None
+
+		if profundidadLechoFijo <0.6 or profundidadLechoFijo >0.75:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe estar entre 0.6 y 0.75")
+			return None
 	
 		if listaE[0].get() == "Tiempo de retrolavado":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el tiempo de retrolavado")
@@ -6105,7 +6136,7 @@ def openFiltroWindow():
 
 		listaconsumoAguaLavado2=list()
 
-		listaVelocidadVelocidadLavadoExpansion = ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60)
+		listaVelocidadVelocidadLavadoExpansion = ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60,porosidad,profundidadLechoFijo)
 
 		listaconsumoAguaLavado2.append(round(tiempoRetrolavado,3))
 
@@ -6181,18 +6212,15 @@ def openFiltroWindow():
 
 
 
-	def valuePerdidaCargaLechoExpandido():
+	def valuePerdidaCargaLechoExpandido(porosidadLechoFijo,profundidadLechoFijo,densidadRelativaArena):
 		
 		listaperdidaCargaLechoExpandido=list()
 		
-		profundidadLechoFijo= 0.64
+		
 		listaperdidaCargaLechoExpandido.append(profundidadLechoFijo)
 
-
-		porosidadLechoFijo= 0.45
 		listaperdidaCargaLechoExpandido.append(porosidadLechoFijo)
 
-		densidadRelativaArena=2.650
 		listaperdidaCargaLechoExpandido.append(densidadRelativaArena)
 
 		perdidaCargaALechoExpandido= profundidadLechoFijo*(1-porosidadLechoFijo)*(densidadRelativaArena-1)
@@ -6201,7 +6229,48 @@ def openFiltroWindow():
 		return listaperdidaCargaLechoExpandido
 
 
-	def perdidaCargaLechoExpandido():
+	def perdidaCargaLechoExpandido(porosidadEntry,profundidadEntry,densidadEntry):
+		if porosidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la porosidad del lecho fijo.")
+			return None
+		if profundidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la profundidad del lecho fijo.")
+			return None
+		try:
+			porosidad= float(porosidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe ser un número.")
+			return None
+
+		try:
+			profundidadLechoFijo= float(profundidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe ser un número.")
+			return None
+
+		if porosidad<0.4 or porosidad>0.48:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe estar entre 0.4 y 0.48")
+			return None
+
+		if profundidadLechoFijo <0.6 or profundidadLechoFijo >0.75:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe estar entre 0.6 y 0.75")
+			return None
+
+
+		if densidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la densidad relativa de arena")
+			return None
+		try:
+			densidadRelativaArena= float(densidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la densidad relativa de arena debe ser un número")
+			return None
+		
+		if densidadRelativaArena <2.5 or densidadRelativaArena >2.7:
+			messagebox.showwarning(title="Error", message="El valor de la densidad relativa de arena debe estar entre 2.5 y 2.7")
+			return None
+
+
 		perdidaCargaLechoExpandidoWindow = tk.Toplevel()
 		path=resource_path('icons\\agua.ico')
 		perdidaCargaLechoExpandidoWindow.iconbitmap(bitmap=path)
@@ -6209,7 +6278,7 @@ def openFiltroWindow():
 		perdidaCargaLechoExpandidoWindow.resizable(0,0)	
 		perdidaCargaLechoExpandidoWindow.configure(background="#9DC4AA")
 
-		perdidaCargaLechoExpandidoFrame=LabelFrame(perdidaCargaLechoExpandidoWindow, text="Cálculos para la velocidad de expansión del lecho filtrante", font=("Yu Gothic bold", 8))
+		perdidaCargaLechoExpandidoFrame=LabelFrame(perdidaCargaLechoExpandidoWindow, text="Pérdida de carga a través del lecho expandido", font=("Yu Gothic bold", 8))
 		perdidaCargaLechoExpandidoFrame.pack(side=TOP, fill=BOTH,expand=True)
 
 		#Frame Treeview
@@ -6230,7 +6299,7 @@ def openFiltroWindow():
 		# sedScrollY.configure(command=arbolperdidaCargaLechoExpandido.yview)
 		#Define columnas.
 		arbolperdidaCargaLechoExpandido["columns"]= (
-		"Pulse para ver fórmulas","2","Unidades"
+		"Ver fórmulas","2","Unidades"
 		)
 
 		#Headings
@@ -6251,17 +6320,13 @@ def openFiltroWindow():
 		listaperdidaCargaLechoExpandido=list()
 		
 
-		profundidadLechoFijo= 0.64
 		listaperdidaCargaLechoExpandido.append(profundidadLechoFijo)
+		
+		listaperdidaCargaLechoExpandido.append(porosidad)
 
-
-		porosidadLechoFijo= 0.45
-		listaperdidaCargaLechoExpandido.append(porosidadLechoFijo)
-
-		densidadRelativaArena=2.650
 		listaperdidaCargaLechoExpandido.append(densidadRelativaArena)
 
-		perdidaCargaALechoExpandido= profundidadLechoFijo*(1-porosidadLechoFijo)*(densidadRelativaArena-1)
+		perdidaCargaALechoExpandido= profundidadLechoFijo*(1-porosidad)*(densidadRelativaArena-1)
 		listaperdidaCargaLechoExpandido.append(round(perdidaCargaALechoExpandido,3))
 
 		listaEncabezados= ["Profundidad del lecho fijo", 
@@ -6289,11 +6354,11 @@ def openFiltroWindow():
 
 
 		
-	def valuePerdidacargaLechoGravaLavado(tempValue,d60):
+	def valuePerdidacargaLechoGravaLavado(tempValue,d60,porosidad,profundidad):
 		
 		listaperdidacargaLechoGravaLavado=list()
 		
-		velocidadLavado= ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60)[6]
+		velocidadLavado= ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60,porosidad,profundidad)[6]
 		listaperdidacargaLechoGravaLavado.append(velocidadLavado)
 
 		profundidadLechoGrava= 0.100+0.075+0.075+0.100+0.100
@@ -6307,7 +6372,36 @@ def openFiltroWindow():
 		return listaperdidacargaLechoGravaLavado
 
 
-	def perdidacargaLechoGravaLavado(tempValue,d60):
+	def perdidacargaLechoGravaLavado(tempValue,d60,porosidadEntry,profundidadEntry):
+		
+		if porosidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la porosidad del lecho fijo.")
+			return None
+		if profundidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la profundidad del lecho fijo.")
+			return None
+		try:
+			porosidad= float(porosidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe ser un número.")
+			return None
+
+		try:
+			profundidadLechoFijo= float(profundidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe ser un número.")
+			return None
+
+		if porosidad<0.4 or porosidad>0.48:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe estar entre 0.4 y 0.48")
+			return None
+
+		if profundidadLechoFijo <0.6 or profundidadLechoFijo >0.75:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe estar entre 0.6 y 0.75")
+			return None
+		
+		
+		
 		perdidacargaLechoGravaLavadoWindow = tk.Toplevel()
 		path=resource_path('icons\\agua.ico')
 		perdidacargaLechoGravaLavadoWindow.iconbitmap(bitmap=path)
@@ -6357,7 +6451,7 @@ def openFiltroWindow():
 
 		listaperdidacargaLechoGravaLavado=list()
 		
-		velocidadLavado= ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60)[6]
+		velocidadLavado= ValuevelocidadLavadoExpansionLechoFiltrante(tempValue,d60,porosidad,profundidadLechoFijo)[6]
 		listaperdidacargaLechoGravaLavado.append(round(velocidadLavado,3))
 
 		profundidadLechoGrava= 0.100+0.075+0.075+0.100+0.100
@@ -6503,11 +6597,11 @@ def openFiltroWindow():
 
 		perdidacargaLechoGravaLavadoWindow.mainloop()
 
-	def valuePerdidaCargaSistemaDrenajeLavado(tempValue,d60, caudal,listaEntradaDrenaje):
+	def valuePerdidaCargaSistemaDrenajeLavado(tempValue,d60, caudal,listaEntradaDrenaje,porosidad,profundidad):
 		
 		listaperdidaCargaSistemaDrenajeLavadoLavado=list()
 		
-		velocidadDeLavado= round(ValuevelocidadLavadoExpansionLechoFiltrante(tempValue, d60)[6]*(1/60.0),4)
+		velocidadDeLavado= round(ValuevelocidadLavadoExpansionLechoFiltrante(tempValue, d60,porosidad,profundidad)[6]*(1/60.0),4)
 		listaperdidaCargaSistemaDrenajeLavadoLavado.append(velocidadDeLavado)
 
 		coeficienteDeOrificio=0.6
@@ -6529,8 +6623,33 @@ def openFiltroWindow():
 
 
 
-	def perdidaCargaSistemaDrenajeLavado(tempValue,d60, caudal,listaEntradaDrenaje):
+	def perdidaCargaSistemaDrenajeLavado(tempValue,d60, caudal,listaEntradaDrenaje,porosidadEntry,profundidadEntry):
 		
+		if porosidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la porosidad del lecho fijo.")
+			return None
+		if profundidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la profundidad del lecho fijo.")
+			return None
+		try:
+			porosidad= float(porosidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe ser un número.")
+			return None
+
+		try:
+			profundidadLechoFijo= float(profundidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe ser un número.")
+			return None
+
+		if porosidad<0.4 or porosidad>0.48:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe estar entre 0.4 y 0.48")
+			return None
+
+		if profundidadLechoFijo <0.6 or profundidadLechoFijo >0.75:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe estar entre 0.6 y 0.75")
+			return None
 		
 		if listaEntradaDrenaje[0].get() == "Diametro de los orificios":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el diámetro de los orificios.")
@@ -6607,7 +6726,7 @@ def openFiltroWindow():
 
 		listaperdidaCargaSistemaDrenajeLavadoLavado=list()
 		
-		velocidadDeLavado= round(ValuevelocidadLavadoExpansionLechoFiltrante(tempValue, d60)[6]*(1/60.0),4)
+		velocidadDeLavado= round(ValuevelocidadLavadoExpansionLechoFiltrante(tempValue, d60,porosidad,profundidadLechoFijo)[6]*(1/60.0),4)
 		listaperdidaCargaSistemaDrenajeLavadoLavado.append(velocidadDeLavado)
 
 		coeficienteDeOrificio=0.6
@@ -6795,7 +6914,7 @@ def openFiltroWindow():
 		perdidaCargaSistemaDrenajeLavadoLavadoWindow.mainloop()
 
 	
-	def ValuePerdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista):
+	def ValuePerdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista,porosidad,profundidad):
 		
 		
 
@@ -6919,7 +7038,7 @@ def openFiltroWindow():
 		diametroInternoTuberiaLavado = diametroInternoDic[(listaEU[0],listaEU[1])]
 		listaEntradaTemp1.append(diametroInternoTuberiaLavado)
 
-		caudalLavado = ValueConsumoAguaLavado(listaE1,temperatureValue,d60,caudalLista)[5]
+		caudalLavado = ValueConsumoAguaLavado(listaE1,temperatureValue,d60,caudalLista,porosidad,profundidad)[5]
 		velocidadFlujoTuberiaLavado = (4.0*caudalLavado)*(1.0/(pi*(diametroInternoTuberiaLavado**2)))
 		listaEntradaTemp1.append(velocidadFlujoTuberiaLavado)
 		
@@ -7075,9 +7194,9 @@ def openFiltroWindow():
 
 
 
-	def perdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista,unidadesDiametro):
+	def perdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista,unidadesDiametro,porosidad,profundidad):
 		
-		#Volver
+		
 
 		
 		listaEU=list()
@@ -7303,7 +7422,7 @@ def openFiltroWindow():
 
 		listaEntradaTemp1.append(round(rugosidadAbsoluta,3))
 
-		#Volver
+		
 
 		listaEntradaTemp1.append(listaE[2].get())
 		listaEntradaTemp1.append(listaE[1].get())
@@ -7350,7 +7469,7 @@ def openFiltroWindow():
 		diametroInternoTuberiaLavado = diametroInternoDic[(listaEU[0],listaEU[1])]
 		listaEntradaTemp1.append(round(diametroInternoTuberiaLavado,3))
 
-		caudalLavado = ValueConsumoAguaLavado(listaE1,temperatureValue,d60,caudalLista)[5]
+		caudalLavado = ValueConsumoAguaLavado(listaE1,temperatureValue,d60,caudalLista,porosidad,profundidad)[5]
 		velocidadFlujoTuberiaLavado = (4.0*caudalLavado)*(1.0/(pi*(diametroInternoTuberiaLavado**2)))
 		listaEntradaTemp1.append(round(velocidadFlujoTuberiaLavado,3))
 		
@@ -8220,10 +8339,35 @@ def openFiltroWindow():
 		perdidaCargaTuberiaLavado_DW_HW2Window.mainloop()
 				
 
-	def perdidaCargaTuberiaLavado_DW_HW(TemperatureValue,listaE, d60,caudalLista):
+	def perdidaCargaTuberiaLavado_DW_HW(TemperatureValue,listaE, d60,caudalLista,porosidadEntry,profundidadEntry):
 		
 		if listaE[0].get() == "Tiempo de retrolavado":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el tiempo de retrolavado")
+			return None
+		if porosidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la porosidad del lecho fijo.")
+			return None
+		if profundidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la profundidad del lecho fijo.")
+			return None
+		try:
+			porosidad= float(porosidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe ser un número.")
+			return None
+
+		try:
+			profundidadLechoFijo= float(profundidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe ser un número.")
+			return None
+
+		if porosidad<0.4 or porosidad>0.48:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe estar entre 0.4 y 0.48")
+			return None
+
+		if profundidadLechoFijo <0.6 or profundidadLechoFijo >0.75:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe estar entre 0.6 y 0.75")
 			return None
 		
 
@@ -8361,7 +8505,8 @@ def openFiltroWindow():
 					alturaInicialEntradas+=40
 
 		#Botones.
-		botonCalcular = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Calcular la estimación de carga en la tubería de lavado.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTuberiaLavado_DW_HW2(listaEntradas,TemperatureValue,listaE, d60,caudalLista,indicador))
+
+		botonCalcular = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Calcular la estimación de carga en la tubería de lavado.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTuberiaLavado_DW_HW2(listaEntradas,TemperatureValue,listaE, d60,caudalLista,indicador,porosidad,profundidadLechoFijo))
 		botonNewEntry = HoverButton(frameperdidaCargaTuberiaLavado_DW_HW, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas,diametroNominalTuberiaLavadoLabel))
 		botones=[botonCalcular,botonNewEntry]
 		alturaBotones=450
@@ -8371,12 +8516,12 @@ def openFiltroWindow():
 
 		#Borrar
 
-		materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
-		diametroNominalTuberiaLavado.set("10")
-		longitudTuberiaLavado.insert(0,"20")
-		factorFriccion.insert(0,"0.0200")
-		codoRadio.set('Codo 90° radio mediano (r/d 3)')
-		tipoEntrada.set('Entrada con boca acampanada')
+		# materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
+		# diametroNominalTuberiaLavado.set("10")
+		# longitudTuberiaLavado.insert(0,"20")
+		# factorFriccion.insert(0,"0.0200")
+		# codoRadio.set('Codo 90° radio mediano (r/d 3)')
+		# tipoEntrada.set('Entrada con boca acampanada')
 		
 
 
@@ -8536,12 +8681,12 @@ def openFiltroWindow():
 
 		#Borrar
 
-		materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
-		diametroNominalTuberiaLavado.set("10")
-		longitudTuberiaLavado.insert(0,"1.5")
-		factorFriccion.insert(0,"0.0200")
+		# materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
+		# diametroNominalTuberiaLavado.set("10")
+		# longitudTuberiaLavado.insert(0,"1.5")
+		# factorFriccion.insert(0,"0.0200")
 	
-		tipoEntrada.set('Entrada con boca acampanada')
+		# tipoEntrada.set('Entrada con boca acampanada')
 		
 		#NOBorrar
 		codoRadio.set('Codo 90° radio mediano (r/d 3)')
@@ -8551,7 +8696,7 @@ def openFiltroWindow():
 		perdidaCargaTuberiaLavado_DW_HWWindow.mainloop()
 
 
-	def perdidaCargaTotalLavado2(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1):
+	def perdidaCargaTotalLavado2(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1,porosidad,profundidad,densidadRelativa):
 		
 		i=0
 		listaEU = list()
@@ -8648,11 +8793,11 @@ def openFiltroWindow():
 
 		listaperdidaCargaTotalLavado=list()
 
-		listaValuePerdidaCargaTuberiaLavado = ValuePerdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista)
+		listaValuePerdidaCargaTuberiaLavado = ValuePerdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista,porosidad,profundidad)
 		
-		perdidaCargaLechoExpandido = valuePerdidaCargaLechoExpandido()[3]
-		perdidaCargaLechoGrava = valuePerdidacargaLechoGravaLavado(temperatureValue,d60)[2]
-		perdidaCargaSistemaDrenaje = valuePerdidaCargaSistemaDrenajeLavado(temperatureValue,d60, caudal,listaEntradaDrenaje)[3]
+		perdidaCargaLechoExpandido = valuePerdidaCargaLechoExpandido(porosidad,profundidad,densidadRelativa)[3]
+		perdidaCargaLechoGrava = valuePerdidacargaLechoGravaLavado(temperatureValue,d60,porosidad,profundidad)[2]
+		perdidaCargaSistemaDrenaje = valuePerdidaCargaSistemaDrenajeLavado(temperatureValue,d60, caudal,listaEntradaDrenaje,porosidad,profundidad)[3]
 		perdidaCargaDW= listaValuePerdidaCargaTuberiaLavado[0][7]
 		perdidaCargaHZ= listaValuePerdidaCargaTuberiaLavado[1][6]
 		perdidaCargaAccesorios= listaValuePerdidaCargaTuberiaLavado[2]
@@ -8720,7 +8865,7 @@ def openFiltroWindow():
 
 	def perdidaCargaTotalLavado2_2(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1,tasa):
 		
-		#Volver
+		
 		listaEU=list()
 		i=0
 		for elemento in listaE:
@@ -8863,7 +9008,53 @@ def openFiltroWindow():
 		perdidaCargaTotalLavadoWindow.mainloop()
 
 
-	def perdidaCargaTotalLavadoMain(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista):
+	def perdidaCargaTotalLavadoMain(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,porosidadEntry,profundidadEntry,densidadEntry):
+		
+		
+		if porosidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la porosidad del lecho fijo.")
+			return None
+		if profundidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la profundidad del lecho fijo.")
+			return None
+		try:
+			porosidad= float(porosidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe ser un número.")
+			return None
+
+		try:
+			profundidadLechoFijo= float(profundidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe ser un número.")
+			return None
+
+		if porosidad<0.4 or porosidad>0.48:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe estar entre 0.4 y 0.48")
+			return None
+
+		if profundidadLechoFijo <0.6 or profundidadLechoFijo >0.75:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe estar entre 0.6 y 0.75")
+			return None
+		
+		if densidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la densidad relativa de arena")
+			return None
+		try:
+			densidadRelativaArena= float(densidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la densidad relativa de arena debe ser un número")
+			return None
+
+		if densidadRelativaArena <2.5 or densidadRelativaArena >2.7:
+			messagebox.showwarning(title="Error", message="El valor de la densidad relativa de arena debe estar entre 2.5 y 2.7")
+			return None
+
+
+		
+		
+		
+		
 		
 		if listaE[0].get() == "Tiempo de retrolavado":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el tiempo de retrolavado")
@@ -8939,7 +9130,7 @@ def openFiltroWindow():
 		for i in range(0, len(listaValoresTemp)):
 			opcionesDic[listaValoresTemp[i]]=Valores[i] 
 
-		#VOlver
+		
 		def on_combobox_select(event):
 			diametroNominalTuberiaLavado.set("Diámetro nominal de la tubería de lavado")
 			diametroNominalTuberiaLavado.config(values=opcionesDic[materialTuberiaLavado.get()])
@@ -9020,7 +9211,7 @@ def openFiltroWindow():
 					alturaInicialEntradas+=40
 
 		#Botones.
-		botonCalcular = HoverButton(frameperdidaCargaTotalLavadoMain, text="Calcular la pérdida de carga total durante el lavado", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTotalLavado2(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE))
+		botonCalcular = HoverButton(frameperdidaCargaTotalLavadoMain, text="Calcular la pérdida de carga total durante el lavado", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: perdidaCargaTotalLavado2(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE,porosidad,profundidadLechoFijo,densidadRelativaArena))
 		botonNewEntry = HoverButton(frameperdidaCargaTotalLavadoMain, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas,diametroNominalTuberiaLavadoLabel))
 		botones=[botonCalcular,botonNewEntry]
 		alturaBotones=450
@@ -9030,12 +9221,12 @@ def openFiltroWindow():
 
 		#Borrar
 
-		materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
-		diametroNominalTuberiaLavado.set("10")
-		longitudTuberiaLavado.insert(0,"20")
-		factorFriccion.insert(0,"0.0200")
-		codoRadio.set('Codo 90° radio mediano (r/d 3)')
-		tipoEntrada.set('Entrada con boca acampanada')
+		# materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
+		# diametroNominalTuberiaLavado.set("10")
+		# longitudTuberiaLavado.insert(0,"20")
+		# factorFriccion.insert(0,"0.0200")
+		# codoRadio.set('Codo 90° radio mediano (r/d 3)')
+		# tipoEntrada.set('Entrada con boca acampanada')
 
 
 
@@ -9226,11 +9417,11 @@ def openFiltroWindow():
 
 		#Borrar
 
-		materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
-		diametroNominalTuberiaLavado.set("10")
-		longitudTuberiaLavado.insert(0,"1.50")
-		factorFriccion.insert(0,"0.0200")	
-		tipoEntrada.set('Entrada con boca acampanada')
+		# materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
+		# diametroNominalTuberiaLavado.set("10")
+		# longitudTuberiaLavado.insert(0,"1.50")
+		# factorFriccion.insert(0,"0.0200")	
+		# tipoEntrada.set('Entrada con boca acampanada')
 
 		#NOBorrar
 		codoRadio.set('Codo 90° radio mediano (r/d 3)')
@@ -9241,8 +9432,34 @@ def openFiltroWindow():
 		perdidaCargaTotalLavadoMainWindow.mainloop()
 
 
-	def verificacionVelocidadesDiseñoTuberiaMain(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista):
+	def verificacionVelocidadesDiseñoTuberiaMain(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,porosidadEntry,profundidadEntry):
 		
+
+		if porosidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la porosidad del lecho fijo.")
+			return None
+		if profundidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la profundidad del lecho fijo.")
+			return None
+		try:
+			porosidad= float(porosidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe ser un número.")
+			return None
+
+		try:
+			profundidadLechoFijo= float(profundidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe ser un número.")
+			return None
+
+		if porosidad<0.4 or porosidad>0.48:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe estar entre 0.4 y 0.48")
+			return None
+
+		if profundidadLechoFijo <0.6 or profundidadLechoFijo >0.75:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe estar entre 0.6 y 0.75")
+			return None
 		if listaE[0].get() == "Tiempo de retrolavado":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el tiempo de retrolavado")
 			return None
@@ -9398,7 +9615,7 @@ def openFiltroWindow():
 					alturaInicialEntradas+=40
 		
 		#Botones.
-		botonCalcular = HoverButton(frameverificacionVelocidadesDiseñoTuberiaMain, text="Calcular las velocidades de diseño en las tuberías del filtro", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: verificacionVelocidadesDiseñoTuberias(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE))
+		botonCalcular = HoverButton(frameverificacionVelocidadesDiseñoTuberiaMain, text="Calcular las velocidades de diseño en las tuberías del filtro", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: verificacionVelocidadesDiseñoTuberias(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE,porosidad,profundidadLechoFijo))
 		botonNewEntry = HoverButton(frameverificacionVelocidadesDiseñoTuberiaMain, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=2, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas,diametroNominalTuberiaLavadoLabel))
 		botones=[botonCalcular,botonNewEntry]
 		alturaBotones=450
@@ -9408,10 +9625,10 @@ def openFiltroWindow():
 
 		#Borrar
 
-		materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
-		diametroNominalTuberiaLavado.set("10")
-		longitudTuberiaLavado.insert(0,"20")
-		factorFriccion.insert(0,"0.0200")
+		# materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
+		# diametroNominalTuberiaLavado.set("10")
+		# longitudTuberiaLavado.insert(0,"20")
+		# factorFriccion.insert(0,"0.0200")
 
 		#NOBORRAR.
 		codoRadio.set('Codo 90° radio mediano (r/d 3)')
@@ -9429,7 +9646,7 @@ def openFiltroWindow():
 
 
 
-	def verificacionVelocidadesDiseñoTuberias(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1):
+	def verificacionVelocidadesDiseñoTuberias(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1,porosidad,profundidad):
 		
 		listaEU=list()
 		i=0
@@ -9569,9 +9786,9 @@ def openFiltroWindow():
 		"Velocidad en tubería de drenaje en lavado\n(laterales)"]
 		listaRangoDiseño=["1.5 - 3.0","0.9 - 2.4", "0.9 - 2.4"]
 		
-		velocidadTuberiaLavado= ValuePerdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista)[0][2]
-		velocidadTuberiaDrenajeMultiple= ValueConsumoAguaLavado(listaE1, temperatureValue, d60, caudalLista)[5] *(1.0/AreaSeccionDic[seccionTransvMultiple])
-		velocidadTuberiaDrenajeLaterales = ValueConsumoAguaLavado(listaE1, temperatureValue, d60, caudalLista)[5]/(( ValueDrenajeFiltro2(caudal,listaEntradaDrenaje)[2])*areaLateralesDic[diametroLaterales])
+		velocidadTuberiaLavado= ValuePerdidaCargaTuberiaLavado_DW_HW2(listaE,temperatureValue,listaE1, d60,caudalLista,porosidad,profundidad)[0][2]
+		velocidadTuberiaDrenajeMultiple= ValueConsumoAguaLavado(listaE1, temperatureValue, d60, caudalLista,porosidad,profundidad)[5] *(1.0/AreaSeccionDic[seccionTransvMultiple])
+		velocidadTuberiaDrenajeLaterales = ValueConsumoAguaLavado(listaE1, temperatureValue, d60, caudalLista,porosidad,profundidad)[5]/(( ValueDrenajeFiltro2(caudal,listaEntradaDrenaje)[2])*areaLateralesDic[diametroLaterales])
 
 		listaCalculada=[velocidadTuberiaLavado, velocidadTuberiaDrenajeMultiple, velocidadTuberiaDrenajeLaterales]
 		
@@ -9799,21 +10016,33 @@ def openFiltroWindow():
 		tiempoRetrolavadoName = OptionMenu(hidraulicaSistemaLavadoMainFrame, tiempoRetrolavado, *listaValoresTemptiempoRetrolavado)
 		tiempoRetrolavadoLabel= Label(hidraulicaSistemaLavadoMainWindow, text="Seleccione el tiempo de retrolavado [s]:", font=("Yu Gothic bold", 10))
 
+		porosidadLechoFijoLabel = Label(hidraulicaSistemaLavadoMainFrame, text="Porosidad del lecho fijo [0.4 - 0.48]:", font =("Yu Gothic bold",10))
+		porosidadLechoFijo = Entry(hidraulicaSistemaLavadoMainFrame)
 		
-		listaEntradaDrenaje2=[diametroOrificiosName,distanciaOrificiosName,seccionTransversalName,distanciaLateralesName, diametroEntreLateralesName,tiempoRetrolavadoName]
-		listaLabel= [diametroOrificiosLabel,distanciaOrificiosLabel, seccionTransversalLabel, distanciaLateralesLabel, diametroEntreLateralesLabel,tiempoRetrolavadoLabel]
+		profundidadLechoFijoArenaLabel = Label(hidraulicaSistemaLavadoMainFrame, text="Profundidad del lecho fijo de arena [0.6m - 0.75m]:", font =("Yu Gothic bold",10))
+		profundidadLechoFijoArena = Entry(hidraulicaSistemaLavadoMainFrame)
+		
+		densidadRelativaArenaLabel = Label(hidraulicaSistemaLavadoMainFrame, text="Densidad relativa de la arena [2.5 - 2.7]:", font =("Yu Gothic bold",10))
+		densidadRelativaArena = Entry(hidraulicaSistemaLavadoMainFrame)
+
+		#Volver2
+		listaEntradaDrenaje2=[diametroOrificiosName,distanciaOrificiosName,seccionTransversalName,distanciaLateralesName, diametroEntreLateralesName,tiempoRetrolavadoName, porosidadLechoFijo,profundidadLechoFijoArena,densidadRelativaArena]
+		listaLabel= [diametroOrificiosLabel,distanciaOrificiosLabel, seccionTransversalLabel, distanciaLateralesLabel, diametroEntreLateralesLabel,tiempoRetrolavadoLabel,porosidadLechoFijoLabel,profundidadLechoFijoArenaLabel,densidadRelativaArenaLabel]
 		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
 		listaEntradaExtra=[tiempoRetrolavado]
 		
 		#Borrar
 
-		diametroOrificios.set("1/4")
-		distanciaOrificios.set("0.100")
-		seccionTransversal.set("14 X 14")
-		distanciaLaterales.set("0.25")
-		diametroEntreLaterales.set("1 1/2")
-		tiempoRetrolavado.set("12")
-
+		# profundidadLechoFijoArena.insert(0,"0.7")
+		# porosidadLechoFijo.insert(0,"0.47")
+		# densidadRelativaArena.insert(0,"2.5")
+		# diametroOrificios.set("1/2")
+		# distanciaOrificios.set("0.150")
+		# seccionTransversal.set("8 X 8")
+		# distanciaLaterales.set("0.25")
+		# diametroEntreLaterales.set("2 1/2")
+		# tiempoRetrolavado.set("14")
+		
 
 		
 	
@@ -9821,49 +10050,59 @@ def openFiltroWindow():
 		altIn2=30
 		for ind in range(0,len(listaLabel)):
 			if ind%2==0:
-				listaLabel[ind].place(x=20,y=altIn)
-				listaEntradaDrenaje2[ind].place(x=20, y= altIn+20)
-				altIn=altIn+80
+				# if ind==6:
+				# 	listaLabel[ind].place(x=20,y=altIn)
+				# 	listaEntradaDrenaje2[ind].place(x=270, y= altIn+20)
+				# 	altIn=altIn+80
+				# else: 
+					listaLabel[ind].place(x=20,y=altIn)
+					listaEntradaDrenaje2[ind].place(x=20, y= altIn+20)
+					altIn=altIn+69
 			else:
-				listaLabel[ind].place(x=500,y=altIn2)
-				listaEntradaDrenaje2[ind].place(x=500, y= altIn2+20)
-				altIn2=altIn2+80
+
+				listaLabel[ind].place(x=450,y=altIn2)
+				listaEntradaDrenaje2[ind].place(x=450, y= altIn2+20)
+				altIn2=altIn2+69
 			
 		#BotonesHidraulica
 		#botonCalculoDrenaje = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Cálculos para el drenaje del filtro", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: calculoDrenaje())
 
-		botonVelocidadLavadoExpansionLechoFiltrante = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Velocidad de lavado\n y expansión del lecho filtrante", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: velocidadLavadoExpansionLechoFiltrante(valorTemperatura,d60))
+		botonVelocidadLavadoExpansionLechoFiltrante = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Velocidad de lavado\n y expansión del lecho filtrante", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: velocidadLavadoExpansionLechoFiltrante(valorTemperatura,d60,porosidadLechoFijo,profundidadLechoFijoArena))
 
-		botonConsumoAguaLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Consumo de agua de\n lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: consumoAguaLavado(listaEntradaExtra,valorTemperatura,d60,listaCaudal))
+		botonConsumoAguaLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Consumo de agua de\n lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: consumoAguaLavado(listaEntradaExtra,valorTemperatura,d60,listaCaudal,porosidadLechoFijo,profundidadLechoFijoArena))
 
-		botonPerdidaCargaLechoExpandido = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga a través\n del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaLechoExpandido() )
+		botonPerdidaCargaLechoExpandido = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga a través\n del lecho expandido", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaLechoExpandido(porosidadLechoFijo,profundidadLechoFijoArena,densidadRelativaArena))
  
-		botonPerdidacargaLechoGravaLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga a través\n del lecho de grava durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado(valorTemperatura,d60) )
+		botonPerdidacargaLechoGravaLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga a través\n del lecho de grava durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidacargaLechoGravaLavado(valorTemperatura,d60,porosidadLechoFijo,profundidadLechoFijoArena) )
 
-		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga a través\n del sistema de drenaje durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado(valorTemperatura,d60, caudalMedio, listaEntradaDrenaje) )
+		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga a través\n del sistema de drenaje durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado(valorTemperatura,d60, caudalMedio, listaEntradaDrenaje,porosidadLechoFijo,profundidadLechoFijoArena) )
 
-		botonPerdidaCargaTuberiaLavado_DW = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga en la tubería\n de lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW_HW(valorTemperatura,listaEntradaExtra,d60,listaCaudal)) 
+		botonPerdidaCargaTuberiaLavado_DW = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga en la tubería\n de lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW_HW(valorTemperatura,listaEntradaExtra,d60,listaCaudal,porosidadLechoFijo,profundidadLechoFijoArena)) 
 
-		botonPerdidaCargaTotalLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga total durante\n el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavadoMain(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal))
+		botonPerdidaCargaTotalLavado = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Pérdida de carga total durante\n el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavadoMain(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal,porosidadLechoFijo,profundidadLechoFijoArena,densidadRelativaArena))
 
-		botonVerificacionVelocidadesDiseñoTuberias = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Verificación de velocidad de diseño\n en tuberías de filtro durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: verificacionVelocidadesDiseñoTuberiaMain(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal) )
+		botonVerificacionVelocidadesDiseñoTuberias = HoverButton(hidraulicaSistemaLavadoMainFrame, text="Verificación de velocidad de diseño\n en tuberías de filtro durante el lavado", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: verificacionVelocidadesDiseñoTuberiaMain(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal, porosidadLechoFijo,profundidadLechoFijoArena) )
 
 	
 
 				
-		def newEntryFiltroHidraulica(lista): 
-			lista2= [
-						"Diametro de los orificios",
-						"Distancia entre los orificios",
-						"Sección transversal",
-						"Distancia entre laterales",
-						"Diámetro de los laterales",
-						"Tiempo de retrolavado"]
+		def newEntryFiltroHidraulica(lista,porosidad,profundidad,densidad): 
+			
+				lista2= [
+							"Diametro de los orificios",
+							"Distancia entre los orificios",
+							"Sección transversal",
+							"Distancia entre laterales",
+							"Diámetro de los laterales",
+							"Tiempo de retrolavado"]
 
-			for i in range(0, len(lista)):
+				for i in range(0, len(lista)):		
 					lista[i].set(lista2[i])
+				porosidad.delete(0,END)
+				profundidad.delete(0,END)
+				densidad.delete(0,END)
 
-		botonLimpiarEntradasHidraulica = HoverButton(hidraulicaSistemaLavadoMainFrame, text="L\ni\nm\np\ni\na\nr\n\ne\nn\nt\nr\na\nd\na\ns", activebackground="#9DC4AA", anchor=CENTER , width=3, height=16, bg= "#09C5CE", font =("Courier",9), command= lambda: newEntryFiltroHidraulica(listaEntradaDrenaje+listaEntradaExtra))
+		botonLimpiarEntradasHidraulica = HoverButton(hidraulicaSistemaLavadoMainFrame, text="L\ni\nm\np\ni\na\nr\n\ne\nn\nt\nr\na\nd\na\ns", activebackground="#9DC4AA", anchor=CENTER , width=3, height=15, bg= "#09C5CE", font =("Courier",8), command= lambda: newEntryFiltroHidraulica(listaEntradaDrenaje+listaEntradaExtra,porosidadLechoFijo,profundidadLechoFijoArena,densidadRelativaArena))
 
 			
 
@@ -9872,17 +10111,21 @@ def openFiltroWindow():
 		,botonPerdidaCargaTuberiaLavado_DW,botonPerdidaCargaTotalLavado ,botonVerificacionVelocidadesDiseñoTuberias]
 		 
 		counter= 0
+		
+		altIn=altIn-10
 		altIn2= altIn
-		botonLimpiarEntradasHidraulica.place(x=400, y=altIn)
+
+		botonLimpiarEntradasHidraulica.place(x=400, y=altIn-20)
+
 
 		for elemento in listaBotones:
 			if counter < 4:
 				elemento.place(x=20,y=altIn)
-				altIn=altIn+60
+				altIn=altIn+55
 				counter=counter+1
 			else: 
 				elemento.place(x=500,y=altIn2)
-				altIn2=altIn2+60
+				altIn2=altIn2+55
 		#botonCalculoDrenaje.place(x=0, y=altIn)
 			
 	
@@ -9896,7 +10139,7 @@ def openFiltroWindow():
 		
 		hidraulicaSistemaLavadoMainWindow.mainloop()
 
-	def canaletasDeLavado2(tempValue,d60, listaCaudal, listaExtra, ValorNuevo,valorNuevo2):
+	def canaletasDeLavado2(tempValue,d60, listaCaudal, listaExtra, ValorNuevo,valorNuevo2,porosidad,profundidadLechoFijo):
 		
 		if ValorNuevo.get() == "Ancho":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar el ancho de la canaleta")
@@ -9979,7 +10222,7 @@ def openFiltroWindow():
 		numeroCanaletas= round(longitudFiltro/espaciamientoEntreEjesCanaletas,0)
 		listacanaletasDeLavado2.append(numeroCanaletas)
 
-		caudalLavado = ValueConsumoAguaLavado(listaExtra, tempValue, d60, listaCaudal)[5]
+		caudalLavado = ValueConsumoAguaLavado(listaExtra, tempValue, d60, listaCaudal,porosidad,profundidadLechoFijo)[5]
 		listacanaletasDeLavado2.append(round(caudalLavado,3))
 
 		caudalLavadoEcuadoCanaleta = caudalLavado/float(numeroCanaletas)
@@ -10002,11 +10245,10 @@ def openFiltroWindow():
 		alturaTotalInternaCanaleta= round(profundidadMaximaAguaCanaleta+bordeLibreCanaleta,2)
 		listacanaletasDeLavado2.append(alturaTotalInternaCanaleta)
 
-		profundidadLechoFijo= 0.64
 
 		listacanaletasDeLavado2.append(profundidadLechoFijo)
 
-		profundidadLechoExpandido = ValuevelocidadLavadoExpansionLechoFiltrante(tempValue, d60)[9]
+		profundidadLechoExpandido = ValuevelocidadLavadoExpansionLechoFiltrante(tempValue, d60,porosidad,profundidadLechoFijo)[9]
 
 		listacanaletasDeLavado2.append(round(profundidadLechoExpandido,3))
 
@@ -10090,7 +10332,7 @@ def openFiltroWindow():
 
 		canaletasDeLavado2Window.mainloop()
 
-	def dimensionesYCotasFiltros(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1,tasa):
+	def dimensionesYCotasFiltros(temperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,listaE1,tasa,profundidadLechoFijoArena):
 
 		
 		
@@ -10237,7 +10479,6 @@ def openFiltroWindow():
 		#Insersión datos. 
 		profundidadLechoGrava = 0.450
 		listadimensionesYCotasFiltros.append(round(profundidadLechoGrava,3))
-		profundidadLechoFijoArena= 0.640
 		listadimensionesYCotasFiltros.append(round(profundidadLechoFijoArena,3))
 		listadimensionesYCotasFiltros.append(listaE[7].get())
 		listadimensionesYCotasFiltros.append(listaE[8].get())
@@ -10289,8 +10530,34 @@ def openFiltroWindow():
 
 		
 
-	def canaletasDeLavadoYDimensionesFiltros(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,tasaE):
+	def canaletasDeLavadoYDimensionesFiltros(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaE,caudalLista,tasaE,porosidadEntry,profundidadEntry):
 		
+		if porosidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la porosidad del lecho fijo.")
+			return None
+		if profundidadEntry.get() == "":
+			messagebox.showwarning(title="Error", message="Hace falta escribir el valor de la profundidad del lecho fijo.")
+			return None
+		try:
+			porosidad= float(porosidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe ser un número.")
+			return None
+
+		try:
+			profundidadLechoFijo= float(profundidadEntry.get())
+		except:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe ser un número.")
+			return None
+
+		if porosidad<0.4 or porosidad>0.48:
+			messagebox.showwarning(title="Error", message="El valor de la porosidad del lecho fijo debe estar entre 0.4 y 0.48")
+			return None
+
+		if profundidadLechoFijo <0.6 or profundidadLechoFijo >0.75:
+			messagebox.showwarning(title="Error", message="El valor de la profundidad del lecho fijo debe estar entre 0.6 y 0.75")
+			return None
+
 		if tasaE.get() == "Tasa":
 			messagebox.showwarning(title="Error", message="Hace falta seleccionar la tasa.")
 			return None
@@ -10508,8 +10775,8 @@ def openFiltroWindow():
 	
 
 		#BotonesCanaletasDimensiones 
-		botonCalcularCanaletas = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Cálculos canaletas de lavado", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: canaletasDeLavado2(TemperatureValue,d60, caudalLista,listaE, listaEntradas[6],listaEntradas[10]))
-		botonCalcularDimensionesYCotasFiltros = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Cálculos dimensiones y cotas en los filtros", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: dimensionesYCotasFiltros(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE,tasa))
+		botonCalcularCanaletas = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Cálculos canaletas de lavado", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: canaletasDeLavado2(TemperatureValue,d60, caudalLista,listaE, listaEntradas[6],listaEntradas[10],porosidad,profundidadLechoFijo))
+		botonCalcularDimensionesYCotasFiltros = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Cálculos dimensiones y cotas en los filtros", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: dimensionesYCotasFiltros(TemperatureValue,d60, caudal,listaEntradaDrenaje, listaEntradas,caudalLista,listaE,tasa,profundidadLechoFijo))
 		botonNewEntry = HoverButton(framecanaletasDeLavadoYDimensionesFiltros, text="Limpiar entradas.", activebackground="#9DC4AA", width=100, height=1, bg= "#09C5CE", font =("Courier",9),command= lambda: newEntryFiltroP(listaEntradas, diametroNominalTuberiaLavadoLabel))
 		botones=[botonCalcularCanaletas, botonCalcularDimensionesYCotasFiltros, botonNewEntry]
 		alturaBotones= alturaInicialEntradas2-45
@@ -10518,17 +10785,16 @@ def openFiltroWindow():
 			alturaBotones= alturaBotones+30
 
 		#Borrar
-
-		materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
-		diametroNominalTuberiaLavado.set("10")
-		longitudTuberiaLavado.insert(0,"1.50")
-		factorFriccion.insert(0,"0.0200")	
-		tipoEntrada.set('Entrada con boca acampanada')
-		alturaVertederoControlLechoFijo.insert(0,"0.2")
-		energiaDisponibleFiltracion.insert(0,"1.8")
-		bordeLibre.insert(0,"0.4")
-		AnchoCanaleta.set("0.15")
-		espaciamientoEntreEjes.insert(0,"1.2")
+		# materialTuberiaLavado.set("Acero al carbono API 5L SCH-80")
+		# diametroNominalTuberiaLavado.set("10")
+		# longitudTuberiaLavado.insert(0,"1.50")
+		# factorFriccion.insert(0,"0.0200")	
+		# tipoEntrada.set('Entrada con boca acampanada')
+		# alturaVertederoControlLechoFijo.insert(0,"0.2")
+		# energiaDisponibleFiltracion.insert(0,"1.8")
+		# bordeLibre.insert(0,"0.4")
+		# AnchoCanaleta.set("0.15")
+		# espaciamientoEntreEjes.insert(0,"1.2")
 		#NOBorrar
 		codoRadio.set('Codo 90° radio mediano (r/d 3)')
 		
@@ -10729,25 +10995,31 @@ def openFiltroWindow():
 		TasaElegirName = OptionMenu(perdidaEnergiaLechoLimpioMainFrame, TasaElegir, *listaValoresTempTasaElegir)
 		TasaElegirLabel= Label(perdidaEnergiaLechoLimpioMainWindow, text="Seleccione la tasa.", font=("Yu Gothic bold", 10))
 
+		
+		porosidadLechoFijoLabel = Label(perdidaEnergiaLechoLimpioMainFrame, text="Porosidad del lecho fijo [0.4 - 0.48]:", font =("Yu Gothic bold",10))
+		porosidadLechoFijo = Entry(perdidaEnergiaLechoLimpioMainFrame)
+
+		profundidadLechoFijoArenaLabel = Label(perdidaEnergiaLechoLimpioMainFrame, text="Profundidad del lecho fijo de arena [0.6m - 0.75m]:", font =("Yu Gothic bold",10))
+		profundidadLechoFijoArena = Entry(perdidaEnergiaLechoLimpioMainFrame)
 
 
 
 
-
-		listaEntradaDrenaje2=[diametroOrificiosName,distanciaOrificiosName,seccionTransversalName,distanciaLateralesName, diametroEntreLateralesName,tiempoRetrolavadoName,TasaElegirName]
-		listaLabel= [diametroOrificiosLabel,distanciaOrificiosLabel, seccionTransversalLabel, distanciaLateralesLabel, diametroEntreLateralesLabel,tiempoRetrolavadoLabel,TasaElegirLabel]
+		listaEntradaDrenaje2=[diametroOrificiosName,distanciaOrificiosName,seccionTransversalName,distanciaLateralesName, diametroEntreLateralesName,tiempoRetrolavadoName,TasaElegirName,porosidadLechoFijo,profundidadLechoFijoArena]
+		listaLabel= [diametroOrificiosLabel,distanciaOrificiosLabel, seccionTransversalLabel, distanciaLateralesLabel, diametroEntreLateralesLabel,tiempoRetrolavadoLabel,TasaElegirLabel,porosidadLechoFijoLabel,profundidadLechoFijoArenaLabel]
 		listaEntradaDrenaje=[diametroOrificios,distanciaOrificios,seccionTransversal,distanciaLaterales, diametroEntreLaterales]
 		listaEntradaExtra=[tiempoRetrolavado]
 		
 		#Borrar
-
-		diametroOrificios.set("1/4")
-		distanciaOrificios.set("0.100")
-		seccionTransversal.set("14 X 14")
-		distanciaLaterales.set("0.25")
-		diametroEntreLaterales.set("1 1/2")
-		tiempoRetrolavado.set("12")
-		TasaElegir.set('Tasa media')
+		# profundidadLechoFijoArena.insert(0,"0.7")
+		# porosidadLechoFijo.insert(0,"0.47")
+		# diametroOrificios.set("1/2")
+		# distanciaOrificios.set("0.150")
+		# seccionTransversal.set("8 X 8")
+		# distanciaLaterales.set("0.25")
+		# diametroEntreLaterales.set("2 1/2")
+		# tiempoRetrolavado.set("14")
+		# TasaElegir.set('Tasa media')
 		
 		
 
@@ -10757,11 +11029,11 @@ def openFiltroWindow():
 			if ind%2==0:
 				listaLabel[ind].place(x=20,y=altIn)
 				listaEntradaDrenaje2[ind].place(x=20, y= altIn+20)
-				altIn=altIn+80
+				altIn=altIn+70
 			else:
 				listaLabel[ind].place(x=500,y=altIn2)
 				listaEntradaDrenaje2[ind].place(x=500, y= altIn2+20)
-				altIn2=altIn2+80
+				altIn2=altIn2+70
 			
 		#BotonesPerdidaEnergiaLechoLimpio
 		
@@ -10775,10 +11047,10 @@ def openFiltroWindow():
 		botonPerdidaCargaSistemaDrenajeLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de energía en el sistema de\ndrenaje durante filtrado con lecho limpio", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaSistemaDrenajeLavado_2(caudalMedio, listaEntradaDrenaje, TasaElegir) )
 		botonPerdidaCargaTuberiaLavado_DW = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de energía en la tubería\n del efluente", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTuberiaLavado_DW_HW_2(valorTemperatura,listaEntradaExtra,d60,listaCaudal,TasaElegir)) 
 		botonPerdidaCargaTotalLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Pérdida de energía total durante\n filtrado con lecho limpio", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: perdidaCargaTotalLavadoMain_2(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal,TasaElegir))
-		botonCanaletasLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Canaletas de lavado &\n dimensiones y cotas en los filtros", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: canaletasDeLavadoYDimensionesFiltros(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal,TasaElegir) )
+		botonCanaletasLavado = HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Canaletas de lavado &\n dimensiones y cotas en los filtros", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: canaletasDeLavadoYDimensionesFiltros(valorTemperatura,d60,caudalMedio, listaEntradaDrenaje,listaEntradaExtra,listaCaudal,TasaElegir,porosidadLechoFijo,profundidadLechoFijoArena) )
 		
 
-		def newEntryPerdidaTotal(lista): 
+		def newEntryPerdidaTotal(lista,porosidad,profundidad): 
 			lista2= [
 						"Diametro de los orificios",
 						"Distancia entre los orificios",
@@ -10790,9 +11062,11 @@ def openFiltroWindow():
 
 			for i in range(0, len(lista)):
 					lista[i].set(lista2[i])
-		
+			porosidad.delete(0,END)
+			profundidad.delete(0,END)
+
 		listaTasa= [TasaElegir]
-		botonLimpiarEntradasPerdidaTotal =  HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Limpiar Entradas", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: newEntryPerdidaTotal(listaEntradaDrenaje+listaEntradaExtra+listaTasa))
+		botonLimpiarEntradasPerdidaTotal =  HoverButton(perdidaEnergiaLechoLimpioMainFrame, text="Limpiar Entradas", activebackground="#9DC4AA", anchor=CENTER , width=40, height=2, bg= "#09C5CE", font =("Courier",9), command= lambda: newEntryPerdidaTotal(listaEntradaDrenaje+listaEntradaExtra+listaTasa,porosidadLechoFijo,profundidadLechoFijoArena))
 
 
 		 
@@ -10803,6 +11077,7 @@ def openFiltroWindow():
 		,botonPerdidaCargaTuberiaLavado_DW,botonPerdidaCargaTotalLavado, botonCanaletasLavado, botonLimpiarEntradasPerdidaTotal]
 			
 		counter= 0
+		altIn=altIn-20
 		altIn2= altIn
 		for elemento in listaBotones:
 			if counter < 3:
@@ -11087,7 +11362,7 @@ def openFiltroWindow():
 	imageAtras= PhotoImage(file=pathAtras)
 	pathRestringido = resource_path("images\\restringido.png")
 	imageRestringido=PhotoImage(file=pathRestringido)
-	#BotonesFiltro 
+	#LFiltro 
 
 
 	botonAtras= HoverButton(frameFiltro, image=imageAtras , width=100, height=40, bg= None, command=lambda: returnMainWindow(filtroWindow))
